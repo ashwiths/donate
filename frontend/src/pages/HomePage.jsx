@@ -81,35 +81,44 @@ const MYSTERY_REWARDS = [
   {
     id: 'daily',
     title: 'Daily Mystery Reward Box 🎁',
-    desc: 'Unlock an elegant surprise cashback or premium shopping voucher.',
-    badge: 'Mystery Box • Daily Drops ✨',
-    color: '#8C4F1A',
-    borderGlow: '0 8px 30px rgba(140, 79, 26, 0.05)',
-    bg: 'linear-gradient(135deg, #FDFBF7 0%, #FAF5F0 100%)',
-    illustration: '🎁',
-    possibleRewards: ['Paytm', 'Google Pay', 'Flipkart']
+    desc: 'Unlock an elegant gold sparkle surprise or shopping reward.',
+    badge: 'Gold Sparkle Edition ✨',
+    color: '#D97706',
+    borderGlow: '0 12px 40px rgba(217, 119, 6, 0.08)',
+    bg: 'linear-gradient(135deg, #FFFDFB 0%, #FAF5F0 100%)',
+    possibleRewards: [
+      { name: 'Paytm Payout', logo: '🔵' },
+      { name: 'Flipkart Voucher', logo: '🟡' }
+    ],
+    previewType: 'gold_sparkle'
   },
   {
     id: 'cashback',
     title: 'Lucky Cashback Drop ⚡',
-    desc: 'Chance to reveal a Paytm or GPay cashback reward up to ₹100.',
-    badge: 'Limited Vouchers Today ✨',
-    color: '#8C4F1A',
-    borderGlow: '0 8px 30px rgba(140, 79, 26, 0.05)',
-    bg: 'linear-gradient(135deg, #FDFBF7 0%, #FAF5F0 100%)',
-    illustration: '⚡',
-    possibleRewards: ['Paytm', 'Google Pay']
+    desc: 'Chance to reveal Google Pay or Paytm instant cashback drops.',
+    badge: 'Fintech Special Drop ⚡',
+    color: '#3B82F6',
+    borderGlow: '0 12px 40px rgba(59, 130, 246, 0.08)',
+    bg: 'linear-gradient(135deg, #FFFDFB 0%, #FAF5F0 100%)',
+    possibleRewards: [
+      { name: 'Google Pay', logo: '🟢' },
+      { name: 'Paytm Wallet', logo: '🔵' }
+    ],
+    previewType: 'cashback_drop'
   },
   {
     id: 'shopping',
     title: 'Shopping Reward Vault 🛒',
-    desc: 'Hidden ecommerce discounts and dining passes waiting inside.',
-    badge: 'Chance-Based Drops ✨',
-    color: '#8C4F1A',
-    borderGlow: '0 8px 30px rgba(140, 79, 26, 0.05)',
-    bg: 'linear-gradient(135deg, #FDFBF7 0%, #FAF5F0 100%)',
-    illustration: '🗝️',
-    possibleRewards: ['Flipkart', 'Amazon', 'Swiggy']
+    desc: 'Hidden ecommerce vouchers and dining passes waiting inside.',
+    badge: 'Premium Lifestyle Vault 🛒',
+    color: '#10B981',
+    borderGlow: '0 12px 40px rgba(16, 185, 129, 0.08)',
+    bg: 'linear-gradient(135deg, #FFFDFB 0%, #FAF5F0 100%)',
+    possibleRewards: [
+      { name: 'Amazon Gift Card', logo: '🟠' },
+      { name: 'Swiggy Coupon', logo: '🍕' }
+    ],
+    previewType: 'shopping_vault'
   }
 ]
 
@@ -193,7 +202,7 @@ export default function HomePage() {
     setIsShaking(true)
     setRevealedResult(null)
 
-    // Stage 1: Premium subtle shake animation (1.8s)
+    // Stage 1: Premium elegant shake (1.8s)
     setTimeout(() => {
       setIsShaking(false)
       const prizes = [
@@ -215,14 +224,14 @@ export default function HomePage() {
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
       background: 'radial-gradient(circle at 50% 50%, #FAF6F0 0%, #FAF8F5 100%)',
       position: 'relative'
     }}>
-      
+
       {/* Soft ambient background radial glows */}
       <div style={{
         position: 'absolute',
@@ -238,48 +247,21 @@ export default function HomePage() {
 
       <Navbar />
 
-      {/* Dynamic Mini Dashboard Sub-Header */}
-      <div style={{
-        background: '#FFF8F2',
-        borderBottom: '1px solid rgba(232, 224, 214, 0.5)',
-        padding: '12px 80px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontSize: '13px',
-        fontWeight: 700,
-        color: '#8C4F1A',
-        zIndex: 9,
-        position: 'relative',
-        boxShadow: '0 2px 6px rgba(123, 63, 0, 0.02)'
-      }} className="home-dashboard-bar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <HeartHandshake size={15} color="#8C4F1A" />
-          <span>Active Session: <strong>Vignesh (Helper Level 3)</strong></span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-          <span>HP Coins: <strong>🪙 120 Coins</strong></span>
-          <span>•</span>
-          <span>Contributions Today: <strong>₹20</strong></span>
-        </div>
-      </div>
-
       <main style={{ flex: 1, paddingBottom: 100, zIndex: 1, position: 'relative' }}>
 
-        {/* ────────────────── 1. CONTENT-DRIVEN HERO ────────────────── */}
-        <section style={{ 
+        {/* ────────────────── 1. HERO ────────────────── */}
+        <section style={{
           padding: '80px 40px 96px',
-          maxWidth: 1200, 
-          margin: '0 auto', 
-          display: 'grid', 
-          gridTemplateColumns: '55fr 45fr', 
+          maxWidth: 1200,
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: '55fr 45fr',
           gap: 64,
           alignItems: 'center',
           boxSizing: 'border-box',
           width: '100%'
         }} className="hero-split-grid">
-          
-          {/* Left Column (55%): Discovery & Header */}
+
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -318,7 +300,7 @@ export default function HomePage() {
               }}
             >
               Play. Unlock.<br />
-              <span style={{ 
+              <span style={{
                 background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent'
@@ -338,19 +320,18 @@ export default function HomePage() {
               Welcome back to the platform! Choose active clinical campaigns below, donate small amounts of ₹10 to play simple games, and unlock discounts from trusted merchant partners.
             </motion.p>
 
-            {/* Micro Dashboard CTAs */}
             <motion.div
               variants={fadeUp}
               style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}
             >
-              <motion.button 
+              <motion.button
                 onClick={() => navigate('/main')}
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="btn-primary" 
-                style={{ 
-                  padding: '13px 26px', 
-                  fontSize: '14.5px', 
+                className="btn-primary"
+                style={{
+                  padding: '13px 26px',
+                  fontSize: '14.5px',
                   borderRadius: '11px',
                   boxShadow: '0 8px 20px rgba(123, 63, 0, 0.16)',
                   display: 'flex',
@@ -361,14 +342,14 @@ export default function HomePage() {
               >
                 <Gamepad2 size={16} /> Open Play Dashboard
               </motion.button>
-              <motion.a 
+              <motion.a
                 href="#active-campaigns"
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="btn-outline" 
-                style={{ 
-                  padding: '12px 26px', 
-                  fontSize: '14.5px', 
+                className="btn-outline"
+                style={{
+                  padding: '12px 26px',
+                  fontSize: '14.5px',
                   borderRadius: '11px',
                   borderColor: 'var(--color-border)',
                   color: 'var(--color-text)',
@@ -384,7 +365,6 @@ export default function HomePage() {
               </motion.a>
             </motion.div>
 
-            {/* Quick trust metrics strip */}
             <motion.div
               variants={fadeUp}
               style={{ display: 'flex', gap: 16, alignItems: 'center', borderTop: '1px solid rgba(232, 224, 214, 0.5)', paddingTop: 20 }}
@@ -401,14 +381,14 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column: Featured Child Spotlight Card */}
+          {/* Right Column: Featured Child Spotlight */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
             style={{ display: 'flex', justifyContent: 'center' }}
           >
-            <motion.div 
+            <motion.div
               whileHover={{ y: -6 }}
               transition={{ duration: 0.3 }}
               style={{
@@ -425,7 +405,6 @@ export default function HomePage() {
               }}
               className="featured-child-premium-card"
             >
-              {/* Case tag */}
               <div style={{
                 position: 'absolute',
                 top: 40,
@@ -447,18 +426,17 @@ export default function HomePage() {
                 TODAY'S MOST URGENT CASE
               </div>
 
-              {/* Image Container */}
-              <div style={{ 
-                width: '100%', 
-                height: '240px', 
-                borderRadius: '16px', 
-                overflow: 'hidden', 
+              <div style={{
+                width: '100%',
+                height: '240px',
+                borderRadius: '16px',
+                overflow: 'hidden',
                 position: 'relative',
                 marginBottom: 24
               }}>
-                <img 
-                  src={URGENT_CASE.image} 
-                  alt={URGENT_CASE.name} 
+                <img
+                  src={URGENT_CASE.image}
+                  alt={URGENT_CASE.name}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <div style={{
@@ -466,7 +444,7 @@ export default function HomePage() {
                   inset: 0,
                   background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%)',
                 }} />
-                
+
                 <div style={{
                   position: 'absolute',
                   bottom: 18,
@@ -480,9 +458,8 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Redesigned Premium Funding Section */}
               <div style={{ marginBottom: 24 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 10 }}>
+                <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 10 }}>
                   <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--color-primary)' }}>
                     {URGENT_CASE.percentage}% Funded
                   </span>
@@ -490,54 +467,52 @@ export default function HomePage() {
                     <strong>₹2.14L</strong> raised of <strong>₹70L</strong> goal
                   </span>
                 </div>
-                
-                {/* Thicker progress track */}
-                <div style={{ 
-                  height: 12, 
-                  background: 'rgba(232, 224, 214, 0.6)', 
-                  borderRadius: '99px', 
+
+                <div style={{
+                  height: 12,
+                  background: 'rgba(232, 224, 214, 0.6)',
+                  borderRadius: '99px',
                   overflow: 'hidden',
                   marginBottom: 20
                 }}>
-                  <div style={{ 
-                    width: `${URGENT_CASE.percentage}%`, 
-                    height: '100%', 
+                  <div style={{
+                    width: `${URGENT_CASE.percentage}%`,
+                    height: '100%',
                     background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
-                    borderRadius: '99px' 
+                    borderRadius: '99px'
                   }} />
                 </div>
 
-                {/* Micro Fintech Stat Grid */}
-                <div style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(3, 1fr)', 
-                  gap: 12, 
-                  marginBottom: 16 
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: 12,
+                  marginBottom: 16
                 }}>
-                  <div style={{ 
-                    background: '#FAF2EA', 
-                    border: '1px solid #EBD5C2', 
-                    borderRadius: '12px', 
+                  <div style={{
+                    background: '#FAF2EA',
+                    border: '1px solid #EBD5C2',
+                    borderRadius: '12px',
                     padding: '10px',
                     textAlign: 'center'
                   }}>
                     <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Needed</span>
                     <div style={{ fontSize: '13px', fontWeight: 900, color: 'var(--color-text)', marginTop: 2 }}>₹70,00,000</div>
                   </div>
-                  <div style={{ 
-                    background: '#FAF2EA', 
-                    border: '1px solid #EBD5C2', 
-                    borderRadius: '12px', 
+                  <div style={{
+                    background: '#FAF2EA',
+                    border: '1px solid #EBD5C2',
+                    borderRadius: '12px',
                     padding: '10px',
                     textAlign: 'center'
                   }}>
                     <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Raised</span>
                     <div style={{ fontSize: '13px', fontWeight: 900, color: 'var(--color-text)', marginTop: 2 }}>₹2,14,385</div>
                   </div>
-                  <div style={{ 
-                    background: '#FAF2EA', 
-                    border: '1px solid #EBD5C2', 
-                    borderRadius: '12px', 
+                  <div style={{
+                    background: '#FAF2EA',
+                    border: '1px solid #EBD5C2',
+                    borderRadius: '12px',
                     padding: '10px',
                     textAlign: 'center'
                   }}>
@@ -551,15 +526,15 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <motion.button 
+              <motion.button
                 onClick={() => navigate('/main')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="btn-primary" 
-                style={{ 
-                  width: '100%', 
-                  padding: '14px', 
-                  borderRadius: '12px', 
+                className="btn-primary"
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  borderRadius: '12px',
                   fontSize: '15px',
                   fontWeight: 800,
                   background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
@@ -575,21 +550,21 @@ export default function HomePage() {
           </motion.div>
         </section>
 
-        {/* ────────────────── 2. SUBTLE LIVE ACTIVITY FEED ────────────────── */}
-        <section style={{ 
-          background: 'rgba(255, 255, 255, 0.6)', 
+        {/* ────────────────── 2. LIVE FEED ────────────────── */}
+        <section style={{
+          background: 'rgba(255, 255, 255, 0.6)',
           borderTop: '1px solid rgba(232, 224, 214, 0.4)',
           borderBottom: '1px solid rgba(232, 224, 214, 0.4)',
           padding: '16px 0',
           overflow: 'hidden'
         }}>
-          <div style={{ 
-            maxWidth: 1200, 
-            margin: '0 auto', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-around', 
-            gap: 20, 
+          <div style={{
+            maxWidth: 1200,
+            margin: '0 auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            gap: 20,
             flexWrap: 'wrap',
             padding: '0 40px',
             boxSizing: 'border-box'
@@ -606,10 +581,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 3. PAYMENT TRANSPARENCY & FLOW ────────────────── */}
+        {/* ────────────────── 3. PAYMENT TRANSPARENCY ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-          
-          {/* Centered Section Header */}
+
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <motion.div
               variants={fadeUp}
@@ -637,7 +611,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* 3-Column Premium Visual Layout */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -645,8 +618,7 @@ export default function HomePage() {
             marginBottom: 64,
             alignItems: 'stretch'
           }} className="transparency-visual-grid">
-            
-            {/* Column 1: Left Treatment Explanation */}
+
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
               style={{
@@ -665,7 +637,7 @@ export default function HomePage() {
                   <HeartPulse size={22} />
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Treatment Allocation</span>
                 </div>
-                
+
                 <div style={{ width: '100%', height: '140px', borderRadius: '16px', overflow: 'hidden', marginBottom: 18 }}>
                   <HospitalIllustration />
                 </div>
@@ -679,7 +651,6 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            {/* Column 2: Center Payment Split Infographic */}
             <motion.div
               style={{
                 background: '#FAF2EA',
@@ -722,7 +693,7 @@ export default function HomePage() {
                 <h4 style={{ margin: '0 0 12px', fontSize: '12.5px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
                   Micro-Payment Verification Flow
                 </h4>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: '12.5px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
@@ -743,7 +714,6 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            {/* Column 3: Right Side Gateway Security */}
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
               style={{
@@ -762,7 +732,7 @@ export default function HomePage() {
                   <Lock size={20} />
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Security Assurance</span>
                 </div>
-                
+
                 <div style={{ width: '100%', height: '140px', borderRadius: '16px', overflow: 'hidden', marginBottom: 18 }}>
                   <SecurityIllustration />
                 </div>
@@ -778,9 +748,9 @@ export default function HomePage() {
 
           </div>
 
-          {/* ────────────────── 3B. TRUST & FRAMEWORK CARDS ────────────────── */}
+          {/* 3B. TRUST & FRAMEWORK CARDS */}
           <div style={{ marginTop: 80, borderTop: '1px solid rgba(232, 224, 214, 0.6)', paddingTop: 64 }}>
-            
+
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
               <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                 Trust Framework
@@ -799,8 +769,7 @@ export default function HomePage() {
               gap: 24,
               marginBottom: 48
             }} className="framework-cards-grid">
-              
-              {/* Card 1: 100% Transparent */}
+
               <motion.div
                 whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
                 style={{
@@ -834,7 +803,6 @@ export default function HomePage() {
                 </p>
               </motion.div>
 
-              {/* Card 2: Verified Medical Cases */}
               <motion.div
                 whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
                 style={{
@@ -868,7 +836,6 @@ export default function HomePage() {
                 </p>
               </motion.div>
 
-              {/* Card 3: Secure Payments */}
               <motion.div
                 whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
                 style={{
@@ -911,20 +878,20 @@ export default function HomePage() {
                 }}>
                   <Lock size={18} />
                 </div>
-                
+
                 <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--color-text)' }}>
                   Secure Payments
                 </h4>
-                
+
                 <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
                   Protected with Razorpay SSL encryption and secure payment routing.
                 </p>
 
-                <div style={{ 
-                  marginTop: 4, 
-                  background: '#FFFDFB', 
-                  border: '1px solid rgba(232, 224, 214, 0.5)', 
-                  borderRadius: '8px', 
+                <div style={{
+                  marginTop: 4,
+                  background: '#FFFDFB',
+                  border: '1px solid rgba(232, 224, 214, 0.5)',
+                  borderRadius: '8px',
                   padding: '6px 10px',
                   display: 'flex',
                   alignItems: 'center',
@@ -938,7 +905,6 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              {/* Card 4: Together We Heal */}
               <motion.div
                 whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
                 style={{
@@ -974,7 +940,6 @@ export default function HomePage() {
 
             </div>
 
-            {/* Bottom Premium Trust Micro Badges Row */}
             <div style={{
               display: 'flex',
               justifyContent: 'center',
@@ -983,12 +948,12 @@ export default function HomePage() {
               paddingTop: 28,
               borderTop: '1px solid rgba(232, 224, 214, 0.4)'
             }} className="bottom-trust-badges">
-              
+
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
                 <span style={{ color: '#16a34a' }}>🔒</span>
                 <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>SSL Secured</span>
               </div>
-              
+
               <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
@@ -1018,7 +983,7 @@ export default function HomePage() {
 
         {/* ────────────────── 4. CURATED PARTICIPATION CATEGORIES ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-          
+
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}> Curated Experiences </span>
             <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}> Choose Your Way to Help 🤝 </h2>
@@ -1026,8 +991,8 @@ export default function HomePage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 32 }} className="categories-grid">
-            
-            {/* Category 1: Games To Unlock */}
+
+            {/* Category 1 */}
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
               style={{
@@ -1047,7 +1012,7 @@ export default function HomePage() {
                   <Gamepad2 size={24} />
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Interactive Play</span>
                 </div>
-                
+
                 <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Games To Unlock</h3>
                 <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
                   Play interactive mini-games while helping fund child treatments. Unlocks high-engagement spins, memory matches, and scratch cards.
@@ -1062,7 +1027,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => navigate('/main?tab=games')}
                 style={{
                   width: '100%',
@@ -1081,7 +1046,7 @@ export default function HomePage() {
               </button>
             </motion.div>
 
-            {/* Category 2: Quotes To Unlock */}
+            {/* Category 2 */}
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
               style={{
@@ -1101,7 +1066,7 @@ export default function HomePage() {
                   <MessageSquare size={22} />
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Inspirational Quotes</span>
                 </div>
-                
+
                 <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Quotes To Unlock</h3>
                 <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
                   Unlock emotional stories, healing messages, and inspirational quotes. Connect directly with the human mission behind pediatric recovery.
@@ -1116,7 +1081,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => navigate('/main?tab=quotes')}
                 style={{
                   width: '100%',
@@ -1135,7 +1100,7 @@ export default function HomePage() {
               </button>
             </motion.div>
 
-            {/* Category 3: Donate Freely */}
+            {/* Category 3 */}
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
               style={{
@@ -1155,7 +1120,7 @@ export default function HomePage() {
                   <Heart size={22} />
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Direct Clinical Support</span>
                 </div>
-                
+
                 <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Donate Freely</h3>
                 <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
                   Support treatments directly. Perfect for helpers who simply wish to donate recommended sums directly to clear hospital bills.
@@ -1196,7 +1161,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => navigate('/main')}
                 style={{
                   width: '100%',
@@ -1235,7 +1200,7 @@ export default function HomePage() {
             <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 2, background: 'var(--color-border)', transform: 'translateX(-50%)' }} className="timeline-line" />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
-              
+
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', position: 'relative' }} className="timeline-row">
                 <div style={{ width: '45%', textAlign: 'right', paddingRight: 20 }} className="timeline-left">
                   <span style={{ fontSize: '11px', background: '#FAF2EA', color: 'var(--color-primary)', padding: '4px 8px', borderRadius: '5px', fontWeight: 800 }}>APRIL 10, 2026</span>
@@ -1279,7 +1244,7 @@ export default function HomePage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-            
+
             <div style={{
               background: '#fff',
               border: '1px solid var(--color-border)',
@@ -1356,9 +1321,9 @@ export default function HomePage() {
         </section>
 
         {/* ────────────────── 7. ACTIVE CHILD CAMPAIGNS ────────────────── */}
-        <section id="active-campaigns" style={{ 
-          padding: '80px 40px', 
-          maxWidth: 1200, 
+        <section id="active-campaigns" style={{
+          padding: '80px 40px',
+          maxWidth: 1200,
           margin: '0 auto',
           boxSizing: 'border-box',
           width: '100%'
@@ -1371,10 +1336,10 @@ export default function HomePage() {
             <span style={{ fontSize: '12.5px', background: '#FEF3C7', color: '#D97706', padding: '6px 14px', borderRadius: '99px', fontWeight: 700 }}>4 Clinical Verifications</span>
           </div>
 
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-            gap: 28 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: 28
           }} className="waiting-children-grid">
             {ACTIVE_CAMPAIGNS.map((child) => (
               <motion.div
@@ -1398,9 +1363,9 @@ export default function HomePage() {
               >
                 <div>
                   <div style={{ position: 'relative', width: '100%', height: '170px', borderRadius: '14px', overflow: 'hidden', marginBottom: 14 }}>
-                    <img 
-                      src={child.image} 
-                      alt={child.name} 
+                    <img
+                      src={child.image}
+                      alt={child.name}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                     <div style={{
@@ -1423,7 +1388,7 @@ export default function HomePage() {
                   <p style={{ margin: '0 0 8px', fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
                     {child.age} old • {child.condition}
                   </p>
-                  
+
                   <p style={{
                     fontSize: '12.5px',
                     color: 'var(--color-text-muted)',
@@ -1441,20 +1406,20 @@ export default function HomePage() {
                 <div>
                   <div style={{ marginBottom: 14 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', color: 'var(--color-text-muted)', marginBottom: 6 }}>
-                      <span>Raised: <strong>₹{(child.raisedAmount/100000).toFixed(2)}L</strong></span>
-                      <span>Goal: <strong>₹{(child.requiredAmount/100000).toFixed(2)}L</strong></span>
+                      <span>Raised: <strong>₹{(child.raisedAmount / 100000).toFixed(2)}L</strong></span>
+                      <span>Goal: <strong>₹{(child.requiredAmount / 100000).toFixed(2)}L</strong></span>
                     </div>
                     <DonationProgress raised={child.raisedAmount} required={child.requiredAmount} percentage={child.percentage} compact />
                   </div>
 
-                  <motion.button 
+                  <motion.button
                     whileTap={{ scale: 0.98 }}
-                    className="btn-primary" 
-                    style={{ 
-                      width: '100%', 
-                      padding: '10px 14px', 
-                      borderRadius: '10px', 
-                      fontSize: '13px', 
+                    className="btn-primary"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      fontSize: '13px',
                       fontWeight: 700,
                       background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                       border: 'none',
@@ -1474,20 +1439,20 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 8. REDESIGNED LUXURIOUS BEIGE/GOLD MYSTERY REWARD SECTION ────────────────── */}
-        <section style={{ 
-          background: 'linear-gradient(180deg, #FAF8F5 0%, #FFFDFB 100%)', 
-          borderTop: '1px solid var(--color-border)', 
-          borderBottom: '1px solid var(--color-border)', 
+        {/* ────────────────── 8. REDESIGNED HIGH-FIDELITY LUXURY MYSTERY REWARD SECTION ────────────────── */}
+        <section style={{
+          background: 'linear-gradient(180deg, #FAF8F5 0%, #FFFDFB 100%)',
+          borderTop: '1px solid var(--color-border)',
+          borderBottom: '1px solid var(--color-border)',
           padding: '80px 40px',
           overflow: 'hidden'
         }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 44 }} className="section-header-flex">
+
+            <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 44 }} className="section-header-flex">
               <div>
                 <span style={{ fontSize: '11.5px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Sparkles size={12} /> Luxury Reward Ecosystem
+                  <Sparkles size={12} /> Mystery Reward Ecosystem
                 </span>
                 <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>
                   Unlock Real Rewards While Helping ❤️
@@ -1496,44 +1461,44 @@ export default function HomePage() {
                   Fund life-saving operations with ₹10 clinical tickets and claim surprise rewards from premium brand sponsors.
                 </p>
               </div>
-              <button 
-                onClick={() => navigate('/main?tab=coupons')} 
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: 'var(--color-primary)', 
-                  fontWeight: 700, 
-                  fontSize: '13.5px', 
-                  cursor: 'pointer', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 4 
+              <button
+                onClick={() => navigate('/main?tab=coupons')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-primary)',
+                  fontWeight: 700,
+                  fontSize: '13.5px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4
                 }}
               >
                 Explore Reward Store <ChevronRight size={16} />
               </button>
             </div>
 
-            {/* 3 Premium Cream/Gold Cards */}
+            {/* 3 Premium Cream/Gold Cards with Unique Personalities */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 28 }} className="rewards-cards-grid">
               {MYSTERY_REWARDS.map((box) => (
-                <motion.div 
+                <motion.div
                   key={box.id}
-                  whileHover={{ 
-                    y: -6, 
-                    boxShadow: '0 12px 30px rgba(140, 79, 26, 0.08)',
-                    borderColor: '#C8773A' 
+                  whileHover={{
+                    y: -8,
+                    boxShadow: box.borderGlow,
+                    borderColor: box.color
                   }}
                   transition={{ duration: 0.25 }}
                   style={{
                     background: box.bg,
                     borderRadius: '24px',
-                    border: '1px solid rgba(232, 224, 214, 0.6)',
+                    border: '1px solid rgba(232, 224, 214, 0.7)',
                     padding: '28px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    height: '360px',
+                    height: '420px',
                     boxSizing: 'border-box',
                     position: 'relative',
                     overflow: 'hidden',
@@ -1541,68 +1506,118 @@ export default function HomePage() {
                   }}
                 >
                   <div>
-                    {/* Top row */}
+                    {/* Top Row with subtle badge & entry */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                      <span style={{ 
-                        fontSize: '10px', 
-                        background: '#FAF2EA', 
-                        color: '#8C4F1A', 
-                        border: `1px solid #EBD5C2`,
-                        padding: '4px 10px', 
-                        borderRadius: '6px', 
-                        fontWeight: 800, 
+                      <span style={{
+                        fontSize: '9.5px',
+                        background: '#FAF2EA',
+                        color: '#8C4F1A',
+                        border: `1px solid rgba(232, 224, 214, 0.8)`,
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        fontWeight: 900,
                         letterSpacing: '0.02em',
                         textTransform: 'uppercase'
                       }}>
                         {box.badge}
                       </span>
-                      <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 600 }}>₹10 entry</span>
+                      <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 700 }}>₹10 entry</span>
                     </div>
 
-                    {/* Premium soft-blurred placeholder visual */}
+                    {/* NEW HIGH-FIDELITY MYSTERY PREVIEW (Blurred/Obfuscated Reward Placeholders) */}
                     <div style={{
-                      height: '84px',
-                      background: 'rgba(255, 255, 255, 0.7)',
+                      height: '110px',
                       borderRadius: '16px',
-                      border: '1px solid rgba(232, 224, 214, 0.4)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
                       position: 'relative',
                       overflow: 'hidden',
                       marginBottom: 20,
-                      boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.02)'
-                    }}>
-                      <div style={{ 
-                        position: 'absolute',
-                        fontSize: '14px',
-                        fontWeight: 700,
+                      boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.02)',
+                      border: '1px solid rgba(232, 224, 214, 0.4)',
+                      background: box.previewType === 'gold_sparkle'
+                        ? 'linear-gradient(135deg, #FEF3C7 0%, #F59E0B 100%)'
+                        : box.previewType === 'cashback_drop'
+                          ? 'linear-gradient(135deg, #DBEAFE 0%, #3B82F6 100%)'
+                          : 'linear-gradient(135deg, #D1FAE5 0%, #10B981 100%)',
+                      opacity: 0.18
+                    }} />
+
+                    {/* Overlay absolute content for premium look */}
+                    <div style={{
+                      height: '110px',
+                      borderRadius: '16px',
+                      position: 'relative',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginTop: '-130px',
+                      marginBottom: 20,
+                      zIndex: 2,
+                      background: 'rgba(255, 255, 255, 0.4)',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid rgba(255, 255, 255, 0.7)',
+                      boxSizing: 'border-box'
+                    }} className="shimmer-bg">
+
+                      {/* Blurred mock reward item inside */}
+                      <div style={{
+                        filter: 'blur(3px)',
+                        fontSize: '15px',
+                        fontWeight: 900,
+                        color: 'var(--color-text)',
+                        marginBottom: 4,
+                        opacity: 0.65
+                      }}>
+                        {box.previewType === 'gold_sparkle' ? '✨ ₹50 Paytm Gold Payout' : box.previewType === 'cashback_drop' ? '⚡ ₹100 Google Pay Drop' : '🛒 Amazon Gift Voucher'}
+                      </div>
+
+                      {/* Obfuscated mock code */}
+                      <div style={{
+                        fontFamily: 'monospace',
+                        fontSize: '11px',
+                        letterSpacing: '2px',
+                        color: 'var(--color-text-muted)',
+                        background: 'rgba(0,0,0,0.04)',
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        marginBottom: 6,
+                        filter: 'blur(1.5px)',
+                        opacity: 0.8
+                      }}>
+                        HP-XXXXX-XXXX
+                      </div>
+
+                      <div style={{
+                        fontSize: '12px',
+                        fontWeight: 800,
                         color: '#8C4F1A',
                         display: 'flex',
                         alignItems: 'center',
                         gap: 6
                       }}>
-                        <span>✨</span> Mystery Reward Hidden ✨
+                        <Lock size={12} style={{ color: '#8C4F1A' }} />
+                        <span>Mystery Reward Hidden ✨</span>
                       </div>
+
                     </div>
 
-                    <h3 style={{ margin: '0 0 6px', fontSize: '19px', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--color-text)', letterSpacing: '-0.3px' }}>
+                    <h3 style={{ margin: '0 0 6px', fontSize: '18px', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--color-text)', letterSpacing: '-0.3px' }}>
                       {box.title}
                     </h3>
-                    <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
                       {box.desc}
                     </p>
                   </div>
 
                   <div>
-                    {/* Brand chips row */}
-                    <div style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: 8, 
-                      fontSize: '11px', 
-                      color: 'var(--color-text-muted)', 
-                      borderTop: '1px solid rgba(232, 224, 214, 0.4)', 
+                    {/* Premium Brand Chips & Mini Logos */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      fontSize: '11px',
+                      color: 'var(--color-text-muted)',
+                      borderTop: '1px solid rgba(232, 224, 214, 0.4)',
                       paddingTop: 14,
                       marginBottom: 16,
                       flexWrap: 'wrap'
@@ -1610,24 +1625,28 @@ export default function HomePage() {
                       <span>Possible rewards:</span>
                       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                         {box.possibleRewards.map((brand, bIdx) => (
-                          <span key={bIdx} style={{ 
-                            background: '#FFF8F2', 
-                            border: '1px solid #FAF2EA', 
-                            borderRadius: '12px', 
-                            padding: '2px 8px', 
-                            fontSize: '10px', 
-                            fontWeight: 700, 
-                            color: '#8C4F1A' 
+                          <span key={bIdx} style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 4,
+                            background: '#FFF8F2',
+                            border: '1px solid rgba(232, 224, 214, 0.6)',
+                            borderRadius: '20px',
+                            padding: '3px 10px',
+                            fontSize: '10px',
+                            fontWeight: 800,
+                            color: '#8C4F1A'
                           }}>
-                            {brand}
+                            <span style={{ fontSize: '11px' }}>{brand.logo}</span>
+                            <span>{brand.name}</span>
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    <motion.button 
+                    <motion.button
                       onClick={() => handleTriggerMysteryReveal(box.id)}
-                      whileHover={{ scale: 1.02 }}
+                      whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
                       style={{
                         width: '100%',
@@ -1639,7 +1658,8 @@ export default function HomePage() {
                         fontWeight: 800,
                         fontSize: '14px',
                         cursor: 'pointer',
-                        boxShadow: '0 4px 12px rgba(123, 63, 0, 0.12)'
+                        boxShadow: '0 4px 12px rgba(123, 63, 0, 0.12)',
+                        transition: 'all 0.2s ease'
                       }}
                     >
                       Unlock for ₹10 🔑
@@ -1648,32 +1668,6 @@ export default function HomePage() {
 
                 </motion.div>
               ))}
-            </div>
-
-            {/* Premium Sponsors Bar */}
-            <div style={{
-              marginTop: 48,
-              background: '#FAF2EA',
-              border: '1px solid #EBD5C2',
-              borderRadius: '20px',
-              padding: '20px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: 16
-            }} className="brands-bar-row">
-              <span style={{ fontSize: '13px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                🤝 Verified Sponsor Partners:
-              </span>
-              <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-                {BRAND_PULL_LIST.map((brand, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px', color: 'var(--color-text)' }}>
-                    <span>{brand.logo}</span>
-                    <strong style={{ fontWeight: 800 }}>{brand.name}</strong>
-                  </div>
-                ))}
-              </div>
             </div>
 
           </div>
@@ -1689,7 +1683,7 @@ export default function HomePage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 28 }}>
             {COMPLETED_TREATMENTS.map((child, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 whileHover={{ y: -4 }}
                 style={{
@@ -1703,9 +1697,9 @@ export default function HomePage() {
                   alignItems: 'center'
                 }}
               >
-                <img 
-                  src={child.image} 
-                  alt={child.name} 
+                <img
+                  src={child.image}
+                  alt={child.name}
                   style={{ width: '84px', height: '84px', borderRadius: '14px', objectFit: 'cover' }}
                 />
                 <div>
@@ -1755,7 +1749,7 @@ export default function HomePage() {
                 boxSizing: 'border-box'
               }}
             >
-              
+
               {/* Shaking State */}
               {isShaking ? (
                 <div style={{ padding: '20px 0' }}>
@@ -1778,11 +1772,11 @@ export default function HomePage() {
                   >
                     🎁
                   </motion.div>
-                  
+
                   <h3 style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--color-text)', marginBottom: 8, letterSpacing: '-0.3px' }}>
                     Sponsoring Patient Treatment...
                   </h3>
-                  
+
                   <p style={{ color: 'var(--color-text-muted)', fontSize: '13.5px', margin: 0, lineHeight: 1.5 }}>
                     Securing safe connection keys. Routing ₹9 directly to Nanavati Max ICU billing ledger. Unlocking surprise voucher...
                   </p>
@@ -1809,7 +1803,7 @@ export default function HomePage() {
                   <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     SURPRISE UNLOCKED • THANK YOU ❤️
                   </span>
-                  
+
                   <h3 style={{ fontSize: '24px', fontWeight: 900, fontFamily: 'Outfit', margin: '6px 0 12px', color: 'var(--color-text)', letterSpacing: '-0.5px' }}>
                     {revealedResult?.title}
                   </h3>
@@ -1832,7 +1826,7 @@ export default function HomePage() {
                     <code style={{ fontSize: '13.5px', fontWeight: 800, color: '#8C4F1A' }}>
                       {revealedResult?.code}
                     </code>
-                    <button 
+                    <button
                       onClick={() => alert('Coupon code copied! Claim your reward at check out.')}
                       style={{
                         background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
@@ -1875,8 +1869,17 @@ export default function HomePage() {
 
       <Footer />
 
-      {/* Responsive adjustments */}
+      {/* Premium Shimmer Animations & CSS styling */}
       <style>{`
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .shimmer-bg {
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+          background-size: 200% 100%;
+          animation: shimmer 3s infinite linear;
+        }
         @media (max-width: 960px) {
           .home-dashboard-bar {
             padding: 12px 20px !important;

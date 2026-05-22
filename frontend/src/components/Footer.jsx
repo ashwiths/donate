@@ -32,10 +32,10 @@ export default function Footer() {
       {/* Bottom bar */}
       <div style={{ borderTop: '1px solid var(--color-border)', padding: '16px 24px', textAlign: 'center' }}>
         <p style={{ fontSize: 13, color: 'var(--color-text-muted)', margin: 0 }}>
-          © 2024 Heal &amp; Play. All rights reserved.
+          © 2026 <a href="https://ashil.space" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-primary)', fontWeight: 800, textDecoration: 'none', transition: 'all 0.2s ease', borderBottom: '1px dashed rgba(140, 79, 26, 0.4)' }} onMouseOver={(e) => { e.target.style.color = '#5C2D0E'; e.target.style.borderBottomColor = '#5C2D0E'; }} onMouseOut={(e) => { e.target.style.color = 'var(--color-primary)'; e.target.style.borderBottomColor = 'rgba(140, 79, 26, 0.4)'; }}>Infant Ashil A</a>. All rights reserved.
         </p>
         <p style={{ fontSize: 13, color: 'var(--color-text-muted)', margin: '4px 0 0' }}>
-          Together, we can save more lives. <Heart size={13} style={{ display: 'inline', verticalAlign: 'middle', color: 'var(--color-primary)' }} fill="var(--color-primary)" />
+          Made with <Heart size={13} style={{ display: 'inline', verticalAlign: 'middle', color: 'var(--color-primary)' }} fill="var(--color-primary)" /> and a lot of ☕
         </p>
       </div>
     </footer>
