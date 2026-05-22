@@ -1,80 +1,261 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronRight, Gamepad2, Tag, Quote as QuoteIcon, Gift, LayoutGrid, ChevronDown, Shield } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { 
+  ChevronRight, Gamepad2, Tag, Quote as QuoteIcon, Gift, 
+  LayoutGrid, Shield, Heart, Lock, ArrowRight, Sparkles, Check, Info
+} from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import GameCard from '../components/GameCard'
-import CouponCard from '../components/CouponCard'
 import DonationProgress from '../components/DonationProgress'
-import { staggerContainer, cardVariant } from '../animations/variants'
+import { useDonation } from '../context/DonationContext'
 
-// ── Static dummy data ─────────────────────────────────────────────────
-const GAMES = [
-  { id: 1, title: 'Spin & Win', description: 'Spin the wheel and win exciting rewards', price: 10, image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&q=80', tag: 'Popular' },
-  { id: 2, title: 'Scratch Card', description: 'Scratch and reveal your surprise', price: 10, image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&q=80' },
-  { id: 3, title: 'Memory Match', description: 'Match the cards and win rewards', price: 20, image: 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400&q=80', tag: 'New' },
-  { id: 4, title: 'Treasure Hunt', description: 'Find the treasure and win big', price: 20, image: 'https://images.unsplash.com/photo-1569701813229-33284b643e3c?w=400&q=80' },
+// ── Static premium data with SVGs / minimal styles ────────────────────
+const MYSTERY_REWARDS = [
+  {
+    id: 'paytm',
+    title: 'Daily Surprise Cashdrop',
+    brand: 'Paytm Cashback',
+    description: 'Chance to reveal a mystery cashback reward up to ₹100 directly to your wallet.',
+    price: 10,
+    blurBg: 'linear-gradient(135deg, rgba(0, 41, 112, 0.08) 0%, rgba(0, 163, 224, 0.12) 100%)',
+    accentColor: '#002970',
+    teaserLogo: 'Paytm'
+  },
+  {
+    id: 'gpay',
+    title: 'Mystery Scratch Reward',
+    brand: 'Google Pay Card',
+    description: 'A special golden scratch card containing exclusive wellness and reward drops.',
+    price: 10,
+    blurBg: 'linear-gradient(135deg, rgba(234, 67, 53, 0.08) 0%, rgba(66, 133, 244, 0.12) 100%)',
+    accentColor: '#4285F4',
+    teaserLogo: 'GPay'
+  },
+  {
+    id: 'amazon',
+    title: 'Premium Gift Voucher',
+    brand: 'Amazon Gift Card',
+    description: 'Unlock shopping power with a hidden Amazon voucher. Pure digital convenience.',
+    price: 20,
+    blurBg: 'linear-gradient(135deg, rgba(255, 153, 0, 0.08) 0%, rgba(0, 0, 0, 0.1) 100%)',
+    accentColor: '#FF9900',
+    teaserLogo: 'Amazon'
+  },
+  {
+    id: 'swiggy',
+    title: 'Gourmet Dining Treat',
+    brand: 'Swiggy Food Coupon',
+    description: 'Savor your next meal with a premium dining discount. Gift of delicious tastes.',
+    price: 10,
+    blurBg: 'linear-gradient(135deg, rgba(252, 128, 25, 0.08) 0%, rgba(252, 128, 25, 0.15) 100%)',
+    accentColor: '#FC8019',
+    teaserLogo: 'Swiggy'
+  },
+  {
+    id: 'flipkart',
+    title: 'Mega Shopping Discount',
+    brand: 'Flipkart Voucher',
+    description: 'An elegant shopping credit to elevate your checkout experience instantly.',
+    price: 20,
+    blurBg: 'linear-gradient(135deg, rgba(40, 116, 240, 0.08) 0%, rgba(255, 222, 0, 0.12) 100%)',
+    accentColor: '#2874F0',
+    teaserLogo: 'Flipkart'
+  }
 ]
 
-const COUPONS = [
-  { id: 1, brand: 'Flipkart', worth: 100, price: 10, color: '#1E3A5F' },
-  { id: 2, brand: 'Amazon', worth: 75, price: 10, color: '#FF9900' },
-  { id: 3, brand: 'Google Play', worth: 50, price: 10, color: '#01875F' },
-  { id: 4, brand: 'Paytm', worth: 100, price: 10, color: '#002970' },
+const PREMIUM_GAMES = [
+  {
+    id: 'spin',
+    title: 'Spin the Care Wheel',
+    description: 'Take a gentle, joyful spin to instantly direct ₹10 from corporate sponsors to Aarav\'s medical fund.',
+    price: 10,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="wheelGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFF4EA" />
+            <stop offset="100%" stopColor="#FAF0E6" />
+          </radialGradient>
+        </defs>
+        <circle cx="50%" cy="50%" r="42" fill="url(#wheelGlow)" stroke="#F0E0D0" strokeWidth="1" />
+        <circle cx="50%" cy="50%" r="35" fill="none" stroke="#E6CDB8" strokeWidth="1.5" strokeDasharray="3, 3" />
+        <motion.g
+          animate={{ rotate: 360 }}
+          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+          style={{ originX: '50px', originY: '50px' }}
+        >
+          <path d="M50 15 L50 85 M15 50 L85 50 M25 25 L75 75 M25 75 L75 25" stroke="#E3C3A7" strokeWidth="1" />
+          <circle cx="50" cy="18" r="4" fill="#E8A87C" />
+          <circle cx="50" cy="82" r="4" fill="#E8A87C" />
+          <circle cx="18" cy="50" r="4" fill="#E8A87C" />
+          <circle cx="82" cy="50" r="4" fill="#E8A87C" />
+        </motion.g>
+        <circle cx="50" cy="50" r="14" fill="#fff" style={{ filter: 'drop-shadow(0 2px 4px rgba(140,79,26,0.1))' }} />
+        <path d="M47 48 H53 V52 H47 Z" fill="#8C4F1A" />
+        <path d="M50 43 L54 48 H46 Z" fill="#8C4F1A" />
+      </svg>
+    )
+  },
+  {
+    id: 'scratch',
+    title: 'Scratch & Heal Card',
+    description: 'Gently wipe the gold leaf surface to reveal a personalized wellness quote and trigger treatment support.',
+    price: 10,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <rect x="15" y="15" width="70" height="70" rx="12" fill="#FCFAF8" stroke="#F0E0D0" strokeWidth="1" />
+        <rect x="22" y="22" width="56" height="56" rx="8" fill="linear-gradient(135deg, #FFF9F3 0%, #FAF0E6 100%)" />
+        <motion.g
+          animate={{ y: [0, -3, 0], x: [0, 4, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <rect x="26" y="26" width="48" height="48" rx="6" fill="#F3E5D8" stroke="#E8D2BF" strokeWidth="1" />
+          <path d="M38 42 L62 58 M62 42 L38 58" stroke="#DFBA9D" strokeWidth="1.5" />
+        </motion.g>
+        <circle cx="50" cy="50" r="12" fill="#fff" />
+        <path d="M48 45 L52 45 L53 53 L47 53 Z" fill="#8C4F1A" />
+        <circle cx="50" cy="56" r="1.5" fill="#8C4F1A" />
+      </svg>
+    )
+  },
+  {
+    id: 'memory',
+    title: 'Mindful Memory Match',
+    description: 'Find matching calming pairs in a beautifully simple cognitive layout to trigger sponsor matches.',
+    price: 20,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <g transform="translate(18, 18)">
+          <rect x="0" y="0" width="28" height="28" rx="6" fill="#FFF9F3" stroke="#E8D2BF" strokeWidth="1.2" />
+          <circle cx="14" cy="14" r="5" fill="#E8A87C" />
+        </g>
+        <g transform="translate(54, 18)">
+          <rect x="0" y="0" width="28" height="28" rx="6" fill="#FFF9F3" stroke="#E8D2BF" strokeWidth="1.2" />
+          <path d="M14 8 L20 20 H8 Z" fill="#E8A87C" />
+        </g>
+        <g transform="translate(18, 54)">
+          <rect x="0" y="0" width="28" height="28" rx="6" fill="#FFF5ED" stroke="#E8D2BF" strokeWidth="1.2" />
+          <path d="M14 8 L20 20 H8 Z" fill="#E8A87C" />
+        </g>
+        <g transform="translate(54, 54)">
+          <rect x="0" y="0" width="28" height="28" rx="6" fill="#FFF9F3" stroke="#E8D2BF" strokeWidth="1.2" />
+          <rect x="9" y="9" width="10" height="10" fill="#E8A87C" />
+        </g>
+      </svg>
+    )
+  },
+  {
+    id: 'treasure',
+    title: 'Healing Treasure Hunt',
+    description: 'Journey through a beautifully serene minimal map, discovering milestones that fund critical hospital supplies.',
+    price: 20,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <path d="M20 50 C 35 25, 45 75, 80 50" fill="none" stroke="#E8D2BF" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="4, 4" />
+        <circle cx="20" cy="50" r="6" fill="#E8A87C" />
+        <circle cx="80" cy="50" r="8" fill="#8C4F1A" />
+        <path d="M77 46 L83 54 M83 46 L77 54" stroke="#fff" strokeWidth="1.5" />
+        <motion.circle
+          animate={{ scale: [1, 1.3, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          cx="48" cy="52" r="5" fill="#E8A87C" opacity="0.4"
+        />
+        <circle cx="48" cy="52" r="3" fill="#E8A87C" />
+      </svg>
+    )
+  }
 ]
 
-const QUOTES = [
-  { text: 'The purpose of our lives is to be happy.', author: '— Dalai Lama' },
-  { text: 'Be the reason someone believes in good people.', author: '— Unknown' },
-  { text: 'Every small step counts. Keep moving forward.', author: '— Unknown' },
-  { text: 'Together, we can make a big difference.', author: '— Unknown' },
+const INSPIRATIONAL_CARDS = [
+  {
+    title: 'Baby Aarav\'s Healing Milestone',
+    description: 'Thanks to over 4,200 small gaming plays, Aarav\'s pre-operation checkup has been fully funded.',
+    tag: 'SUCCESS STORY',
+    accent: '#8C4F1A',
+    bg: '#FAF4EE'
+  },
+  {
+    title: 'Words of Hope from Pediatric Care',
+    description: '"Every single 10-rupee gameplay helps us secure reliable bedside monitoring faster than traditional fundraising."',
+    tag: 'CLINICAL VOICE',
+    accent: '#47682C',
+    bg: '#F3F6F0'
+  },
+  {
+    title: 'How Transparency Empowers You',
+    description: 'We map every transaction ID directly to the hospital\'s billing terminal. Trust is built on complete clarity.',
+    tag: 'OUR PROMISE',
+    accent: '#1E3A5F',
+    bg: '#F0F4F8'
+  }
 ]
 
-const FREE_ITEMS = [
-  { emoji: '🎁', title: 'Daily Free Box', desc: 'Open your daily free mystery box', cta: 'Open Now' },
-  { emoji: '🧠', title: 'Free Quiz', desc: 'Answer & win reward points', cta: 'Play Now' },
-  { emoji: '▶️', title: 'Watch & Earn', desc: 'Watch short videos and earn points', cta: 'Earn Now' },
-  { emoji: '🎯', title: 'Lucky Draw', desc: 'Join daily lucky draw & win', cta: 'Join Now' },
+const OTHER_CASES = [
+  {
+    name: 'Baby Kabir',
+    condition: 'Congenital Heart Defect',
+    raised: 450000,
+    goal: 5500000,
+    progress: 8,
+    img: 'https://images.unsplash.com/photo-1519689680058-324335c77ebe?w=400&q=80'
+  },
+  {
+    name: 'Infant Diya',
+    condition: 'Retinoblastoma Treatment',
+    raised: 120000,
+    goal: 3000000,
+    progress: 4,
+    img: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&q=80'
+  }
 ]
 
 const TABS = [
-  { id: 'all', label: 'All Categories', icon: LayoutGrid },
-  { id: 'games', label: 'Playable Games', icon: Gamepad2 },
-  { id: 'coupons', label: 'Store Coupons', icon: Tag },
-  { id: 'quotes', label: 'Daily Quotes', icon: QuoteIcon },
-  { id: 'free', label: 'Free Rewards', icon: Gift },
+  { id: 'all', label: 'All Unlocks' },
+  { id: 'rewards', label: 'Mystery Rewards' },
+  { id: 'games', label: 'Mini-Games' },
+  { id: 'inspiration', label: 'Inspiration' },
+  { id: 'donate', label: 'Direct Support' }
 ]
 
-const SIDEBAR_ITEMS = [
-  { id: 'all', label: 'All', icon: LayoutGrid },
-  { id: 'games', label: 'Games', icon: Gamepad2 },
-  { id: 'coupons', label: 'Coupons', icon: Tag },
-  { id: 'quotes', label: 'Quotes', icon: QuoteIcon },
-  { id: 'free', label: 'Free', icon: Gift },
-]
-
-// ─────────────────────────────────────────────────────────────────────
 export default function MainPage() {
   const [activeTab, setActiveTab] = useState('all')
+  const [customAmount, setCustomAmount] = useState('')
+  const [selectedPreset, setSelectedPreset] = useState(100)
+  
+  const navigate = useNavigate()
+  const { confirmDonation } = useDonation()
+
+  const handleUnlock = (price) => {
+    confirmDonation(price)
+    navigate('/thank-you')
+  }
+
+  const handleDirectDonate = () => {
+    const amount = customAmount ? parseInt(customAmount) : selectedPreset
+    if (amount > 0) {
+      handleUnlock(amount)
+    }
+  }
 
   const show = (key) => activeTab === 'all' || activeTab === key
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--color-bg)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FDFBF7', color: '#332211' }}>
       <Navbar />
 
-      <main style={{ flex: 1, width: '100%' }}>
+      <main style={{ flex: 1, width: '100%', paddingBottom: 120 }}>
         
-        {/* Full-width child support banner with responsive limits */}
+        {/* ── TOP CHILD-SUPPORT STRIP (Retained & Optimized) ── */}
         <div style={{ 
           background: '#fff', 
-          borderBottom: '1px solid var(--color-border)', 
+          borderBottom: '1px solid rgba(232,224,214,0.6)', 
           padding: '16px 40px',
           width: '100%',
           boxSizing: 'border-box'
         }} className="banner-fluid-padding">
           <div style={{ 
-            maxWidth: 1600, 
+            maxWidth: 1200, 
             margin: '0 auto', 
             display: 'flex', 
             alignItems: 'center', 
@@ -83,339 +264,547 @@ export default function MainPage() {
             flexWrap: 'wrap' 
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <img 
-                src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=100&q=80" 
-                alt="child" 
-                style={{ width: 64, height: 64, borderRadius: 14, objectFit: 'cover', border: '1px solid var(--color-border)' }} 
-              />
+              <div style={{ position: 'relative' }}>
+                <img 
+                  src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=120&q=80" 
+                  alt="child" 
+                  style={{ width: 56, height: 56, borderRadius: 14, objectFit: 'cover', border: '2px solid #FAF2EA' }} 
+                />
+                <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#8C4F1A', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>
+                  <Heart size={10} color="#fff" fill="#fff" />
+                </span>
+              </div>
               <div>
-                <p style={{ margin: 0, fontSize: 11, color: 'var(--color-text-muted)', fontWeight: 600, letterSpacing: '0.02em', textTransform: 'uppercase' }}>Currently Supporting</p>
-                <h3 style={{ margin: '2px 0', fontWeight: 800, fontSize: 18, color: 'var(--color-text)', fontFamily: 'Outfit' }}>Baby Aarav 🤍</h3>
+                <p style={{ margin: 0, fontSize: 10, color: '#8C4F1A', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Currently Supporting</p>
+                <h3 style={{ margin: '2px 0 0', fontWeight: 800, fontSize: 16, color: '#3C2F2F', fontFamily: 'Outfit', letterSpacing: '-0.3px' }}>Baby Aarav 🤍</h3>
                 <p style={{ margin: 0, fontSize: 12, color: 'var(--color-text-muted)' }}>Liver Disease (Biliary Atresia)</p>
               </div>
             </div>
             
-            <div style={{ flex: 1, maxWidth: 460, minWidth: 260 }}>
-              <DonationProgress raised={214385} required={7000000} percentage={0.31} compact />
+            <div style={{ flex: 1, maxWidth: 420, minWidth: 240 }}>
+              <DonationProgress raised={214385} required={7000000} percentage={3.06} compact />
             </div>
 
-            <button className="btn-primary" style={{ padding: '12px 24px', fontSize: 14, flexShrink: 0, borderRadius: '12px' }}>
-              View Aarav's Full Story →
+            <button 
+              onClick={() => handleUnlock(10)}
+              className="btn-primary" 
+              style={{ 
+                padding: '10px 20px', 
+                fontSize: 13, 
+                fontWeight: 700,
+                borderRadius: '10px', 
+                background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                border: 'none',
+                color: '#fff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                transition: 'all 0.2s'
+              }}
+            >
+              <span>Quick Support (₹10)</span>
+              <ArrowRight size={14} />
             </button>
           </div>
         </div>
 
-        {/* Full Width Responsive Dashboard */}
-        <div style={{ 
-          maxWidth: 1600, 
-          margin: '0 auto', 
-          padding: '32px 40px', 
-          display: 'grid', 
-          gridTemplateColumns: '180px 1fr', 
-          gap: 36,
-          boxSizing: 'border-box',
-          width: '100%'
-        }} className="main-grid">
+        {/* ── PREMIUM FILTER PILLS (Replaces Sidebar) ── */}
+        <div style={{ maxWidth: 1200, margin: '48px auto 0', padding: '0 24px', textAlign: 'center' }}>
+          <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Discovery Portal</span>
+          <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '32px', color: '#2C1B1B', margin: '4px 0 16px', letterSpacing: '-0.8px' }}>
+            Choose What You Want to Unlock 🤍
+          </h2>
+          <p style={{ margin: '0 auto 32px', maxWidth: 640, fontSize: '15px', color: '#7C6B5B', fontWeight: 500, lineHeight: 1.6 }}>
+            Direct micro-donations to Baby Aarav\'s medical fund while gaining access to surprise wellness rewards, immersive minimal games, and stories.
+          </p>
+
+          <div style={{ 
+            display: 'inline-flex', 
+            gap: 8, 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            background: 'rgba(235, 224, 214, 0.3)',
+            padding: '6px',
+            borderRadius: '20px',
+            border: '1px solid rgba(235, 224, 214, 0.6)',
+            flexWrap: 'wrap'
+          }}>
+            {TABS.map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                style={{
+                  padding: '10px 22px',
+                  borderRadius: '16px',
+                  border: 'none',
+                  background: activeTab === id ? '#fff' : 'transparent',
+                  color: activeTab === id ? '#8C4F1A' : '#7C6B5B',
+                  fontWeight: 700,
+                  fontSize: 13,
+                  cursor: 'pointer',
+                  boxShadow: activeTab === id ? '0 4px 12px rgba(140, 79, 26, 0.08)' : 'none',
+                  transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── CENTRALIZED CONTENT GRID ── */}
+        <div style={{ maxWidth: 1200, margin: '40px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
           
-          {/* Small modern Sticky Sidebar */}
-          <aside className="dashboard-sidebar">
-            <div style={{ 
-              background: '#fff', 
-              borderRadius: 18, 
-              border: '1px solid var(--color-border)', 
-              overflow: 'hidden', 
-              position: 'sticky', 
-              top: 96,
-              boxShadow: 'var(--shadow-sm)'
-            }}>
-              {SIDEBAR_ITEMS.map(({ id, label, icon: Icon }) => (
-                <button
-                  key={id}
-                  onClick={() => setActiveTab(id)}
-                  style={{
-                    width: '100%', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 12,
-                    padding: '14px 20px', 
-                    background: activeTab === id ? 'var(--color-bg-warm)' : 'none',
-                    border: 'none', 
-                    borderLeft: activeTab === id ? '4px solid var(--color-primary)' : '4px solid transparent',
-                    cursor: 'pointer', 
-                    fontSize: 14, 
-                    fontWeight: activeTab === id ? 700 : 500,
-                    color: activeTab === id ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                    textAlign: 'left', 
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  <Icon size={16} /> {label}
-                </button>
-              ))}
-              
-              {/* Sidebar badge context */}
-              <div style={{ 
-                margin: 14, 
-                background: 'var(--color-bg-warm)', 
-                borderRadius: 14, 
-                padding: '14px', 
-                border: '1px solid #E8D9C8' 
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                  <Shield size={14} color="var(--color-primary)" />
-                  <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--color-primary)', letterSpacing: '0.02em' }}>100% SECURE</span>
-                </div>
-                <p style={{ margin: 0, fontSize: 11, color: 'var(--color-text-muted)', lineHeight: 1.45 }}>All donation splits are directly verified on public audits.</p>
+          {/* ────────────────── 1. FEATURED MYSTERY UNLOCKS ────────────────── */}
+          {show('rewards') && (
+            <section style={{ marginBottom: 64 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 32 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.06em', textTransform: 'uppercase' }}>✨ Curated Surprise drops</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0' }}>Featured Mystery Unlocks</h3>
+                <p style={{ margin: 0, fontSize: '14px', color: '#7C6B5B' }}>Unlock elegant fintech and lifestyle surprise rewards. Brand vouchers are kept purely secret.</p>
               </div>
-            </div>
-          </aside>
 
-          {/* Large Expanded Content Area */}
-          <div style={{ width: '100%' }} className="dashboard-content">
-            
-            <div style={{ marginBottom: 32 }}>
-              <h2 style={{ 
-                fontFamily: 'Outfit', 
-                fontWeight: 800, 
-                fontSize: '28px', 
-                margin: '0 0 6px', 
-                color: 'var(--color-text)',
-                letterSpacing: '-0.5px'
-              }}>
-                Choose What You Want to Unlock 🤍
-              </h2>
-              <p style={{ margin: '0 0 24px', fontSize: 15, color: 'var(--color-text-muted)' }}>
-                Fund medical procedures, claim curated vouchers, play mini-games, and save a life today.
-              </p>
-
-              {/* Enhanced Full-Width Filter Tabs */}
               <div style={{ 
-                display: 'flex', 
-                gap: 10, 
-                alignItems: 'center', 
-                flexWrap: 'wrap',
-                background: '#fff',
-                padding: '8px 12px',
-                borderRadius: '16px',
-                border: '1px solid var(--color-border)',
-                boxShadow: 'var(--shadow-sm)'
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+                gap: 24 
               }}>
-                {TABS.map(({ id, label, icon: Icon }) => (
-                  <motion.button
-                    key={id}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setActiveTab(id)}
+                {MYSTERY_REWARDS.map((reward) => (
+                  <motion.div
+                    key={reward.id}
+                    whileHover={{ y: -6, boxShadow: '0 12px 30px rgba(140, 79, 26, 0.08)' }}
+                    onClick={() => handleUnlock(reward.price)}
                     style={{
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: 8, 
-                      padding: '8px 16px',
-                      borderRadius: 10, 
-                      border: 'none',
-                      background: activeTab === id ? 'var(--color-primary)' : 'transparent',
-                      color: activeTab === id ? '#fff' : 'var(--color-text-muted)',
-                      fontWeight: activeTab === id ? 700 : 500, 
-                      fontSize: 13,
-                      cursor: 'pointer', 
-                      transition: 'all 0.2s',
+                      background: '#fff',
+                      border: '1px solid rgba(232, 224, 214, 0.7)',
+                      borderRadius: '24px',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                      position: 'relative'
                     }}
                   >
-                    <Icon size={14} /> {label}
-                  </motion.button>
+                    {/* Blurred Secret Preview Area */}
+                    <div style={{ 
+                      height: 150, 
+                      background: reward.blurBg, 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}>
+                      {/* Ambient background shimmer */}
+                      <div className="shimmer-bg" style={{ position: 'absolute', inset: 0, opacity: 0.15 }} />
+                      
+                      {/* Blurred teaser gift card */}
+                      <div style={{
+                        width: 140,
+                        height: 84,
+                        background: 'rgba(255, 255, 255, 0.45)',
+                        backdropFilter: 'blur(12px)',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 255, 255, 0.6)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        padding: '10px',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.03)',
+                        transform: 'rotate(-4deg)',
+                        transition: 'all 0.3s'
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 9, fontWeight: 800, color: reward.accentColor, opacity: 0.75, letterSpacing: '0.04em' }}>MYSTERY GIFT</span>
+                          <Lock size={10} color={reward.accentColor} />
+                        </div>
+                        <div style={{ textAlign: 'center', margin: '4px 0' }}>
+                          <span style={{ fontSize: 18, fontWeight: 900, color: '#8C4F1A', opacity: 0.4, letterSpacing: '2px', filter: 'blur(1.5px)' }}>
+                            ✨?✨
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 9, fontWeight: 700, color: '#8C4F1A' }}>₹?? Worth</span>
+                          <div style={{ width: 12, height: 12, borderRadius: '50%', background: reward.accentColor, opacity: 0.6 }} />
+                        </div>
+                      </div>
+
+                      {/* Lock Icon Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: 12,
+                        background: '#FAF2EA',
+                        border: '1px solid rgba(140, 79, 26, 0.15)',
+                        padding: '4px 10px',
+                        borderRadius: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}>
+                        <Lock size={11} color="#8C4F1A" />
+                        <span style={{ fontSize: 10, fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.02em', textTransform: 'uppercase' }}>SECURE REVEAL</span>
+                      </div>
+                    </div>
+
+                    <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                      <div>
+                        <h4 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 800, color: '#3C2F2F', fontFamily: 'Outfit' }}>{reward.title}</h4>
+                        <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#7C6B5B', lineHeight: 1.5, fontWeight: 500 }}>{reward.description}</p>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', justifySelf: 'space-between', justifyContent: 'space-between', borderTop: '1px solid rgba(232, 224, 214, 0.4)', paddingTop: '12px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase' }}>CLAIM FOR ₹{reward.price}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#8C4F1A', fontWeight: 800, fontSize: '13px' }}>
+                          <span>Unlock</span>
+                          <ChevronRight size={14} />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
                 ))}
-                
-                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <button style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 6, 
-                    background: 'var(--color-bg-warm)', 
-                    border: '1px solid #E8D9C8', 
-                    borderRadius: 10, 
-                    padding: '8px 16px', 
-                    fontSize: 13, 
-                    cursor: 'pointer', 
-                    color: 'var(--color-primary)',
-                    fontWeight: 600
-                  }}>
-                    Sorted: Popular <ChevronDown size={14} />
-                  </button>
+              </div>
+            </section>
+          )}
+
+          {/* ────────────────── 2. MINI-GAMES ────────────────── */}
+          {show('games') && (
+            <section style={{ marginBottom: 64 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 32 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.06em', textTransform: 'uppercase' }}>🎮 Light & Mindful Gameplay</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0' }}>Mini-Games Collection</h3>
+                <p style={{ margin: 0, fontSize: '14px', color: '#7C6B5B' }}>Calm your mind with interactive micro-games while direct funding life-saving treatments.</p>
+              </div>
+
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', 
+                gap: 24 
+              }}>
+                {PREMIUM_GAMES.map((game) => (
+                  <motion.div
+                    key={game.id}
+                    whileHover={{ y: -6, boxShadow: '0 12px 30px rgba(140, 79, 26, 0.08)' }}
+                    onClick={() => handleUnlock(game.price)}
+                    style={{
+                      background: '#fff',
+                      border: '1px solid rgba(232, 224, 214, 0.7)',
+                      borderRadius: '24px',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                    }}
+                  >
+                    {/* SVG Illustration Container */}
+                    <div style={{ 
+                      height: 140, 
+                      background: '#FAF7F2', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      padding: 16
+                    }}>
+                      {game.illustration}
+                    </div>
+
+                    <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                      <div>
+                        <h4 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 800, color: '#3C2F2F', fontFamily: 'Outfit' }}>{game.title}</h4>
+                        <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#7C6B5B', lineHeight: 1.5, fontWeight: 500 }}>{game.description}</p>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', justifySelf: 'space-between', justifyContent: 'space-between', borderTop: '1px solid rgba(232, 224, 214, 0.4)', paddingTop: '12px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase' }}>PLAY FOR ₹{game.price}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#8C4F1A', fontWeight: 800, fontSize: '13px' }}>
+                          <span>Start Play</span>
+                          <ChevronRight size={14} />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ────────────────── 3. INSPIRATIONAL UNLOCKS ────────────────── */}
+          {show('inspiration') && (
+            <section style={{ marginBottom: 64 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 32 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#47682C', letterSpacing: '0.06em', textTransform: 'uppercase' }}>💬 Stories that heal</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0' }}>Inspirational Unlocks</h3>
+                <p style={{ margin: 0, fontSize: '14px', color: '#7C6B5B' }}>Unlock real hospital updates, progress stories, and beautiful motivational community quotes.</p>
+              </div>
+
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+                gap: 24 
+              }}>
+                {INSPIRATIONAL_CARDS.map((card, idx) => (
+                  <motion.div
+                    key={idx}
+                    whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(0,0,0,0.02)' }}
+                    onClick={() => handleUnlock(10)}
+                    style={{
+                      background: card.bg,
+                      borderRadius: '24px',
+                      padding: '28px',
+                      cursor: 'pointer',
+                      border: '1px solid rgba(232, 224, 214, 0.4)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      minHeight: 180,
+                      transition: 'all 0.25s'
+                    }}
+                  >
+                    <div>
+                      <span style={{ fontSize: '10px', fontWeight: 800, color: card.accent, letterSpacing: '0.04em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.6)', padding: '4px 10px', borderRadius: '8px', display: 'inline-block', marginBottom: 12 }}>
+                        {card.tag}
+                      </span>
+                      <h4 style={{ margin: '0 0 8px', fontSize: '17px', fontWeight: 800, color: '#2C1B1B', fontFamily: 'Outfit', lineHeight: 1.35 }}>{card.title}</h4>
+                      <p style={{ margin: 0, fontSize: '13.5px', color: '#5C4C3C', lineHeight: 1.5, fontWeight: 500 }}>{card.description}</p>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifySelf: 'space-between', justifyContent: 'space-between', marginTop: 20, paddingTop: 12, borderTop: '1px solid rgba(0,0,0,0.04)' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: card.accent }}>CONTRIBUTE ₹10 TO UNLOCK</span>
+                      <ArrowRight size={14} color={card.accent} />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ────────────────── 4. DIRECT DONATION ────────────────── */}
+          {show('donate') && (
+            <section style={{ marginBottom: 64, maxWidth: 680, margin: '0 auto 64px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 28 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.06em', textTransform: 'uppercase' }}>❤️ Immediate Clinical Support</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0' }}>Direct Support Checkout</h3>
+                <p style={{ margin: 0, fontSize: '14px', color: '#7C6B5B' }}>Bypass the mini-games and mystery rewards to direct fund Baby Aarav\'s medical balance instantly.</p>
+              </div>
+
+              <div style={{
+                background: '#fff',
+                border: '1px solid rgba(232, 224, 214, 0.8)',
+                borderRadius: '28px',
+                padding: '32px',
+                boxShadow: '0 10px 30px rgba(140, 79, 26, 0.03)'
+              }}>
+                <label style={{ fontSize: '13px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block', marginBottom: 12 }}>
+                  Select Contribution Amount
+                </label>
+
+                {/* Preset Chips */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 24 }}>
+                  {[100, 250, 500, 1000].map((preset) => (
+                    <button
+                      key={preset}
+                      onClick={() => {
+                        setSelectedPreset(preset)
+                        setCustomAmount('')
+                      }}
+                      style={{
+                        padding: '12px 0',
+                        borderRadius: '14px',
+                        border: '1px solid',
+                        borderColor: selectedPreset === preset && !customAmount ? '#8C4F1A' : 'rgba(232, 224, 214, 0.8)',
+                        background: selectedPreset === preset && !customAmount ? '#FFF8F2' : '#fff',
+                        color: selectedPreset === preset && !customAmount ? '#8C4F1A' : '#7C6B5B',
+                        fontWeight: 800,
+                        fontSize: '14px',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      ₹{preset}
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{ marginBottom: 24 }}>
+                  <label style={{ fontSize: '13px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block', marginBottom: 8 }}>
+                    Or Enter Custom Amount (₹)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Enter custom support amount"
+                    value={customAmount}
+                    onChange={(e) => {
+                      setCustomAmount(e.target.value)
+                      setSelectedPreset(0)
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '14px 18px',
+                      borderRadius: '14px',
+                      border: '1px solid rgba(232, 224, 214, 0.9)',
+                      fontSize: '15px',
+                      fontWeight: 600,
+                      boxSizing: 'border-box',
+                      outline: 'none',
+                      background: '#FFFDFB',
+                      color: '#2C1B1B',
+                      transition: 'border-color 0.2s'
+                    }}
+                  />
+                </div>
+
+                <button
+                  onClick={handleDirectDonate}
+                  style={{
+                    width: '100%',
+                    padding: '16px',
+                    borderRadius: '16px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: '15px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    boxShadow: '0 4px 14px rgba(140, 79, 26, 0.25)',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <Heart size={16} fill="#fff" />
+                  <span>Support Baby Aarav with ₹{customAmount ? parseInt(customAmount).toLocaleString() : selectedPreset.toLocaleString()}</span>
+                </button>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center', marginTop: 18, fontSize: '11px', color: '#7C6B5B', fontWeight: 600 }}>
+                  <Shield size={12} color="#47682C" />
+                  <span>100% Direct Hospital Split Routing. Public Ledger Verified.</span>
                 </div>
               </div>
+            </section>
+          )}
+
+          {/* ────────────────── 5. MORE CASES ────────────────── */}
+          <section style={{ 
+            marginTop: 80, 
+            borderTop: '1px solid rgba(232, 224, 214, 0.5)', 
+            paddingTop: '64px'
+          }}>
+            <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32 }}>
+              <div>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Explore more children</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0 0', letterSpacing: '-0.5px' }}>Other Urgent Medical Cases</h3>
+              </div>
+              <button style={{ background: 'none', border: 'none', color: '#8C4F1A', fontWeight: 800, fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span>View All Cases</span>
+                <ChevronRight size={14} />
+              </button>
             </div>
 
-            {/* Games Section */}
-            {show('games') && (
-              <section style={{ marginBottom: 48 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                  <h3 className="section-title" style={{ fontSize: '20px', fontWeight: 800 }}>🎮 Playable Games – Win Rewards</h3>
-                  <button style={{ fontSize: 13, color: 'var(--color-primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    View All Games <ChevronRight size={15} />
-                  </button>
-                </div>
-                <motion.div 
-                  variants={staggerContainer} 
-                  initial="hidden" 
-                  whileInView="visible" 
-                  viewport={{ once: true }}
-                  style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', 
-                    gap: 24 
-                  }}
-                >
-                  {GAMES.map((g) => <GameCard key={g.id} game={g} />)}
-                </motion.div>
-              </section>
-            )}
-
-            {/* Coupons Section */}
-            {show('coupons') && (
-              <section style={{ marginBottom: 48 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                  <h3 className="section-title" style={{ fontSize: '20px', fontWeight: 800 }}>🏷️ Premium Coupons – Shop & Save</h3>
-                  <button style={{ fontSize: 13, color: 'var(--color-primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    View All Coupons <ChevronRight size={15} />
-                  </button>
-                </div>
-                <motion.div 
-                  variants={staggerContainer} 
-                  initial="hidden" 
-                  whileInView="visible" 
-                  viewport={{ once: true }}
-                  style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
-                    gap: 24 
-                  }}
-                >
-                  {COUPONS.map((c) => <CouponCard key={c.id} coupon={c} />)}
-                </motion.div>
-              </section>
-            )}
-
-            {/* Quotes Section */}
-            {show('quotes') && (
-              <section style={{ marginBottom: 48 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                  <h3 className="section-title" style={{ fontSize: '20px', fontWeight: 800 }}>💬 Inspirational Quotes – Lift Spirits</h3>
-                  <button style={{ fontSize: 13, color: 'var(--color-primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700 }}>View All</button>
-                </div>
-                <motion.div 
-                  variants={staggerContainer} 
-                  initial="hidden" 
-                  whileInView="visible" 
-                  viewport={{ once: true }}
-                  style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-                    gap: 24 
-                  }}
-                >
-                  {QUOTES.map((q, i) => (
-                    <motion.div 
-                      key={i} 
-                      variants={cardVariant} 
-                      style={{ 
-                        background: '#fff', 
-                        borderRadius: 18, 
-                        padding: '24px', 
-                        border: '1px solid var(--color-border)', 
-                        position: 'relative',
-                        boxShadow: 'var(--shadow-sm)'
-                      }}
-                    >
-                      <button style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}>🤍</button>
-                      <p style={{ margin: '0 0 16px', fontSize: 15, color: 'var(--color-text)', lineHeight: 1.6, fontStyle: 'italic', pr: '20px' }}>&ldquo;{q.text}&rdquo;</p>
-                      <p style={{ margin: 0, fontSize: 12, color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.02em' }}>{q.author}</p>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </section>
-            )}
-
-            {/* Free Rewards Section */}
-            {show('free') && (
-              <section style={{ marginBottom: 48 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                  <h3 className="section-title" style={{ fontSize: '20px', fontWeight: 800 }}>🎁 Free Quizzes & Daily Rewards</h3>
-                  <button style={{ fontSize: 13, color: 'var(--color-primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700 }}>View All</button>
-                </div>
-                <motion.div 
-                  variants={staggerContainer} 
-                  initial="hidden" 
-                  whileInView="visible" 
-                  viewport={{ once: true }}
-                  style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', 
-                    gap: 24 
-                  }}
-                >
-                  {FREE_ITEMS.map((item) => (
-                    <motion.div 
-                      key={item.title} 
-                      variants={cardVariant}
-                      whileHover={{ y: -4, boxShadow: 'var(--shadow-md)' }}
-                      style={{ 
-                        background: '#fff', 
-                        borderRadius: 18, 
-                        padding: '24px', 
-                        border: '1px solid var(--color-border)', 
-                        boxShadow: 'var(--shadow-sm)', 
-                        cursor: 'pointer' 
-                      }}
-                    >
-                      <div style={{ fontSize: 36, marginBottom: 12 }}>{item.emoji}</div>
-                      <h4 style={{ margin: '0 0 6px', fontWeight: 800, fontSize: 16, color: 'var(--color-text)', fontFamily: 'Outfit' }}>{item.title}</h4>
-                      <p style={{ margin: '0 0 20px', fontSize: 13, color: 'var(--color-text-muted)', lineHeight: 1.5 }}>{item.desc}</p>
-                      <button className="btn-outline" style={{ width: '100%', padding: '10px', fontSize: 13, borderRadius: '10px' }}>{item.cta}</button>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </section>
-            )}
-
-            {/* Bottom transparency fluid panel */}
             <div style={{ 
-              background: 'var(--color-bg-warm)', 
-              borderRadius: 18, 
-              padding: '20px 24px', 
-              border: '1px solid #E8D9C8', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'space-between', 
-              flexWrap: 'wrap', 
-              gap: 16,
-              boxShadow: 'var(--shadow-sm)'
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+              gap: 24 
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'var(--color-text-muted)' }}>
-                <Shield size={18} color="var(--color-primary)" />
-                <span>100% of your micro-donation goes directly towards baby Aarav's treatment case. Zero hidden commissions.</span>
-              </div>
-              <button style={{ background: 'none', border: 'none', fontSize: 14, fontWeight: 700, color: 'var(--color-primary)', cursor: 'pointer' }}>Auditing Dashboard →</button>
-            </div>
+              {OTHER_CASES.map((child, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    background: '#fff',
+                    border: '1px solid rgba(232, 224, 214, 0.6)',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <img src={child.img} alt={child.name} style={{ width: '100%', height: 160, objectFit: 'cover' }} />
+                  
+                  <div style={{ padding: '18px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <h4 style={{ margin: '0 0 2px', fontSize: '16px', fontWeight: 800, color: '#3C2F2F', fontFamily: 'Outfit' }}>{child.name}</h4>
+                      <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: '#7C6B5B' }}>{child.condition}</p>
+                      
+                      {/* Simple compact progress */}
+                      <div style={{ height: 6, background: '#FAF2EA', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
+                        <div style={{ width: `${child.progress}%`, height: '100%', background: '#8C4F1A' }} />
+                      </div>
+                      <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', fontSize: '11px', color: '#7C6B5B', fontWeight: 700 }}>
+                        <span>₹{child.raised.toLocaleString('en-IN')} raised</span>
+                        <span>{child.progress}%</span>
+                      </div>
+                    </div>
 
+                    <button 
+                      onClick={() => handleUnlock(10)}
+                      style={{ 
+                        width: '100%', 
+                        marginTop: 18, 
+                        padding: '10px', 
+                        fontSize: 12, 
+                        fontWeight: 800, 
+                        borderRadius: '10px', 
+                        border: '1px solid rgba(140, 79, 26, 0.25)', 
+                        background: 'transparent', 
+                        color: '#8C4F1A', 
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      Support case
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Audit Verification Block */}
+          <div style={{ 
+            background: 'linear-gradient(135deg, #FFF9F3 0%, #FAF0E6 100%)', 
+            borderRadius: '24px', 
+            padding: '24px 32px', 
+            border: '1px solid rgba(232, 224, 214, 0.6)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between', 
+            flexWrap: 'wrap', 
+            gap: 16,
+            marginTop: 64,
+            boxShadow: '0 4px 20px rgba(140, 79, 26, 0.01)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13.5, color: '#5C4C3C', fontWeight: 500 }}>
+              <Shield size={18} color="#8C4F1A" />
+              <span>100% of your micro-donation goes directly towards Baby Aarav\'s medical fund balance. Zero corporate hidden commissions.</span>
+            </div>
+            <button style={{ background: 'none', border: 'none', fontSize: 13.5, fontWeight: 800, color: '#8C4F1A', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>Auditing Dashboard</span>
+              <ArrowRight size={14} />
+            </button>
           </div>
+
         </div>
       </main>
 
       <Footer />
 
-      {/* Modern Dashboard Media Queries for full screen responsiveness */}
+      {/* Shimmer animations */}
       <style>{`
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .shimmer-bg {
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
+          background-size: 200% 100%;
+          animation: shimmer 3.5s infinite linear;
+        }
         @media (max-width: 960px) {
-          .main-grid {
-            grid-template-columns: 1fr !important;
-            padding: 24px 16px !important;
-            gap: 24px !important;
-          }
-          .dashboard-sidebar {
-            display: none !important;
-          }
           .banner-fluid-padding {
-            padding: 16px !important;
+            padding: 16px 20px !important;
           }
         }
       `}</style>

@@ -1561,14 +1561,14 @@ export default function HomePage() {
 
                       {/* Blurred mock reward item inside */}
                       <div style={{
-                        filter: 'blur(3px)',
+                        filter: 'blur(1.5px)',
                         fontSize: '15px',
                         fontWeight: 900,
                         color: 'var(--color-text)',
                         marginBottom: 4,
                         opacity: 0.65
                       }}>
-                        {box.previewType === 'gold_sparkle' ? '✨ ₹50 Paytm Gold Payout' : box.previewType === 'cashback_drop' ? '⚡ ₹100 Google Pay Drop' : '🛒 Amazon Gift Voucher'}
+                        ✨ Mystery Reward Box ✨
                       </div>
 
                       {/* Obfuscated mock code */}
