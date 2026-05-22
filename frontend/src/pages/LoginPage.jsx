@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, User, Heart, Shield, FileCheck, Globe, Star, Users, ArrowRight } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, User, Heart, Shield, FileCheck, Globe, Star, Users, ArrowRight, ChevronRight } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { fadeUp, staggerContainer, scaleIn, fadeIn } from '../animations/variants'
 
