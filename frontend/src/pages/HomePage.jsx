@@ -76,60 +76,49 @@ const COMPLETED_TREATMENTS = [
   { name: 'Baby Aisha', age: '1 year', illness: 'Liver Transplant Success', status: 'Discharged!', date: '1 week ago', image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80' }
 ]
 
-// 3 Curated Mystery Box Types
+// 3 Curated Mystery Box Types - Luxury Cream/Gold Aesthetic
 const MYSTERY_REWARDS = [
   {
     id: 'daily',
     title: 'Daily Mystery Reward Box 🎁',
-    desc: 'Unlock a surprise cashback or shopping discount reward.',
-    badge: 'Mystery Box • Daily Drops 🔮',
-    color: '#8B5CF6',
-    borderGlow: '0 0 20px rgba(139, 92, 246, 0.25)',
-    bg: 'linear-gradient(135deg, #1E1B4B 0%, #0F172A 100%)',
+    desc: 'Unlock an elegant surprise cashback or premium shopping voucher.',
+    badge: 'Mystery Box • Daily Drops ✨',
+    color: '#8C4F1A',
+    borderGlow: '0 8px 30px rgba(140, 79, 26, 0.05)',
+    bg: 'linear-gradient(135deg, #FDFBF7 0%, #FAF5F0 100%)',
     illustration: '🎁',
-    possibleRewards: [
-      { name: 'Paytm Cashback', logo: '🔵' },
-      { name: 'Flipkart Voucher', logo: '🟡' },
-      { name: 'Swiggy Coupon', logo: '🍕' }
-    ]
+    possibleRewards: ['Paytm', 'Google Pay', 'Flipkart']
   },
   {
     id: 'cashback',
     title: 'Lucky Cashback Drop ⚡',
-    desc: 'Chance to reveal Paytm or Google Pay cashback rewards up to ₹100.',
-    badge: 'Limited Stock Today ⚡',
-    color: '#EC4899',
-    borderGlow: '0 0 20px rgba(236, 72, 153, 0.25)',
-    bg: 'linear-gradient(135deg, #311042 0%, #0F172A 100%)',
+    desc: 'Chance to reveal a Paytm or GPay cashback reward up to ₹100.',
+    badge: 'Limited Vouchers Today ✨',
+    color: '#8C4F1A',
+    borderGlow: '0 8px 30px rgba(140, 79, 26, 0.05)',
+    bg: 'linear-gradient(135deg, #FDFBF7 0%, #FAF5F0 100%)',
     illustration: '⚡',
-    possibleRewards: [
-      { name: 'Paytm Cashback', logo: '🔵' },
-      { name: 'Google Pay Card', logo: '🟢' }
-    ]
+    possibleRewards: ['Paytm', 'Google Pay']
   },
   {
     id: 'shopping',
     title: 'Shopping Reward Vault 🛒',
-    desc: 'Hidden ecommerce vouchers and delivery passes waiting inside.',
-    badge: 'Chance-Based Drops 📈',
-    color: '#10B981',
-    borderGlow: '0 0 20px rgba(16, 185, 129, 0.25)',
-    bg: 'linear-gradient(135deg, #064E3B 0%, #0F172A 100%)',
+    desc: 'Hidden ecommerce discounts and dining passes waiting inside.',
+    badge: 'Chance-Based Drops ✨',
+    color: '#8C4F1A',
+    borderGlow: '0 8px 30px rgba(140, 79, 26, 0.05)',
+    bg: 'linear-gradient(135deg, #FDFBF7 0%, #FAF5F0 100%)',
     illustration: '🗝️',
-    possibleRewards: [
-      { name: 'Flipkart Voucher', logo: '🟡' },
-      { name: 'Amazon Gift Card', logo: '🟠' },
-      { name: 'Swiggy Coupon', logo: '🍕' }
-    ]
+    possibleRewards: ['Flipkart', 'Amazon', 'Swiggy']
   }
 ]
 
 const BRAND_PULL_LIST = [
-  { name: 'Paytm Cashback', logo: '🔵', detail: '₹50 instant wallet payout' },
+  { name: 'Paytm', logo: '🔵', detail: '₹50 instant wallet payout' },
   { name: 'Google Pay', logo: '🟢', detail: 'Mystery daily scratch bonus' },
-  { name: 'Flipkart Voucher', logo: '🟡', detail: '10% sitewide shopping pass' },
-  { name: 'Amazon Gift Card', logo: '🟠', detail: '₹100 Amazon Pay gift voucher' },
-  { name: 'Swiggy Food Pass', logo: '🍕', detail: 'Free food delivery coupon' }
+  { name: 'Flipkart', logo: '🟡', detail: '10% sitewide shopping pass' },
+  { name: 'Amazon', logo: '🟠', detail: '₹100 Amazon Pay gift voucher' },
+  { name: 'Swiggy', logo: '🍕', detail: 'Free food delivery coupon' }
 ]
 
 const LIVE_DONATIONS = [
@@ -195,7 +184,7 @@ export default function HomePage() {
   const [selectedDirectAmount, setSelectedDirectAmount] = useState(20)
 
   // Interactive Mystery Reveal State Machine
-  const [activeRevealBox, setActiveRevealBox] = useState(null) // 'daily' | 'cashback' | 'shopping'
+  const [activeRevealBox, setActiveRevealBox] = useState(null)
   const [isShaking, setIsShaking] = useState(false)
   const [revealedResult, setRevealedResult] = useState(null)
 
@@ -204,10 +193,9 @@ export default function HomePage() {
     setIsShaking(true)
     setRevealedResult(null)
 
-    // Stage 1: Fast exciting shake animation (1.8s)
+    // Stage 1: Premium subtle shake animation (1.8s)
     setTimeout(() => {
       setIsShaking(false)
-      // Pick a random exciting premium reward
       const prizes = [
         { title: '₹50 Paytm Cashback! 🔵', code: 'HP-PAYTM50-CASH', detail: 'Instantly credited to your linked wallet number.' },
         { title: 'Google Pay Scratch Card! 🟢', code: 'HP-GPAY-SCRATCH', detail: 'Check GPay Reward section for mystery cashback drop.' },
@@ -278,7 +266,7 @@ export default function HomePage() {
 
       <main style={{ flex: 1, paddingBottom: 100, zIndex: 1, position: 'relative' }}>
 
-        {/* ────────────────── 1. CONTENT-DRIVEN PLATFORM HERO ────────────────── */}
+        {/* ────────────────── 1. CONTENT-DRIVEN HERO ────────────────── */}
         <section style={{ 
           padding: '80px 40px 96px',
           maxWidth: 1200, 
@@ -413,7 +401,7 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column (45%): ONE Large Premium Featured Child Spotlight */}
+          {/* Right Column: Featured Child Spotlight Card */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -503,7 +491,7 @@ export default function HomePage() {
                   </span>
                 </div>
                 
-                {/* Thicker, high-fidelity premium progress track */}
+                {/* Thicker progress track */}
                 <div style={{ 
                   height: 12, 
                   background: 'rgba(232, 224, 214, 0.6)', 
@@ -558,7 +546,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Verified Hospital Treatment Estimate */}
                 <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-muted)', textAlign: 'center', fontWeight: 600 }}>
                   🛡️ Verified hospital treatment estimate. Updated directly from hospital billing records.
                 </p>
@@ -619,7 +606,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 3. STABLE VECTOR STORYTELLING PAYMENT TRANSPARENCY ────────────────── */}
+        {/* ────────────────── 3. PAYMENT TRANSPARENCY & FLOW ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           
           {/* Centered Section Header */}
@@ -679,7 +666,6 @@ export default function HomePage() {
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Treatment Allocation</span>
                 </div>
                 
-                {/* Custom Inline SVG Illustration (Stable/Unbreakable) */}
                 <div style={{ width: '100%', height: '140px', borderRadius: '16px', overflow: 'hidden', marginBottom: 18 }}>
                   <HospitalIllustration />
                 </div>
@@ -693,7 +679,7 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            {/* Column 2: Center Payment Split Infographic & flow */}
+            {/* Column 2: Center Payment Split Infographic */}
             <motion.div
               style={{
                 background: '#FAF2EA',
@@ -711,7 +697,6 @@ export default function HomePage() {
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Allocation Split</span>
                 </div>
 
-                {/* Animated fill graphic bar */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: 4 }}>
@@ -734,7 +719,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Mini payment flow diagram */}
                 <h4 style={{ margin: '0 0 12px', fontSize: '12.5px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
                   Micro-Payment Verification Flow
                 </h4>
@@ -779,7 +763,6 @@ export default function HomePage() {
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Security Assurance</span>
                 </div>
                 
-                {/* Custom Inline SVG Illustration (Stable/Unbreakable) */}
                 <div style={{ width: '100%', height: '140px', borderRadius: '16px', overflow: 'hidden', marginBottom: 18 }}>
                   <SecurityIllustration />
                 </div>
@@ -795,7 +778,7 @@ export default function HomePage() {
 
           </div>
 
-          {/* ────────────────── 3B. REDESIGNED HIGH-FIDELITY TRUST & FRAMEWORK CARDS ────────────────── */}
+          {/* ────────────────── 3B. TRUST & FRAMEWORK CARDS ────────────────── */}
           <div style={{ marginTop: 80, borderTop: '1px solid rgba(232, 224, 214, 0.6)', paddingTop: 64 }}>
             
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -1033,7 +1016,7 @@ export default function HomePage() {
 
         </section>
 
-        {/* ────────────────── 4. REDESIGNED CURATED PARTICIPATION CATEGORIES ────────────────── */}
+        {/* ────────────────── 4. CURATED PARTICIPATION CATEGORIES ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
@@ -1178,7 +1161,6 @@ export default function HomePage() {
                   Support treatments directly. Perfect for helpers who simply wish to donate recommended sums directly to clear hospital bills.
                 </p>
 
-                {/* Interactive Recommended Chips */}
                 <div style={{ display: 'flex', gap: 10, marginBottom: 18 }} className="amount-chips-row">
                   {[20, 50, 100].map((amt) => (
                     <motion.button
@@ -1236,7 +1218,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 5. TREATMENT JOURNEY & TIMELINE ────────────────── */}
+        {/* ────────────────── 5. TREATMENT TIMELINE ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Clinical Roadmap</span>
@@ -1250,13 +1232,10 @@ export default function HomePage() {
             margin: '0 auto',
             padding: '20px 0'
           }}>
-            {/* Center line */}
             <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 2, background: 'var(--color-border)', transform: 'translateX(-50%)' }} className="timeline-line" />
 
-            {/* Timeline Milestones */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
               
-              {/* Event 1 */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', position: 'relative' }} className="timeline-row">
                 <div style={{ width: '45%', textAlign: 'right', paddingRight: 20 }} className="timeline-left">
                   <span style={{ fontSize: '11px', background: '#FAF2EA', color: 'var(--color-primary)', padding: '4px 8px', borderRadius: '5px', fontWeight: 800 }}>APRIL 10, 2026</span>
@@ -1267,7 +1246,6 @@ export default function HomePage() {
                 <div style={{ width: '45%' }} className="timeline-right" />
               </div>
 
-              {/* Event 2 */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', position: 'relative' }} className="timeline-row">
                 <div style={{ width: '45%' }} className="timeline-left" />
                 <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', width: 14, height: 14, borderRadius: '50%', background: 'var(--color-primary)', border: '4px solid #fff', zIndex: 2 }} />
@@ -1278,7 +1256,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Event 3 */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', position: 'relative' }} className="timeline-row">
                 <div style={{ width: '45%', textAlign: 'right', paddingRight: 20 }} className="timeline-left">
                   <span style={{ fontSize: '11px', background: '#FAF2EA', color: 'var(--color-primary)', padding: '4px 8px', borderRadius: '5px', fontWeight: 800 }}>MAY 20, 2026</span>
@@ -1293,7 +1270,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 6. PROOF & HOSPITAL VERIFICATION ────────────────── */}
+        {/* ────────────────── 6. PROOF & VERIFICATION ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Clinical Verification</span>
@@ -1303,7 +1280,6 @@ export default function HomePage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
             
-            {/* Doc 1 */}
             <div style={{
               background: '#fff',
               border: '1px solid var(--color-border)',
@@ -1328,7 +1304,6 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* Doc 2 */}
             <div style={{
               background: '#fff',
               border: '1px solid var(--color-border)',
@@ -1353,7 +1328,6 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* Doc 3 */}
             <div style={{
               background: '#fff',
               border: '1px solid var(--color-border)',
@@ -1389,7 +1363,7 @@ export default function HomePage() {
           boxSizing: 'border-box',
           width: '100%'
         }}>
-          <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }} className="section-header-flex">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }} className="section-header-flex">
             <div>
               <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Active Clinical Campaigns</span>
               <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>More Children Waiting For Help ❤️</h2>
@@ -1500,7 +1474,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 8. EXCITED & MYSTERY REWARD UNLOCK SYSTEM ────────────────── */}
+        {/* ────────────────── 8. REDESIGNED LUXURIOUS BEIGE/GOLD MYSTERY REWARD SECTION ────────────────── */}
         <section style={{ 
           background: 'linear-gradient(180deg, #FAF8F5 0%, #FFFDFB 100%)', 
           borderTop: '1px solid var(--color-border)', 
@@ -1512,14 +1486,14 @@ export default function HomePage() {
             
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 44 }} className="section-header-flex">
               <div>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Sparkles size={12} /> Mystery Reward Ecosystem
+                <span style={{ fontSize: '11.5px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Sparkles size={12} /> Luxury Reward Ecosystem
                 </span>
                 <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>
                   Unlock Real Rewards While Helping ❤️
                 </h2>
                 <p style={{ margin: '4px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}>
-                  Tickets cost ₹10. Buy dynamic tickets to fund surgeries and unlock high-dopamine mystery vouchers immediately!
+                  Fund life-saving operations with ₹10 clinical tickets and claim surprise rewards from premium brand sponsors.
                 </p>
               </div>
               <button 
@@ -1540,119 +1514,112 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* 3 Premium Mystery Box Cards */}
+            {/* 3 Premium Cream/Gold Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 28 }} className="rewards-cards-grid">
               {MYSTERY_REWARDS.map((box) => (
                 <motion.div 
                   key={box.id}
                   whileHover={{ 
                     y: -6, 
-                    boxShadow: box.borderGlow,
-                    borderColor: box.color 
+                    boxShadow: '0 12px 30px rgba(140, 79, 26, 0.08)',
+                    borderColor: '#C8773A' 
                   }}
                   transition={{ duration: 0.25 }}
                   style={{
                     background: box.bg,
-                    borderRadius: '28px',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '24px',
+                    border: '1px solid rgba(232, 224, 214, 0.6)',
                     padding: '28px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    height: '350px',
+                    height: '360px',
                     boxSizing: 'border-box',
                     position: 'relative',
                     overflow: 'hidden',
-                    color: '#fff'
+                    color: 'var(--color-text)'
                   }}
                 >
-                  {/* Subtle top light bar */}
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 28,
-                    right: 28,
-                    height: '2px',
-                    background: `linear-gradient(90deg, transparent, ${box.color}, transparent)`
-                  }} />
-
                   <div>
-                    {/* Header Row */}
+                    {/* Top row */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                       <span style={{ 
-                        fontSize: '9.5px', 
-                        background: 'rgba(255,255,255,0.08)', 
-                        color: box.color, 
-                        border: `1px solid rgba(255,255,255,0.15)`,
+                        fontSize: '10px', 
+                        background: '#FAF2EA', 
+                        color: '#8C4F1A', 
+                        border: `1px solid #EBD5C2`,
                         padding: '4px 10px', 
                         borderRadius: '6px', 
-                        fontWeight: 900, 
-                        letterSpacing: '0.04em',
+                        fontWeight: 800, 
+                        letterSpacing: '0.02em',
                         textTransform: 'uppercase'
                       }}>
                         {box.badge}
                       </span>
-                      <span style={{ fontSize: '12px', opacity: 0.5 }}>₹10 entry</span>
+                      <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 600 }}>₹10 entry</span>
                     </div>
 
-                    {/* Mystery visual graphic wrapper - Blurred Preview with question mark! */}
+                    {/* Premium soft-blurred placeholder visual */}
                     <div style={{
-                      height: '80px',
-                      background: 'rgba(255,255,255,0.03)',
+                      height: '84px',
+                      background: 'rgba(255, 255, 255, 0.7)',
                       borderRadius: '16px',
-                      border: '1px solid rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(232, 224, 214, 0.4)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       position: 'relative',
                       overflow: 'hidden',
-                      marginBottom: 20
+                      marginBottom: 20,
+                      boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.02)'
                     }}>
-                      {/* Blurred ambient brand logo rows behind */}
-                      <div style={{ display: 'flex', gap: 14, filter: 'blur(6px)', opacity: 0.25 }}>
-                        <span>🔵 Paytm</span>
-                        <span>🟢 GPay</span>
-                        <span>🟡 Flipkart</span>
-                      </div>
-
-                      {/* Floating question mark overlay */}
-                      <div style={{
+                      <div style={{ 
                         position: 'absolute',
-                        fontSize: '26px',
-                        fontWeight: 900,
-                        color: box.color,
-                        textShadow: `0 0 12px ${box.color}`,
-                        animation: 'pulse 2s infinite ease-in-out'
+                        fontSize: '14px',
+                        fontWeight: 700,
+                        color: '#8C4F1A',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
                       }}>
-                        {box.illustration} Secret Reward Inside
+                        <span>✨</span> Mystery Reward Hidden ✨
                       </div>
                     </div>
 
-                    <h3 style={{ margin: '0 0 6px', fontSize: '19px', fontWeight: 900, fontFamily: 'Outfit', color: '#fff', letterSpacing: '-0.3px' }}>
+                    <h3 style={{ margin: '0 0 6px', fontSize: '19px', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--color-text)', letterSpacing: '-0.3px' }}>
                       {box.title}
                     </h3>
-                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.45 }}>
+                    <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
                       {box.desc}
                     </p>
                   </div>
 
                   <div>
-                    {/* Possible Brands Row */}
+                    {/* Brand chips row */}
                     <div style={{ 
                       display: 'flex', 
                       alignItems: 'center', 
                       gap: 8, 
                       fontSize: '11px', 
-                      color: 'rgba(255,255,255,0.4)', 
-                      borderTop: '1px solid rgba(255,255,255,0.06)', 
-                      paddingTop: 12,
-                      marginBottom: 16 
+                      color: 'var(--color-text-muted)', 
+                      borderTop: '1px solid rgba(232, 224, 214, 0.4)', 
+                      paddingTop: 14,
+                      marginBottom: 16,
+                      flexWrap: 'wrap'
                     }}>
-                      <span>Possible Vouchers:</span>
-                      <div style={{ display: 'flex', gap: 6 }}>
+                      <span>Possible rewards:</span>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                         {box.possibleRewards.map((brand, bIdx) => (
-                          <span key={bIdx} style={{ color: '#fff', fontWeight: 700 }} title={brand.name}>
-                            {brand.logo}
+                          <span key={bIdx} style={{ 
+                            background: '#FFF8F2', 
+                            border: '1px solid #FAF2EA', 
+                            borderRadius: '12px', 
+                            padding: '2px 8px', 
+                            fontSize: '10px', 
+                            fontWeight: 700, 
+                            color: '#8C4F1A' 
+                          }}>
+                            {brand}
                           </span>
                         ))}
                       </div>
@@ -1667,15 +1634,15 @@ export default function HomePage() {
                         padding: '12px',
                         borderRadius: '12px',
                         border: 'none',
-                        background: `linear-gradient(135deg, ${box.color}, #0F172A)`,
+                        background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                         color: '#fff',
-                        fontWeight: 900,
-                        fontSize: '13.5px',
+                        fontWeight: 800,
+                        fontSize: '14px',
                         cursor: 'pointer',
-                        boxShadow: `0 4px 15px rgba(0,0,0,0.3)`
+                        boxShadow: '0 4px 12px rgba(123, 63, 0, 0.12)'
                       }}
                     >
-                      Unlock Box (₹10) 🗝️
+                      Unlock for ₹10 🔑
                     </motion.button>
                   </div>
 
@@ -1683,7 +1650,7 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Possible Brands Carousel Bar */}
+            {/* Premium Sponsors Bar */}
             <div style={{
               marginTop: 48,
               background: '#FAF2EA',
@@ -1712,7 +1679,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 9. RECENTLY FUNDED TREATMENTS (WALL OF JOY) ────────────────── */}
+        {/* ────────────────── 9. RECENTLY FUNDED TREATMENTS ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Wall of Joy</span>
@@ -1756,7 +1723,7 @@ export default function HomePage() {
 
       </main>
 
-      {/* ────────────────── HIGH-DOPAMINE INTERACTIVE MYSTERY REVEAL MODAL ────────────────── */}
+      {/* ────────────────── LUXURY INTERACTIVE MYSTERY REVEAL MODAL ────────────────── */}
       <AnimatePresence>
         {activeRevealBox && (
           <div style={{
@@ -1766,25 +1733,26 @@ export default function HomePage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgba(15, 23, 42, 0.9)',
-            backdropFilter: 'blur(12px)',
+            background: 'rgba(74, 62, 61, 0.6)',
+            backdropFilter: 'blur(8px)',
             padding: '20px'
           }}>
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.95, opacity: 0 }}
               style={{
-                background: 'linear-gradient(135deg, #1E1B4B 0%, #0F172A 100%)',
-                border: '1px solid rgba(139, 92, 246, 0.4)',
-                borderRadius: '28px',
-                padding: '40px',
+                background: '#FAF6F0',
+                border: '1px solid #8C4F1A',
+                borderRadius: '24px',
+                padding: '36px',
                 width: '100%',
-                maxWidth: '460px',
+                maxWidth: '440px',
                 textAlign: 'center',
-                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5)',
-                color: '#fff',
-                position: 'relative'
+                boxShadow: '0 20px 40px rgba(123, 63, 0, 0.1)',
+                color: 'var(--color-text)',
+                position: 'relative',
+                boxSizing: 'border-box'
               }}
             >
               
@@ -1793,81 +1761,81 @@ export default function HomePage() {
                 <div style={{ padding: '20px 0' }}>
                   <motion.div
                     animate={{
-                      x: [-6, 6, -6, 6, 0],
-                      y: [-4, 4, -4, 4, 0],
-                      rotate: [-2, 2, -2, 2, 0]
+                      x: [-4, 4, -4, 4, 0],
+                      y: [-2, 2, -2, 2, 0],
+                      rotate: [-1, 1, -1, 1, 0]
                     }}
                     transition={{
                       repeat: Infinity,
-                      duration: 0.18,
+                      duration: 0.2,
                       ease: 'easeInOut'
                     }}
                     style={{
-                      fontSize: '72px',
-                      marginBottom: 24,
-                      filter: 'drop-shadow(0 0 20px rgba(139, 92, 246, 0.6))'
+                      fontSize: '64px',
+                      marginBottom: 20,
+                      filter: 'drop-shadow(0 4px 10px rgba(140, 79, 26, 0.1))'
                     }}
                   >
                     🎁
                   </motion.div>
                   
-                  <h3 style={{ fontSize: '22px', fontWeight: 900, fontFamily: 'Outfit', marginBottom: 8, letterSpacing: '-0.3px' }}>
-                    Securing payment gateway...
+                  <h3 style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--color-text)', marginBottom: 8, letterSpacing: '-0.3px' }}>
+                    Sponsoring Patient Treatment...
                   </h3>
                   
-                  <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13.5px', margin: 0 }}>
-                    SSL check successful. Generating micro-ticket settlement for Baby Aarav. Vouchers unlocking soon!
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '13.5px', margin: 0, lineHeight: 1.5 }}>
+                    Securing safe connection keys. Routing ₹9 directly to Nanavati Max ICU billing ledger. Unlocking surprise voucher...
                   </p>
                 </div>
               ) : (
-                /* Success Reveal State - High Dopamine Celebration! */
+                /* Success Reveal State - Elegant Gold Theme Celebration */
                 <div>
-                  {/* Glowing success badge */}
                   <div style={{
-                    width: 72,
-                    height: 72,
+                    width: 64,
+                    height: 64,
                     borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #10B981, #064E3B)',
+                    background: '#FAF2EA',
+                    border: '1px solid #EBD5C2',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '32px',
-                    margin: '0 auto 24px',
-                    boxShadow: '0 0 30px rgba(16, 185, 129, 0.4)'
+                    fontSize: '28px',
+                    margin: '0 auto 20px',
+                    boxShadow: '0 4px 12px rgba(140, 79, 26, 0.05)'
                   }}>
-                    🎉
+                    ✨
                   </div>
 
-                  <span style={{ fontSize: '10.5px', fontWeight: 900, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    Unlock Success • Treatment Funded ❤️
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    SURPRISE UNLOCKED • THANK YOU ❤️
                   </span>
                   
-                  <h3 style={{ fontSize: '26px', fontWeight: 900, fontFamily: 'Outfit', margin: '6px 0 12px', letterSpacing: '-0.5px' }}>
+                  <h3 style={{ fontSize: '24px', fontWeight: 900, fontFamily: 'Outfit', margin: '6px 0 12px', color: 'var(--color-text)', letterSpacing: '-0.5px' }}>
                     {revealedResult?.title}
                   </h3>
 
-                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', lineHeight: 1.5, marginBottom: 20 }}>
-                    {revealedResult?.detail} Thank you for your support! Your ₹9 clinical routing deposit has cleared immediately with Nanavati Max Hospital billers.
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '13.5px', lineHeight: 1.5, marginBottom: 20 }}>
+                    {revealedResult?.detail} Your micro-donation routes 100% to verified clinical billing.
                   </p>
 
-                  {/* Blurred Copy Promo Code Field */}
+                  {/* Copy Coupon Box */}
                   <div style={{
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: '#FAF2EA',
+                    border: '1px solid #EBD5C2',
                     borderRadius: '12px',
-                    padding: '12px 18px',
+                    padding: '12px 16px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: 28
+                    marginBottom: 24
                   }}>
-                    <code style={{ fontSize: '14px', fontWeight: 700, color: '#FCD34D' }}>
+                    <code style={{ fontSize: '13.5px', fontWeight: 800, color: '#8C4F1A' }}>
                       {revealedResult?.code}
                     </code>
                     <button 
                       onClick={() => alert('Coupon code copied! Claim your reward at check out.')}
                       style={{
-                        background: 'rgba(255,255,255,0.1)',
+                        background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                         border: 'none',
                         borderRadius: '6px',
                         color: '#fff',
@@ -1885,17 +1853,17 @@ export default function HomePage() {
                     onClick={handleCloseRevealModal}
                     style={{
                       width: '100%',
-                      padding: '12px 24px',
+                      padding: '12px 20px',
                       borderRadius: '12px',
                       border: 'none',
-                      background: 'linear-gradient(135deg, #10B981, #059669)',
+                      background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                       color: '#fff',
                       fontWeight: 800,
-                      fontSize: '14.5px',
+                      fontSize: '14px',
                       cursor: 'pointer'
                     }}
                   >
-                    Awesome, Claim Reward ❤️
+                    Return to Portal ❤️
                   </button>
                 </div>
               )}
@@ -1909,10 +1877,6 @@ export default function HomePage() {
 
       {/* Responsive adjustments */}
       <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.8; transform: scale(0.98); }
-        }
         @media (max-width: 960px) {
           .home-dashboard-bar {
             padding: 12px 20px !important;
