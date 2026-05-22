@@ -212,10 +212,10 @@ const OTHER_CASES = [
 
 const TABS = [
   { id: 'all', label: 'All Unlocks' },
-  { id: 'rewards', label: 'Mystery Rewards' },
-  { id: 'games', label: 'Mini-Games' },
-  { id: 'inspiration', label: 'Inspiration' },
-  { id: 'donate', label: 'Direct Support' }
+  { id: 'games', label: 'Games 🎮' },
+  { id: 'coupons', label: 'Coupons 🎁' },
+  { id: 'quotes', label: 'Quotes 💬' },
+  { id: 'free-help', label: 'Free Help ❤️' }
 ]
 
 export default function MainPage() {
@@ -249,11 +249,11 @@ export default function MainPage() {
 
         {/* ── PREMIUM FILTER PILLS (Replaces Sidebar) ── */}
         <div style={{ maxWidth: 1200, margin: '48px auto 0', padding: '0 24px', textAlign: 'center' }}>
-          <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Discovery Portal</span>
-          <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '32px', color: '#2C1B1B', margin: '4px 0 16px', letterSpacing: '-0.8px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Discovery Portal</span>
+          <h2 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '34px', color: '#4A3427', margin: '6px 0 16px', letterSpacing: '-0.8px' }}>
             Choose What You Want to Unlock 🤍
           </h2>
-          <p style={{ margin: '0 auto 32px', maxWidth: 640, fontSize: '15px', color: '#7C6B5B', fontWeight: 500, lineHeight: 1.6 }}>
+          <p style={{ margin: '0 auto 32px', maxWidth: 640, fontSize: '15px', color: '#7A6A5A', fontWeight: 500, lineHeight: 1.7 }}>
             Direct micro-donations to Baby Aarav\'s medical fund while gaining access to surprise wellness rewards, immersive minimal games, and stories.
           </p>
 
@@ -262,10 +262,10 @@ export default function MainPage() {
             gap: 8, 
             alignItems: 'center', 
             justifyContent: 'center',
-            background: 'rgba(235, 224, 214, 0.3)',
+            background: 'rgba(235, 224, 214, 0.25)',
             padding: '6px',
             borderRadius: '20px',
-            border: '1px solid rgba(235, 224, 214, 0.6)',
+            border: '1px solid rgba(235, 224, 214, 0.4)',
             flexWrap: 'wrap'
           }}>
             {TABS.map(({ id, label }) => (
@@ -277,11 +277,11 @@ export default function MainPage() {
                   borderRadius: '16px',
                   border: 'none',
                   background: activeTab === id ? '#fff' : 'transparent',
-                  color: activeTab === id ? '#8C4F1A' : '#7C6B5B',
+                  color: activeTab === id ? '#8B5E34' : '#7A6A5A',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',
-                  boxShadow: activeTab === id ? '0 4px 12px rgba(140, 79, 26, 0.08)' : 'none',
+                  boxShadow: activeTab === id ? '0 4px 12px rgba(139, 94, 52, 0.05)' : 'none',
                   transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
               >
@@ -294,125 +294,13 @@ export default function MainPage() {
         {/* ── CENTRALIZED CONTENT GRID ── */}
         <div style={{ maxWidth: 1200, margin: '40px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
           
-          {/* ────────────────── 1. FEATURED MYSTERY UNLOCKS ────────────────── */}
-          {show('rewards') && (
-            <section style={{ marginBottom: 64 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 32 }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.06em', textTransform: 'uppercase' }}>✨ Curated Surprise drops</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0' }}>Featured Mystery Unlocks</h3>
-                <p style={{ margin: 0, fontSize: '14px', color: '#7C6B5B' }}>Unlock elegant fintech and lifestyle surprise rewards. Brand vouchers are kept purely secret.</p>
-              </div>
-
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-                gap: 24 
-              }}>
-                {MYSTERY_REWARDS.map((reward) => (
-                  <motion.div
-                    key={reward.id}
-                    whileHover={{ y: -6, boxShadow: '0 12px 30px rgba(140, 79, 26, 0.08)' }}
-                    onClick={() => handleUnlock(reward.price)}
-                    style={{
-                      background: '#fff',
-                      border: '1px solid rgba(232, 224, 214, 0.7)',
-                      borderRadius: '24px',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                      position: 'relative'
-                    }}
-                  >
-                    {/* Blurred Secret Preview Area */}
-                    <div style={{ 
-                      height: 150, 
-                      background: reward.blurBg, 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}>
-                      {/* Ambient background shimmer */}
-                      <div className="shimmer-bg" style={{ position: 'absolute', inset: 0, opacity: 0.15 }} />
-                      
-                      {/* Blurred teaser gift card */}
-                      <div style={{
-                        width: 140,
-                        height: 84,
-                        background: 'rgba(255, 255, 255, 0.45)',
-                        backdropFilter: 'blur(12px)',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(255, 255, 255, 0.6)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        padding: '10px',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.03)',
-                        transform: 'rotate(-4deg)',
-                        transition: 'all 0.3s'
-                      }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 9, fontWeight: 800, color: reward.accentColor, opacity: 0.75, letterSpacing: '0.04em' }}>MYSTERY GIFT</span>
-                          <Lock size={10} color={reward.accentColor} />
-                        </div>
-                        <div style={{ textAlign: 'center', margin: '4px 0' }}>
-                          <span style={{ fontSize: 18, fontWeight: 900, color: '#8C4F1A', opacity: 0.4, letterSpacing: '2px', filter: 'blur(1.5px)' }}>
-                            ✨?✨
-                          </span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 9, fontWeight: 700, color: '#8C4F1A' }}>₹?? Worth</span>
-                          <div style={{ width: 12, height: 12, borderRadius: '50%', background: reward.accentColor, opacity: 0.6 }} />
-                        </div>
-                      </div>
-
-                      {/* Lock Icon Badge */}
-                      <div style={{
-                        position: 'absolute',
-                        bottom: 12,
-                        background: '#FAF2EA',
-                        border: '1px solid rgba(140, 79, 26, 0.15)',
-                        padding: '4px 10px',
-                        borderRadius: '12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6
-                      }}>
-                        <Lock size={11} color="#8C4F1A" />
-                        <span style={{ fontSize: 10, fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.02em', textTransform: 'uppercase' }}>SECURE REVEAL</span>
-                      </div>
-                    </div>
-
-                    <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                      <div>
-                        <h4 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 800, color: '#3C2F2F', fontFamily: 'Outfit' }}>{reward.title}</h4>
-                        <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#7C6B5B', lineHeight: 1.5, fontWeight: 500 }}>{reward.description}</p>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', justifySelf: 'space-between', justifyContent: 'space-between', borderTop: '1px solid rgba(232, 224, 214, 0.4)', paddingTop: '12px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase' }}>CLAIM FOR ₹{reward.price}</span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#8C4F1A', fontWeight: 800, fontSize: '13px' }}>
-                          <span>Unlock</span>
-                          <ChevronRight size={14} />
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* ────────────────── 2. MINI-GAMES ────────────────── */}
+          {/* ────────────────── 1. GAMES SECTION ────────────────── */}
           {show('games') && (
-            <section style={{ marginBottom: 64 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 32 }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.06em', textTransform: 'uppercase' }}>🎮 Light & Mindful Gameplay</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0' }}>Mini-Games Collection</h3>
-                <p style={{ margin: 0, fontSize: '14px', color: '#7C6B5B' }}>Calm your mind with interactive micro-games while direct funding life-saving treatments.</p>
+            <section style={{ marginBottom: 72 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>🎮 Interactive Micro-Play</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 8px', letterSpacing: '-0.5px' }}>Mindful Play & Support</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 540, lineHeight: 1.7 }}>Calm your mind with interactive micro-games while direct funding life-saving treatments.</p>
               </div>
 
               <div style={{ 
@@ -423,12 +311,13 @@ export default function MainPage() {
                 {PREMIUM_GAMES.map((game) => (
                   <motion.div
                     key={game.id}
-                    whileHover={{ y: -6, boxShadow: '0 12px 30px rgba(140, 79, 26, 0.08)' }}
+                    whileHover={{ y: -5, boxShadow: '0 12px 30px rgba(139, 94, 52, 0.06), 0 0 0 1px rgba(139, 94, 52, 0.04)' }}
                     onClick={() => handleUnlock(game.price)}
                     style={{
-                      background: '#fff',
-                      border: '1px solid rgba(232, 224, 214, 0.7)',
-                      borderRadius: '24px',
+                      background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
+                      border: '1px solid rgba(235, 224, 214, 0.5)',
+                      borderRadius: '28px',
+                      boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(139, 94, 52, 0.02)',
                       overflow: 'hidden',
                       cursor: 'pointer',
                       display: 'flex',
@@ -438,28 +327,43 @@ export default function MainPage() {
                   >
                     {/* SVG Illustration Container */}
                     <div style={{ 
-                      height: 140, 
-                      background: '#FAF7F2', 
+                      height: 150, 
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%)', 
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'center',
-                      padding: 16
+                      padding: 20,
+                      borderBottom: '1px solid rgba(235, 224, 214, 0.3)'
                     }}>
                       {game.illustration}
                     </div>
 
-                    <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 20 }}>
                       <div>
-                        <h4 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 800, color: '#3C2F2F', fontFamily: 'Outfit' }}>{game.title}</h4>
-                        <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#7C6B5B', lineHeight: 1.5, fontWeight: 500 }}>{game.description}</p>
+                        <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{game.title}</h4>
+                        <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.7, fontWeight: 500 }}>{game.description}</p>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', justifySelf: 'space-between', justifyContent: 'space-between', borderTop: '1px solid rgba(232, 224, 214, 0.4)', paddingTop: '12px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase' }}>PLAY FOR ₹{game.price}</span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#8C4F1A', fontWeight: 800, fontSize: '13px' }}>
-                          <span>Start Play</span>
-                          <ChevronRight size={14} />
-                        </div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>₹{game.price} Entry Code</span>
+                        <motion.div 
+                          whileHover={{ scale: 1.03 }}
+                          style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: 6, 
+                            color: '#fff', 
+                            fontWeight: 700, 
+                            fontSize: '12.5px',
+                            background: 'linear-gradient(135deg, #8B5E34, #734D29)',
+                            padding: '8px 16px',
+                            borderRadius: '12px',
+                            boxShadow: '0 4px 12px rgba(139, 94, 52, 0.15)'
+                          }}
+                        >
+                          <span>Unlock for ₹{game.price}</span>
+                          <ChevronRight size={13} />
+                        </motion.div>
                       </div>
                     </div>
                   </motion.div>
@@ -468,13 +372,140 @@ export default function MainPage() {
             </section>
           )}
 
-          {/* ────────────────── 3. INSPIRATIONAL UNLOCKS ────────────────── */}
-          {show('inspiration') && (
-            <section style={{ marginBottom: 64 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 32 }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#47682C', letterSpacing: '0.06em', textTransform: 'uppercase' }}>💬 Stories that heal</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0' }}>Inspirational Unlocks</h3>
-                <p style={{ margin: 0, fontSize: '14px', color: '#7C6B5B' }}>Unlock real hospital updates, progress stories, and beautiful motivational community quotes.</p>
+          {/* ────────────────── 2. COUPONS / MYSTERY REWARDS SECTION ────────────────── */}
+          {show('coupons') && (
+            <section style={{ marginBottom: 72 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>🎁 Curated Brand Drops</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 8px', letterSpacing: '-0.5px' }}>Mystery Sponsor Rewards</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 540, lineHeight: 1.7 }}>Unlock hidden surprise brand vouchers securely. Brand reward codes are kept completely secret before payment.</p>
+              </div>
+
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+                gap: 24 
+              }}>
+                {MYSTERY_REWARDS.map((reward) => (
+                  <motion.div
+                    key={reward.id}
+                    whileHover={{ y: -5, boxShadow: '0 12px 30px rgba(139, 94, 52, 0.06), 0 0 0 1px rgba(139, 94, 52, 0.04)' }}
+                    onClick={() => handleUnlock(reward.price)}
+                    style={{
+                      background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
+                      border: '1px solid rgba(235, 224, 214, 0.5)',
+                      borderRadius: '28px',
+                      boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(139, 94, 52, 0.02)',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                      position: 'relative'
+                    }}
+                  >
+                    {/* Blurred Secret Preview Area */}
+                    <div style={{ 
+                      height: 160, 
+                      background: reward.blurBg, 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      borderBottom: '1px solid rgba(235, 224, 214, 0.3)'
+                    }}>
+                      <div className="shimmer-bg" style={{ position: 'absolute', inset: 0, opacity: 0.15 }} />
+                      
+                      {/* Blurred teaser gift card */}
+                      <div style={{
+                        width: 140,
+                        height: 84,
+                        background: 'rgba(255, 255, 255, 0.45)',
+                        backdropFilter: 'blur(16px)',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 255, 255, 0.7)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        padding: '10px',
+                        boxShadow: '0 8px 24px rgba(139, 94, 52, 0.03)',
+                        transform: 'rotate(-4deg)',
+                        transition: 'all 0.3s'
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 9, fontWeight: 800, color: reward.accentColor, opacity: 0.75, letterSpacing: '0.04em' }}>MYSTERY GIFT</span>
+                          <Lock size={10} color={reward.accentColor} />
+                        </div>
+                        <div style={{ textAlign: 'center', margin: '4px 0' }}>
+                          <span style={{ fontSize: 18, fontWeight: 900, color: '#8B5E34', opacity: 0.3, letterSpacing: '2px', filter: 'blur(1.5px)' }}>
+                            ✨?✨
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 9, fontWeight: 700, color: '#8B5E34' }}>₹?? Worth</span>
+                          <div style={{ width: 12, height: 12, borderRadius: '50%', background: reward.accentColor, opacity: 0.6 }} />
+                        </div>
+                      </div>
+
+                      {/* Lock Icon Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: 12,
+                        background: '#FAF6F0',
+                        border: '1px solid rgba(139, 94, 52, 0.15)',
+                        padding: '4px 10px',
+                        borderRadius: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}>
+                        <Lock size={11} color="#8B5E34" />
+                        <span style={{ fontSize: 10, fontWeight: 800, color: '#8B5E34', letterSpacing: '0.02em', textTransform: 'uppercase' }}>SECURE REVEAL</span>
+                      </div>
+                    </div>
+
+                    <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifySelf: 'space-between', justifyContent: 'space-between', gap: 20 }}>
+                      <div>
+                        <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{reward.title}</h4>
+                        <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.7, fontWeight: 500 }}>{reward.description}</p>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>₹{reward.price} Reward Code</span>
+                        <motion.div 
+                          whileHover={{ scale: 1.03 }}
+                          style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: 6, 
+                            color: '#fff', 
+                            fontWeight: 700, 
+                            fontSize: '12.5px',
+                            background: 'linear-gradient(135deg, #8B5E34, #734D29)',
+                            padding: '8px 16px',
+                            borderRadius: '12px',
+                            boxShadow: '0 4px 12px rgba(139, 94, 52, 0.15)'
+                          }}
+                        >
+                          <span>Unlock for ₹{reward.price}</span>
+                          <ChevronRight size={13} />
+                        </motion.div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ────────────────── 3. QUOTES & INSPIRATION SECTION ────────────────── */}
+          {show('quotes') && (
+            <section style={{ marginBottom: 72 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>💬 Stories that heal</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 8px', letterSpacing: '-0.5px' }}>Quotes & Emotional Capsules</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 540, lineHeight: 1.7 }}>Unlock heartwarming gratitude messages, survivor audio stories, and positive pediatric recovery journals.</p>
               </div>
 
               <div style={{ 
@@ -485,32 +516,50 @@ export default function MainPage() {
                 {INSPIRATIONAL_CARDS.map((card, idx) => (
                   <motion.div
                     key={idx}
-                    whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(0,0,0,0.02)' }}
+                    whileHover={{ y: -5, boxShadow: '0 12px 30px rgba(139, 94, 52, 0.06), 0 0 0 1px rgba(139, 94, 52, 0.04)' }}
                     onClick={() => handleUnlock(10)}
                     style={{
-                      background: card.bg,
-                      borderRadius: '24px',
-                      padding: '28px',
+                      background: `linear-gradient(135deg, #FCFAF7 0%, ${card.bg} 100%)`,
+                      borderRadius: '28px',
+                      padding: '30px',
                       cursor: 'pointer',
-                      border: '1px solid rgba(232, 224, 214, 0.4)',
+                      border: '1px solid rgba(235, 224, 214, 0.5)',
+                      boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(139, 94, 52, 0.02)',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      minHeight: 180,
+                      minHeight: 220,
                       transition: 'all 0.25s'
                     }}
                   >
                     <div>
-                      <span style={{ fontSize: '10px', fontWeight: 800, color: card.accent, letterSpacing: '0.04em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.6)', padding: '4px 10px', borderRadius: '8px', display: 'inline-block', marginBottom: 12 }}>
+                      <span style={{ fontSize: '9.5px', fontWeight: 800, color: card.accent, letterSpacing: '0.05em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.7)', padding: '4px 10px', borderRadius: '8px', display: 'inline-block', marginBottom: 16, border: `1px solid rgba(235, 224, 214, 0.3)` }}>
                         {card.tag}
                       </span>
-                      <h4 style={{ margin: '0 0 8px', fontSize: '17px', fontWeight: 800, color: '#2C1B1B', fontFamily: 'Outfit', lineHeight: 1.35 }}>{card.title}</h4>
-                      <p style={{ margin: 0, fontSize: '13.5px', color: '#5C4C3C', lineHeight: 1.5, fontWeight: 500 }}>{card.description}</p>
+                      <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit', lineHeight: 1.4 }}>{card.title}</h4>
+                      <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.7, fontWeight: 500 }}>{card.description}</p>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', justifySelf: 'space-between', justifyContent: 'space-between', marginTop: 20, paddingTop: 12, borderTop: '1px solid rgba(0,0,0,0.04)' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: card.accent }}>CONTRIBUTE ₹10 TO UNLOCK</span>
-                      <ArrowRight size={14} color={card.accent} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(235, 224, 214, 0.4)' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.04em' }}>₹10 Contribution</span>
+                      <motion.div 
+                        whileHover={{ scale: 1.03 }}
+                        style={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: 6, 
+                          color: '#fff', 
+                          fontWeight: 700, 
+                          fontSize: '12.5px',
+                          background: 'linear-gradient(135deg, #8B5E34, #734D29)',
+                          padding: '8px 16px',
+                          borderRadius: '12px',
+                          boxShadow: '0 4px 12px rgba(139, 94, 52, 0.15)'
+                        }}
+                      >
+                        <span>Unlock for ₹10</span>
+                        <ChevronRight size={13} />
+                      </motion.div>
                     </div>
                   </motion.div>
                 ))}
@@ -518,23 +567,33 @@ export default function MainPage() {
             </section>
           )}
 
-          {/* ────────────────── 4. DIRECT DONATION ────────────────── */}
-          {show('donate') && (
-            <section style={{ marginBottom: 64, maxWidth: 680, margin: '0 auto 64px' }}>
+          {/* ────────────────── 4. FREE TO HELP SECTION ────────────────── */}
+          {show('free-help') && (
+            <section style={{ marginBottom: 72, maxWidth: 680, margin: '0 auto 72px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 28 }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.06em', textTransform: 'uppercase' }}>❤️ Immediate Clinical Support</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0' }}>Direct Support Checkout</h3>
-                <p style={{ margin: 0, fontSize: '14px', color: '#7C6B5B' }}>Bypass the mini-games and mystery rewards to direct fund Baby Aarav\'s medical balance instantly.</p>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>❤️ Simple Pure Contribution</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 8px', letterSpacing: '-0.5px' }}>Help Without Rewards</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', lineHeight: 1.7 }}>Every single rupee goes directly towards Baby Aarav\'s medical balance sheet at the hospital billing desk.</p>
               </div>
 
               <div style={{
-                background: '#fff',
-                border: '1px solid rgba(232, 224, 214, 0.8)',
+                background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
+                border: '1px solid rgba(235, 224, 214, 0.8)',
                 borderRadius: '28px',
-                padding: '32px',
-                boxShadow: '0 10px 30px rgba(140, 79, 26, 0.03)'
+                padding: '36px',
+                boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(139, 94, 52, 0.02)'
               }}>
-                <label style={{ fontSize: '13px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block', marginBottom: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#FFF2EA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Heart size={20} color="#8B5E34" fill="#8B5E34" />
+                  </div>
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>Help Without Rewards ❤️</h4>
+                    <p style={{ margin: '2px 0 0', fontSize: '13px', color: '#7A6A5A' }}>Every contribution directly supports treatment.</p>
+                  </div>
+                </div>
+
+                <label style={{ fontSize: '12px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: 12 }}>
                   Select Contribution Amount
                 </label>
 
@@ -551,13 +610,14 @@ export default function MainPage() {
                         padding: '12px 0',
                         borderRadius: '14px',
                         border: '1px solid',
-                        borderColor: selectedPreset === preset && !customAmount ? '#8C4F1A' : 'rgba(232, 224, 214, 0.8)',
-                        background: selectedPreset === preset && !customAmount ? '#FFF8F2' : '#fff',
-                        color: selectedPreset === preset && !customAmount ? '#8C4F1A' : '#7C6B5B',
-                        fontWeight: 800,
-                        fontSize: '14px',
+                        borderColor: selectedPreset === preset && !customAmount ? '#8B5E34' : 'rgba(235, 224, 214, 0.6)',
+                        background: '#fff',
+                        color: selectedPreset === preset && !customAmount ? '#8B5E34' : '#7A6A5A',
+                        fontWeight: 700,
+                        fontSize: '13.5px',
                         cursor: 'pointer',
-                        transition: 'all 0.2s'
+                        transition: 'all 0.2s',
+                        boxShadow: selectedPreset === preset && !customAmount ? '0 4px 12px rgba(139, 94, 52, 0.06)' : 'none'
                       }}
                     >
                       ₹{preset}
@@ -566,7 +626,7 @@ export default function MainPage() {
                 </div>
 
                 <div style={{ marginBottom: 24 }}>
-                  <label style={{ fontSize: '13px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block', marginBottom: 8 }}>
+                  <label style={{ fontSize: '12px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: 8 }}>
                     Or Enter Custom Amount (₹)
                   </label>
                   <input
@@ -581,13 +641,13 @@ export default function MainPage() {
                       width: '100%',
                       padding: '14px 18px',
                       borderRadius: '14px',
-                      border: '1px solid rgba(232, 224, 214, 0.9)',
-                      fontSize: '15px',
+                      border: '1px solid rgba(232, 224, 214, 0.8)',
+                      fontSize: '14.5px',
                       fontWeight: 600,
                       boxSizing: 'border-box',
                       outline: 'none',
-                      background: '#FFFDFB',
-                      color: '#2C1B1B',
+                      background: '#FFF',
+                      color: '#4A3427',
                       transition: 'border-color 0.2s'
                     }}
                   />
@@ -600,7 +660,7 @@ export default function MainPage() {
                     padding: '16px',
                     borderRadius: '16px',
                     border: 'none',
-                    background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                    background: 'linear-gradient(135deg, #8B5E34, #734D29)',
                     color: '#fff',
                     fontWeight: 800,
                     fontSize: '15px',
@@ -609,12 +669,12 @@ export default function MainPage() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: 8,
-                    boxShadow: '0 4px 14px rgba(140, 79, 26, 0.25)',
+                    boxShadow: '0 4px 14px rgba(140, 79, 26, 0.2)',
                     transition: 'all 0.2s'
                   }}
                 >
                   <Heart size={16} fill="#fff" />
-                  <span>Support Baby Aarav with ₹{customAmount ? parseInt(customAmount).toLocaleString() : selectedPreset.toLocaleString()}</span>
+                  <span>Contribute Freely</span>
                 </button>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center', marginTop: 18, fontSize: '11px', color: '#7C6B5B', fontWeight: 600 }}>
@@ -633,10 +693,10 @@ export default function MainPage() {
           }}>
             <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32 }}>
               <div>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Explore more children</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '24px', color: '#2C1B1B', margin: '4px 0 0', letterSpacing: '-0.5px' }}>Other Urgent Medical Cases</h3>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Explore more children</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 0', letterSpacing: '-0.5px' }}>Other Urgent Medical Cases</h3>
               </div>
-              <button style={{ background: 'none', border: 'none', color: '#8C4F1A', fontWeight: 800, fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <button style={{ background: 'none', border: 'none', color: '#8B5E34', fontWeight: 800, fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
                 <span>View All Cases</span>
                 <ChevronRight size={14} />
               </button>
@@ -651,9 +711,10 @@ export default function MainPage() {
                 <div
                   key={idx}
                   style={{
-                    background: '#fff',
-                    border: '1px solid rgba(232, 224, 214, 0.6)',
-                    borderRadius: '20px',
+                    background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
+                    border: '1px solid rgba(235, 224, 214, 0.5)',
+                    borderRadius: '28px',
+                    boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(139, 94, 52, 0.02)',
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column'
@@ -661,16 +722,16 @@ export default function MainPage() {
                 >
                   <img src={child.img} alt={child.name} style={{ width: '100%', height: 160, objectFit: 'cover' }} />
                   
-                  <div style={{ padding: '18px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 20 }}>
                     <div>
-                      <h4 style={{ margin: '0 0 2px', fontSize: '16px', fontWeight: 800, color: '#3C2F2F', fontFamily: 'Outfit' }}>{child.name}</h4>
-                      <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: '#7C6B5B' }}>{child.condition}</p>
+                      <h4 style={{ margin: '0 0 4px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{child.name}</h4>
+                      <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#7A6A5A', fontWeight: 500 }}>{child.condition}</p>
                       
                       {/* Simple compact progress */}
-                      <div style={{ height: 6, background: '#FAF2EA', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
-                        <div style={{ width: `${child.progress}%`, height: '100%', background: '#8C4F1A' }} />
+                      <div style={{ height: 6, background: 'rgba(235, 224, 214, 0.4)', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
+                        <div style={{ width: `${child.progress}%`, height: '100%', background: '#8B5E34' }} />
                       </div>
-                      <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', fontSize: '11px', color: '#7C6B5B', fontWeight: 700 }}>
+                      <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', fontSize: '11px', color: '#7A6A5A', fontWeight: 700 }}>
                         <span>₹{child.raised.toLocaleString('en-IN')} raised</span>
                         <span>{child.progress}%</span>
                       </div>
@@ -680,15 +741,15 @@ export default function MainPage() {
                       onClick={() => handleUnlock(10)}
                       style={{ 
                         width: '100%', 
-                        marginTop: 18, 
-                        padding: '10px', 
-                        fontSize: 12, 
-                        fontWeight: 800, 
-                        borderRadius: '10px', 
-                        border: '1px solid rgba(140, 79, 26, 0.25)', 
-                        background: 'transparent', 
-                        color: '#8C4F1A', 
+                        padding: '12px', 
+                        fontSize: 13, 
+                        fontWeight: 700, 
+                        borderRadius: '12px', 
+                        border: '1px solid rgba(139, 94, 52, 0.3)', 
+                        background: '#fff', 
+                        color: '#8B5E34', 
                         cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(139, 94, 52, 0.02)',
                         transition: 'all 0.2s'
                       }}
                     >
