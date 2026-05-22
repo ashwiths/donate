@@ -61,6 +61,16 @@ const MYSTERY_REWARDS = [
     blurBg: 'linear-gradient(135deg, rgba(40, 116, 240, 0.08) 0%, rgba(255, 222, 0, 0.12) 100%)',
     accentColor: '#8C4F1A',
     teaserLogo: 'Gift'
+  },
+  {
+    id: 'healing-token',
+    title: 'Hope & Healing Token',
+    brand: 'Special Support Code',
+    description: 'A surprise healing reward promised by our leading healthcare and mindfulness partners to support your recovery quest.',
+    price: 30,
+    blurBg: 'linear-gradient(135deg, rgba(71, 104, 44, 0.08) 0%, rgba(71, 104, 44, 0.15) 100%)',
+    accentColor: '#8C4F1A',
+    teaserLogo: 'Gift'
   }
 ]
 
