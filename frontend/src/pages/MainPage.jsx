@@ -246,68 +246,6 @@ export default function MainPage() {
 
       <main style={{ flex: 1, width: '100%', paddingBottom: 120 }}>
         
-        {/* ── TOP CHILD-SUPPORT STRIP (Retained & Optimized) ── */}
-        <div style={{ 
-          background: '#fff', 
-          borderBottom: '1px solid rgba(232,224,214,0.6)', 
-          padding: '16px 40px',
-          width: '100%',
-          boxSizing: 'border-box'
-        }} className="banner-fluid-padding">
-          <div style={{ 
-            maxWidth: 1200, 
-            margin: '0 auto', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between',
-            gap: 24, 
-            flexWrap: 'wrap' 
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <div style={{ position: 'relative' }}>
-                <img 
-                  src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=120&q=80" 
-                  alt="child" 
-                  style={{ width: 56, height: 56, borderRadius: 14, objectFit: 'cover', border: '2px solid #FAF2EA' }} 
-                />
-                <span style={{ position: 'absolute', bottom: -2, right: -2, background: '#8C4F1A', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>
-                  <Heart size={10} color="#fff" fill="#fff" />
-                </span>
-              </div>
-              <div>
-                <p style={{ margin: 0, fontSize: 10, color: '#8C4F1A', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Currently Supporting</p>
-                <h3 style={{ margin: '2px 0 0', fontWeight: 800, fontSize: 16, color: '#3C2F2F', fontFamily: 'Outfit', letterSpacing: '-0.3px' }}>Baby Aarav 🤍</h3>
-                <p style={{ margin: 0, fontSize: 12, color: 'var(--color-text-muted)' }}>Liver Disease (Biliary Atresia)</p>
-              </div>
-            </div>
-            
-            <div style={{ flex: 1, maxWidth: 420, minWidth: 240 }}>
-              <DonationProgress raised={214385} required={7000000} percentage={3.06} compact />
-            </div>
-
-            <button 
-              onClick={() => handleUnlock(10)}
-              className="btn-primary" 
-              style={{ 
-                padding: '10px 20px', 
-                fontSize: 13, 
-                fontWeight: 700,
-                borderRadius: '10px', 
-                background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                border: 'none',
-                color: '#fff',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                transition: 'all 0.2s'
-              }}
-            >
-              <span>Quick Support (₹10)</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
-        </div>
 
         {/* ── PREMIUM FILTER PILLS (Replaces Sidebar) ── */}
         <div style={{ maxWidth: 1200, margin: '48px auto 0', padding: '0 24px', textAlign: 'center' }}>
