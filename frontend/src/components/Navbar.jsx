@@ -7,7 +7,7 @@ import { useAuth } from '../context/AuthContext'
 const navItems = [
   { label: 'Home', path: '/home', icon: Heart },
   { label: 'Play Zone', path: '/main?tab=games', icon: Gamepad2 },
-  { label: 'Inspirations', path: '/main?tab=quotes', icon: Quote },
+  { label: 'Inspirations', path: '/inspirations', icon: Quote },
 ]
 
 export default function Navbar() {

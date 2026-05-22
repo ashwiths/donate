@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import MainPage from './pages/MainPage'
 import ThankYouPage from './pages/ThankYouPage'
+import InspirationsPage from './pages/InspirationsPage'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/main" element={<MainPage />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
+            <Route path="/inspirations" element={<InspirationsPage />} />
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
