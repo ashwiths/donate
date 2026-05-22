@@ -248,12 +248,12 @@ export default function MainPage() {
         
 
         {/* ── PREMIUM FILTER PILLS (Replaces Sidebar) ── */}
-        <div style={{ maxWidth: 1500, margin: '80px auto 0', padding: '0 80px', textAlign: 'center', boxSizing: 'border-box' }}>
+        <div style={{ maxWidth: 1360, margin: '60px auto 0', padding: '0 48px', textAlign: 'center', boxSizing: 'border-box' }}>
           <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Discovery Portal</span>
-          <h2 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '38px', color: '#4A3427', margin: '12px 0 24px', letterSpacing: '-0.8px', lineHeight: 1.25 }}>
+          <h2 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '36px', color: '#4A3427', margin: '8px 0 16px', letterSpacing: '-0.8px', lineHeight: 1.25 }}>
             Choose What You Want to Unlock 🤍
           </h2>
-          <p style={{ margin: '0 auto 48px', maxWidth: 680, fontSize: '16px', color: '#7A6A5A', fontWeight: 500, lineHeight: 1.8 }}>
+          <p style={{ margin: '0 auto 36px', maxWidth: 640, fontSize: '15.5px', color: '#7A6A5A', fontWeight: 500, lineHeight: 1.75 }}>
             Direct micro-donations to Baby Aarav\'s medical fund while gaining access to surprise wellness rewards, immersive minimal games, and stories.
           </p>
 
@@ -292,21 +292,21 @@ export default function MainPage() {
         </div>
 
         {/* ── CENTRALIZED CONTENT GRID ── */}
-        <div style={{ maxWidth: 1500, margin: '100px auto 0', padding: '0 80px', boxSizing: 'border-box' }}>
+        <div style={{ maxWidth: 1360, margin: '56px auto 0', padding: '0 48px', boxSizing: 'border-box' }}>
           
           {/* ────────────────── 1. GAMES SECTION ────────────────── */}
           {show('games') && (
-            <section style={{ marginBottom: 110 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 48 }}>
+            <section style={{ marginBottom: 90 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>🎮 Interactive Micro-Play</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 10px', letterSpacing: '-0.5px' }}>Mindful Play & Support</h3>
-                <p style={{ margin: 0, fontSize: '15.5px', color: '#7A6A5A', maxWidth: 580, lineHeight: 1.8 }}>Calm your mind with interactive micro-games while direct funding life-saving treatments.</p>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 6px', letterSpacing: '-0.5px' }}>Mindful Play & Support</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75 }}>Calm your mind with interactive micro-games while direct funding life-saving treatments.</p>
               </div>
 
               <div style={{ 
                 display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', 
-                gap: 36 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
+                gap: 32 
               }}>
                 {PREMIUM_GAMES.map((game) => (
                   <motion.div
@@ -375,17 +375,17 @@ export default function MainPage() {
 
           {/* ────────────────── 2. COUPONS / MYSTERY REWARDS SECTION ────────────────── */}
           {show('coupons') && (
-            <section style={{ marginBottom: 110 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 48 }}>
+            <section style={{ marginBottom: 90 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>🎁 Curated Brand Drops</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 10px', letterSpacing: '-0.5px' }}>Mystery Sponsor Rewards</h3>
-                <p style={{ margin: 0, fontSize: '15.5px', color: '#7A6A5A', maxWidth: 580, lineHeight: 1.8 }}>Unlock hidden surprise brand vouchers securely. Brand reward codes are kept completely secret before payment.</p>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 6px', letterSpacing: '-0.5px' }}>Mystery Sponsor Rewards</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75 }}>Unlock hidden surprise brand vouchers securely. Brand reward codes are kept completely secret before payment.</p>
               </div>
 
               <div style={{ 
                 display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', 
-                gap: 36 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
+                gap: 32 
               }}>
                 {MYSTERY_REWARDS.map((reward) => (
                   <motion.div
@@ -503,17 +503,17 @@ export default function MainPage() {
 
           {/* ────────────────── 3. QUOTES & INSPIRATION SECTION ────────────────── */}
           {show('quotes') && (
-            <section style={{ marginBottom: 110 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 48 }}>
+            <section style={{ marginBottom: 90 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>💬 Stories that heal</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 10px', letterSpacing: '-0.5px' }}>Quotes & Emotional Capsules</h3>
-                <p style={{ margin: 0, fontSize: '15.5px', color: '#7A6A5A', maxWidth: 580, lineHeight: 1.8 }}>Unlock heartwarming gratitude messages, survivor audio stories, and positive pediatric recovery journals.</p>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 6px', letterSpacing: '-0.5px' }}>Quotes & Emotional Capsules</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75 }}>Unlock heartwarming gratitude messages, survivor audio stories, and positive pediatric recovery journals.</p>
               </div>
 
               <div style={{ 
                 display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-                gap: 36 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
+                gap: 32 
               }}>
                 {INSPIRATIONAL_CARDS.map((card, idx) => (
                   <motion.div
@@ -689,14 +689,14 @@ export default function MainPage() {
 
           {/* ────────────────── 5. MORE CASES ────────────────── */}
           <section style={{ 
-            marginTop: 100, 
+            marginTop: 90, 
             borderTop: '1px solid rgba(232, 224, 214, 0.5)', 
-            paddingTop: '80px'
+            paddingTop: '64px'
           }}>
-            <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48 }}>
+            <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }}>
               <div>
                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Explore more children</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 0', letterSpacing: '-0.5px' }}>Other Urgent Medical Cases</h3>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 0', letterSpacing: '-0.5px' }}>Other Urgent Medical Cases</h3>
               </div>
               <button style={{ background: 'none', border: 'none', color: '#8B5E34', fontWeight: 800, fontSize: '13.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
                 <span>View All Cases</span>
@@ -706,8 +706,8 @@ export default function MainPage() {
 
             <div style={{ 
               display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', 
-              gap: 36 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
+              gap: 32 
             }}>
               {OTHER_CASES.map((child, idx) => (
                 <div
