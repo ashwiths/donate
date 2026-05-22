@@ -17,6 +17,54 @@ const CHILD = {
   story: 'Aarav is just 8 months old. He was diagnosed with Biliary Atresia—a rare, life-threatening liver condition. He requires an urgent liver transplant within the next 3 weeks to survive. His father, a local delivery driver, is the donor, but the transplant surgery costs an overwhelming ₹70 Lakhs, which is far beyond the family\'s lifetime savings. Every single ₹10 game ticket you purchase goes directly to funding his hospital bills.',
 }
 
+// Sample waiting children data
+const WAITING_CHILDREN = [
+  {
+    id: '2',
+    name: 'Baby Diya',
+    age: '18 months old',
+    condition: 'Congenital Heart Defect (VSD)',
+    image: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=500&q=80',
+    requiredAmount: 1500000,
+    raisedAmount: 480000,
+    percentage: 0.32,
+    tag: 'Urgent Case'
+  },
+  {
+    id: '3',
+    name: 'Baby Vihaan',
+    age: '2 years old',
+    condition: 'Acute Leukemia (Blood Cancer)',
+    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80',
+    requiredAmount: 3000000,
+    raisedAmount: 820000,
+    percentage: 0.27,
+    tag: 'Recently Added'
+  },
+  {
+    id: '4',
+    name: 'Baby Arjun',
+    age: '1 year old',
+    condition: 'Spinal Muscular Atrophy (Type 1)',
+    image: 'https://images.unsplash.com/photo-1544120190-2751b8e176b0?w=500&q=80',
+    requiredAmount: 16000000,
+    raisedAmount: 1400000,
+    percentage: 0.08,
+    tag: 'Urgent Case'
+  },
+  {
+    id: '5',
+    name: 'Baby Meera',
+    age: '6 months old',
+    condition: 'Severe SCID (Bone Marrow Needed)',
+    image: 'https://images.unsplash.com/photo-1484863137850-59afcfe05386?w=500&q=80',
+    requiredAmount: 2500000,
+    raisedAmount: 310000,
+    percentage: 0.12,
+    tag: 'Urgent Case'
+  }
+]
+
 const TRUST_ITEMS = [
   { icon: Shield, title: 'Direct Hospital Payouts', desc: 'Every rupee collected goes directly to Nanavati Max Hospital bill settlement.' },
   { icon: CheckCircle2, title: 'Verified Medical Auditing', desc: 'All medical records, doctor prescriptions, and hospital sheets are third-party verified.' },
@@ -413,11 +461,122 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 3. HOW IT WORKS SECTION (3-STEP GRID) ────────────────── */}
+        {/* ────────────────── 3. MORE CHILDREN WAITING FOR HELP ❤️ (NEW SECTION) ────────────────── */}
+        <section style={{ 
+          padding: '80px 40px', 
+          maxWidth: 1600, 
+          margin: '0 auto',
+          boxSizing: 'border-box',
+          width: '100%'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }} className="section-header-flex">
+            <div>
+              <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Urgent Cases</span>
+              <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '32px', color: 'var(--color-text)', margin: '4px 0 0', letterSpacing: '-0.75px' }}>More Children Waiting For Help ❤️</h2>
+            </div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <span style={{ fontSize: '12px', background: '#FEF3C7', color: '#D97706', padding: '6px 12px', borderRadius: '99px', fontWeight: 700 }}>4 Critical Cases Remaining</span>
+            </div>
+          </div>
+
+          {/* Premium horizontal cards layout */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+            gap: 28 
+          }} className="waiting-children-grid">
+            {WAITING_CHILDREN.map((child) => (
+              <motion.div
+                key={child.id}
+                variants={cardVariant}
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.12)' }}
+                style={{
+                  background: '#fff',
+                  borderRadius: '20px',
+                  border: '1px solid var(--color-border)',
+                  padding: '16px',
+                  boxSizing: 'border-box',
+                  boxShadow: 'var(--shadow-sm)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  height: '420px',
+                  cursor: 'pointer'
+                }}
+                onClick={() => navigate('/main')}
+              >
+                {/* Child Image & Badge */}
+                <div>
+                  <div style={{ position: 'relative', width: '100%', height: '170px', borderRadius: '14px', overflow: 'hidden', marginBottom: 16 }}>
+                    <img 
+                      src={child.image} 
+                      alt={child.name} 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: 12,
+                      left: 12,
+                      background: child.tag === 'Urgent Case' ? '#FEE2E2' : '#FEF3C7',
+                      color: child.tag === 'Urgent Case' ? '#EF4444' : '#D97706',
+                      padding: '4px 10px',
+                      borderRadius: '6px',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.02em'
+                    }}>
+                      {child.tag}
+                    </div>
+                  </div>
+
+                  {/* Child Info */}
+                  <h3 style={{ margin: '0 0 4px', fontSize: '17px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>{child.name}</h3>
+                  <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'var(--color-text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {child.age} old • {child.condition}
+                  </p>
+                </div>
+
+                {/* Progress bar and play CTA */}
+                <div>
+                  <div style={{ marginBottom: 14 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', color: 'var(--color-text-muted)', marginBottom: 6 }}>
+                      <span>Raised: <strong>₹{(child.raisedAmount/100000).toFixed(2)}L</strong></span>
+                      <span>Goal: <strong>₹{(child.requiredAmount/100000).toFixed(2)}L</strong></span>
+                    </div>
+                    <DonationProgress raised={child.raisedAmount} required={child.requiredAmount} percentage={child.percentage} compact />
+                  </div>
+
+                  <button 
+                    className="btn-primary" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '10px 14px', 
+                      borderRadius: '10px', 
+                      fontSize: '13px', 
+                      fontWeight: 700,
+                      background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                      border: 'none',
+                      color: '#fff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 6
+                    }}
+                  >
+                    Donate & Play <ChevronRight size={14} />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* ────────────────── 4. HOW IT WORKS SECTION (3-STEP GRID) ────────────────── */}
         <section id="how-it-works" style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Simple Micro-philanthropy</span>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '36px', color: 'var(--color-text)', margin: '4px 0 12px', letterSpacing: '-0.5px' }}>Help Aarav in 3 Simple Steps</h2>
+            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '36px', color: 'var(--color-text)', margin: '4px 0 12px', letterSpacing: '-0.5px' }}>Help Children in 3 Simple Steps</h2>
             <p style={{ margin: 0, fontSize: '15px', color: 'var(--color-text-muted)' }}>No huge payments required. Even ₹10 contributes directly.</p>
           </div>
 
@@ -443,7 +602,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 4. GAMES & REWARDS PREVIEW SECTION ────────────────── */}
+        {/* ────────────────── 5. GAMES & REWARDS PREVIEW SECTION ────────────────── */}
         <section style={{ 
           background: 'radial-gradient(circle at 50% 50%, #FAF6F0 0%, #FAF8F5 100%)', 
           borderTop: '1px solid var(--color-border)', 
@@ -512,7 +671,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 5. BRAND TRUST & AUDITING BADGES ────────────────── */}
+        {/* ────────────────── 6. BRAND TRUST & AUDITING BADGES ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ 
             display: 'grid', 
@@ -563,6 +722,11 @@ export default function HomePage() {
           }
           .step-card-hover:hover, .step-card-hover:focus {
             transform: none !important;
+          }
+          .section-header-flex {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
           }
         }
       `}</style>
