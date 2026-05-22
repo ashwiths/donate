@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, Gamepad2, Tag, Quote, Gift, Bell, ChevronDown, User, LogOut, Menu, X, Coins } from 'lucide-react'
+import { Heart, Gamepad2, Quote, Bell, ChevronDown, LogOut, Menu, X, Coins } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 const navItems = [
   { label: 'Home', path: '/home', icon: Heart },
   { label: 'Play Zone', path: '/main?tab=games', icon: Gamepad2 },
-  { label: 'Coupons', path: '/main?tab=coupons', icon: Tag },
   { label: 'Inspirations', path: '/main?tab=quotes', icon: Quote },
-  { label: 'Free Tickets', path: '/main?tab=free', icon: Gift },
 ]
 
 export default function Navbar() {
@@ -24,56 +22,68 @@ export default function Navbar() {
     navigate('/')
   }
 
+  const isActive = (path) => {
+    if (path.includes('?')) {
+      return location.pathname + location.search === path;
+    }
+    return location.pathname === path;
+  }
+
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
       style={{
-        background: 'rgba(255, 255, 255, 0.85)',
+        background: 'rgba(252, 250, 247, 0.88)',
         backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(232, 224, 214, 0.4)',
+        borderBottom: '1px solid rgba(235, 224, 214, 0.45)',
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        boxShadow: '0 4px 20px rgba(123, 63, 0, 0.02)',
+        boxShadow: '0 4px 24px rgba(139, 94, 52, 0.03)'
       }}
     >
       <div style={{ 
         maxWidth: 1280, 
         margin: '0 auto', 
-        padding: '0 40px', 
+        padding: '0 24px', 
         display: 'flex', 
         alignItems: 'center', 
-        height: 76, // Increased height for luxury vertical breathing room
+        height: 64, 
         justifyContent: 'space-between',
         boxSizing: 'border-box'
       }} className="nav-container">
         
         {/* Left Section: Premium Branding */}
-        <Link to="/home" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none', flexShrink: 0 }}>
+        <Link to="/home" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
           <div style={{
-            width: 38,
-            height: 38,
-            background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-            borderRadius: '11px',
+            width: 34,
+            height: 34,
+            background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
+            borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 6px 16px rgba(123, 63, 0, 0.15)'
+            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 12px rgba(122, 78, 43, 0.15)'
           }}>
-            <Heart size={18} color="#fff" fill="#fff" />
+            <Heart size={15} color="#fff" fill="#fff" />
           </div>
           <div>
-            <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 17, color: 'var(--color-text)', letterSpacing: '-0.5px', lineHeight: 1.1 }}>Heal & Play</div>
-            <div style={{ fontSize: 9.5, color: 'var(--color-text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Play Games. Save Lives.</div>
+            <div style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 16, color: '#4A3427', letterSpacing: '-0.4px', lineHeight: 1.1 }}>Heal & Play</div>
+            <div style={{ fontSize: 9, color: '#7A6A5A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Play Games. Save Lives.</div>
           </div>
         </Link>
 
-        {/* Middle Section: Desktop Nav Tabs (Premium horizontal pill) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} className="hidden md:flex">
+        {/* Middle Section: Centered Premium Capsule Nav Pills */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 8,
+          justifyContent: 'center'
+        }} className="hidden md:flex">
           {navItems.map(({ label, path, icon: Icon }) => {
-            const active = location.pathname + location.search === path || location.pathname === path.split('?')[0]
+            const active = isActive(path)
             return (
               <Link 
                 key={label} 
@@ -81,76 +91,83 @@ export default function Navbar() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 8,
+                  gap: 6,
                   padding: '8px 16px',
                   borderRadius: '99px',
                   textDecoration: 'none',
-                  color: active ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                  color: active ? '#fff' : '#7A6A5A',
                   fontWeight: active ? 750 : 600,
-                  fontSize: '13.5px',
-                  background: active ? '#FAF2EA' : 'transparent',
-                  transition: 'all 0.25s ease',
-                  border: active ? '1px solid #EBD5C2' : '1px solid transparent'
+                  fontSize: '13px',
+                  height: 36,
+                  boxSizing: 'border-box',
+                  background: active ? 'linear-gradient(135deg, #9A673A, #7A4E2B)' : '#FAF6F2',
+                  border: active ? '1px solid #7A4E2B' : '1px solid rgba(235, 224, 214, 0.5)',
+                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                  boxShadow: active 
+                    ? 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 12px rgba(122, 78, 43, 0.16)' 
+                    : '0 2px 6px rgba(139, 94, 52, 0.01)'
                 }}
                 className="nav-link-item"
               >
-                <Icon size={15} style={{ opacity: active ? 1 : 0.7 }} />
-                {label}
+                <Icon size={13} style={{ opacity: active ? 1 : 0.8 }} />
+                <span>{label}</span>
               </Link>
             )
           })}
         </div>
 
-        {/* Right Section: Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        {/* Right Section: Aligned flex group */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           
           {/* HP Coins Pill */}
           {user && (
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 6,
+              gap: 5,
               background: '#FFFBEB',
               border: '1.5px solid #FCD34D',
               borderRadius: '99px',
-              padding: '6px 14px',
-              fontSize: '13px',
+              padding: '5px 12px',
+              fontSize: '12px',
               fontWeight: 800,
               color: '#B45309',
             }} className="coins-badge">
-              <Coins size={14} color="#D97706" />
+              <Coins size={13} color="#D97706" />
               <span>120 Coins</span>
             </div>
           )}
 
           {/* Bell Notifications */}
           <button style={{ 
-            background: 'none', 
-            border: 'none', 
+            background: '#FAF6F2', 
+            border: '1px solid rgba(235, 224, 214, 0.5)', 
             cursor: 'pointer', 
-            padding: 8, 
-            color: 'var(--color-text-muted)', 
+            width: 36,
+            height: 36,
+            color: '#7A6A5A', 
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: '50%',
-            transition: 'background 0.2s'
+            transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+            boxShadow: '0 2px 6px rgba(139, 94, 52, 0.01)'
           }} className="icon-btn-hover">
-            <Bell size={19} />
+            <Bell size={16} />
             <span style={{
               position: 'absolute',
-              top: 6,
-              right: 6,
-              width: 7,
-              height: 7,
+              top: 10,
+              right: 10,
+              width: 6,
+              height: 6,
               background: '#EF4444',
               borderRadius: '50%',
-              border: '1.5px solid #fff',
+              border: '1px solid #fff',
             }} />
           </button>
 
-          {/* User profile section */}
+          {/* User profile section / Login trigger */}
           {user ? (
             <div style={{ position: 'relative' }}>
               <button
@@ -158,32 +175,34 @@ export default function Navbar() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 8,
-                  background: 'none',
-                  border: 'none',
+                  gap: 6,
+                  background: '#FAF6F2',
+                  border: '1px solid rgba(235, 224, 214, 0.5)',
                   cursor: 'pointer',
-                  padding: '4px 6px',
+                  padding: '3px 8px 3px 4px',
                   borderRadius: '99px',
-                  transition: 'background 0.2s'
+                  height: 36,
+                  transition: 'background 0.2s',
+                  boxShadow: '0 2px 6px rgba(139, 94, 52, 0.01)'
                 }}
                 className="profile-btn-hover"
               >
                 <div style={{
-                  width: 32,
-                  height: 32,
+                  width: 28,
+                  height: 28,
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg, #FAF2EA, #EBD5C2)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  border: '1.5px solid #EBD5C2',
-                  fontSize: '12.5px',
+                  border: '1px solid #EBD5C2',
+                  fontSize: '11px',
                   fontWeight: 800,
-                  color: 'var(--color-primary)'
+                  color: '#9A673A'
                 }}>
                   {user.name ? user.name[0].toUpperCase() : 'V'}
                 </div>
-                <ChevronDown size={14} color="var(--color-text-muted)" style={{ transform: dropOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                <ChevronDown size={12} color="#7A6A5A" style={{ transform: dropOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
               </button>
 
               <AnimatePresence>
@@ -208,8 +227,8 @@ export default function Navbar() {
                     }}
                   >
                     <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(232, 224, 214, 0.4)', marginBottom: 4 }}>
-                      <div style={{ fontSize: '11px', color: 'var(--color-text-light)', fontWeight: 700, textTransform: 'uppercase' }}>Signed in as</div>
-                      <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--color-text)', marginTop: 2 }}>{user.name || 'Helper'}</div>
+                      <div style={{ fontSize: '11px', color: '#7A6A5A', fontWeight: 700, textTransform: 'uppercase' }}>Signed in as</div>
+                      <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#4A3427', marginTop: 2 }}>{user.name || 'Helper'}</div>
                     </div>
                     
                     <button 
@@ -239,23 +258,47 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
           ) : (
-            <Link to="/" className="btn-primary" style={{ padding: '8px 18px', fontSize: 13.5, borderRadius: '9px' }}>Login</Link>
+            <Link 
+              to="/" 
+              style={{ 
+                padding: '0 18px', 
+                fontSize: '13px', 
+                fontWeight: 700,
+                borderRadius: '99px',
+                height: 36,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                textDecoration: 'none',
+                background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
+                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 12px rgba(122, 78, 43, 0.14)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
+              Login
+            </Link>
           )}
 
-          {/* Mobile menu toggle */}
+          {/* Collapsed Mobile Menu Toggle inside subtle rounded button container */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             style={{ 
-              background: 'none', 
-              border: 'none', 
+              background: '#FAF6F2', 
+              border: '1px solid rgba(235, 224, 214, 0.5)', 
               cursor: 'pointer', 
+              width: 36,
+              height: 36,
+              borderRadius: '50%',
               display: 'flex', 
-              padding: 6,
-              color: 'var(--color-text)'
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#4A3427',
+              boxShadow: '0 2px 6px rgba(139, 94, 52, 0.01)'
             }}
             className="md:hidden"
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            {menuOpen ? <X size={16} /> : <Menu size={16} />}
           </button>
         </div>
       </div>
@@ -276,7 +319,7 @@ export default function Navbar() {
           >
             <div style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {navItems.map(({ label, path, icon: Icon }) => {
-                const active = location.pathname + location.search === path || location.pathname === path.split('?')[0]
+                const active = isActive(path)
                 return (
                   <Link 
                     key={label} 
@@ -289,7 +332,7 @@ export default function Navbar() {
                       padding: '12px 16px',
                       borderRadius: '10px',
                       textDecoration: 'none',
-                      color: active ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                      color: active ? '#9A673A' : '#7A6A5A',
                       fontWeight: active ? 750 : 600,
                       fontSize: '14.5px',
                       background: active ? '#FAF2EA' : 'transparent',
