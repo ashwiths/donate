@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, User, Heart, Shield, FileCheck, Users, ArrowRight, ChevronRight, CheckCircle2, X, Sparkles, Award } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, User, Heart, Shield, FileCheck, Users, ArrowRight, ChevronRight, CheckCircle2, X, Sparkles, Award, Star, Gift, Gamepad2, ArrowUpRight } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { fadeUp, staggerContainer } from '../animations/variants'
+import { fadeUp, staggerContainer, scaleIn } from '../animations/variants'
+import DonationProgress from '../components/DonationProgress'
 
-const stats = [
-  { icon: Users, value: '25,800+', label: 'Active Helpers' },
-  { icon: Shield, value: '100%', label: 'Direct Payout' },
-  { icon: FileCheck, value: 'Verified', label: 'Clinical Cases' },
+const statsGrid = [
+  { value: '25,800+', label: 'Active Helpers' },
+  { value: '₹3.28Cr+', label: 'Directly Raised' },
+  { value: '120+', label: 'Children Supported' },
+  { value: '98%', label: 'Verified Cases' },
 ]
 
 const AVATARS = [
@@ -54,15 +56,26 @@ export default function LoginPage() {
       flexDirection: 'column'
     }}>
 
-      {/* Decorative premium blurs */}
+      {/* Modern ambient blurred layout shapes */}
       <div style={{
         position: 'absolute',
-        top: '-10%',
-        left: '10%',
-        width: '600px',
-        height: '600px',
-        background: 'radial-gradient(circle, rgba(232, 168, 124, 0.15) 0%, rgba(254, 243, 232, 0) 70%)',
-        filter: 'blur(110px)',
+        top: '-15%',
+        left: '5%',
+        width: '550px',
+        height: '550px',
+        background: 'radial-gradient(circle, rgba(232, 168, 124, 0.12) 0%, rgba(254, 243, 232, 0) 70%)',
+        filter: 'blur(100px)',
+        pointerEvents: 'none',
+        zIndex: 0
+      }} />
+      <div style={{
+        position: 'absolute',
+        bottom: '-5%',
+        right: '15%',
+        width: '450px',
+        height: '450px',
+        background: 'radial-gradient(circle, rgba(123, 63, 0, 0.04) 0%, rgba(254, 243, 232, 0) 70%)',
+        filter: 'blur(90px)',
         pointerEvents: 'none',
         zIndex: 0
       }} />
@@ -72,11 +85,11 @@ export default function LoginPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '24px 80px',
+        padding: '20px 80px',
         zIndex: 10,
         position: 'relative',
         borderBottom: '1px solid rgba(232, 224, 214, 0.4)',
-        background: 'rgba(250, 246, 240, 0.7)',
+        background: 'rgba(250, 246, 240, 0.75)',
         backdropFilter: 'blur(12px)'
       }} className="landing-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -133,12 +146,35 @@ export default function LoginPage() {
         </div>
       </header>
 
-      {/* ────────────────── 2. HERO GRID SECTION (55% / 45%) ────────────────── */}
+      {/* ────────────────── 2. TRUST VERIFICATION STRIP ────────────────── */}
+      <div style={{
+        background: '#FFFDF9',
+        borderBottom: '1px solid rgba(232, 224, 214, 0.4)',
+        padding: '10px 80px',
+        display: 'flex',
+        justifyContent: 'center',
+        gap: 36,
+        fontSize: '11.5px',
+        fontWeight: 700,
+        color: '#8C4F1A',
+        zIndex: 9,
+        position: 'relative',
+        letterSpacing: '0.02em',
+        boxShadow: '0 2px 8px rgba(123, 63, 0, 0.02)'
+      }} className="trust-strip">
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>🛡️ Verified Hospital Cases</span>
+        <span style={{ opacity: 0.3 }}>•</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>🤝 100% Direct Payment Auditing</span>
+        <span style={{ opacity: 0.3 }}>•</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>🔒 Secure SSL Micro-donations</span>
+      </div>
+
+      {/* ────────────────── 3. HERO GRID SECTION (55% / 45%) ────────────────── */}
       <main style={{
         flex: 1,
         maxWidth: 1600,
         margin: '0 auto',
-        padding: '56px 80px',
+        padding: '56px 80px 80px',
         display: 'grid',
         gridTemplateColumns: '55fr 45fr',
         gap: 64,
@@ -149,13 +185,14 @@ export default function LoginPage() {
         position: 'relative'
       }} className="hero-split-grid">
         
-        {/* Left Side Content (55%) */}
+        {/* Left Side Column: Interactive Visual Stack (55%) */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+          style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}
         >
+          {/* Tag */}
           <motion.div
             variants={fadeUp}
             style={{
@@ -175,6 +212,7 @@ export default function LoginPage() {
             </span>
           </motion.div>
 
+          {/* Heading */}
           <motion.h1
             variants={fadeUp}
             style={{
@@ -195,6 +233,7 @@ export default function LoginPage() {
             }}>Save Sick Children.</span>
           </motion.h1>
 
+          {/* Subtitle */}
           <motion.p
             variants={fadeUp}
             style={{
@@ -208,7 +247,30 @@ export default function LoginPage() {
             Join over 25,800 active helpers transforming medical crowdfunding. Play simple mini-games, claim merchant retail coupons, and fund surgeries for just ₹10.
           </motion.p>
 
-          {/* Quick Buttons Row */}
+          {/* Mini "How It Works" Flow Row */}
+          <motion.div
+            variants={fadeUp}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 12, 
+              fontSize: '12px', 
+              fontWeight: 700, 
+              color: '#8C4F1A',
+              background: '#FAF2EA',
+              border: '1px solid #EBD5C2',
+              borderRadius: '12px',
+              padding: '10px 16px',
+              alignSelf: 'flex-start'
+            }}
+            className="hero-mini-flow"
+          >
+            <span>🎮 1. Choose Game</span> <ArrowRight size={13} />
+            <span>💳 2. Pay ₹10 Ticket</span> <ArrowRight size={13} />
+            <span>🌱 3. Save Children</span>
+          </motion.div>
+
+          {/* CTAs Row */}
           <motion.div
             variants={fadeUp}
             style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}
@@ -239,7 +301,35 @@ export default function LoginPage() {
             </button>
           </motion.div>
 
-          {/* Helper Avatars & Trust Stats */}
+          {/* Impact Stats Grid: Fills empty whitespace in left column beautifully */}
+          <motion.div
+            variants={fadeUp}
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(4, 1fr)', 
+              gap: 14, 
+              maxWidth: '600px',
+              borderTop: '1px solid rgba(232, 224, 214, 0.6)',
+              paddingTop: '24px',
+              marginTop: '8px'
+            }}
+            className="hero-stats-row"
+          >
+            {statsGrid.map(({ value, label }) => (
+              <div key={label} style={{
+                background: 'rgba(255, 255, 255, 0.6)',
+                borderRadius: '12px',
+                padding: '12px 14px',
+                border: '1px solid rgba(232, 224, 214, 0.5)',
+                boxShadow: 'var(--shadow-sm)'
+              }}>
+                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--color-primary)', fontFamily: 'Outfit' }}>{value}</div>
+                <div style={{ fontSize: '10.5px', color: 'var(--color-text-muted)', fontWeight: 500, marginTop: 2 }}>{label}</div>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Avatars */}
           <motion.div
             variants={fadeUp}
             style={{ display: 'flex', alignItems: 'center', gap: 12 }}
@@ -251,8 +341,8 @@ export default function LoginPage() {
                   src={avatar}
                   alt="Helper avatar"
                   style={{
-                    width: 34,
-                    height: 34,
+                    width: 32,
+                    height: 32,
                     borderRadius: '50%',
                     border: '3px solid #FAF8F5',
                     marginLeft: idx === 0 ? 0 : -10,
@@ -262,46 +352,93 @@ export default function LoginPage() {
                 />
               ))}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13.5px' }}>
-              <CheckCircle2 size={16} color="#16a34a" fill="#dcfce7" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px' }}>
+              <CheckCircle2 size={15} color="#16a34a" fill="#dcfce7" />
               <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>Trusted by 25,000+ helpers</span>
-              <span style={{ color: 'var(--color-text-muted)' }}>• 100% Secure Auditing</span>
-            </div>
-          </motion.div>
-
-          {/* Dynamic Floating Notification */}
-          <motion.div
-            variants={fadeUp}
-            animate={{ y: [0, -6, 0] }}
-            transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-            style={{
-              background: '#fff',
-              borderRadius: '16px',
-              padding: '14px 20px',
-              boxShadow: '0 15px 35px rgba(123, 63, 0, 0.1)',
-              border: '1px solid rgba(232, 224, 214, 0.8)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              alignSelf: 'flex-start'
-            }}
-          >
-            <div style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%' }} />
-            <div>
-              <div style={{ fontSize: '10.5px', color: 'var(--color-text-muted)', fontWeight: 600 }}>Live Impact Ticket</div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--color-text)' }}>₹10 directly credited to Baby Aarav</div>
+              <span style={{ color: 'var(--color-text-muted)' }}>• 100% Audited</span>
             </div>
           </motion.div>
         </motion.div>
 
-        {/* Right Side Column: The ONE Large Premium Featured Child Card (45%) */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {/* Right Side Column: Large Premium Child Card + Overlapping Widgets (45%) */}
+        <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', width: '100%' }}>
+          
+          {/* Decorative Floating Reward Cards around the featured card */}
+          <motion.div
+            animate={{ y: [0, -8, 0], rotate: [0, 2, 0] }}
+            transition={{ repeat: Infinity, duration: 4.2, ease: "easeInOut" }}
+            style={{
+              position: 'absolute',
+              top: '-24px',
+              left: '-28px',
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '12px',
+              padding: '8px 12px',
+              border: '1px solid rgba(232, 224, 214, 0.8)',
+              boxShadow: '0 8px 24px rgba(123, 63, 0, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              zIndex: 3
+            }}
+            className="floating-reward-badge"
+          >
+            <Gift size={15} color="#D97706" />
+            <span style={{ fontSize: '11px', fontWeight: 800 }}>Flipkart Vouchers 🏷️</span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [0, 8, 0], rotate: [0, -2, 0] }}
+            transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1 }}
+            style={{
+              position: 'absolute',
+              top: '40%',
+              right: '-36px',
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '12px',
+              padding: '8px 12px',
+              border: '1px solid rgba(232, 224, 214, 0.8)',
+              boxShadow: '0 8px 24px rgba(123, 63, 0, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              zIndex: 3
+            }}
+            className="floating-game-badge"
+          >
+            <Gamepad2 size={15} color="#8C4F1A" />
+            <span style={{ fontSize: '11px', fontWeight: 800 }}>Spin Wheel 🎯</span>
+          </motion.div>
+
+          {/* Floating live activities block */}
+          <motion.div
+            animate={{ x: [0, 6, 0] }}
+            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+            style={{
+              position: 'absolute',
+              top: '-36px',
+              right: '20px',
+              background: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)',
+              borderRadius: '10px',
+              padding: '6px 12px',
+              border: '1px solid #FCD34D',
+              boxShadow: 'var(--shadow-sm)',
+              fontSize: '10.5px',
+              fontWeight: 800,
+              color: '#B45309',
+              zIndex: 3
+            }}
+          >
+            🎉 Coupon unlocked in Chennai just now!
+          </motion.div>
+
+          {/* The ONE Large Premium Featured Child Card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             style={{
-              background: 'rgba(255, 255, 255, 0.85)',
+              background: 'rgba(255, 255, 255, 0.88)',
               backdropFilter: 'blur(20px)',
               borderRadius: '28px',
               border: '1px solid rgba(232, 224, 214, 0.8)',
@@ -314,7 +451,7 @@ export default function LoginPage() {
             }}
             className="featured-child-premium-card"
           >
-            {/* Visual Header */}
+            {/* Image Overlay Header */}
             <div style={{ position: 'relative', width: '100%', height: '280px', borderRadius: '20px', overflow: 'hidden', marginBottom: 24 }}>
               <img 
                 src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1000&q=90" 
@@ -327,7 +464,7 @@ export default function LoginPage() {
                 background: 'linear-gradient(to top, rgba(26, 17, 9, 0.85) 0%, rgba(26, 17, 9, 0.1) 75%)'
               }} />
 
-              {/* Verified Badge Overlay */}
+              {/* Verified Badge */}
               <div style={{
                 position: 'absolute',
                 top: 16,
@@ -345,10 +482,10 @@ export default function LoginPage() {
                 boxShadow: 'var(--shadow-sm)'
               }}>
                 <Award size={13} />
-                VERIFIED MEDICAL CASE
+                VERIFIED CLINICAL CASE
               </div>
 
-              {/* Age and Name */}
+              {/* Name & Title */}
               <div style={{ position: 'absolute', bottom: 20, left: 24, right: 24 }}>
                 <span style={{ fontSize: '10.5px', color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>Nanavati Max Hospital Biller</span>
                 <h3 style={{ margin: '2px 0 0', color: '#fff', fontSize: '22px', fontWeight: 800, fontFamily: 'Outfit' }}>Baby Aarav</h3>
@@ -365,7 +502,7 @@ export default function LoginPage() {
               <DonationProgress raised={214385} required={7000000} percentage={0.03} compact />
             </div>
 
-            {/* Sub-text impact split */}
+            {/* Sub-text transparency row */}
             <div style={{
               background: 'var(--color-bg-warm)',
               borderRadius: '14px',
@@ -383,7 +520,7 @@ export default function LoginPage() {
               100%platform transparency split audited by coordinates.
             </div>
 
-            {/* CTA Triggering the Glassmorphic Modal */}
+            {/* Play CTA */}
             <button 
               onClick={() => setIsLoginOpen(true)}
               className="btn-primary"
@@ -400,11 +537,40 @@ export default function LoginPage() {
               Donate ₹10 & Play to Support
             </button>
           </motion.div>
+
+          {/* Secondary Overlapping Child Support Card (Fills empty bottom right space beautifully) */}
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut" }}
+            style={{
+              position: 'absolute',
+              bottom: '-36px',
+              right: '-28px',
+              background: 'rgba(255, 255, 255, 0.98)',
+              borderRadius: '18px',
+              padding: '14px 18px',
+              boxShadow: '0 20px 45px rgba(123, 63, 0, 0.16)',
+              border: '1px solid rgba(232, 224, 214, 0.9)',
+              zIndex: 2,
+              width: '210px',
+              cursor: 'pointer'
+            }}
+            onClick={() => setIsLoginOpen(true)}
+            className="secondary-waiting-card"
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <span style={{ fontSize: '9px', background: '#FEE2E2', color: '#EF4444', padding: '3px 8px', borderRadius: '4px', fontWeight: 800, textTransform: 'uppercase' }}>Urgent Case</span>
+              <ArrowUpRight size={14} color="var(--color-primary)" />
+            </div>
+            <h4 style={{ margin: '4px 0 2px', fontSize: '13.5px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>Baby Meera</h4>
+            <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>12% raised • Bone Marrow transplant</div>
+          </motion.div>
+          
         </div>
 
       </main>
 
-      {/* ────────────────── 3. DYNAMIC GLASSMORPHIC LOGIN MODAL ────────────────── */}
+      {/* ────────────────── 4. DYNAMIC GLASSMORPHIC LOGIN MODAL ────────────────── */}
       <AnimatePresence>
         {isLoginOpen && (
           <motion.div
@@ -592,7 +758,7 @@ export default function LoginPage() {
                 </button>
               </form>
 
-              {/* Guest Explorative Mode */}
+              {/* Guest explorative block */}
               <div 
                 onClick={handleGuest}
                 style={{
@@ -618,19 +784,31 @@ export default function LoginPage() {
         )}
       </AnimatePresence>
 
-      {/* Media styling overrides */}
+      {/* Responsive media css overrides */}
       <style>{`
         @media (max-width: 960px) {
           .landing-header {
-            padding: 20px 24px !important;
+            padding: 16px 24px !important;
+          }
+          .trust-strip {
+            padding: 8px 24px !important;
+            gap: 16px !important;
+            flex-wrap: wrap !important;
           }
           .landing-nav-links {
             display: none !important;
           }
           .hero-split-grid {
             grid-template-columns: 1fr !important;
-            padding: 40px 24px !important;
-            gap: 40px !important;
+            padding: 32px 24px 64px !important;
+            gap: 48px !important;
+          }
+          .hero-stats-row {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+          }
+          .floating-reward-badge, .floating-game-badge, .secondary-waiting-card {
+            display: none !important;
           }
         }
       `}</style>
