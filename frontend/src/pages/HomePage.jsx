@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Users, Shield, CheckCircle2, ChevronRight, Play, Heart, Star, Award, Sparkles, Gift, Gamepad2, Trophy, Clock, HeartHandshake, FileText, Download, TrendingUp, ShieldCheck, HeartPulse, CreditCard, Lock, Activity, CheckSquare, MessageSquare, HeartHandshake as DirectHeart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
@@ -76,57 +76,60 @@ const COMPLETED_TREATMENTS = [
   { name: 'Baby Aisha', age: '1 year', illness: 'Liver Transplant Success', status: 'Discharged!', date: '1 week ago', image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80' }
 ]
 
-const REAL_REWARDS = [
+// 3 Curated Mystery Box Types
+const MYSTERY_REWARDS = [
   {
-    brand: 'Paytm Cashback',
-    desc: '₹50 Instant Cashback',
-    requirement: 'Unlocked after 1 game session',
-    badge: 'Limited Rewards Today ⚡',
-    color: '#002E6E',
-    bg: 'linear-gradient(135deg, #E6F0FF 0%, #FFFFFF 100%)',
-    logo: '🔵',
-    trustText: 'Play games to unlock cashback while helping treatments.'
+    id: 'daily',
+    title: 'Daily Mystery Reward Box 🎁',
+    desc: 'Unlock a surprise cashback or shopping discount reward.',
+    badge: 'Mystery Box • Daily Drops 🔮',
+    color: '#8B5CF6',
+    borderGlow: '0 0 20px rgba(139, 92, 246, 0.25)',
+    bg: 'linear-gradient(135deg, #1E1B4B 0%, #0F172A 100%)',
+    illustration: '🎁',
+    possibleRewards: [
+      { name: 'Paytm Cashback', logo: '🔵' },
+      { name: 'Flipkart Voucher', logo: '🟡' },
+      { name: 'Swiggy Coupon', logo: '🍕' }
+    ]
   },
   {
-    brand: 'Google Pay Reward',
-    desc: 'Mystery Scratch Card',
-    requirement: 'Daily unlock chances',
-    badge: 'Mystery Unlock Chance 🔮',
-    color: '#1A73E8',
-    bg: 'linear-gradient(135deg, #EEF4FC 0%, #FFFFFF 100%)',
-    logo: '🟢',
-    trustText: 'Every ticket purchased unlocks a daily scratch drop.'
+    id: 'cashback',
+    title: 'Lucky Cashback Drop ⚡',
+    desc: 'Chance to reveal Paytm or Google Pay cashback rewards up to ₹100.',
+    badge: 'Limited Stock Today ⚡',
+    color: '#EC4899',
+    borderGlow: '0 0 20px rgba(236, 72, 153, 0.25)',
+    bg: 'linear-gradient(135deg, #311042 0%, #0F172A 100%)',
+    illustration: '⚡',
+    possibleRewards: [
+      { name: 'Paytm Cashback', logo: '🔵' },
+      { name: 'Google Pay Card', logo: '🟢' }
+    ]
   },
   {
-    brand: 'Flipkart Voucher',
-    desc: 'Shopping Discount Reward',
-    requirement: 'Unlock at Level 2 Helper',
-    badge: 'Daily Reward Drops 🎁',
-    color: '#2874F0',
-    bg: 'linear-gradient(135deg, #FFF9E6 0%, #FFFFFF 100%)',
-    logo: '🟡',
-    trustText: 'Sponsor medicines to redeem Flipkart vouchers.'
-  },
-  {
-    brand: 'Amazon Gift Card',
-    desc: '₹100 Amazon Pay Balance',
-    requirement: 'Directly unlocks on play',
+    id: 'shopping',
+    title: 'Shopping Reward Vault 🛒',
+    desc: 'Hidden ecommerce vouchers and delivery passes waiting inside.',
     badge: 'Chance-Based Drops 📈',
-    color: '#FF9900',
-    bg: 'linear-gradient(135deg, #FFF5E6 0%, #FFFFFF 100%)',
-    logo: '🟠',
-    trustText: 'Your play support directly generates Amazon vouchers.'
-  },
-  {
-    brand: 'Swiggy Food Coupon',
-    desc: 'Free Delivery Food Pass',
-    requirement: 'Unlocked on ₹20 direct play',
-    badge: 'Trending Rewards 🔥',
-    color: '#FC8019',
-    bg: 'linear-gradient(135deg, #FFF0E6 0%, #FFFFFF 100%)',
-    logo: '🍕',
-    trustText: 'Enjoy Swiggy food passes sponsored by merchant partners.'
+    color: '#10B981',
+    borderGlow: '0 0 20px rgba(16, 185, 129, 0.25)',
+    bg: 'linear-gradient(135deg, #064E3B 0%, #0F172A 100%)',
+    illustration: '🗝️',
+    possibleRewards: [
+      { name: 'Flipkart Voucher', logo: '🟡' },
+      { name: 'Amazon Gift Card', logo: '🟠' },
+      { name: 'Swiggy Coupon', logo: '🍕' }
+    ]
   }
+]
+
+const BRAND_PULL_LIST = [
+  { name: 'Paytm Cashback', logo: '🔵', detail: '₹50 instant wallet payout' },
+  { name: 'Google Pay', logo: '🟢', detail: 'Mystery daily scratch bonus' },
+  { name: 'Flipkart Voucher', logo: '🟡', detail: '10% sitewide shopping pass' },
+  { name: 'Amazon Gift Card', logo: '🟠', detail: '₹100 Amazon Pay gift voucher' },
+  { name: 'Swiggy Food Pass', logo: '🍕', detail: 'Free food delivery coupon' }
 ]
 
 const LIVE_DONATIONS = [
@@ -190,6 +193,38 @@ function SecurityIllustration() {
 export default function HomePage() {
   const navigate = useNavigate()
   const [selectedDirectAmount, setSelectedDirectAmount] = useState(20)
+
+  // Interactive Mystery Reveal State Machine
+  const [activeRevealBox, setActiveRevealBox] = useState(null) // 'daily' | 'cashback' | 'shopping'
+  const [isShaking, setIsShaking] = useState(false)
+  const [revealedResult, setRevealedResult] = useState(null)
+
+  const handleTriggerMysteryReveal = (boxId) => {
+    setActiveRevealBox(boxId)
+    setIsShaking(true)
+    setRevealedResult(null)
+
+    // Stage 1: Fast exciting shake animation (1.8s)
+    setTimeout(() => {
+      setIsShaking(false)
+      // Pick a random exciting premium reward
+      const prizes = [
+        { title: '₹50 Paytm Cashback! 🔵', code: 'HP-PAYTM50-CASH', detail: 'Instantly credited to your linked wallet number.' },
+        { title: 'Google Pay Scratch Card! 🟢', code: 'HP-GPAY-SCRATCH', detail: 'Check GPay Reward section for mystery cashback drop.' },
+        { title: '10% Flipkart Shopping Voucher! 🟡', code: 'HP-FLIP-10VOUCH', detail: 'Applicable on next clinical partner checkout.' },
+        { title: '₹100 Amazon Pay Gift Reward! 🟠', code: 'HP-AMZN-100GIFT', detail: 'Redeem directly inside Amazon Pay wallet balance.' },
+        { title: 'Free Swiggy Food Pass! 🍕', code: 'HP-SWIG-PASSFREE', detail: 'Enjoy 100% free food delivery checkout.' }
+      ]
+      const chosen = prizes[Math.floor(Math.random() * prizes.length)]
+      setRevealedResult(chosen)
+    }, 1800)
+  }
+
+  const handleCloseRevealModal = () => {
+    setActiveRevealBox(null)
+    setRevealedResult(null)
+    setIsShaking(false)
+  }
 
   return (
     <div style={{ 
@@ -850,7 +885,7 @@ export default function HomePage() {
                 </p>
               </motion.div>
 
-              {/* Card 3: Secure Payments (Specific protection focus & visualization) */}
+              {/* Card 3: Secure Payments */}
               <motion.div
                 whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
                 style={{
@@ -866,7 +901,6 @@ export default function HomePage() {
                   overflow: 'hidden'
                 }}
               >
-                {/* Visual Secure Payment encrypted glow banner */}
                 <div style={{
                   position: 'absolute',
                   top: 0,
@@ -903,7 +937,6 @@ export default function HomePage() {
                   Protected with Razorpay SSL encryption and secure payment routing.
                 </p>
 
-                {/* Subtle secure banking indicator graphic */}
                 <div style={{ 
                   marginTop: 4, 
                   background: '#FFFDFB', 
@@ -1119,7 +1152,7 @@ export default function HomePage() {
               </button>
             </motion.div>
 
-            {/* Category 3: Donate Freely (With Interactive ₹20 Recommended Chips) */}
+            {/* Category 3: Donate Freely */}
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
               style={{
@@ -1145,7 +1178,7 @@ export default function HomePage() {
                   Support treatments directly. Perfect for helpers who simply wish to donate recommended sums directly to clear hospital bills.
                 </p>
 
-                {/* Interactive Recommended Contribution Chips - Keeps ₹20 highlighted & prominent! */}
+                {/* Interactive Recommended Chips */}
                 <div style={{ display: 'flex', gap: 10, marginBottom: 18 }} className="amount-chips-row">
                   {[20, 50, 100].map((amt) => (
                     <motion.button
@@ -1356,7 +1389,7 @@ export default function HomePage() {
           boxSizing: 'border-box',
           width: '100%'
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }} className="section-header-flex">
+          <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }} className="section-header-flex">
             <div>
               <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Active Clinical Campaigns</span>
               <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>More Children Waiting For Help ❤️</h2>
@@ -1467,23 +1500,27 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 8. EXCITED & REALISTIC BRAND-REWARD EXPERIENCE ────────────────── */}
+        {/* ────────────────── 8. EXCITED & MYSTERY REWARD UNLOCK SYSTEM ────────────────── */}
         <section style={{ 
           background: 'linear-gradient(180deg, #FAF8F5 0%, #FFFDFB 100%)', 
           borderTop: '1px solid var(--color-border)', 
           borderBottom: '1px solid var(--color-border)', 
-          padding: '80px 40px' 
+          padding: '80px 40px',
+          overflow: 'hidden'
         }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 44 }} className="section-header-flex">
               <div>
                 <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Sparkles size={12} /> Partner Brand Rewards
+                  <Sparkles size={12} /> Mystery Reward Ecosystem
                 </span>
-                <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>
+                <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>
                   Unlock Real Rewards While Helping ❤️
                 </h2>
+                <p style={{ margin: '4px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}>
+                  Tickets cost ₹10. Buy dynamic tickets to fund surgeries and unlock high-dopamine mystery vouchers immediately!
+                </p>
               </div>
               <button 
                 onClick={() => navigate('/main?tab=coupons')} 
@@ -1503,83 +1540,173 @@ export default function HomePage() {
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 28 }} className="rewards-cards-grid">
-              {REAL_REWARDS.map((reward, i) => (
+            {/* 3 Premium Mystery Box Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 28 }} className="rewards-cards-grid">
+              {MYSTERY_REWARDS.map((box) => (
                 <motion.div 
-                  key={i}
+                  key={box.id}
                   whileHover={{ 
                     y: -6, 
-                    boxShadow: '0 20px 40px rgba(123, 63, 0, 0.08)',
-                    borderColor: reward.color 
+                    boxShadow: box.borderGlow,
+                    borderColor: box.color 
                   }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.25 }}
                   style={{
-                    background: reward.bg,
-                    borderRadius: '24px',
-                    border: '1px solid rgba(232, 224, 214, 0.6)',
-                    padding: '24px',
-                    boxShadow: 'var(--shadow-sm)',
+                    background: box.bg,
+                    borderRadius: '28px',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    padding: '28px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    height: '240px',
+                    height: '350px',
                     boxSizing: 'border-box',
-                    transition: 'border-color 0.3s ease'
+                    position: 'relative',
+                    overflow: 'hidden',
+                    color: '#fff'
                   }}
                 >
+                  {/* Subtle top light bar */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 28,
+                    right: 28,
+                    height: '2px',
+                    background: `linear-gradient(90deg, transparent, ${box.color}, transparent)`
+                  }} />
+
                   <div>
-                    {/* Card Top Row with Icon and Badge */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
-                      <div style={{
-                        width: 44,
-                        height: 44,
-                        borderRadius: '12px',
-                        background: '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '22px',
-                        boxShadow: '0 4px 10px rgba(0,0,0,0.03)',
-                        border: '1px solid rgba(232, 224, 214, 0.3)'
-                      }}>
-                        {reward.logo}
-                      </div>
-                      
+                    {/* Header Row */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                       <span style={{ 
                         fontSize: '9.5px', 
-                        background: 'rgba(255,255,255,0.9)', 
-                        color: reward.color, 
+                        background: 'rgba(255,255,255,0.08)', 
+                        color: box.color, 
+                        border: `1px solid rgba(255,255,255,0.15)`,
                         padding: '4px 10px', 
                         borderRadius: '6px', 
-                        fontWeight: 800, 
-                        boxShadow: 'var(--shadow-sm)',
-                        letterSpacing: '0.02em',
+                        fontWeight: 900, 
+                        letterSpacing: '0.04em',
                         textTransform: 'uppercase'
                       }}>
-                        {reward.badge}
+                        {box.badge}
                       </span>
+                      <span style={{ fontSize: '12px', opacity: 0.5 }}>₹10 entry</span>
                     </div>
 
-                    {/* Brand details */}
-                    <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
-                      {reward.brand}
-                    </span>
-                    <h4 style={{ margin: '2px 0 6px', fontSize: '18px', fontWeight: 900, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
-                      {reward.desc}
-                    </h4>
-                    
-                    <span style={{ fontSize: '12.5px', color: reward.color, fontWeight: 750 }}>
-                      ⚡ {reward.requirement}
-                    </span>
+                    {/* Mystery visual graphic wrapper - Blurred Preview with question mark! */}
+                    <div style={{
+                      height: '80px',
+                      background: 'rgba(255,255,255,0.03)',
+                      borderRadius: '16px',
+                      border: '1px solid rgba(255,255,255,0.05)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      marginBottom: 20
+                    }}>
+                      {/* Blurred ambient brand logo rows behind */}
+                      <div style={{ display: 'flex', gap: 14, filter: 'blur(6px)', opacity: 0.25 }}>
+                        <span>🔵 Paytm</span>
+                        <span>🟢 GPay</span>
+                        <span>🟡 Flipkart</span>
+                      </div>
+
+                      {/* Floating question mark overlay */}
+                      <div style={{
+                        position: 'absolute',
+                        fontSize: '26px',
+                        fontWeight: 900,
+                        color: box.color,
+                        textShadow: `0 0 12px ${box.color}`,
+                        animation: 'pulse 2s infinite ease-in-out'
+                      }}>
+                        {box.illustration} Secret Reward Inside
+                      </div>
+                    </div>
+
+                    <h3 style={{ margin: '0 0 6px', fontSize: '19px', fontWeight: 900, fontFamily: 'Outfit', color: '#fff', letterSpacing: '-0.3px' }}>
+                      {box.title}
+                    </h3>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.45 }}>
+                      {box.desc}
+                    </p>
                   </div>
 
-                  {/* Tiny Helper Trust Text */}
-                  <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', borderTop: '1px solid rgba(232, 224, 214, 0.4)', paddingTop: 10, display: 'block', fontWeight: 600 }}>
-                    🤝 {reward.trustText}
-                  </span>
+                  <div>
+                    {/* Possible Brands Row */}
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 8, 
+                      fontSize: '11px', 
+                      color: 'rgba(255,255,255,0.4)', 
+                      borderTop: '1px solid rgba(255,255,255,0.06)', 
+                      paddingTop: 12,
+                      marginBottom: 16 
+                    }}>
+                      <span>Possible Vouchers:</span>
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        {box.possibleRewards.map((brand, bIdx) => (
+                          <span key={bIdx} style={{ color: '#fff', fontWeight: 700 }} title={brand.name}>
+                            {brand.logo}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <motion.button 
+                      onClick={() => handleTriggerMysteryReveal(box.id)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        borderRadius: '12px',
+                        border: 'none',
+                        background: `linear-gradient(135deg, ${box.color}, #0F172A)`,
+                        color: '#fff',
+                        fontWeight: 900,
+                        fontSize: '13.5px',
+                        cursor: 'pointer',
+                        boxShadow: `0 4px 15px rgba(0,0,0,0.3)`
+                      }}
+                    >
+                      Unlock Box (₹10) 🗝️
+                    </motion.button>
+                  </div>
 
                 </motion.div>
               ))}
+            </div>
+
+            {/* Possible Brands Carousel Bar */}
+            <div style={{
+              marginTop: 48,
+              background: '#FAF2EA',
+              border: '1px solid #EBD5C2',
+              borderRadius: '20px',
+              padding: '20px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: 16
+            }} className="brands-bar-row">
+              <span style={{ fontSize: '13px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                🤝 Verified Sponsor Partners:
+              </span>
+              <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+                {BRAND_PULL_LIST.map((brand, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px', color: 'var(--color-text)' }}>
+                    <span>{brand.logo}</span>
+                    <strong style={{ fontWeight: 800 }}>{brand.name}</strong>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
@@ -1629,10 +1756,163 @@ export default function HomePage() {
 
       </main>
 
+      {/* ────────────────── HIGH-DOPAMINE INTERACTIVE MYSTERY REVEAL MODAL ────────────────── */}
+      <AnimatePresence>
+        {activeRevealBox && (
+          <div style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(15, 23, 42, 0.9)',
+            backdropFilter: 'blur(12px)',
+            padding: '20px'
+          }}>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              style={{
+                background: 'linear-gradient(135deg, #1E1B4B 0%, #0F172A 100%)',
+                border: '1px solid rgba(139, 92, 246, 0.4)',
+                borderRadius: '28px',
+                padding: '40px',
+                width: '100%',
+                maxWidth: '460px',
+                textAlign: 'center',
+                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5)',
+                color: '#fff',
+                position: 'relative'
+              }}
+            >
+              
+              {/* Shaking State */}
+              {isShaking ? (
+                <div style={{ padding: '20px 0' }}>
+                  <motion.div
+                    animate={{
+                      x: [-6, 6, -6, 6, 0],
+                      y: [-4, 4, -4, 4, 0],
+                      rotate: [-2, 2, -2, 2, 0]
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 0.18,
+                      ease: 'easeInOut'
+                    }}
+                    style={{
+                      fontSize: '72px',
+                      marginBottom: 24,
+                      filter: 'drop-shadow(0 0 20px rgba(139, 92, 246, 0.6))'
+                    }}
+                  >
+                    🎁
+                  </motion.div>
+                  
+                  <h3 style={{ fontSize: '22px', fontWeight: 900, fontFamily: 'Outfit', marginBottom: 8, letterSpacing: '-0.3px' }}>
+                    Securing payment gateway...
+                  </h3>
+                  
+                  <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13.5px', margin: 0 }}>
+                    SSL check successful. Generating micro-ticket settlement for Baby Aarav. Vouchers unlocking soon!
+                  </p>
+                </div>
+              ) : (
+                /* Success Reveal State - High Dopamine Celebration! */
+                <div>
+                  {/* Glowing success badge */}
+                  <div style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #10B981, #064E3B)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '32px',
+                    margin: '0 auto 24px',
+                    boxShadow: '0 0 30px rgba(16, 185, 129, 0.4)'
+                  }}>
+                    🎉
+                  </div>
+
+                  <span style={{ fontSize: '10.5px', fontWeight: 900, color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Unlock Success • Treatment Funded ❤️
+                  </span>
+                  
+                  <h3 style={{ fontSize: '26px', fontWeight: 900, fontFamily: 'Outfit', margin: '6px 0 12px', letterSpacing: '-0.5px' }}>
+                    {revealedResult?.title}
+                  </h3>
+
+                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', lineHeight: 1.5, marginBottom: 20 }}>
+                    {revealedResult?.detail} Thank you for your support! Your ₹9 clinical routing deposit has cleared immediately with Nanavati Max Hospital billers.
+                  </p>
+
+                  {/* Blurred Copy Promo Code Field */}
+                  <div style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '12px',
+                    padding: '12px 18px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 28
+                  }}>
+                    <code style={{ fontSize: '14px', fontWeight: 700, color: '#FCD34D' }}>
+                      {revealedResult?.code}
+                    </code>
+                    <button 
+                      onClick={() => alert('Coupon code copied! Claim your reward at check out.')}
+                      style={{
+                        background: 'rgba(255,255,255,0.1)',
+                        border: 'none',
+                        borderRadius: '6px',
+                        color: '#fff',
+                        padding: '6px 12px',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Copy Code
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={handleCloseRevealModal}
+                    style={{
+                      width: '100%',
+                      padding: '12px 24px',
+                      borderRadius: '12px',
+                      border: 'none',
+                      background: 'linear-gradient(135deg, #10B981, #059669)',
+                      color: '#fff',
+                      fontWeight: 800,
+                      fontSize: '14.5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Awesome, Claim Reward ❤️
+                  </button>
+                </div>
+              )}
+
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <Footer />
 
       {/* Responsive adjustments */}
       <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(0.98); }
+        }
         @media (max-width: 960px) {
           .home-dashboard-bar {
             padding: 12px 20px !important;
