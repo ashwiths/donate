@@ -76,10 +76,57 @@ const COMPLETED_TREATMENTS = [
   { name: 'Baby Aisha', age: '1 year', illness: 'Liver Transplant Success', status: 'Discharged!', date: '1 week ago', image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80' }
 ]
 
-const REWARD_CATEGORIES = [
-  { brand: 'Flipkart Voucher', value: 'flat 10% off', logo: '🏷️', category: 'Shopping' },
-  { brand: 'Amazon Pay Gift Card', value: 'flat ₹50 cashback', logo: '💳', category: 'Vouchers' },
-  { brand: 'Swiggy Food Pass', value: 'free delivery voucher', logo: '🍕', category: 'Food' }
+const REAL_REWARDS = [
+  {
+    brand: 'Paytm Cashback',
+    desc: '₹50 Instant Cashback',
+    requirement: 'Unlocked after 1 game session',
+    badge: 'Limited Rewards Today ⚡',
+    color: '#002E6E',
+    bg: 'linear-gradient(135deg, #E6F0FF 0%, #FFFFFF 100%)',
+    logo: '🔵',
+    trustText: 'Play games to unlock cashback while helping treatments.'
+  },
+  {
+    brand: 'Google Pay Reward',
+    desc: 'Mystery Scratch Card',
+    requirement: 'Daily unlock chances',
+    badge: 'Mystery Unlock Chance 🔮',
+    color: '#1A73E8',
+    bg: 'linear-gradient(135deg, #EEF4FC 0%, #FFFFFF 100%)',
+    logo: '🟢',
+    trustText: 'Every ticket purchased unlocks a daily scratch drop.'
+  },
+  {
+    brand: 'Flipkart Voucher',
+    desc: 'Shopping Discount Reward',
+    requirement: 'Unlock at Level 2 Helper',
+    badge: 'Daily Reward Drops 🎁',
+    color: '#2874F0',
+    bg: 'linear-gradient(135deg, #FFF9E6 0%, #FFFFFF 100%)',
+    logo: '🟡',
+    trustText: 'Sponsor medicines to redeem Flipkart vouchers.'
+  },
+  {
+    brand: 'Amazon Gift Card',
+    desc: '₹100 Amazon Pay Balance',
+    requirement: 'Directly unlocks on play',
+    badge: 'Chance-Based Drops 📈',
+    color: '#FF9900',
+    bg: 'linear-gradient(135deg, #FFF5E6 0%, #FFFFFF 100%)',
+    logo: '🟠',
+    trustText: 'Your play support directly generates Amazon vouchers.'
+  },
+  {
+    brand: 'Swiggy Food Coupon',
+    desc: 'Free Delivery Food Pass',
+    requirement: 'Unlocked on ₹20 direct play',
+    badge: 'Trending Rewards 🔥',
+    color: '#FC8019',
+    bg: 'linear-gradient(135deg, #FFF0E6 0%, #FFFFFF 100%)',
+    logo: '🍕',
+    trustText: 'Enjoy Swiggy food passes sponsored by merchant partners.'
+  }
 ]
 
 const LIVE_DONATIONS = [
@@ -142,6 +189,7 @@ function SecurityIllustration() {
 
 export default function HomePage() {
   const navigate = useNavigate()
+  const [selectedDirectAmount, setSelectedDirectAmount] = useState(20)
 
   return (
     <div style={{ 
@@ -712,34 +760,240 @@ export default function HomePage() {
 
           </div>
 
-          {/* Bottom Trust Badge Row */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 24,
-            flexWrap: 'wrap',
-            paddingTop: 32,
-            borderTop: '1px solid rgba(232, 224, 214, 0.4)'
-          }} className="bottom-trust-badges">
+          {/* ────────────────── 3B. REDESIGNED HIGH-FIDELITY TRUST & FRAMEWORK CARDS ────────────────── */}
+          <div style={{ marginTop: 80, borderTop: '1px solid rgba(232, 224, 214, 0.6)', paddingTop: 64 }}>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13.5px', fontWeight: 700, color: 'var(--color-text)' }}>
-              <ShieldCheck size={16} color="var(--color-primary)" />
-              <span>Hospital Verified 🏥</span>
-            </div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13.5px', fontWeight: 700, color: 'var(--color-text)' }}>
-              <ShieldCheck size={16} color="var(--color-primary)" />
-              <span>No Hidden Charges 🛡️</span>
+            <div style={{ textAlign: 'center', marginBottom: 48 }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                Trust Framework
+              </span>
+              <h3 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '26px', color: 'var(--color-text)', margin: '4px 0 0', letterSpacing: '-0.5px' }}>
+                Our Security & Verification Framework 🛡️
+              </h3>
+              <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
+                Instant transparent operations. Verified medical cases and bank-grade payment encryption guarantee absolute security.
+              </p>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13.5px', fontWeight: 700, color: 'var(--color-text)' }}>
-              <ShieldCheck size={16} color="var(--color-primary)" />
-              <span>Direct Billing Settlement 💳</span>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: 24,
+              marginBottom: 48
+            }} className="framework-cards-grid">
+              
+              {/* Card 1: 100% Transparent */}
+              <motion.div
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                style={{
+                  background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(232, 224, 214, 0.6)',
+                  padding: '24px',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12
+                }}
+              >
+                <div style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '10px',
+                  background: '#FAF2EA',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--color-primary)'
+                }}>
+                  <ShieldCheck size={20} />
+                </div>
+                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
+                  100% Transparent
+                </h4>
+                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Every rupee is mapped directly to verified hospital billing.
+                </p>
+              </motion.div>
+
+              {/* Card 2: Verified Medical Cases */}
+              <motion.div
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                style={{
+                  background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(232, 224, 214, 0.6)',
+                  padding: '24px',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12
+                }}
+              >
+                <div style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '10px',
+                  background: '#FAF2EA',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--color-primary)'
+                }}>
+                  <FileText size={20} />
+                </div>
+                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
+                  Verified Medical Cases
+                </h4>
+                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Hospital documents and treatment records are manually verified before publishing.
+                </p>
+              </motion.div>
+
+              {/* Card 3: Secure Payments (Specific protection focus & visualization) */}
+              <motion.div
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
+                style={{
+                  background: 'linear-gradient(135deg, #FFF9F2 0%, #FFFFFF 100%)',
+                  borderRadius: '20px',
+                  border: '1px solid #8C4F1A',
+                  padding: '24px',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12,
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+              >
+                {/* Visual Secure Payment encrypted glow banner */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  background: '#8C4F1A',
+                  color: '#fff',
+                  fontSize: '8px',
+                  fontWeight: 900,
+                  padding: '2px 8px',
+                  borderBottomLeftRadius: '8px',
+                  letterSpacing: '0.05em'
+                }}>
+                  AES-256 SSL
+                </div>
+
+                <div style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '10px',
+                  background: '#FFF2E6',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#8C4F1A'
+                }}>
+                  <Lock size={18} />
+                </div>
+                
+                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--color-text)' }}>
+                  Secure Payments
+                </h4>
+                
+                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Protected with Razorpay SSL encryption and secure payment routing.
+                </p>
+
+                {/* Subtle secure banking indicator graphic */}
+                <div style={{ 
+                  marginTop: 4, 
+                  background: '#FFFDFB', 
+                  border: '1px solid rgba(232, 224, 214, 0.5)', 
+                  borderRadius: '8px', 
+                  padding: '6px 10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '10px',
+                  color: '#8C4F1A',
+                  fontWeight: 700
+                }}>
+                  <span>🔒 Razorpay Gateway</span>
+                  <span style={{ color: '#16a34a' }}>● Encrypted</span>
+                </div>
+              </motion.div>
+
+              {/* Card 4: Together We Heal */}
+              <motion.div
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                style={{
+                  background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(232, 224, 214, 0.6)',
+                  padding: '24px',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12
+                }}
+              >
+                <div style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '10px',
+                  background: '#FAF2EA',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--color-primary)'
+                }}>
+                  <Users size={20} />
+                </div>
+                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
+                  Together We Heal
+                </h4>
+                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Thousands of helpers contributing toward life-saving treatments together.
+                </p>
+              </motion.div>
+
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: '13.5px', fontWeight: 700, color: 'var(--color-text)' }}>
-              <ShieldCheck size={16} color="var(--color-primary)" />
-              <span>Fully Auditable Payments 📊</span>
+            {/* Bottom Premium Trust Micro Badges Row */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: 20,
+              flexWrap: 'wrap',
+              paddingTop: 28,
+              borderTop: '1px solid rgba(232, 224, 214, 0.4)'
+            }} className="bottom-trust-badges">
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
+                <span style={{ color: '#16a34a' }}>🔒</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>SSL Secured</span>
+              </div>
+              
+              <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
+                <span style={{ color: '#1A73E8' }}>💳</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>Razorpay Verified</span>
+              </div>
+
+              <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
+                <span style={{ color: '#8C4F1A' }}>🏥</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>Hospital Audited</span>
+              </div>
+
+              <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
+                <span style={{ color: '#C026D3' }}>🔑</span>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>End-to-End Encrypted</span>
+              </div>
+
             </div>
 
           </div>
@@ -769,7 +1023,7 @@ export default function HomePage() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                height: '380px'
+                height: '420px'
               }}
             >
               <div>
@@ -807,7 +1061,7 @@ export default function HomePage() {
                   boxShadow: '0 4px 12px rgba(123, 63, 0, 0.1)'
                 }}
               >
-                Explore Games
+                Explore Games (₹10) 🎮
               </button>
             </motion.div>
 
@@ -823,7 +1077,7 @@ export default function HomePage() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                height: '380px'
+                height: '420px'
               }}
             >
               <div>
@@ -861,11 +1115,11 @@ export default function HomePage() {
                   boxShadow: '0 4px 12px rgba(123, 63, 0, 0.1)'
                 }}
               >
-                Unlock Inspiration
+                Unlock Inspiration (₹10) 💬
               </button>
             </motion.div>
 
-            {/* Category 3: Donate Freely */}
+            {/* Category 3: Donate Freely (With Interactive ₹20 Recommended Chips) */}
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
               style={{
@@ -877,7 +1131,7 @@ export default function HomePage() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                height: '380px'
+                height: '420px'
               }}
             >
               <div>
@@ -886,11 +1140,37 @@ export default function HomePage() {
                   <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Direct Clinical Support</span>
                 </div>
                 
-                {/* Custom styling direct badge */}
                 <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Donate Freely</h3>
                 <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Support treatments directly without unlocking games or rewards. Perfect for helpers who simply wish to donate and clear hospital bills directly.
+                  Support treatments directly. Perfect for helpers who simply wish to donate recommended sums directly to clear hospital bills.
                 </p>
+
+                {/* Interactive Recommended Contribution Chips - Keeps ₹20 highlighted & prominent! */}
+                <div style={{ display: 'flex', gap: 10, marginBottom: 18 }} className="amount-chips-row">
+                  {[20, 50, 100].map((amt) => (
+                    <motion.button
+                      key={amt}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedDirectAmount(amt)}
+                      style={{
+                        flex: 1,
+                        padding: '8px 0',
+                        borderRadius: '10px',
+                        border: '1px solid',
+                        borderColor: selectedDirectAmount === amt ? '#8C4F1A' : 'rgba(232, 224, 214, 0.8)',
+                        background: selectedDirectAmount === amt ? '#FAF2EA' : '#fff',
+                        color: selectedDirectAmount === amt ? '#8C4F1A' : 'var(--color-text-muted)',
+                        fontSize: '13px',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      ₹{amt} {amt === 20 ? '🔥' : ''}
+                    </motion.button>
+                  ))}
+                </div>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
                   {['0% platform fee', 'hospital billing', 'direct payout', 'tax receipt ready'].map((item, idx) => (
@@ -916,7 +1196,7 @@ export default function HomePage() {
                   boxShadow: '0 4px 12px rgba(239, 68, 68, 0.15)'
                 }}
               >
-                Support a Child ❤️
+                Support a Child (₹{selectedDirectAmount}) ❤️
               </button>
             </motion.div>
 
@@ -1187,59 +1467,121 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 8. REWARD CATEGORIES ────────────────── */}
+        {/* ────────────────── 8. EXCITED & REALISTIC BRAND-REWARD EXPERIENCE ────────────────── */}
         <section style={{ 
-          background: 'radial-gradient(circle at 50% 50%, #FAF6F0 0%, #FAF8F5 100%)', 
+          background: 'linear-gradient(180deg, #FAF8F5 0%, #FFFDFB 100%)', 
           borderTop: '1px solid var(--color-border)', 
           borderBottom: '1px solid var(--color-border)', 
           padding: '80px 40px' 
         }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 44 }} className="section-header-flex">
               <div>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Partner Brand Rewards</span>
-                <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '26px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.5px' }}>Coupons Unlocked via Playing</h2>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Sparkles size={12} /> Partner Brand Rewards
+                </span>
+                <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>
+                  Unlock Real Rewards While Helping ❤️
+                </h2>
               </div>
-              <button onClick={() => navigate('/main?tab=coupons')} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontWeight: 700, fontSize: '13.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                Explore Coupon Store <ChevronRight size={16} />
+              <button 
+                onClick={() => navigate('/main?tab=coupons')} 
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  color: 'var(--color-primary)', 
+                  fontWeight: 700, 
+                  fontSize: '13.5px', 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 4 
+                }}
+              >
+                Explore Reward Store <ChevronRight size={16} />
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-              {REWARD_CATEGORIES.map((reward, i) => (
-                <div 
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 28 }} className="rewards-cards-grid">
+              {REAL_REWARDS.map((reward, i) => (
+                <motion.div 
                   key={i}
+                  whileHover={{ 
+                    y: -6, 
+                    boxShadow: '0 20px 40px rgba(123, 63, 0, 0.08)',
+                    borderColor: reward.color 
+                  }}
+                  transition={{ duration: 0.2 }}
                   style={{
-                    background: '#fff',
-                    borderRadius: '20px',
-                    border: '1px solid var(--color-border)',
+                    background: reward.bg,
+                    borderRadius: '24px',
+                    border: '1px solid rgba(232, 224, 214, 0.6)',
                     padding: '24px',
                     boxShadow: 'var(--shadow-sm)',
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: 16
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '240px',
+                    boxSizing: 'border-box',
+                    transition: 'border-color 0.3s ease'
                   }}
                 >
-                  <div style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: '12px',
-                    background: 'var(--color-bg-warm)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '22px'
-                  }}>
-                    {reward.logo}
-                  </div>
                   <div>
-                    <span style={{ fontSize: '10px', fontWeight: 800, color: '#B45309', textTransform: 'uppercase' }}>{reward.category}</span>
-                    <h4 style={{ margin: '2px 0 0', fontSize: '15px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>{reward.brand}</h4>
-                    <span style={{ fontSize: '12.5px', color: 'var(--color-text-muted)' }}>{reward.value}</span>
+                    {/* Card Top Row with Icon and Badge */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
+                      <div style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: '12px',
+                        background: '#fff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '22px',
+                        boxShadow: '0 4px 10px rgba(0,0,0,0.03)',
+                        border: '1px solid rgba(232, 224, 214, 0.3)'
+                      }}>
+                        {reward.logo}
+                      </div>
+                      
+                      <span style={{ 
+                        fontSize: '9.5px', 
+                        background: 'rgba(255,255,255,0.9)', 
+                        color: reward.color, 
+                        padding: '4px 10px', 
+                        borderRadius: '6px', 
+                        fontWeight: 800, 
+                        boxShadow: 'var(--shadow-sm)',
+                        letterSpacing: '0.02em',
+                        textTransform: 'uppercase'
+                      }}>
+                        {reward.badge}
+                      </span>
+                    </div>
+
+                    {/* Brand details */}
+                    <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                      {reward.brand}
+                    </span>
+                    <h4 style={{ margin: '2px 0 6px', fontSize: '18px', fontWeight: 900, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                      {reward.desc}
+                    </h4>
+                    
+                    <span style={{ fontSize: '12.5px', color: reward.color, fontWeight: 750 }}>
+                      ⚡ {reward.requirement}
+                    </span>
                   </div>
-                </div>
+
+                  {/* Tiny Helper Trust Text */}
+                  <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', borderTop: '1px solid rgba(232, 224, 214, 0.4)', paddingTop: 10, display: 'block', fontWeight: 600 }}>
+                    🤝 {reward.trustText}
+                  </span>
+
+                </motion.div>
               ))}
             </div>
+
           </div>
         </section>
 
@@ -1341,6 +1683,12 @@ export default function HomePage() {
             grid-template-columns: 1fr !important;
           }
           .categories-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .rewards-cards-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .framework-cards-grid {
             grid-template-columns: 1fr !important;
           }
         }
