@@ -171,6 +171,7 @@ const INSPIRATIONAL_CARDS = [
   {
     title: 'Baby Aarav\'s Healing Milestone',
     description: 'Thanks to over 4,200 small gaming plays, Aarav\'s pre-operation checkup has been fully funded.',
+    curiosity: 'Discover the heartfelt recovery milestone shared by Aarav\'s family after successful pre-op stabilization.',
     tag: 'SUCCESS STORY',
     accent: '#8C4F1A',
     bg: '#FAF4EE'
@@ -178,6 +179,7 @@ const INSPIRATIONAL_CARDS = [
   {
     title: 'Words of Hope from Pediatric Care',
     description: '"Every single 10-rupee gameplay helps us secure reliable bedside monitoring faster than traditional fundraising."',
+    curiosity: 'Unlock an exclusive clinical voice recording message from the lead pediatric nursing officer at the hospital ward.',
     tag: 'CLINICAL VOICE',
     accent: '#47682C',
     bg: '#F3F6F0'
@@ -185,6 +187,7 @@ const INSPIRATIONAL_CARDS = [
   {
     title: 'How Transparency Empowers You',
     description: 'We map every transaction ID directly to the hospital\'s billing terminal. Trust is built on complete clarity.',
+    curiosity: 'Reveal the transparent ledger framework that guarantees your contribution arrives directly to the ward desk.',
     tag: 'OUR PROMISE',
     accent: '#1E3A5F',
     bg: '#F0F4F8'
@@ -297,10 +300,20 @@ export default function MainPage() {
           {/* ────────────────── 1. GAMES SECTION ────────────────── */}
           {show('games') && (
             <section style={{ marginBottom: 90 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>🎮 Interactive Micro-Play</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 6px', letterSpacing: '-0.5px' }}>Mindful Play & Support</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75 }}>Calm your mind with interactive micro-games while direct funding life-saving treatments.</p>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                textAlign: 'center', 
+                marginBottom: 36,
+                padding: '24px 0',
+                background: 'radial-gradient(50% 50% at 50% 50%, rgba(235, 224, 214, 0.15) 0%, rgba(255, 255, 255, 0) 100%)',
+                position: 'relative'
+              }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>🎮 Interactive Micro-Play</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 8px', letterSpacing: '-0.5px' }}>Mindful Play & Support</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75, fontWeight: 500 }}>Calm your mind with interactive micro-games while direct funding life-saving treatments.</p>
+                <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
               <div style={{ 
@@ -311,44 +324,49 @@ export default function MainPage() {
                 {PREMIUM_GAMES.map((game) => (
                   <motion.div
                     key={game.id}
-                    whileHover={{ y: -6, boxShadow: '0 16px 36px rgba(139, 94, 52, 0.06), 0 0 0 1px rgba(139, 94, 52, 0.04)' }}
+                    whileHover={{ 
+                      y: -6, 
+                      boxShadow: '0 20px 40px rgba(139, 94, 52, 0.08), inset 0 0 0 1px rgba(139, 94, 52, 0.1), inset 0 0 24px rgba(255, 255, 255, 0.9)' 
+                    }}
                     onClick={() => handleUnlock(game.price)}
                     style={{
                       background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
                       border: '1px solid rgba(235, 224, 214, 0.5)',
                       borderRadius: '32px',
-                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 6px 24px rgba(139, 94, 52, 0.02)',
+                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 4px 16px rgba(139, 94, 52, 0.01)',
                       overflow: 'hidden',
                       cursor: 'pointer',
                       display: 'flex',
                       flexDirection: 'column',
-                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                      minHeight: 460
+                      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                      minHeight: 410
                     }}
                   >
                     {/* SVG Illustration Container */}
                     <div style={{ 
-                      height: 180, 
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%)', 
+                      height: 160, 
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.45) 100%)', 
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'center',
-                      padding: 24,
+                      padding: 20,
                       borderBottom: '1px solid rgba(235, 224, 214, 0.3)'
                     }}>
-                      {game.illustration}
+                      <div style={{ width: '100%', height: '100%', maxWidth: 120, maxHeight: 120 }}>
+                        {game.illustration}
+                      </div>
                     </div>
 
-                    <div style={{ padding: '36px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 24 }}>
+                    <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 20 }}>
                       <div>
-                        <h4 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{game.title}</h4>
-                        <p style={{ margin: 0, fontSize: '14px', color: '#7A6A5A', lineHeight: 1.8, fontWeight: 500 }}>{game.description}</p>
+                        <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{game.title}</h4>
+                        <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.75, fontWeight: 500 }}>{game.description}</p>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '20px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px' }}>
                         <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>₹{game.price} Entry Code</span>
                         <motion.div 
-                          whileHover={{ scale: 1.03 }}
+                          whileHover={{ scale: 1.02 }}
                           style={{ 
                             display: 'flex', 
                             alignItems: 'center', 
@@ -356,10 +374,10 @@ export default function MainPage() {
                             color: '#fff', 
                             fontWeight: 700, 
                             fontSize: '12.5px',
-                            background: 'linear-gradient(135deg, #8B5E34, #734D29)',
+                            background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
                             padding: '10px 20px',
                             borderRadius: '14px',
-                            boxShadow: '0 6px 16px rgba(139, 94, 52, 0.15)'
+                            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)'
                           }}
                         >
                           <span>Unlock for ₹{game.price}</span>
@@ -518,7 +536,10 @@ export default function MainPage() {
                 {INSPIRATIONAL_CARDS.map((card, idx) => (
                   <motion.div
                     key={idx}
-                    whileHover={{ y: -6, boxShadow: '0 16px 36px rgba(139, 94, 52, 0.06), 0 0 0 1px rgba(139, 94, 52, 0.04)' }}
+                    whileHover={{ 
+                      y: -6, 
+                      boxShadow: '0 20px 40px rgba(139, 94, 52, 0.08), inset 0 0 0 1px rgba(139, 94, 52, 0.1), inset 0 0 24px rgba(255, 255, 255, 0.9)' 
+                    }}
                     onClick={() => handleUnlock(10)}
                     style={{
                       background: `linear-gradient(135deg, #FCFAF7 0%, ${card.bg} 100%)`,
@@ -526,26 +547,63 @@ export default function MainPage() {
                       padding: '36px',
                       cursor: 'pointer',
                       border: '1px solid rgba(235, 224, 214, 0.5)',
-                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 6px 24px rgba(139, 94, 52, 0.02)',
+                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 4px 16px rgba(139, 94, 52, 0.01)',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      minHeight: 250,
-                      transition: 'all 0.25s'
+                      minHeight: 280,
+                      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
                     }}
                   >
                     <div>
-                      <span style={{ fontSize: '9.5px', fontWeight: 800, color: card.accent, letterSpacing: '0.05em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.7)', padding: '4px 10px', borderRadius: '8px', display: 'inline-block', marginBottom: 20, border: `1px solid rgba(235, 224, 214, 0.3)` }}>
-                        {card.tag}
-                      </span>
-                      <h4 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit', lineHeight: 1.45 }}>{card.title}</h4>
-                      <p style={{ margin: 0, fontSize: '14px', color: '#7A6A5A', lineHeight: 1.8, fontWeight: 500 }}>{card.description}</p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                        <span style={{ fontSize: '9.5px', fontWeight: 800, color: card.accent, letterSpacing: '0.05em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.7)', padding: '4px 10px', borderRadius: '8px', border: `1px solid rgba(235, 224, 214, 0.3)` }}>
+                          {card.tag}
+                        </span>
+                        
+                        <div style={{
+                          background: '#FAF6F0',
+                          border: '1px solid rgba(139, 94, 52, 0.15)',
+                          padding: '4px 10px',
+                          borderRadius: '8px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4
+                        }}>
+                          <Lock size={10} color="#8B5E34" />
+                          <span style={{ fontSize: 9, fontWeight: 800, color: '#8B5E34', letterSpacing: '0.02em' }}>LOCKED</span>
+                        </div>
+                      </div>
+
+                      <h4 style={{ margin: '0 0 10px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit', lineHeight: 1.4 }}>
+                        {card.title}
+                      </h4>
+                      
+                      {/* Premium locked mask layout */}
+                      <div style={{ margin: '14px 0 0', position: 'relative' }}>
+                        <p style={{ margin: '0 0 12px', fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.7, fontWeight: 600, fontStyle: 'italic' }}>
+                          “{card.curiosity}”
+                        </p>
+                        
+                        {/* Elegant blurred mockup text */}
+                        <div style={{ 
+                          fontSize: '12px', 
+                          color: '#A8998A', 
+                          letterSpacing: '3px', 
+                          filter: 'blur(3.5px)', 
+                          userSelect: 'none', 
+                          opacity: 0.45,
+                          lineHeight: 1.8
+                        }}>
+                          •••••••••••• •••••••••••• •••••••••••• •••••••••••• •••••••••••• ••••••••••••
+                        </div>
+                      </div>
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 28, paddingTop: 20, borderTop: '1px solid rgba(235, 224, 214, 0.4)' }}>
                       <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.04em' }}>₹10 Contribution</span>
                       <motion.div 
-                        whileHover={{ scale: 1.03 }}
+                        whileHover={{ scale: 1.02 }}
                         style={{ 
                           display: 'flex', 
                           alignItems: 'center', 
@@ -553,13 +611,13 @@ export default function MainPage() {
                           color: '#fff', 
                           fontWeight: 700, 
                           fontSize: '12.5px',
-                          background: 'linear-gradient(135deg, #8B5E34, #734D29)',
+                          background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
                           padding: '10px 20px',
                           borderRadius: '14px',
-                          boxShadow: '0 6px 16px rgba(139, 94, 52, 0.15)'
+                          boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)'
                         }}
                       >
-                        <span>Unlock for ₹10</span>
+                        <span>Reveal Healing Message</span>
                         <ChevronRight size={13} />
                       </motion.div>
                     </div>
