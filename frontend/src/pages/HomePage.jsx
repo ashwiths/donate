@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Users, Shield, CheckCircle2, ChevronRight, Play, Heart, Star, Award, Sparkles, Gift, Gamepad2, Trophy, Clock, HeartHandshake, FileText, Download, TrendingUp, ShieldCheck, HeartPulse, CreditCard } from 'lucide-react'
+import { ArrowRight, Users, Shield, CheckCircle2, ChevronRight, Play, Heart, Star, Award, Sparkles, Gift, Gamepad2, Trophy, Clock, HeartHandshake, FileText, Download, TrendingUp, ShieldCheck, HeartPulse, CreditCard, Lock, Activity, CheckSquare, MessageSquare, HeartHandshake as DirectHeart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -15,7 +15,8 @@ const URGENT_CASE = {
   image: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1000&q=90',
   requiredAmount: 7000000,
   raisedAmount: 214385,
-  percentage: 0.03,
+  remainingAmount: 6785615,
+  percentage: 3,
   hospital: 'Nanavati Max Hospital'
 }
 
@@ -28,7 +29,7 @@ const ACTIVE_CAMPAIGNS = [
     image: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=500&q=80',
     requiredAmount: 1500000,
     raisedAmount: 480000,
-    percentage: 0.32,
+    percentage: 32,
     tag: 'Urgent Case',
     storyPreview: "A simple open-heart surgery at Nanavati Hospital will patch Diya's congenital heart defect, letting her live a healthy life."
   },
@@ -40,7 +41,7 @@ const ACTIVE_CAMPAIGNS = [
     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80',
     requiredAmount: 3000000,
     raisedAmount: 820000,
-    percentage: 0.27,
+    percentage: 27,
     tag: 'Recently Added',
     storyPreview: "Vihaan requires 3 rounds of targeted chemotherapy to defeat blood cancer. Doctors are highly optimistic of a full cure."
   },
@@ -52,7 +53,7 @@ const ACTIVE_CAMPAIGNS = [
     image: 'https://images.unsplash.com/photo-1544120190-2751b8e176b0?w=500&q=80',
     requiredAmount: 16000000,
     raisedAmount: 1400000,
-    percentage: 0.08,
+    percentage: 8,
     tag: 'Urgent Case',
     storyPreview: "Arjun needs Zolgensma gene therapy within the next 4 months to halt progressive muscle loss and breathe naturally."
   },
@@ -64,16 +65,10 @@ const ACTIVE_CAMPAIGNS = [
     image: 'https://images.unsplash.com/photo-1484863137850-59afcfe05386?w=500&q=80',
     requiredAmount: 2500000,
     raisedAmount: 310000,
-    percentage: 0.12,
+    percentage: 12,
     tag: 'Urgent Case',
     storyPreview: "An urgent bone marrow transplant from a verified matched donor will rebuild Meera's immune system completely."
   }
-]
-
-const TRENDING_GAMES = [
-  { id: 'g1', title: 'Spin the Wheel', icon: '🎯', players: '1,240 active helpers', cost: 10, rating: 4.8 },
-  { id: 'g2', title: 'Lucky Scratch Card', icon: '💳', players: '820 online now', cost: 10, rating: 4.9 },
-  { id: 'g3', title: 'Daily Treasure Box', icon: '🎁', players: '2.5K helpers today', cost: 0, rating: 4.7 }
 ]
 
 const COMPLETED_TREATMENTS = [
@@ -93,6 +88,57 @@ const LIVE_DONATIONS = [
   { text: "₹2,500 raised for Baby Aarav this hour 📈", time: "3m ago" },
   { text: "Nanavati Max Hospital cleared billing milestone 🛡️", time: "8m ago" }
 ]
+
+// Stable inline custom high-fidelity SVG for Hospital Treatment
+function HospitalIllustration() {
+  return (
+    <svg width="100%" height="100%" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', background: 'linear-gradient(135deg, #FFF7ED 0%, #FAF2EA 100%)' }}>
+      <rect width="400" height="200" rx="16" fill="url(#paint0_linear)" />
+      {/* Clinic base */}
+      <path d="M120 160H280V80H120V160Z" fill="#FFF7ED" stroke="#EBD5C2" strokeWidth="3" />
+      <path d="M170 160H230V115H170V160Z" fill="#FAF2EA" stroke="#EBD5C2" strokeWidth="3" />
+      {/* Heart beat graph line behind */}
+      <path d="M40 100H100L110 70L125 130L135 90L145 110L155 100H360" stroke="#8C4F1A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.25" />
+      {/* Hospital cross roof sign */}
+      <rect x="188" y="48" width="24" height="24" rx="4" fill="#8C4F1A" />
+      <path d="M200 53V67M193 60H207" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+      {/* Heart badge */}
+      <path d="M200 137C200 137 186 127 186 119C186 112 192.5 108.5 200 114C207.5 108.5 214 112 214 119C214 127 200 137 200 137Z" fill="#8C4F1A" />
+      <defs>
+        <linearGradient id="paint0_linear" x1="0" y1="0" x2="400" y2="200" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFF7ED" />
+          <stop offset="1" stopColor="#FAF2EA" />
+        </linearGradient>
+      </defs>
+    </svg>
+  )
+}
+
+// Stable inline custom high-fidelity SVG for Security Lock
+function SecurityIllustration() {
+  return (
+    <svg width="100%" height="100%" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', background: 'linear-gradient(135deg, #FFF7ED 0%, #FAF2EA 100%)' }}>
+      <rect width="400" height="200" rx="16" fill="url(#paint1_linear)" />
+      {/* Credit card shape */}
+      <rect x="110" y="60" width="180" height="100" rx="12" fill="#fff" stroke="#EBD5C2" strokeWidth="3" />
+      <rect x="130" y="80" width="36" height="26" rx="4" fill="#FAF2EA" stroke="#EBD5C2" strokeWidth="2" />
+      {/* Card strips */}
+      <line x1="130" y1="125" x2="230" y2="125" stroke="#EBD5C2" strokeWidth="4" strokeLinecap="round" />
+      <line x1="130" y1="138" x2="190" y2="138" stroke="#EBD5C2" strokeWidth="4" strokeLinecap="round" />
+      {/* Lock badge overlay */}
+      <circle cx="250" cy="115" r="28" fill="#8C4F1A" />
+      <rect x="238" y="108" width="24" height="18" rx="3" fill="#fff" />
+      <path d="M244 108V100C244 96.6863 246.686 94 250 94C253.314 94 256 96.6863 256 100V108" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+      <circle cx="250" cy="116" r="3" fill="#8C4F1A" />
+      <defs>
+        <linearGradient id="paint1_linear" x1="0" y1="0" x2="400" y2="200" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFF7ED" />
+          <stop offset="1" stopColor="#FAF2EA" />
+        </linearGradient>
+      </defs>
+    </svg>
+  )
+}
 
 export default function HomePage() {
   const navigate = useNavigate()
@@ -284,7 +330,7 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column (45%): ONE Dynamic Featured Case Spotlight */}
+          {/* Right Column (45%): ONE Large Premium Featured Child Spotlight */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -299,9 +345,9 @@ export default function HomePage() {
                 backdropFilter: 'blur(20px)',
                 borderRadius: '24px',
                 border: '1px solid rgba(232, 224, 214, 0.8)',
-                padding: '24px',
+                padding: '28px',
                 width: '100%',
-                maxWidth: '450px',
+                maxWidth: '480px',
                 boxShadow: '0 25px 60px rgba(123, 63, 0, 0.08)',
                 boxSizing: 'border-box',
                 position: 'relative'
@@ -311,8 +357,8 @@ export default function HomePage() {
               {/* Case tag */}
               <div style={{
                 position: 'absolute',
-                top: 36,
-                left: 36,
+                top: 40,
+                left: 40,
                 background: 'rgba(255, 255, 255, 0.95)',
                 backdropFilter: 'blur(8px)',
                 padding: '4px 10px',
@@ -337,7 +383,7 @@ export default function HomePage() {
                 borderRadius: '16px', 
                 overflow: 'hidden', 
                 position: 'relative',
-                marginBottom: 20
+                marginBottom: 24
               }}>
                 <img 
                   src={URGENT_CASE.image} 
@@ -352,24 +398,87 @@ export default function HomePage() {
                 
                 <div style={{
                   position: 'absolute',
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
+                  bottom: 18,
+                  left: 18,
+                  right: 18,
                   color: '#fff'
                 }}>
                   <span style={{ fontSize: '10px', opacity: 0.8, textTransform: 'uppercase', fontWeight: 700 }}>{URGENT_CASE.hospital}</span>
-                  <h3 style={{ margin: '2px 0 0', fontSize: '18px', fontWeight: 800, fontFamily: 'Outfit' }}>{URGENT_CASE.name} ({URGENT_CASE.age})</h3>
-                  <p style={{ margin: 0, fontSize: '11.5px', opacity: 0.8 }}>{URGENT_CASE.condition}</p>
+                  <h3 style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>{URGENT_CASE.name} ({URGENT_CASE.age})</h3>
+                  <p style={{ margin: 0, fontSize: '12px', opacity: 0.8 }}>{URGENT_CASE.condition}</p>
                 </div>
               </div>
 
-              {/* Progress metrics */}
-              <div style={{ marginBottom: 20 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', color: 'var(--color-text-muted)', marginBottom: 8 }}>
-                  <span>Raised: <strong>₹2.14L</strong></span>
-                  <span>Goal: <strong>₹70L</strong></span>
+              {/* Redesigned Premium Funding Section */}
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 10 }}>
+                  <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--color-primary)' }}>
+                    {URGENT_CASE.percentage}% Funded
+                  </span>
+                  <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
+                    <strong>₹2.14L</strong> raised of <strong>₹70L</strong> goal
+                  </span>
                 </div>
-                <DonationProgress raised={URGENT_CASE.raisedAmount} required={URGENT_CASE.requiredAmount} percentage={URGENT_CASE.percentage} compact />
+                
+                {/* Thicker, high-fidelity premium progress track */}
+                <div style={{ 
+                  height: 12, 
+                  background: 'rgba(232, 224, 214, 0.6)', 
+                  borderRadius: '99px', 
+                  overflow: 'hidden',
+                  marginBottom: 20
+                }}>
+                  <div style={{ 
+                    width: `${URGENT_CASE.percentage}%`, 
+                    height: '100%', 
+                    background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
+                    borderRadius: '99px' 
+                  }} />
+                </div>
+
+                {/* Micro Fintech Stat Grid */}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(3, 1fr)', 
+                  gap: 12, 
+                  marginBottom: 16 
+                }}>
+                  <div style={{ 
+                    background: '#FAF2EA', 
+                    border: '1px solid #EBD5C2', 
+                    borderRadius: '12px', 
+                    padding: '10px',
+                    textAlign: 'center'
+                  }}>
+                    <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Needed</span>
+                    <div style={{ fontSize: '13px', fontWeight: 900, color: 'var(--color-text)', marginTop: 2 }}>₹70,00,000</div>
+                  </div>
+                  <div style={{ 
+                    background: '#FAF2EA', 
+                    border: '1px solid #EBD5C2', 
+                    borderRadius: '12px', 
+                    padding: '10px',
+                    textAlign: 'center'
+                  }}>
+                    <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Raised</span>
+                    <div style={{ fontSize: '13px', fontWeight: 900, color: 'var(--color-text)', marginTop: 2 }}>₹2,14,385</div>
+                  </div>
+                  <div style={{ 
+                    background: '#FAF2EA', 
+                    border: '1px solid #EBD5C2', 
+                    borderRadius: '12px', 
+                    padding: '10px',
+                    textAlign: 'center'
+                  }}>
+                    <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Remaining</span>
+                    <div style={{ fontSize: '13px', fontWeight: 900, color: '#C8773A', marginTop: 2 }}>₹67,85,615</div>
+                  </div>
+                </div>
+
+                {/* Verified Hospital Treatment Estimate */}
+                <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-muted)', textAlign: 'center', fontWeight: 600 }}>
+                  🛡️ Verified hospital treatment estimate. Updated directly from hospital billing records.
+                </p>
               </div>
 
               <motion.button 
@@ -379,9 +488,9 @@ export default function HomePage() {
                 className="btn-primary" 
                 style={{ 
                   width: '100%', 
-                  padding: '13px', 
-                  borderRadius: '11px', 
-                  fontSize: '14.5px',
+                  padding: '14px', 
+                  borderRadius: '12px', 
+                  fontSize: '15px',
                   fontWeight: 800,
                   background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                   boxShadow: '0 4px 15px rgba(123, 63, 0, 0.15)',
@@ -390,7 +499,7 @@ export default function HomePage() {
                   color: '#fff'
                 }}
               >
-                Donate ₹10 & Start Playing
+                Help Aarav While You Play ❤️
               </motion.button>
             </motion.div>
           </motion.div>
@@ -427,11 +536,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 3. REDESIGNED ULTRA-PREMIUM PAYMENT TRANSPARENCY ────────────────── */}
+        {/* ────────────────── 3. STABLE VECTOR STORYTELLING PAYMENT TRANSPARENCY ────────────────── */}
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           
           {/* Centered Section Header */}
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <motion.div
               variants={fadeUp}
               style={{
@@ -447,241 +556,370 @@ export default function HomePage() {
             >
               <ShieldCheck size={13} color="#8C4F1A" />
               <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                0% Platform Commission
+                100% Direct Payout Audit
               </span>
             </motion.div>
             <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '32px', color: 'var(--color-text)', margin: '4px 0 0', letterSpacing: '-0.75px' }}>
               Where Your Contribution Goes 💳
             </h2>
-            <p style={{ margin: '8px 0 0', fontSize: '15px', color: 'var(--color-text-muted)', maxWidth: '580px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.5 }}>
-              We route 100% of ticket transactions to children's hospital operations. No platform fees, no complex cutaways. Complete transparency.
+            <p style={{ margin: '8px 0 0', fontSize: '15.5px', color: 'var(--color-text-muted)', maxWidth: '580px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.55 }}>
+              A premium transparent overview of how your ₹10 ticket routes directly from payment gateway verification into immediate hospital treatment.
             </p>
           </div>
 
-          {/* Balanced 3-Card Responsive Grid Layout */}
+          {/* 3-Column Premium Visual Layout */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 28,
-            marginBottom: 48
-          }} className="transparency-grid">
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: 32,
+            marginBottom: 64,
+            alignItems: 'stretch'
+          }} className="transparency-visual-grid">
             
-            {/* Card 1 */}
+            {/* Column 1: Left Treatment Explanation */}
             <motion.div
-              whileHover={{ y: -5, boxShadow: '0 15px 35px rgba(123, 63, 0, 0.05)' }}
-              transition={{ duration: 0.2 }}
+              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
               style={{
                 background: '#fff',
-                borderRadius: '20px',
+                borderRadius: '24px',
                 border: '1px solid rgba(232, 224, 214, 0.6)',
                 padding: '24px',
-                boxShadow: 'var(--shadow-sm)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 12
+                justifyContent: 'space-between',
+                boxShadow: 'var(--shadow-sm)'
               }}
             >
-              <div style={{
-                width: 44,
-                height: 44,
-                borderRadius: '12px',
-                background: '#FFF7ED',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--color-primary)'
-              }}>
-                <HeartPulse size={20} />
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
+                  <HeartPulse size={22} />
+                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Treatment Allocation</span>
+                </div>
+                
+                {/* Custom Inline SVG Illustration (Stable/Unbreakable) */}
+                <div style={{ width: '100%', height: '140px', borderRadius: '16px', overflow: 'hidden', marginBottom: 18 }}>
+                  <HospitalIllustration />
+                </div>
+
+                <h3 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                  ₹9 Direct Treatment Support
+                </h3>
+                <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Ninety percent of your micro-donation routes directly to settling operating theater fees, essential critical ICU setup support, and specialty pediatric pharmacy desks.
+                </p>
               </div>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>Direct Hospital Payouts</h3>
-              <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
-                ₹9.00 routes directly to settlement of operations and medical bills. We route payments to official hospital accounts, never personal profiles.
-              </p>
             </motion.div>
 
-            {/* Card 2 */}
+            {/* Column 2: Center Payment Split Infographic & flow */}
             <motion.div
-              whileHover={{ y: -5, boxShadow: '0 15px 35px rgba(123, 63, 0, 0.05)' }}
-              transition={{ duration: 0.2 }}
               style={{
-                background: '#fff',
-                borderRadius: '20px',
-                border: '1px solid rgba(232, 224, 214, 0.6)',
+                background: '#FAF2EA',
+                borderRadius: '24px',
+                border: '1px solid #EBD5C2',
                 padding: '24px',
-                boxShadow: 'var(--shadow-sm)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 12
+                justifyContent: 'space-between'
               }}
             >
-              <div style={{
-                width: 44,
-                height: 44,
-                borderRadius: '12px',
-                background: '#FFF7ED',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--color-primary)'
-              }}>
-                <CreditCard size={20} />
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#8C4F1A', marginBottom: 16 }}>
+                  <Activity size={22} />
+                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Allocation Split</span>
+                </div>
+
+                {/* Animated fill graphic bar */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: 4 }}>
+                      <span>Child Treatment</span>
+                      <span>₹9.00 (90%)</span>
+                    </div>
+                    <div style={{ height: 10, background: 'rgba(232, 224, 214, 0.8)', borderRadius: 99, overflow: 'hidden' }}>
+                      <div style={{ width: '90%', height: '100%', background: 'linear-gradient(90deg, #8C4F1A, #C8773A)', borderRadius: 99 }} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: 4 }}>
+                      <span>Secure Gateway Processing</span>
+                      <span>₹1.00 (10%)</span>
+                    </div>
+                    <div style={{ height: 10, background: 'rgba(232, 224, 214, 0.8)', borderRadius: 99, overflow: 'hidden' }}>
+                      <div style={{ width: '10%', height: '100%', background: '#5C2D0E', borderRadius: 99 }} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mini payment flow diagram */}
+                <h4 style={{ margin: '0 0 12px', fontSize: '12.5px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+                  Micro-Payment Verification Flow
+                </h4>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: '12.5px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
+                    <span>Helper Pays ₹10 securely</span>
+                  </div>
+                  <div style={{ width: 1, height: 10, background: '#EBD5C2', marginLeft: 2.5 }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
+                    <span>Razorpay SSL verification clears fee (₹1)</span>
+                  </div>
+                  <div style={{ width: 1, height: 10, background: '#EBD5C2', marginLeft: 2.5 }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
+                    <span>Direct settlement clears operation billing (₹9)</span>
+                  </div>
+                </div>
+
               </div>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>Secure Gateway Processing</h3>
-              <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
-                ₹1.00 covers Razorpays direct SSL transactional network and server gateway processing costs. We absorb zero administration cuts.
-              </p>
             </motion.div>
 
-            {/* Card 3 */}
+            {/* Column 3: Right Side Gateway Security */}
             <motion.div
-              whileHover={{ y: -5, boxShadow: '0 15px 35px rgba(123, 63, 0, 0.05)' }}
-              transition={{ duration: 0.2 }}
+              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
               style={{
                 background: '#fff',
-                borderRadius: '20px',
+                borderRadius: '24px',
                 border: '1px solid rgba(232, 224, 214, 0.6)',
                 padding: '24px',
-                boxShadow: 'var(--shadow-sm)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 12
+                justifyContent: 'space-between',
+                boxShadow: 'var(--shadow-sm)'
               }}
             >
-              <div style={{
-                width: 44,
-                height: 44,
-                borderRadius: '12px',
-                background: '#FFF7ED',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--color-primary)'
-              }}>
-                <FileText size={20} />
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
+                  <Lock size={20} />
+                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Security Assurance</span>
+                </div>
+                
+                {/* Custom Inline SVG Illustration (Stable/Unbreakable) */}
+                <div style={{ width: '100%', height: '140px', borderRadius: '16px', overflow: 'hidden', marginBottom: 18 }}>
+                  <SecurityIllustration />
+                </div>
+
+                <h3 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                  ₹1 Secure Payment Routing
+                </h3>
+                <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Payment routing handles secure SSL encryption protocols, transactional routing, and verification clearing keys, routing direct payouts to verified hospital ledgers.
+                </p>
               </div>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>Fully Auditable Ledger</h3>
-              <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.45 }}>
-                Every ₹10 spent unlocks an instant cryptographic transaction trail and hospital ledger release. Anyone can verify matching allocations anytime.
-              </p>
             </motion.div>
 
           </div>
 
-          {/* Centered Modern Payment Split Infographic */}
+          {/* Bottom Trust Badge Row */}
           <div style={{
-            background: '#FAF2EA',
-            border: '1px solid #EBD5C2',
-            borderRadius: '24px',
-            padding: '32px',
-            maxWidth: '800px',
-            margin: '0 auto',
-            boxSizing: 'border-box'
-          }}>
-            <h4 style={{ margin: '0 0 16px', fontSize: '14.5px', fontWeight: 800, color: '#8C4F1A', textAlign: 'center', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
-              Micro-Ticket Transaction Allocation
-            </h4>
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 24,
+            flexWrap: 'wrap',
+            paddingTop: 32,
+            borderTop: '1px solid rgba(232, 224, 214, 0.4)'
+          }} className="bottom-trust-badges">
             
-            {/* Visual split progress track */}
-            <div style={{ 
-              height: 24, 
-              background: 'rgba(232, 224, 214, 0.6)', 
-              borderRadius: '99px', 
-              overflow: 'hidden', 
-              display: 'flex',
-              marginBottom: 16
-            }}>
-              <div style={{ 
-                width: '90%', 
-                background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: '11px',
-                fontWeight: 900
-              }}>
-                ₹9.00 Direct Treatment (90%)
-              </div>
-              <div style={{ 
-                width: '10%', 
-                background: '#5C2D0E',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: '11px',
-                fontWeight: 900
-              }}>
-                ₹1.00 PG (10%)
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13.5px', fontWeight: 700, color: 'var(--color-text)' }}>
+              <ShieldCheck size={16} color="var(--color-primary)" />
+              <span>Hospital Verified 🏥</span>
+            </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13.5px', fontWeight: 700, color: 'var(--color-text)' }}>
+              <ShieldCheck size={16} color="var(--color-primary)" />
+              <span>No Hidden Charges 🛡️</span>
             </div>
 
-            {/* Split Info Labels */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }} className="split-labels-flex">
-              <span style={{ fontSize: '12.5px', color: 'var(--color-text-muted)' }}>
-                🏥 Route: <strong>Nanavati Max Hospital operations desk</strong>
-              </span>
-              <span style={{ fontSize: '12.5px', color: 'var(--color-text-muted)' }}>
-                🔒 Encryption: <strong>Razorpay Direct Gateway Routing</strong>
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '13.5px', fontWeight: 700, color: 'var(--color-text)' }}>
+              <ShieldCheck size={16} color="var(--color-primary)" />
+              <span>Direct Billing Settlement 💳</span>
             </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: '13.5px', fontWeight: 700, color: 'var(--color-text)' }}>
+              <ShieldCheck size={16} color="var(--color-primary)" />
+              <span>Fully Auditable Payments 📊</span>
+            </div>
+
           </div>
 
         </section>
 
-        {/* ────────────────── 4. TRENDING MINI-GAMES ────────────────── */}
-        <section style={{ padding: '40px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32 }}>
-            <div>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Playable Options</span>
-              <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '26px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.5px' }}>Trending Mini-Games</h2>
-            </div>
-            <button onClick={() => navigate('/main?tab=games')} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontWeight: 700, fontSize: '13.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-              View All Games <ChevronRight size={16} />
-            </button>
+        {/* ────────────────── 4. REDESIGNED CURATED PARTICIPATION CATEGORIES ────────────────── */}
+        <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
+          
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}> Curated Experiences </span>
+            <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}> Choose Your Way to Help 🤝 </h2>
+            <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}> Explore gamified clinical tickets, unlock emotional quotes, or contribute direct billing sums. </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-            {TRENDING_GAMES.map((game) => (
-              <motion.div 
-                key={game.id}
-                whileHover={{ y: -5, boxShadow: '0 15px 30px rgba(123, 63, 0, 0.06)' }}
-                transition={{ duration: 0.2 }}
-                style={{
-                  background: '#fff',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: '20px',
-                  padding: '24px',
-                  boxShadow: 'var(--shadow-sm)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer'
-                }}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 32 }} className="categories-grid">
+            
+            {/* Category 1: Games To Unlock */}
+            <motion.div
+              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+              style={{
+                background: '#fff',
+                border: '1px solid var(--color-border)',
+                borderRadius: '24px',
+                padding: '32px',
+                boxShadow: 'var(--shadow-sm)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                height: '380px'
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
+                  <Gamepad2 size={24} />
+                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Interactive Play</span>
+                </div>
+                
+                <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Games To Unlock</h3>
+                <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Play interactive mini-games while helping fund child treatments. Unlocks high-engagement spins, memory matches, and scratch cards.
+                </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                  {['spin wheel', 'scratch cards', 'memory games', 'treasure hunts'].map((item, idx) => (
+                    <span key={idx} style={{ fontSize: '11px', background: '#FAF2EA', color: '#8C4F1A', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
+                      🎮 {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <button 
                 onClick={() => navigate('/main?tab=games')}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                  color: '#fff',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(123, 63, 0, 0.1)'
+                }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div style={{ 
-                    fontSize: '30px',
-                    width: 52,
-                    height: 52,
-                    background: '#FFF7ED',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>{game.icon}</div>
-                  <div>
-                    <h4 style={{ margin: 0, fontSize: '15.5px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>{game.title}</h4>
-                    <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>{game.players}</span>
-                  </div>
+                Explore Games
+              </button>
+            </motion.div>
+
+            {/* Category 2: Quotes To Unlock */}
+            <motion.div
+              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+              style={{
+                background: '#fff',
+                border: '1px solid var(--color-border)',
+                borderRadius: '24px',
+                padding: '32px',
+                boxShadow: 'var(--shadow-sm)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                height: '380px'
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
+                  <MessageSquare size={22} />
+                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Inspirational Quotes</span>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--color-primary)' }}>{game.cost === 0 ? 'FREE' : `₹${game.cost}`}</div>
-                  <div style={{ fontSize: '11px', color: '#B45309', fontWeight: 700, marginTop: 2 }}>⭐ {game.rating}</div>
+                
+                <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Quotes To Unlock</h3>
+                <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Unlock emotional stories, healing messages, and inspirational quotes. Connect directly with the human mission behind pediatric recovery.
+                </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                  {['motivational quotes', 'success stories', 'healing messages', 'emotional content'].map((item, idx) => (
+                    <span key={idx} style={{ fontSize: '11px', background: '#FAF2EA', color: '#8C4F1A', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
+                      💬 {item}
+                    </span>
+                  ))}
                 </div>
-              </motion.div>
-            ))}
+              </div>
+
+              <button 
+                onClick={() => navigate('/main?tab=quotes')}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                  color: '#fff',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(123, 63, 0, 0.1)'
+                }}
+              >
+                Unlock Inspiration
+              </button>
+            </motion.div>
+
+            {/* Category 3: Donate Freely */}
+            <motion.div
+              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+              style={{
+                background: '#fff',
+                border: '1px solid var(--color-border)',
+                borderRadius: '24px',
+                padding: '32px',
+                boxShadow: 'var(--shadow-sm)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                height: '380px'
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
+                  <Heart size={22} />
+                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Direct Clinical Support</span>
+                </div>
+                
+                {/* Custom styling direct badge */}
+                <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Donate Freely</h3>
+                <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  Support treatments directly without unlocking games or rewards. Perfect for helpers who simply wish to donate and clear hospital bills directly.
+                </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                  {['0% platform fee', 'hospital billing', 'direct payout', 'tax receipt ready'].map((item, idx) => (
+                    <span key={idx} style={{ fontSize: '11px', background: '#FDF2F2', color: '#EF4444', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
+                      ❤️ {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <button 
+                onClick={() => navigate('/main')}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #EF4444, #C026D3)',
+                  color: '#fff',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(239, 68, 68, 0.15)'
+                }}
+              >
+                Support a Child ❤️
+              </button>
+            </motion.div>
+
           </div>
         </section>
 
@@ -1098,6 +1336,12 @@ export default function HomePage() {
             flex-direction: column !important;
             align-items: center !important;
             gap: 8px !important;
+          }
+          .transparency-visual-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .categories-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>
