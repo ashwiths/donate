@@ -14,53 +14,53 @@ import { useDonation } from '../context/DonationContext'
 const MYSTERY_REWARDS = [
   {
     id: 'paytm',
-    title: 'Daily Surprise Cashdrop',
-    brand: 'Paytm Cashback',
-    description: 'Chance to reveal a mystery cashback reward up to ₹100 directly to your wallet.',
+    title: 'Calmness Promise Drop',
+    brand: 'Exclusive Partner Gift',
+    description: 'A genuine mystery support reward code promised by our leading healthcare and wellness brand partners.',
     price: 10,
     blurBg: 'linear-gradient(135deg, rgba(0, 41, 112, 0.08) 0%, rgba(0, 163, 224, 0.12) 100%)',
-    accentColor: '#002970',
-    teaserLogo: 'Paytm'
+    accentColor: '#8C4F1A',
+    teaserLogo: 'Gift'
   },
   {
     id: 'gpay',
-    title: 'Mystery Scratch Reward',
-    brand: 'Google Pay Card',
-    description: 'A special golden scratch card containing exclusive wellness and reward drops.',
+    title: 'Golden Wellness Surprise',
+    brand: 'Premium Care Drop',
+    description: 'Unlock a guaranteed surprise partner perk curated specifically to celebrate your generous gameplay.',
     price: 10,
     blurBg: 'linear-gradient(135deg, rgba(234, 67, 53, 0.08) 0%, rgba(66, 133, 244, 0.12) 100%)',
-    accentColor: '#4285F4',
-    teaserLogo: 'GPay'
+    accentColor: '#8C4F1A',
+    teaserLogo: 'Gift'
   },
   {
     id: 'amazon',
-    title: 'Premium Gift Voucher',
-    brand: 'Amazon Gift Card',
-    description: 'Unlock shopping power with a hidden Amazon voucher. Pure digital convenience.',
+    title: 'Serene Care Bonus',
+    brand: 'Wellness Sponsor Reward',
+    description: 'Enjoy a surprise healthcare voucher or exclusive brand drop provided by our dedicated care partners.',
     price: 20,
     blurBg: 'linear-gradient(135deg, rgba(255, 153, 0, 0.08) 0%, rgba(0, 0, 0, 0.1) 100%)',
-    accentColor: '#FF9900',
-    teaserLogo: 'Amazon'
+    accentColor: '#8C4F1A',
+    teaserLogo: 'Gift'
   },
   {
     id: 'swiggy',
-    title: 'Gourmet Dining Treat',
-    brand: 'Swiggy Food Coupon',
-    description: 'Savor your next meal with a premium dining discount. Gift of delicious tastes.',
+    title: 'Care Circle Gift',
+    brand: 'Mindfulness Gift Drop',
+    description: 'A surprise lifestyle code or wellness reward drops promised by top organic lifestyle sponsors.',
     price: 10,
     blurBg: 'linear-gradient(135deg, rgba(252, 128, 25, 0.08) 0%, rgba(252, 128, 25, 0.15) 100%)',
-    accentColor: '#FC8019',
-    teaserLogo: 'Swiggy'
+    accentColor: '#8C4F1A',
+    teaserLogo: 'Gift'
   },
   {
     id: 'flipkart',
-    title: 'Mega Shopping Discount',
-    brand: 'Flipkart Voucher',
-    description: 'An elegant shopping credit to elevate your checkout experience instantly.',
+    title: 'Pure Joy Voucher',
+    brand: 'Hospital Sponsor Drop',
+    description: 'Unlock a promised surprise wellness credit or positive living voucher from our wellness partners.',
     price: 20,
     blurBg: 'linear-gradient(135deg, rgba(40, 116, 240, 0.08) 0%, rgba(255, 222, 0, 0.12) 100%)',
-    accentColor: '#2874F0',
-    teaserLogo: 'Flipkart'
+    accentColor: '#8C4F1A',
+    teaserLogo: 'Gift'
   }
 ]
 
@@ -164,6 +164,100 @@ const PREMIUM_GAMES = [
         <circle cx="48" cy="52" r="3" fill="#E8A87C" />
       </svg>
     )
+  },
+  {
+    id: 'calm-tap',
+    title: 'Calm Tap Challenge',
+    description: 'Breathe and tap expanding circles at their peak alignment to generate sponsor hospital credits.',
+    price: 10,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <motion.circle
+          animate={{ r: [15, 38, 15], opacity: [0.3, 0.8, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          cx="50" cy="50" r="25" fill="none" stroke="#E8A87C" strokeWidth="2"
+        />
+        <circle cx="50" cy="50" r="12" fill="#8C4F1A" />
+        <circle cx="50" cy="50" r="32" fill="none" stroke="#E8D2BF" strokeWidth="1" strokeDasharray="6, 4" />
+      </svg>
+    )
+  },
+  {
+    id: 'hope-puzzle',
+    title: 'Hope Tile Puzzle',
+    description: 'Arrange matching therapeutic clinical icons cleanly to release custom matching sponsor rewards.',
+    price: 20,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <rect x="20" y="20" width="60" height="60" rx="8" fill="#FCFAF8" stroke="#F0E0D0" strokeWidth="1.2" />
+        <line x1="40" y1="20" x2="40" y2="80" stroke="#F0E0D0" strokeWidth="1" />
+        <line x1="60" y1="20" x2="60" y2="80" stroke="#F0E0D0" strokeWidth="1" />
+        <line x1="20" y1="40" x2="80" y2="40" stroke="#F0E0D0" strokeWidth="1" />
+        <line x1="20" y1="60" x2="80" y2="60" stroke="#F0E0D0" strokeWidth="1" />
+        <motion.circle
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ duration: 3, repeat: Infinity }}
+          cx="50" cy="50" r="6" fill="#E8A87C"
+        />
+      </svg>
+    )
+  },
+  {
+    id: 'light-path',
+    title: 'Light Path Journey',
+    description: 'Trace glowing points of healing light through a calming forest path to secure child aid.',
+    price: 10,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <path d="M15 80 Q 35 20, 50 50 T 85 20" fill="none" stroke="#E6D4C3" strokeWidth="2.5" strokeLinecap="round" />
+        <motion.circle
+          animate={{ offsetDistance: ["0%", "100%"] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+          r="5" fill="#8C4F1A"
+          style={{ motionPath: 'path("M15 80 Q 35 20, 50 50 T 85 20")' }}
+        />
+        <circle cx="15" cy="80" r="3" fill="#E8A87C" />
+        <circle cx="85" cy="20" r="3" fill="#E8A87C" />
+      </svg>
+    )
+  },
+  {
+    id: 'sponsor-match',
+    title: 'Sponsor Match Quest',
+    description: 'Bridge two major brand partners directly to unlock double matching contributions instantly.',
+    price: 20,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <circle cx="30" cy="50" r="12" fill="#FFF2EA" stroke="#E8A87C" strokeWidth="1" />
+        <circle cx="70" cy="50" r="12" fill="#FFF2EA" stroke="#E8A87C" strokeWidth="1" />
+        <motion.line
+          animate={{ strokeDashoffset: [0, -20] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+          x1="42" y1="50" x2="58" y2="50" stroke="#8C4F1A" strokeWidth="2" strokeDasharray="4, 4"
+        />
+        <circle cx="50" cy="50" r="5" fill="#8C4F1A" />
+      </svg>
+    )
+  },
+  {
+    id: 'gratitude-drop',
+    title: 'Gratitude Drop',
+    description: 'Catch slowly descending bubbles of positive emotional recovery to route free hospital split bonuses.',
+    price: 0,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <motion.circle
+          animate={{ y: [80, 20], opacity: [0, 0.7, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          cx="35" cy="50" r="7" fill="#E8A87C"
+        />
+        <motion.circle
+          animate={{ y: [90, 10], opacity: [0, 0.6, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          cx="65" cy="50" r="9" fill="#8C4F1A"
+        />
+      </svg>
+    )
   }
 ]
 
@@ -174,7 +268,8 @@ const INSPIRATIONAL_CARDS = [
     curiosity: 'Discover the heartfelt recovery milestone shared by Aarav\'s family after successful pre-op stabilization.',
     tag: 'SUCCESS STORY',
     accent: '#8C4F1A',
-    bg: '#FAF4EE'
+    bg: '#FAF4EE',
+    price: 10
   },
   {
     title: 'Words of Hope from Pediatric Care',
@@ -182,7 +277,8 @@ const INSPIRATIONAL_CARDS = [
     curiosity: 'Unlock an exclusive clinical voice recording message from the lead pediatric nursing officer at the hospital ward.',
     tag: 'CLINICAL VOICE',
     accent: '#47682C',
-    bg: '#F3F6F0'
+    bg: '#F3F6F0',
+    price: 20
   },
   {
     title: 'How Transparency Empowers You',
@@ -190,28 +286,12 @@ const INSPIRATIONAL_CARDS = [
     curiosity: 'Reveal the transparent ledger framework that guarantees your contribution arrives directly to the ward desk.',
     tag: 'OUR PROMISE',
     accent: '#1E3A5F',
-    bg: '#F0F4F8'
+    bg: '#F0F4F8',
+    price: 30
   }
 ]
 
-const OTHER_CASES = [
-  {
-    name: 'Baby Kabir',
-    condition: 'Congenital Heart Defect',
-    raised: 450000,
-    goal: 5500000,
-    progress: 8,
-    img: 'https://images.unsplash.com/photo-1519689680058-324335c77ebe?w=400&q=80'
-  },
-  {
-    name: 'Infant Diya',
-    condition: 'Retinoblastoma Treatment',
-    raised: 120000,
-    goal: 3000000,
-    progress: 4,
-    img: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&q=80'
-  }
-]
+
 
 const TABS = [
   { id: 'all', label: 'All Unlocks' },
@@ -364,7 +444,9 @@ export default function MainPage() {
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>₹{game.price} Entry Code</span>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          {game.price === 0 ? 'Free Experience' : `₹${game.price} Entry Code`}
+                        </span>
                         <motion.div 
                           whileHover={{ scale: 1.02 }}
                           style={{ 
@@ -380,7 +462,7 @@ export default function MainPage() {
                             boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)'
                           }}
                         >
-                          <span>Unlock for ₹{game.price}</span>
+                          <span>{game.price === 0 ? 'Start Playing' : `Unlock for ₹${game.price}`}</span>
                           <ChevronRight size={13} />
                         </motion.div>
                       </div>
@@ -394,10 +476,20 @@ export default function MainPage() {
           {/* ────────────────── 2. COUPONS / MYSTERY REWARDS SECTION ────────────────── */}
           {show('coupons') && (
             <section style={{ marginBottom: 90 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>🎁 Curated Brand Drops</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 6px', letterSpacing: '-0.5px' }}>Mystery Sponsor Rewards</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75 }}>Unlock hidden surprise brand vouchers securely. Brand reward codes are kept completely secret before payment.</p>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                textAlign: 'center', 
+                marginBottom: 36,
+                padding: '24px 0',
+                background: 'radial-gradient(50% 50% at 50% 50%, rgba(235, 224, 214, 0.15) 0%, rgba(255, 255, 255, 0) 100%)',
+                position: 'relative'
+              }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>🎁 Curated Brand Drops</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 8px', letterSpacing: '-0.5px' }}>Mystery Sponsor Rewards</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75, fontWeight: 500 }}>Unlock hidden surprise brand vouchers securely. Brand reward codes are kept completely secret before payment.</p>
+                <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
               <div style={{ 
@@ -408,25 +500,28 @@ export default function MainPage() {
                 {MYSTERY_REWARDS.map((reward) => (
                   <motion.div
                     key={reward.id}
-                    whileHover={{ y: -6, boxShadow: '0 16px 36px rgba(139, 94, 52, 0.06), 0 0 0 1px rgba(139, 94, 52, 0.04)' }}
+                    whileHover={{ 
+                      y: -6, 
+                      boxShadow: '0 20px 40px rgba(139, 94, 52, 0.08), inset 0 0 0 1px rgba(139, 94, 52, 0.1), inset 0 0 24px rgba(255, 255, 255, 0.9)' 
+                    }}
                     onClick={() => handleUnlock(reward.price)}
                     style={{
                       background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
                       border: '1px solid rgba(235, 224, 214, 0.5)',
                       borderRadius: '32px',
-                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 6px 24px rgba(139, 94, 52, 0.02)',
+                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 4px 16px rgba(139, 94, 52, 0.01)',
                       overflow: 'hidden',
                       cursor: 'pointer',
                       display: 'flex',
                       flexDirection: 'column',
-                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                       position: 'relative',
-                      minHeight: 460
+                      minHeight: 410
                     }}
                   >
                     {/* Blurred Secret Preview Area */}
                     <div style={{ 
-                      height: 180, 
+                      height: 160, 
                       background: reward.blurBg, 
                       display: 'flex', 
                       alignItems: 'center', 
@@ -485,16 +580,16 @@ export default function MainPage() {
                       </div>
                     </div>
 
-                    <div style={{ padding: '36px', flex: 1, display: 'flex', flexDirection: 'column', justifySelf: 'space-between', justifyContent: 'space-between', gap: 24 }}>
+                    <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifySelf: 'space-between', justifyContent: 'space-between', gap: 20 }}>
                       <div>
-                        <h4 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{reward.title}</h4>
-                        <p style={{ margin: 0, fontSize: '14px', color: '#7A6A5A', lineHeight: 1.8, fontWeight: 500 }}>{reward.description}</p>
+                        <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{reward.title}</h4>
+                        <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.75, fontWeight: 500 }}>{reward.description}</p>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '20px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px' }}>
                         <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>₹{reward.price} Reward Code</span>
                         <motion.div 
-                          whileHover={{ scale: 1.03 }}
+                          whileHover={{ scale: 1.02 }}
                           style={{ 
                             display: 'flex', 
                             alignItems: 'center', 
@@ -502,10 +597,10 @@ export default function MainPage() {
                             color: '#fff', 
                             fontWeight: 700, 
                             fontSize: '12.5px',
-                            background: 'linear-gradient(135deg, #8B5E34, #734D29)',
+                            background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
                             padding: '10px 20px',
                             borderRadius: '14px',
-                            boxShadow: '0 6px 16px rgba(139, 94, 52, 0.15)'
+                            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)'
                           }}
                         >
                           <span>Unlock for ₹{reward.price}</span>
@@ -522,10 +617,20 @@ export default function MainPage() {
           {/* ────────────────── 3. QUOTES & INSPIRATION SECTION ────────────────── */}
           {show('quotes') && (
             <section style={{ marginBottom: 90 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 36 }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>💬 Stories that heal</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 6px', letterSpacing: '-0.5px' }}>Quotes & Emotional Capsules</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75 }}>Unlock heartwarming gratitude messages, survivor audio stories, and positive pediatric recovery journals.</p>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                textAlign: 'center', 
+                marginBottom: 36,
+                padding: '24px 0',
+                background: 'radial-gradient(50% 50% at 50% 50%, rgba(235, 224, 214, 0.15) 0%, rgba(255, 255, 255, 0) 100%)',
+                position: 'relative'
+              }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>💬 Stories that heal</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 8px', letterSpacing: '-0.5px' }}>Quotes & Emotional Capsules</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75, fontWeight: 500 }}>Unlock heartwarming gratitude messages, survivor audio stories, and positive pediatric recovery journals.</p>
+                <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
               <div style={{ 
@@ -540,7 +645,7 @@ export default function MainPage() {
                       y: -6, 
                       boxShadow: '0 20px 40px rgba(139, 94, 52, 0.08), inset 0 0 0 1px rgba(139, 94, 52, 0.1), inset 0 0 24px rgba(255, 255, 255, 0.9)' 
                     }}
-                    onClick={() => handleUnlock(10)}
+                    onClick={() => handleUnlock(card.price)}
                     style={{
                       background: `linear-gradient(135deg, #FCFAF7 0%, ${card.bg} 100%)`,
                       borderRadius: '32px',
@@ -601,7 +706,7 @@ export default function MainPage() {
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 28, paddingTop: 20, borderTop: '1px solid rgba(235, 224, 214, 0.4)' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.04em' }}>₹10 Contribution</span>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.04em' }}>₹{card.price} Contribution</span>
                       <motion.div 
                         whileHover={{ scale: 1.02 }}
                         style={{ 
@@ -629,11 +734,21 @@ export default function MainPage() {
 
           {/* ────────────────── 4. FREE TO HELP SECTION ────────────────── */}
           {show('free-help') && (
-            <section style={{ marginBottom: 110, maxWidth: 740, margin: '0 auto 110px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 40 }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>❤️ Simple Pure Contribution</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 10px', letterSpacing: '-0.5px' }}>Help Without Rewards</h3>
-                <p style={{ margin: 0, fontSize: '15.5px', color: '#7A6A5A', lineHeight: 1.8 }}>Every single rupee goes directly towards Baby Aarav\'s medical balance sheet at the hospital billing desk.</p>
+            <section style={{ marginBottom: 110, maxWidth: 840, margin: '0 auto 110px' }}>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                textAlign: 'center', 
+                marginBottom: 36,
+                padding: '24px 0',
+                background: 'radial-gradient(50% 50% at 50% 50%, rgba(235, 224, 214, 0.15) 0%, rgba(255, 255, 255, 0) 100%)',
+                position: 'relative'
+              }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>❤️ Simple Pure Contribution</span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 8px', letterSpacing: '-0.5px' }}>Help Without Rewards</h3>
+                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75, fontWeight: 500 }}>Every single rupee goes directly towards Baby Aarav\'s medical balance sheet at the hospital billing desk.</p>
+                <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
               <div style={{
@@ -643,50 +758,70 @@ export default function MainPage() {
                 padding: '48px',
                 boxShadow: 'inset 0 0 30px rgba(255, 255, 255, 0.7), 0 8px 32px rgba(139, 94, 52, 0.02)'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 32 }}>
-                  <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#FFF2EA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Heart size={22} color="#8B5E34" fill="#8B5E34" />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#FFF2EA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Heart size={22} color="#8B5E34" fill="#8B5E34" />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: '19px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>Direct Hospital Support</h4>
+                      <p style={{ margin: '3px 0 0', fontSize: '13.5px', color: '#7A6A5A', fontWeight: 500 }}>Real-time pediatric ward terminal split routing</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 style={{ margin: 0, fontSize: '19px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>Help Without Rewards ❤️</h4>
-                    <p style={{ margin: '3px 0 0', fontSize: '13.5px', color: '#7A6A5A' }}>Every contribution directly supports treatment.</p>
+
+                  <div style={{
+                    background: '#EAF5E2',
+                    border: '1px solid rgba(71, 104, 44, 0.2)',
+                    borderRadius: '12px',
+                    padding: '6px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6
+                  }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#47682C' }} />
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#47682C', letterSpacing: '0.04em', textTransform: 'uppercase' }}>VERIFIED TERMINAL</span>
                   </div>
                 </div>
 
-                <label style={{ fontSize: '12px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 16 }}>
+                <label style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 14 }}>
                   Select Contribution Amount
                 </label>
 
                 {/* Preset Chips */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 32 }}>
-                  {[100, 250, 500, 1000].map((preset) => (
-                    <button
-                      key={preset}
-                      onClick={() => {
-                        setSelectedPreset(preset)
-                        setCustomAmount('')
-                      }}
-                      style={{
-                        padding: '14px 0',
-                        borderRadius: '16px',
-                        border: '1px solid',
-                        borderColor: selectedPreset === preset && !customAmount ? '#8B5E34' : 'rgba(235, 224, 214, 0.6)',
-                        background: '#fff',
-                        color: selectedPreset === preset && !customAmount ? '#8B5E34' : '#7A6A5A',
-                        fontWeight: 700,
-                        fontSize: '14.5px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        boxShadow: selectedPreset === preset && !customAmount ? '0 6px 16px rgba(139, 94, 52, 0.06)' : 'none'
-                      }}
-                    >
-                      ₹{preset}
-                    </button>
-                  ))}
+                  {[100, 250, 500, 1000].map((preset) => {
+                    const isSelected = selectedPreset === preset && !customAmount;
+                    return (
+                      <motion.button
+                        key={preset}
+                        whileHover={{ y: -2 }}
+                        onClick={() => {
+                          setSelectedPreset(preset)
+                          setCustomAmount('')
+                        }}
+                        style={{
+                          padding: '14px 0',
+                          borderRadius: '16px',
+                          border: isSelected ? 'none' : '1px solid rgba(235, 224, 214, 0.7)',
+                          background: isSelected ? 'linear-gradient(135deg, #9A673A, #7A4E2B)' : '#fff',
+                          color: isSelected ? '#fff' : '#7A6A5A',
+                          fontWeight: 700,
+                          fontSize: '14.5px',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                          boxShadow: isSelected 
+                            ? 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 16px rgba(122, 78, 43, 0.16)' 
+                            : '0 2px 6px rgba(139, 94, 52, 0.02)'
+                        }}
+                      >
+                        ₹{preset}
+                      </motion.button>
+                    );
+                  })}
                 </div>
 
                 <div style={{ marginBottom: 32 }}>
-                  <label style={{ fontSize: '12px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 10 }}>
+                  <label style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 10 }}>
                     Or Enter Custom Amount (₹)
                   </label>
                   <input
@@ -708,36 +843,65 @@ export default function MainPage() {
                       outline: 'none',
                       background: '#FFF',
                       color: '#4A3427',
-                      transition: 'border-color 0.2s'
+                      transition: 'border-color 0.2s',
+                      boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.01)'
                     }}
                   />
                 </div>
 
-                <button
+                {/* Direct Hospital Trust Info Panel */}
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.45)',
+                  border: '1px solid rgba(235, 224, 214, 0.5)',
+                  borderRadius: '24px',
+                  padding: '24px',
+                  marginBottom: 32,
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                  gap: 20
+                }}>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <Shield size={18} color="#8B5E34" style={{ marginTop: 2, flexShrink: 0 }} />
+                    <div>
+                      <h5 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#4A3427' }}>Split-Term Routing Guarantee</h5>
+                      <p style={{ margin: '4px 0 0', fontSize: 12, color: '#7A6A5A', lineHeight: 1.6 }}>100% of contributions land directly inside Baby Aarav\'s pre-op stabilization billing account (Fortis ID #F89410).</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <Shield size={18} color="#47682C" style={{ marginTop: 2, flexShrink: 0 }} />
+                    <div>
+                      <h5 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#47682C' }}>Public Ledger Ledgering</h5>
+                      <p style={{ margin: '4px 0 0', fontSize: 12, color: '#7A6A5A', lineHeight: 1.6 }}>Real-time cryptographic audit trail verified. Public records index is open to every gameplay micro-donator.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.01 }}
                   onClick={handleDirectDonate}
                   style={{
                     width: '100%',
                     padding: '18px',
                     borderRadius: '18px',
                     border: 'none',
-                    background: 'linear-gradient(135deg, #8B5E34, #734D29)',
+                    background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
                     color: '#fff',
                     fontWeight: 800,
-                    fontSize: '16px',
+                    fontSize: '15px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: 8,
-                    boxShadow: '0 4px 14px rgba(140, 79, 26, 0.2)',
-                    transition: 'all 0.2s'
+                    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 24px rgba(122, 78, 43, 0.18)',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                   }}
                 >
                   <Heart size={16} fill="#fff" />
                   <span>Contribute Freely</span>
-                </button>
+                </motion.button>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center', marginTop: 18, fontSize: '11px', color: '#7C6B5B', fontWeight: 600 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center', marginTop: 20, fontSize: '11px', color: '#7C6B5B', fontWeight: 600 }}>
                   <Shield size={12} color="#47682C" />
                   <span>100% Direct Hospital Split Routing. Public Ledger Verified.</span>
                 </div>
@@ -745,81 +909,7 @@ export default function MainPage() {
             </section>
           )}
 
-          {/* ────────────────── 5. MORE CASES ────────────────── */}
-          <section style={{ 
-            marginTop: 90, 
-            borderTop: '1px solid rgba(232, 224, 214, 0.5)', 
-            paddingTop: '64px'
-          }}>
-            <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }}>
-              <div>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Explore more children</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '28px', color: '#4A3427', margin: '4px 0 0', letterSpacing: '-0.5px' }}>Other Urgent Medical Cases</h3>
-              </div>
-              <button style={{ background: 'none', border: 'none', color: '#8B5E34', fontWeight: 800, fontSize: '13.5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span>View All Cases</span>
-                <ChevronRight size={14} />
-              </button>
-            </div>
 
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
-              gap: 32 
-            }}>
-              {OTHER_CASES.map((child, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
-                    border: '1px solid rgba(235, 224, 214, 0.5)',
-                    borderRadius: '32px',
-                    boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 6px 24px rgba(139, 94, 52, 0.02)',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}
-                >
-                  <img src={child.img} alt={child.name} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
-                  
-                  <div style={{ padding: '36px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 24 }}>
-                    <div>
-                      <h4 style={{ margin: '0 0 6px', fontSize: '19px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{child.name}</h4>
-                      <p style={{ margin: '0 0 20px', fontSize: '13.5px', color: '#7A6A5A', fontWeight: 500 }}>{child.condition}</p>
-                      
-                      {/* Simple compact progress */}
-                      <div style={{ height: 6, background: 'rgba(235, 224, 214, 0.4)', borderRadius: 3, overflow: 'hidden', marginBottom: 8 }}>
-                        <div style={{ width: `${child.progress}%`, height: '100%', background: '#8B5E34' }} />
-                      </div>
-                      <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', fontSize: '11px', color: '#7A6A5A', fontWeight: 700 }}>
-                        <span>₹{child.raised.toLocaleString('en-IN')} raised</span>
-                        <span>{child.progress}%</span>
-                      </div>
-                    </div>
-
-                    <button 
-                      onClick={() => handleUnlock(10)}
-                      style={{ 
-                        width: '100%', 
-                        padding: '12px', 
-                        fontSize: 13, 
-                        fontWeight: 700, 
-                        borderRadius: '12px', 
-                        border: '1px solid rgba(139, 94, 52, 0.3)', 
-                        background: '#fff', 
-                        color: '#8B5E34', 
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 8px rgba(139, 94, 52, 0.02)',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      Support case
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
 
           {/* Audit Verification Block */}
           <div style={{ 
