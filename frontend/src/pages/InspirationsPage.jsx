@@ -7,6 +7,15 @@ import {
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
+import imgSuriya from '/portraits/portrait_suriya.png'
+import imgKalam from '/portraits/portrait_kalam.png'
+import imgElon from '/portraits/portrait_elon.png'
+import imgJobs from '/portraits/portrait_jobs.png'
+import imgMurthy from '/portraits/portrait_murthy.png'
+import imgDhoni from '/portraits/portrait_dhoni.png'
+import imgVirat from '/portraits/portrait_virat.png'
+import imgSundar from '/portraits/portrait_sundar.png'
+
 // ── Data ──────────────────────────────────────────────────────────────
 const HERO_QUOTE = {
   text: "Every small act of kindness plants a seed that grows into something extraordinary.",
