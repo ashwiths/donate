@@ -70,6 +70,81 @@ const CHALLENGES = [
   { id: 6, text: "Spend 20 minutes reading something uplifting", icon: Star }
 ]
 
+const REAL_LIFE_INSPIRATIONS = [
+  {
+    name: "Suriya",
+    badge: "Agaram Foundation",
+    role: "Founder of Agaram Foundation",
+    description: "Pioneering transformative educational access for underprivileged children, building lives through empowerment and active social outreach.",
+    quote: "Education is the single most powerful tool to uplift families and change society.",
+    image: "/portraits/portrait_suriya.png",
+    accent: "#8B6239"
+  },
+  {
+    name: "Dr. A.P.J. Abdul Kalam",
+    badge: "Missile Man of India",
+    role: "People's President & Scientist",
+    description: "Igniting million minds with values of pure discipline, persistent dreams, and child-centered learning paradigms.",
+    quote: "Dreams are not what you see in your sleep, they are things that do not let you sleep.",
+    image: "/portraits/portrait_kalam.png",
+    accent: "#A0522D"
+  },
+  {
+    name: "Elon Musk",
+    badge: "SpaceX & Tesla",
+    role: "Futurist & Explorer",
+    description: "Redefining interplanetary travel, electric mobility, and neurotechnology with bold risk-taking and relentless execution.",
+    quote: "When something is important enough, you do it even if the odds are not in your favor.",
+    image: "/portraits/portrait_elon.png",
+    accent: "#6F7B3A"
+  },
+  {
+    name: "Steve Jobs",
+    badge: "Apple Co-founder",
+    role: "Design Pioneer",
+    description: "Championing elegant simplicity, pure intuition, and state-of-the-art designs that revolutionized global human interface.",
+    quote: "The only way to do great work is to love what you do.",
+    image: "/portraits/portrait_jobs.png",
+    accent: "#7A4E2B"
+  },
+  {
+    name: "Narayana Murthy",
+    badge: "Infosys Founder",
+    role: "Father of Indian IT",
+    description: "Pioneering the global software revolution while modeling absolute clean governance, modesty, and compassionate capitalism.",
+    quote: "In God we trust, everyone else brings data to the table.",
+    image: "/portraits/portrait_murthy.png",
+    accent: "#5C6B8A"
+  },
+  {
+    name: "MS Dhoni",
+    badge: "Captain Cool",
+    role: "Legendary Leader & Finisher",
+    description: "Executing legendary high-pressure turnarounds with serene calmness, unparalleled strategic clarity, and sheer sportsmanship.",
+    quote: "Process is always more important than the final result.",
+    image: "/portraits/portrait_dhoni.png",
+    accent: "#8B6239"
+  },
+  {
+    name: "Virat Kohli",
+    badge: "Modern Cricket Icon",
+    role: "Peak Athleticism & Passion",
+    description: "Redefining batting performance metrics through absolute fitness discipline, raw intensity, and consistent work ethic.",
+    quote: "Self-belief and hard work will always earn you success.",
+    image: "/portraits/portrait_virat.png",
+    accent: "#A0522D"
+  },
+  {
+    name: "Sundar Pichai",
+    badge: "Google CEO",
+    role: "Global Tech Leader",
+    description: "Leading global internet scale from humble beginnings with clean collaborative leadership, curiosity, and high vision.",
+    quote: "A person who is happy is because he chooses to find attitude right.",
+    image: "/portraits/portrait_sundar.png",
+    accent: "#6F7B3A"
+  }
+]
+
 // ── Floating particle component ────────────────────────────────────────
 function FloatingParticle({ style }) {
   return (
@@ -250,6 +325,168 @@ export default function InspirationsPage() {
                 </motion.div>
               )
             })}
+          </div>
+        </section>
+
+        {/* ── REAL LIFE INSPIRATIONS (Inspired Minds ✨) ── */}
+        <section style={{ maxWidth: 1400, margin: '0 auto', padding: '0 32px 100px' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            style={{ textAlign: 'center', marginBottom: 60 }}
+          >
+            <span style={{ fontSize: 11, fontWeight: 800, color: '#8B6239', textTransform: 'uppercase', letterSpacing: '0.12em' }}>🌟 Inspired Minds ✨</span>
+            <h2 style={{ fontFamily: 'Outfit', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: '#3D2B1A', margin: '8px 0 12px', letterSpacing: '-1px' }}>
+              Real Life Inspirations
+            </h2>
+            <p style={{ fontSize: 15, color: '#7A6A58', margin: 0, lineHeight: 1.65, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
+              Meet the visionary minds, resilient leaders, and passionate innovators who reshaped their fields with determination and purpose.
+            </p>
+          </motion.div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
+            gap: 32
+          }}>
+            {REAL_LIFE_INSPIRATIONS.map((person, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.05, duration: 0.6 }}
+                whileHover={{ y: -10 }}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.45)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1.5px solid rgba(234, 223, 207, 0.6)',
+                  borderRadius: '32px',
+                  padding: '40px 28px 36px',
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 16,
+                  boxShadow: '0 8px 32px rgba(111, 77, 46, 0.04)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'background 0.3s, border-color 0.3s, box-shadow 0.3s'
+                }}
+                className="inspiration-profile-card"
+              >
+                {/* Floating glow behind image */}
+                <div style={{
+                  position: 'absolute',
+                  top: '10%',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '160px',
+                  height: '160px',
+                  background: `radial-gradient(circle, ${person.accent}20 0%, transparent 70%)`,
+                  borderRadius: '50%',
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }} />
+
+                {/* Circular Profile Image Container */}
+                <div style={{ position: 'relative', zIndex: 1, width: 120, height: 120 }}>
+                  <img
+                    src={person.image}
+                    alt={person.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '4px solid #fff',
+                      boxShadow: '0 12px 28px rgba(139, 98, 57, 0.15)'
+                    }}
+                  />
+                  {/* Subtle decorative mini sparkle badge */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 4,
+                    width: 24,
+                    height: 24,
+                    borderRadius: '50%',
+                    background: person.accent,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  }}>
+                    <Sparkles size={11} color="#fff" />
+                  </div>
+                </div>
+
+                {/* Info & Typography */}
+                <div style={{ relative: 1, zIndex: 1, width: '100%' }}>
+                  <h3 style={{
+                    fontFamily: 'Outfit',
+                    fontWeight: 850,
+                    fontSize: 20,
+                    color: '#3D2B1A',
+                    margin: '0 0 4px',
+                    letterSpacing: '-0.4px'
+                  }}>
+                    {person.name}
+                  </h3>
+                  
+                  <span style={{
+                    display: 'inline-block',
+                    fontSize: 10,
+                    fontWeight: 800,
+                    color: person.accent,
+                    background: `${person.accent}12`,
+                    border: `1.5px solid ${person.accent}22`,
+                    borderRadius: '99px',
+                    padding: '4px 12px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    marginBottom: 14
+                  }}>
+                    {person.badge}
+                  </span>
+
+                  <p style={{
+                    fontSize: 13.5,
+                    color: '#7A6A58',
+                    lineHeight: 1.6,
+                    margin: '0 0 16px',
+                    fontWeight: 500
+                  }}>
+                    {person.description}
+                  </p>
+
+                  <div style={{
+                    width: '32px',
+                    height: '2px',
+                    background: `linear-gradient(90deg, ${person.accent}, transparent)`,
+                    margin: '0 auto 16px'
+                  }} />
+
+                  {/* Elegant Quote */}
+                  <p style={{
+                    fontSize: 12.5,
+                    color: '#8C745C',
+                    fontStyle: 'italic',
+                    lineHeight: 1.5,
+                    margin: 0,
+                    fontWeight: 600,
+                    background: 'rgba(255, 255, 255, 0.35)',
+                    padding: '10px 14px',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(234, 223, 207, 0.4)'
+                  }}>
+                    “{person.quote}”
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </section>
 
