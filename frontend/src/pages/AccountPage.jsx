@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Heart, Sparkles, User, Award, Shield, FileText, 
@@ -73,11 +74,15 @@ const StatRing = ({ value, total, color }) => {
 
 export default function AccountPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [supportForm, setSupportForm] = useState({ name: user?.name || '', email: user?.email || '', issue: '', message: '' });
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleSupportSubmit = (e) => {
     e.preventDefault();

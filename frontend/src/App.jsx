@@ -22,6 +22,7 @@ export default function App() {
               <Route path="/thank-you" element={<ThankYouPage />} />
               <Route path="/healing-stories" element={<HealingStoriesPage />} />
               <Route path="/account" element={<AccountPage />} />
+              <Route path="/inspirations" element={<InspirationsPage />} />
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
