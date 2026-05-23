@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Users, Shield, CheckCircle2, ChevronRight, Play, Heart, Star, Award, Sparkles, Gift, Gamepad2, Trophy, Clock, HeartHandshake, FileText, Download, TrendingUp, ShieldCheck, HeartPulse, CreditCard, Lock, Activity, CheckSquare, MessageSquare, HeartHandshake as DirectHeart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import DonationProgress from '../components/DonationProgress'
@@ -191,7 +192,14 @@ function SecurityIllustration() {
 
 export default function HomePage() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [selectedDirectAmount, setSelectedDirectAmount] = useState(20)
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+  }, [user, navigate])
 
   // Interactive Mystery Reveal State Machine
   const [activeRevealBox, setActiveRevealBox] = useState(null)
