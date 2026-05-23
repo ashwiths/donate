@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { QuotesBackground } from '../components/PremiumBackground'
 
 import imgSuriya from '/portraits/portrait_suriya.png'
 import imgKalam from '/portraits/portrait_kalam.png'
@@ -194,11 +195,9 @@ export default function InspirationsPage() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F5F1EB', position: 'relative', overflowX: 'hidden' }}>
-      {/* Ambient background glows */}
+      {/* Premium ambient background system */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div style={{ position: 'absolute', top: '5%', left: '-10%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(200,168,124,0.14) 0%, transparent 70%)', filter: 'blur(60px)' }} />
-        <div style={{ position: 'absolute', top: '50%', right: '-10%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(139,98,57,0.10) 0%, transparent 70%)', filter: 'blur(80px)' }} />
-        <div style={{ position: 'absolute', bottom: '10%', left: '30%', width: 350, height: 350, background: 'radial-gradient(circle, rgba(234,223,207,0.20) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+        <QuotesBackground />
       </div>
 
       {/* Floating particles */}
@@ -509,8 +508,17 @@ export default function InspirationsPage() {
           position: 'relative',
           overflow: 'hidden'
         }}>
-          <div style={{ position: 'absolute', top: '20%', left: '5%', width: 220, height: 220, background: 'radial-gradient(circle, rgba(200,119,58,0.10), transparent 70%)', filter: 'blur(40px)' }} />
-          <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: 200, height: 200, background: 'radial-gradient(circle, rgba(139,98,57,0.09), transparent 70%)', filter: 'blur(40px)' }} />
+          {/* Premium animated corner glows */}
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.14, 0.08] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ position: 'absolute', top: '20%', left: '5%', width: 220, height: 220, background: 'radial-gradient(circle, rgba(200,119,58,0.14), transparent 70%)', filter: 'blur(40px)', borderRadius: '50%' }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.12, 1], opacity: [0.07, 0.13, 0.07] }}
+            transition={{ duration: 13, delay: 3, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ position: 'absolute', bottom: '10%', right: '5%', width: 200, height: 200, background: 'radial-gradient(circle, rgba(139,98,57,0.12), transparent 70%)', filter: 'blur(40px)', borderRadius: '50%' }}
+          />
 
           <span style={{ fontSize: 11, fontWeight: 800, color: '#8B6239', textTransform: 'uppercase', letterSpacing: '0.12em' }}>💬 Quote of the Moment</span>
           <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 'clamp(26px, 3.5vw, 36px)', color: '#3D2B1A', margin: '10px 0 48px', letterSpacing: '-0.8px' }}>Words That Change Everything</h2>

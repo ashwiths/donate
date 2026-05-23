@@ -125,3 +125,94 @@ body {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-bg); }
 ::-webkit-scrollbar-thumb { background: var(--color-accent-soft); border-radius: 99px; }
+
+/* ───────── Premium Animated Background System ───────── */
+
+/* Hero: Slow animated mesh gradient */
+@keyframes meshShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-mesh-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    #FAF8F5 0%,
+    #FFF3E8 18%,
+    #FAF6EE 35%,
+    #FFF8F0 52%,
+    #FAF4EC 68%,
+    #FFF0E4 84%,
+    #FAF8F5 100%
+  );
+  background-size: 300% 300%;
+  animation: meshShift 22s ease infinite;
+  opacity: 0.85;
+}
+
+/* Games: Faint animated grid texture */
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.025; }
+  50%       { opacity: 0.055; }
+}
+
+.games-grid-texture {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(139,98,57,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,98,57,0.12) 1px, transparent 1px);
+  background-size: 52px 52px;
+  animation: gridPulse 10s ease-in-out infinite;
+}
+
+/* Premium card hover glow — applied per card via JS whileHover */
+.premium-card-glow {
+  transition: box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.premium-card-glow:hover {
+  box-shadow: 0 20px 48px rgba(139, 98, 57, 0.10), 0 0 0 1px rgba(200, 160, 100, 0.12) inset;
+}
+
+/* Glassmorphism overlay utility */
+.glass-warm {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(234, 223, 207, 0.65);
+}
+
+/* Radial glow behind progress bars */
+.progress-glow {
+  position: relative;
+}
+.progress-glow::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: radial-gradient(ellipse, rgba(200, 119, 58, 0.18) 0%, transparent 70%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* Breathing radial glow animation utility */
+@keyframes breatheGlow {
+  0%, 100% { opacity: 0.08; transform: scale(1); }
+  50%       { opacity: 0.18; transform: scale(1.07); }
+}
+.breathe-glow {
+  animation: breatheGlow 9s ease-in-out infinite;
+}
+
+/* Soft particle drift */
+@keyframes particleDrift {
+  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.35; }
+  50%       { transform: translateY(-18px) scale(1.15); opacity: 0.70; }
+}
+

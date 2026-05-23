@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import DonationProgress from '../components/DonationProgress'
 import { staggerContainer, fadeUp, cardVariant } from '../animations/variants'
+import { HeroBackground, DonationBackground, GamesBackground, WarmSectionBackground } from '../components/PremiumBackground'
 
 const URGENT_CASE = {
   id: '1',
@@ -232,35 +233,26 @@ export default function HomePage() {
       position: 'relative'
     }}>
 
-      {/* Soft ambient background radial glows */}
-      <div style={{
-        position: 'absolute',
-        top: '10%',
-        left: '5%',
-        width: '450px',
-        height: '450px',
-        background: 'radial-gradient(circle, rgba(232, 168, 124, 0.08) 0%, rgba(254, 243, 232, 0) 70%)',
-        filter: 'blur(90px)',
-        pointerEvents: 'none',
-        zIndex: 0
-      }} />
-
       <Navbar />
 
       <main style={{ flex: 1, paddingBottom: 100, zIndex: 1, position: 'relative' }}>
 
         {/* ────────────────── 1. HERO ────────────────── */}
-        <section style={{
-          padding: '80px 40px 96px',
-          maxWidth: 1200,
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: '55fr 45fr',
-          gap: 64,
-          alignItems: 'center',
-          boxSizing: 'border-box',
-          width: '100%'
-        }} className="hero-split-grid">
+        <section style={{ position: 'relative', overflow: 'hidden' }}>
+          <HeroBackground />
+          <div style={{
+            padding: '80px 40px 96px',
+            maxWidth: 1200,
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: '55fr 45fr',
+            gap: 64,
+            alignItems: 'center',
+            boxSizing: 'border-box',
+            width: '100%',
+            position: 'relative',
+            zIndex: 1
+          }} className="hero-split-grid">
 
           <motion.div
             variants={staggerContainer}
@@ -468,7 +460,7 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                <div style={{
+                <div className="progress-glow" style={{
                   height: 12,
                   background: 'rgba(232, 224, 214, 0.6)',
                   borderRadius: '99px',
@@ -548,6 +540,7 @@ export default function HomePage() {
               </motion.button>
             </motion.div>
           </motion.div>
+          </div>
         </section>
 
         {/* ────────────────── 2. LIVE FEED ────────────────── */}
@@ -582,7 +575,9 @@ export default function HomePage() {
         </section>
 
         {/* ────────────────── 3. PAYMENT TRANSPARENCY ────────────────── */}
-        <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
+        <section style={{ position: 'relative', overflow: 'hidden' }}>
+          <DonationBackground />
+          <div style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box', position: 'relative', zIndex: 1 }}>
 
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <motion.div
@@ -979,10 +974,13 @@ export default function HomePage() {
 
           </div>
 
+          </div>
         </section>
 
         {/* ────────────────── 4. CURATED PARTICIPATION CATEGORIES ────────────────── */}
-        <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
+        <section style={{ position: 'relative', overflow: 'hidden' }}>
+          <GamesBackground />
+          <div style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box', position: 'relative', zIndex: 1 }}>
 
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}> Curated Experiences </span>
@@ -1181,6 +1179,7 @@ export default function HomePage() {
             </motion.div>
 
           </div>
+          </div>
         </section>
 
         {/* ────────────────── 5. TREATMENT TIMELINE ────────────────── */}
@@ -1321,13 +1320,17 @@ export default function HomePage() {
         </section>
 
         {/* ────────────────── 7. ACTIVE CHILD CAMPAIGNS ────────────────── */}
-        <section id="active-campaigns" style={{
-          padding: '80px 40px',
-          maxWidth: 1200,
-          margin: '0 auto',
-          boxSizing: 'border-box',
-          width: '100%'
-        }}>
+        <section id="active-campaigns" style={{ position: 'relative', overflow: 'hidden' }}>
+          <WarmSectionBackground />
+          <div style={{
+            padding: '80px 40px',
+            maxWidth: 1200,
+            margin: '0 auto',
+            boxSizing: 'border-box',
+            width: '100%',
+            position: 'relative',
+            zIndex: 1
+          }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }} className="section-header-flex">
             <div>
               <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Active Clinical Campaigns</span>
@@ -1436,6 +1439,7 @@ export default function HomePage() {
                 </div>
               </motion.div>
             ))}
+          </div>
           </div>
         </section>
 
