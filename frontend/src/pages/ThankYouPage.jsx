@@ -456,18 +456,7 @@ export default function ThankYouPage() {
         {/* Cinematic Main Title */}
         <motion.h1
           variants={fadeUp}
-          style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: 'clamp(36px, 5.5vw, 54px)',
-            fontWeight: 'bold',
-            lineHeight: 1.1,
-            color: '#3D2B1A',
-            letterSpacing: '-1.5px',
-            margin: '0 0 16px',
-            background: 'linear-gradient(180deg, #3D2B1A 0%, #5A3A1A 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}
+          className="premium-title-lg"
         >
           You Just Helped Save a Life ❤️
         </motion.h1>
@@ -537,9 +526,9 @@ export default function ThankYouPage() {
       </motion.div>
 
       {/* Main Grid: Editorial Asymmetric Layout with staggered columns */}
-      <div style={{ 
+      <div className="thank-you-grid" style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
         gap: '40px', 
         maxWidth: '1150px', 
         width: '100%', 
@@ -821,7 +810,7 @@ export default function ThankYouPage() {
             </motion.button>
 
             {/* Print and Share row */}
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="hero-buttons" style={{ display: 'flex', gap: '12px' }}>
               <motion.button
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}

@@ -170,9 +170,9 @@ const PREMIUM_GAMES = [
         <motion.circle
           animate={{ scale: [1, 1.3, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
-          cx="48" cy="52" r="5" fill="#E8A87C" opacity="0.4"
+          cx="48" cy="52" r={5} fill="#E8A87C" opacity="0.4"
         />
-        <circle cx="48" cy="52" r="3" fill="#E8A87C" />
+        <circle cx="48" cy="52" r={3} fill="#E8A87C" />
       </svg>
     )
   },
@@ -186,9 +186,9 @@ const PREMIUM_GAMES = [
         <motion.circle
           animate={{ r: [15, 38, 15], opacity: [0.3, 0.8, 0.3] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          cx="50" cy="50" r="25" fill="none" stroke="#E8A87C" strokeWidth="2"
+          cx="50" cy="50" r={25} fill="none" stroke="#E8A87C" strokeWidth="2"
         />
-        <circle cx="50" cy="50" r="12" fill="#8C4F1A" />
+        <circle cx="50" cy="50" r={12} fill="#8C4F1A" />
         <circle cx="50" cy="50" r="32" fill="none" stroke="#E8D2BF" strokeWidth="1" strokeDasharray="6, 4" />
       </svg>
     )
@@ -208,7 +208,7 @@ const PREMIUM_GAMES = [
         <motion.circle
           animate={{ scale: [1, 1.15, 1] }}
           transition={{ duration: 3, repeat: Infinity }}
-          cx="50" cy="50" r="6" fill="#E8A87C"
+          cx="50" cy="50" r={6} fill="#E8A87C"
         />
       </svg>
     )
@@ -224,7 +224,7 @@ const PREMIUM_GAMES = [
         <motion.circle
           animate={{ offsetDistance: ["0%", "100%"] }}
           transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
-          r="5" fill="#8C4F1A"
+          r={5} fill="#8C4F1A"
           style={{ motionPath: 'path("M15 80 Q 35 20, 50 50 T 85 20")' }}
         />
         <circle cx="15" cy="80" r="3" fill="#E8A87C" />
@@ -260,12 +260,12 @@ const PREMIUM_GAMES = [
         <motion.circle
           animate={{ y: [80, 20], opacity: [0, 0.7, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          cx="35" cy="50" r="7" fill="#E8A87C"
+          cx="35" cy="50" r={7} fill="#E8A87C"
         />
         <motion.circle
           animate={{ y: [90, 10], opacity: [0, 0.6, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          cx="65" cy="50" r="9" fill="#8C4F1A"
+          cx="65" cy="50" r={9} fill="#8C4F1A"
         />
       </svg>
     )
@@ -398,17 +398,9 @@ export default function MainPage() {
             </span>
           </div>
 
-          <h2 style={{ 
-            fontFamily: 'Outfit', 
-            fontWeight: 900, 
-            fontSize: 'clamp(36px, 5vw, 64px)', 
-            color: '#3D2B1A', 
-            margin: '0 0 16px', 
-            letterSpacing: '-2px', 
-            lineHeight: 1.1 
-          }}>
+          <h2 className="premium-title-lg" style={{ textAlign: 'center' }}>
             Unlock Joy While{' '}
-            <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <span className="text-gradient-animate">
               Healing ❤️
             </span>
           </h2>
@@ -484,17 +476,9 @@ export default function MainPage() {
                   </span>
                 </div>
 
-                <h3 style={{ 
-                  fontFamily: 'Outfit', 
-                  fontWeight: 900, 
-                  fontSize: 'clamp(32px, 4.5vw, 48px)', 
-                  color: '#3D2B1A', 
-                  margin: '0 0 12px', 
-                  letterSpacing: '-1.8px', 
-                  lineHeight: 1.15 
-                }}>
+                <h3 className="premium-title-md">
                   Healing Through{' '}
-                  <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  <span className="text-gradient-animate">
                     Play 🎮
                   </span>
                 </h3>
@@ -612,17 +596,9 @@ export default function MainPage() {
                   </span>
                 </div>
 
-                <h3 style={{ 
-                  fontFamily: 'Outfit', 
-                  fontWeight: 900, 
-                  fontSize: 'clamp(32px, 4.5vw, 48px)', 
-                  color: '#3D2B1A', 
-                  margin: '0 0 12px', 
-                  letterSpacing: '-1.8px', 
-                  lineHeight: 1.15 
-                }}>
+                <h3 className="premium-title-md">
                   Play With{' '}
-                  <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  <span className="text-gradient-animate">
                     Purpose 🎁
                   </span>
                 </h3>
@@ -785,17 +761,9 @@ export default function MainPage() {
                   </span>
                 </div>
 
-                <h3 style={{ 
-                  fontFamily: 'Outfit', 
-                  fontWeight: 900, 
-                  fontSize: 'clamp(32px, 4.5vw, 48px)', 
-                  color: '#3D2B1A', 
-                  margin: '0 0 12px', 
-                  letterSpacing: '-1.8px', 
-                  lineHeight: 1.15 
-                }}>
+                <h3 className="premium-title-md">
                   Mindful Healing{' '}
-                  <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  <span className="text-gradient-animate">
                     Games ✨
                   </span>
                 </h3>
@@ -1227,7 +1195,7 @@ export default function MainPage() {
                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 8 }}>
                   <Sparkles size={12} /> Healing Contribution
                 </span>
-                <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: '#3D2B1A', margin: '0 0 8px', letterSpacing: '-0.8px', lineHeight: 1.15 }}>
+                <h2 className="premium-title-sm" style={{ margin: '0 0 8px' }}>
                   Before Unlocking ✨
                 </h2>
                 <p style={{ margin: 0, fontSize: '14px', color: '#7A6A5A', lineHeight: 1.5, fontWeight: 500 }}>

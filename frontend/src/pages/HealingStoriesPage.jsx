@@ -124,19 +124,11 @@ export default function HealingStoriesPage() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-          style={{
-            fontFamily: 'Outfit',
-            fontWeight: 900,
-            fontSize: 'clamp(36px, 5vw, 60px)',
-            color: '#3D2B1A',
-            margin: '0 0 16px',
-            letterSpacing: '-2px',
-            lineHeight: 1.1,
-            textShadow: '0 10px 30px rgba(139, 94, 52, 0.05)'
-          }}
+          className="premium-title-lg"
+          style={{ textShadow: '0 10px 30px rgba(139, 94, 52, 0.05)' }}
         >
           Healing Stories That{' '}
-          <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span className="text-gradient-animate">
             Stay With You
           </span>
           <span style={{ display: 'inline-block', fontSize: '0.65em', verticalAlign: 'middle', marginLeft: '6px', filter: 'drop-shadow(0 0 8px rgba(225,29,72,0.3))' }}>❤️</span>
@@ -164,6 +156,7 @@ export default function HealingStoriesPage() {
         
         {/* Cinematic Featured Story Card */}
         <motion.section 
+          className="healing-story-card"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -171,7 +164,7 @@ export default function HealingStoriesPage() {
           whileHover={{ boxShadow: '0 30px 60px rgba(139, 94, 52, 0.08)' }}
           style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
             gap: '0',
             background: 'rgba(255, 254, 252, 0.9)',
             backdropFilter: 'blur(8px)',
@@ -257,7 +250,7 @@ export default function HealingStoriesPage() {
           </div>
 
           {/* Right Column: Emotional Story Details */}
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '56px' }}>
+          <div className="healing-story-content" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '56px' }}>
             <div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', marginBottom: 20 }}>
                 <span style={{ fontSize: '32px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit', letterSpacing: '-1px' }}>
@@ -425,9 +418,9 @@ export default function HealingStoriesPage() {
             </h2>
           </div>
 
-          <div style={{ 
+          <div className="responsive-grid" style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
             gap: 32 
           }}>
             {floatingMessages.map((item, idx) => (

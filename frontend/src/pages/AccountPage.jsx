@@ -56,8 +56,8 @@ const StatRing = ({ value, total, color }) => {
       <svg width="60" height="60" style={{ transform: 'rotate(-90deg)' }}>
         <circle cx="30" cy="30" r={radius} fill="none" stroke="rgba(139, 94, 52, 0.1)" strokeWidth="4" />
         <motion.circle
-          cx="30" cy="30" r={radius} fill="none" stroke={color} strokeWidth="4"
-          strokeLinecap="round" strokeDasharray={circumference}
+          cx="30" cy="30" r={radius || 24} fill="none" stroke={color || '#8B5E34'} strokeWidth="4"
+          strokeLinecap="round" strokeDasharray={circumference || 150}
           initial={{ strokeDashoffset: circumference }}
           whileInView={{ strokeDashoffset }}
           viewport={{ once: true }}
@@ -111,7 +111,7 @@ export default function AccountPage() {
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-          style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(36px, 5vw, 56px)', color: '#3D2B1A', margin: '0 0 16px', letterSpacing: '-2px' }}
+          className="premium-title-lg"
         >
           Your Healing Journey Dashboard 🤎
         </motion.h1>
@@ -127,7 +127,7 @@ export default function AccountPage() {
       <main style={{ maxWidth: 1280, width: '100%', margin: '0 auto', padding: '0 24px 100px', boxSizing: 'border-box', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: '60px' }}>
         
         {/* Top Grid: Profile & Analytics / Quote */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '32px' }}>
+        <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
           
           {/* Section 1: Profile Overview */}
           <motion.section 
@@ -208,7 +208,7 @@ export default function AccountPage() {
         <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '24px' }}>
             <Sparkles size={20} color="#8C4F1A" />
-            <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit' }}>Unlocked Experiences</h3>
+            <h3 className="premium-title-sm" style={{ margin: 0 }}>Unlocked Experiences</h3>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
             {[
@@ -232,13 +232,13 @@ export default function AccountPage() {
         </motion.section>
 
         {/* Middle Grid: Certificates & Contributions */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '40px' }}>
+        <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px' }}>
           
           {/* Section 2: My Certificates */}
           <motion.section initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '24px' }}>
               <Award size={20} color="#8C4F1A" />
-              <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit' }}>My Healing Certificates</h3>
+              <h3 className="premium-title-sm" style={{ margin: 0 }}>My Healing Certificates</h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {MOCK_CERTIFICATES.map((cert) => (
@@ -271,7 +271,7 @@ export default function AccountPage() {
           <motion.section initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '24px' }}>
               <Clock size={20} color="#8C4F1A" />
-              <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit' }}>Contribution History</h3>
+              <h3 className="premium-title-sm" style={{ margin: 0 }}>Contribution History</h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {MOCK_CONTRIBUTIONS.map((tx) => (
@@ -297,13 +297,13 @@ export default function AccountPage() {
         </div>
 
         {/* Bottom Grid: Support Center & Timeline */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px' }}>
+        <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px' }}>
           
           {/* Section 5: Help & Support Center */}
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '16px' }}>
               <MessageCircle size={20} color="#8C4F1A" />
-              <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit' }}>Need Help?</h3>
+              <h3 className="premium-title-sm" style={{ margin: 0 }}>Need Help?</h3>
             </div>
             <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#7A6A58', fontWeight: 500, lineHeight: 1.5 }}>
               Our support system is here to help you quickly and transparently.
@@ -341,7 +341,7 @@ export default function AccountPage() {
           <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '24px' }}>
               <Activity size={20} color="#8C4F1A" />
-              <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit' }}>Recent Activity</h3>
+              <h3 className="premium-title-sm" style={{ margin: 0 }}>Recent Activity</h3>
             </div>
             <div style={{ background: '#FFFDFB', border: '1px solid rgba(235, 224, 214, 0.8)', borderRadius: '24px', padding: '32px', boxShadow: '0 12px 30px rgba(139, 94, 52, 0.04)' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', position: 'relative' }}>

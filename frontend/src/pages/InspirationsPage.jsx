@@ -228,13 +228,10 @@ export default function InspirationsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            style={{
-              fontFamily: 'Outfit', fontSize: 'clamp(42px, 6vw, 72px)', fontWeight: 900,
-              color: '#3D2B1A', margin: '0 0 16px', letterSpacing: '-2px', lineHeight: 1.1
-            }}
+            className="premium-title-lg"
           >
             Fuel Your{' '}
-            <span style={{ background: 'linear-gradient(135deg, #8B6239, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <span className="text-gradient-animate">
               Inner Fire
             </span>
           </motion.h1>
@@ -288,7 +285,7 @@ export default function InspirationsPage() {
             style={{ textAlign: 'center', marginBottom: 52 }}
           >
             <span style={{ fontSize: 11, fontWeight: 800, color: '#8B6239', textTransform: 'uppercase', letterSpacing: '0.12em' }}>✨ Mindset Collection</span>
-            <h2 style={{ fontFamily: 'Outfit', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: '#3D2B1A', margin: '8px 0 0', letterSpacing: '-1px' }}>
+            <h2 className="premium-title-md">
               Wisdom for Every Moment
             </h2>
           </motion.div>
@@ -345,7 +342,7 @@ export default function InspirationsPage() {
             style={{ textAlign: 'center', marginBottom: 60 }}
           >
             <span style={{ fontSize: 11, fontWeight: 800, color: '#8B6239', textTransform: 'uppercase', letterSpacing: '0.12em' }}>🌟 Inspired Minds ✨</span>
-            <h2 style={{ fontFamily: 'Outfit', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: '#3D2B1A', margin: '8px 0 12px', letterSpacing: '-1px' }}>
+            <h2 className="premium-title-md" style={{ margin: '8px 0 12px' }}>
               Real Life Inspirations
             </h2>
             <p style={{ fontSize: 15, color: '#7A6A58', margin: 0, lineHeight: 1.65, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
@@ -519,7 +516,7 @@ export default function InspirationsPage() {
           />
 
           <span style={{ fontSize: 11, fontWeight: 800, color: '#8B6239', textTransform: 'uppercase', letterSpacing: '0.12em' }}>💬 Quote of the Moment</span>
-          <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 'clamp(26px, 3.5vw, 36px)', color: '#3D2B1A', margin: '10px 0 48px', letterSpacing: '-0.8px' }}>Words That Change Everything</h2>
+          <h2 className="premium-title-md">Words That Change Everything</h2>
 
           <div style={{ maxWidth: 680, margin: '0 auto', position: 'relative', minHeight: 160 }}>
             <AnimatePresence mode="wait">
@@ -572,7 +569,7 @@ export default function InspirationsPage() {
             style={{ textAlign: 'center', marginBottom: 52 }}
           >
             <span style={{ fontSize: 11, fontWeight: 800, color: '#8B6239', textTransform: 'uppercase', letterSpacing: '0.12em' }}>✅ Today's Growth</span>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: 'clamp(26px, 3.5vw, 38px)', color: '#3D2B1A', margin: '8px 0 8px', letterSpacing: '-0.8px' }}>
+            <h2 className="premium-title-md">
               Daily Challenges
             </h2>
             <p style={{ fontSize: 15, color: '#7A6A58', margin: 0, lineHeight: 1.65 }}>Small, consistent actions that compound into extraordinary results.</p>
@@ -667,11 +664,7 @@ export default function InspirationsPage() {
             ))}
 
             <Flame size={44} color="rgba(255,220,180,0.7)" style={{ marginBottom: 24 }} />
-            <h2 style={{
-              fontFamily: 'Outfit', fontWeight: 900,
-              fontSize: 'clamp(30px, 5vw, 56px)',
-              color: '#fff', margin: '0 0 20px', letterSpacing: '-1.5px', lineHeight: 1.15
-            }}>
+            <h2 className="premium-title-lg" style={{ color: '#fff' }}>
               Your Mindset Is<br />Your Superpower
             </h2>
             <p style={{ fontSize: 17, color: 'rgba(255,240,220,0.85)', lineHeight: 1.75, maxWidth: 560, margin: '0 auto 36px', fontWeight: 500 }}>

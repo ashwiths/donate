@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import MainPage from './pages/MainPage'
 import ThankYouPage from './pages/ThankYouPage'
 import InspirationsPage from './pages/InspirationsPage'
+import InspirationsPage from './pages/InspirationsPage'
 import HealingStoriesPage from './pages/HealingStoriesPage'
 import AccountPage from './pages/AccountPage'
 
@@ -20,6 +21,7 @@ export default function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/main" element={<MainPage />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
+              <Route path="/inspirations" element={<InspirationsPage />} />
               <Route path="/healing-stories" element={<HealingStoriesPage />} />
               <Route path="/account" element={<AccountPage />} />
               {/* Fallback */}
