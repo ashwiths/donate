@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, query, where, orderBy, doc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 
 /**
@@ -82,18 +82,22 @@ export async function addContribution(userId, amount, childName, status = 'Succe
 /**
  * Fetches all contributions for a given user.
  * @param {string} userId - The user's UID.
- * @returns {Promise<Array>} List of contribution documents.
+ * @returns {Promise<Array>} List of contribution documents sorted in memory.
  */
 export async function getUserContributions(userId) {
   if (!userId) return [];
   try {
     const q = query(
       collection(db, 'contributions'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc')
+      where('userId', '==', userId)
     );
     const snap = await getDocs(q);
-    return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const docs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return docs.sort((a, b) => {
+      const timeA = a.createdAt?.seconds || a.createdAt?.toMillis?.() || 0;
+      const timeB = b.createdAt?.seconds || b.createdAt?.toMillis?.() || 0;
+      return timeB - timeA;
+    });
   } catch (err) {
     console.error('Error fetching contributions:', err);
     throw err;
@@ -103,18 +107,22 @@ export async function getUserContributions(userId) {
 /**
  * Fetches all certificates for a given user.
  * @param {string} userId - The user's UID.
- * @returns {Promise<Array>} List of certificate documents.
+ * @returns {Promise<Array>} List of certificate documents sorted in memory.
  */
 export async function getUserCertificates(userId) {
   if (!userId) return [];
   try {
     const q = query(
       collection(db, 'certificates'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc')
+      where('userId', '==', userId)
     );
     const snap = await getDocs(q);
-    return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const docs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return docs.sort((a, b) => {
+      const timeA = a.createdAt?.seconds || a.createdAt?.toMillis?.() || 0;
+      const timeB = b.createdAt?.seconds || b.createdAt?.toMillis?.() || 0;
+      return timeB - timeA;
+    });
   } catch (err) {
     console.error('Error fetching certificates:', err);
     throw err;
@@ -124,18 +132,22 @@ export async function getUserCertificates(userId) {
 /**
  * Fetches all activities for a given user.
  * @param {string} userId - The user's UID.
- * @returns {Promise<Array>} List of activity documents.
+ * @returns {Promise<Array>} List of activity documents sorted in memory.
  */
 export async function getUserActivities(userId) {
   if (!userId) return [];
   try {
     const q = query(
       collection(db, 'activities'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc')
+      where('userId', '==', userId)
     );
     const snap = await getDocs(q);
-    return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const docs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return docs.sort((a, b) => {
+      const timeA = a.createdAt?.seconds || a.createdAt?.toMillis?.() || 0;
+      const timeB = b.createdAt?.seconds || b.createdAt?.toMillis?.() || 0;
+      return timeB - timeA;
+    });
   } catch (err) {
     console.error('Error fetching activities:', err);
     throw err;

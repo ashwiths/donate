@@ -52,11 +52,16 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('hp_token');
   };
 
+  const login = (userData) => {
+    setCurrentUser(userData);
+  };
+
   return (
     <AuthContext.Provider value={{ 
       currentUser, 
       user: currentUser, // provide both for perfect backward compatibility
       loading, 
+      login,
       logout 
     }}>
       {!loading && children}

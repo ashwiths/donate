@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 /**
@@ -71,6 +71,29 @@ export async function updateUserData(uid, data) {
     await updateDoc(userRef, data);
   } catch (err) {
     console.error('Error updating user data:', err);
+    throw err;
+  }
+}
+
+/**
+ * Submits a new support ticket to Firestore.
+ * @param {string} userId - The user's UID.
+ * @param {Object} ticketData - The ticket details (name, email, issue, message).
+ * @returns {Promise<void>}
+ */
+export async function addSupportTicket(userId, ticketData) {
+  try {
+    const ticketsCol = collection(db, 'supportTickets');
+    await addDoc(ticketsCol, {
+      userId: userId || 'anonymous',
+      name: ticketData.name || 'Anonymous',
+      email: ticketData.email || '',
+      issue: ticketData.issue || '',
+      message: ticketData.message || '',
+      createdAt: serverTimestamp()
+    });
+  } catch (err) {
+    console.error('Error submitting support ticket:', err);
     throw err;
   }
 }

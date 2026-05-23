@@ -11,6 +11,7 @@ import { useUserData } from '../hooks/useUserData';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import { addSupportTicket } from '../services/userService';
 
 // Ambient floating particles (optimized for performance)
 const Particles = () => (
@@ -86,10 +87,16 @@ export default function AccountPage() {
     }
   }, [userData]);
 
-  const handleSupportSubmit = (e) => {
+  const handleSupportSubmit = async (e) => {
     e.preventDefault();
-    alert('Support request submitted securely. Our team will contact you shortly.');
-    setSupportForm({ ...supportForm, issue: '', message: '' });
+    try {
+      await addSupportTicket(user?.uid, supportForm);
+      alert('Support request submitted securely to our team. Thank you!');
+      setSupportForm({ ...supportForm, issue: '', message: '' });
+    } catch (err) {
+      console.error(err);
+      alert('Failed to submit support ticket. Please try again.');
+    }
   };
 
   const formatDate = (timestamp) => {
