@@ -11,6 +11,9 @@ import DonationProgress from '../components/DonationProgress'
 import { useDonation } from '../context/DonationContext'
 import { useAuth } from '../context/AuthContext'
 import TransparentBreakdown from '../components/TransparentBreakdown'
+import { addContribution } from '../services/contributionService'
+import { doc, updateDoc, increment } from 'firebase/firestore'
+import { db } from '../firebase'
 
 // ── Static premium data with SVGs / minimal styles ────────────────────
 const MYSTERY_REWARDS = [
@@ -331,6 +334,7 @@ export default function MainPage() {
   // Premium Certificate Form Modal states
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPrice, setPendingPrice] = useState(null)
+  const [unlockType, setUnlockType] = useState('donation')
   const [formData, setFormData] = useState({ name: '', mobile: '', email: '' })
   const [errors, setErrors] = useState({ name: '', email: '' })
 
@@ -353,6 +357,7 @@ export default function MainPage() {
   const handleDirectDonate = () => {
     const amount = customAmount ? parseInt(customAmount) : selectedPreset
     if (amount > 0) {
+      setUnlockType('donation')
       handleUnlock(amount)
     }
   }
@@ -382,6 +387,27 @@ export default function MainPage() {
     // Proceed to payment
     setIsModalOpen(false)
     confirmDonation(pendingPrice)
+    
+    if (user?.uid) {
+      addContribution(user.uid, pendingPrice, 'Janamithra').catch(err => {
+        console.error('Error adding contribution:', err)
+      })
+
+      // Increment specific field based on unlockType in Firestore
+      const userRef = doc(db, 'users', user.uid);
+      const updateFields = {};
+      if (unlockType === 'game') {
+        updateFields.unlockedGames = increment(1);
+      } else if (unlockType === 'coupon') {
+        updateFields.couponsClaimed = increment(1);
+      }
+      if (Object.keys(updateFields).length > 0) {
+        updateDoc(userRef, updateFields).catch(err => {
+          console.error('Error updating user stats in Firestore:', err);
+        });
+      }
+    }
+
     navigate('/thank-you')
   }
 
@@ -516,7 +542,7 @@ export default function MainPage() {
                       y: -8, 
                       boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
-                    onClick={() => handleUnlock(game.price)}
+                    onClick={() => { setUnlockType('game'); handleUnlock(game.price); }}
                     style={{
                       background: '#FFFFFF',
                       border: '1px solid rgba(220, 208, 195, 0.7)',
@@ -636,7 +662,7 @@ export default function MainPage() {
                       y: -8, 
                       boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
-                    onClick={() => handleUnlock(reward.price)}
+                    onClick={() => { setUnlockType('coupon'); handleUnlock(reward.price); }}
                     style={{
                       background: '#FFFFFF',
                       border: '1px solid rgba(220, 208, 195, 0.7)',
@@ -801,7 +827,7 @@ export default function MainPage() {
                       y: -8, 
                       boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
-                    onClick={() => handleUnlock(card.price)}
+                    onClick={() => { setUnlockType('donation'); handleUnlock(card.price); }}
                     style={{
                       background: '#FFFFFF',
                       borderRadius: '32px',

@@ -9,6 +9,8 @@ import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { QuotesBackground } from '../components/PremiumBackground'
+import { doc, updateDoc, increment } from 'firebase/firestore'
+import { db } from '../firebase'
 
 import imgSuriya from '/portraits/portrait_suriya.png'
 import imgKalam from '/portraits/portrait_kalam.png'
@@ -185,7 +187,15 @@ export default function InspirationsPage() {
   useEffect(() => {
     if (!user) {
       navigate('/')
+      return
     }
+
+    // Increment quotesOpened when user loads the inspirations page
+    const userRef = doc(db, 'users', user.uid);
+    updateDoc(userRef, {
+      quotesOpened: increment(1)
+    }).catch(err => console.error('Error incrementing quotesOpened:', err));
+
   }, [user, navigate])
 
   useEffect(() => {
