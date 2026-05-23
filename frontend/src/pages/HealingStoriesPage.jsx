@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Sparkles, Shield, ChevronRight, Star, Quote } from 'lucide-react';
+import { Heart, Sparkles, Shield, ChevronRight, Star, Quote, BookOpen, Award, Users, GraduationCap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
@@ -57,35 +57,50 @@ export default function HealingStoriesPage() {
 
   const timelineSteps = [
     {
-      title: "Diagnosis Confirmed",
-      date: "Baby Aarav - 2 Months",
-      desc: "Diagnosed with severe Biliary Atresia requiring emergent pediatric liver surgery preparation.",
+      title: "Foundation Inception",
+      date: "September 25, 2006",
+      desc: "Founded by Actor Suriya, deeply inspired by his father Actor Sivakumar’s long-standing educational trust and APJ Abdul Kalam’s vision.",
       status: "completed"
     },
     {
-      title: "Emergency Treatment Started",
-      date: "Baby Aarav - 4 Months",
-      desc: "ICU stabilization and baseline biliary drainage initiated at pediatric surgical ward.",
+      title: "Project Vidhai (The Seed)",
+      date: "Flagship Initiative",
+      desc: "Launched to provide 100% free higher education, food, accommodation, computer literacy, and emotional guidance to rural toppers.",
       status: "completed"
     },
     {
-      title: "Community Contributions Activated",
-      date: "Baby Aarav - 6 Months",
-      desc: "Thousands of ₹10, ₹20 micro-donations securely routed through Heal & Play transparent ecosystem.",
+      title: "Inclusive Remote Outreach",
+      date: "Tribal & Dalit Focus",
+      desc: "Volunteers traveled deep into remote tribal regions, dalit settlements, and refugee centers to find deserving first-generation learners.",
       status: "completed"
     },
     {
-      title: "Recovery Stabilized",
-      date: "Baby Aarav - Today",
-      desc: "Post-operative liver markers stabilized safely. Aarav is recovering happily under professional monitoring.",
+      title: "8,000+ Transformed Lives",
+      date: "Today's Achievement",
+      desc: "Over 6,700 first-generation graduates, 51 doctors, and 1,800 engineers created, fully breaking generational poverty cycles.",
       status: "active"
     }
   ];
 
-  const floatingMessages = [
-    { name: "Priyanshu S.", msg: "Seeing Aarav smile makes every game we play entirely worth it! ❤️", date: "2 hrs ago", avatar: "P" },
-    { name: "Ananya D.", msg: "A beautiful proof that micro-donations are incredibly powerful.", date: "1 day ago", avatar: "A" },
-    { name: "Vikram R.", msg: "Healing through play is the most honest, pure model. Keep going!", date: "3 days ago", avatar: "V" }
+  const graduatesTestimonials = [
+    { 
+      name: "Dr. Anitha K.", 
+      msg: "Agaram gave me a pen when poverty forced me to pick up a sickle in the fields. Today, I am a practicing pediatrician saving lives! 🌱", 
+      date: "Batch of 2014", 
+      avatar: "A" 
+    },
+    { 
+      name: "Kathir M.", 
+      msg: "Vidhai was not just college tuition — they built my computer literacy, communication skills, and self-belief to face the corporate world.", 
+      date: "Senior Software Engineer", 
+      avatar: "K" 
+    },
+    { 
+      name: "Suresh P.", 
+      msg: "Watching first-generation graduates land prestigious roles and lift their entire families out of poverty is the most beautiful story.", 
+      date: "Agaram Volunteer", 
+      avatar: "S" 
+    }
   ];
 
   return (
@@ -121,7 +136,7 @@ export default function HealingStoriesPage() {
         >
           <Sparkles size={13} color="#8B5E34" />
           <span style={{ fontSize: '11px', fontWeight: 900, color: '#8B5E34', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-            Real Healing Journeys
+            Inspiring Educational Missions
           </span>
         </motion.div>
 
@@ -132,11 +147,11 @@ export default function HealingStoriesPage() {
           className="premium-title-lg"
           style={{ textShadow: '0 10px 30px rgba(139, 94, 52, 0.05)' }}
         >
-          Healing Stories That{' '}
+          The Story That Changed{' '}
           <span className="text-gradient-animate">
-            Stay With You
+            Thousands of Lives
           </span>
-          <span style={{ display: 'inline-block', fontSize: '0.65em', verticalAlign: 'middle', marginLeft: '6px', filter: 'drop-shadow(0 0 8px rgba(225,29,72,0.3))' }}>❤️</span>
+          <span style={{ display: 'inline-block', fontSize: '0.65em', verticalAlign: 'middle', marginLeft: '6px', filter: 'drop-shadow(0 0 8px rgba(225,29,72,0.3))' }}>🌱</span>
         </motion.h1>
 
         <motion.p
@@ -152,7 +167,7 @@ export default function HealingStoriesPage() {
             lineHeight: 1.75
           }}
         >
-          Every contribution becomes part of a child’s recovery journey. Read the stories made possible through collective kindness.
+          How Suriya transformed education into a movement of hope and gave wings to rural first-generation learners.
         </motion.p>
       </header>
 
@@ -182,27 +197,18 @@ export default function HealingStoriesPage() {
           }}
         >
           {/* Left Column: Cinematic Imagery */}
-          <div style={{ position: 'relative', overflow: 'hidden', minHeight: '500px' }}>
+          <div style={{ position: 'relative', overflow: 'hidden', minHeight: '600px' }}>
             <motion.div 
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              style={{ width: '100%', height: '60%', position: 'absolute', top: 0 }}
+              style={{ width: '100%', height: '100%', position: 'absolute', top: 0 }}
             >
-              <img src="/pediatric_hospital_care.png" alt="Hospital Care" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(61,43,26,0) 0%, rgba(61,43,26,0.4) 100%)' }} />
-            </motion.div>
-            
-            <motion.div 
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              style={{ width: '100%', height: '40%', position: 'absolute', bottom: 0 }}
-            >
-              <img src="/parent_holding_infant_hand.png" alt="Holding Hand" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(61,43,26,0.2) 0%, transparent 100%)' }} />
+              <img src="/agaram_vidhai_inspiration.png" alt="Agaram Foundation Hope" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(61,43,26,0.1) 0%, rgba(61,43,26,0.6) 100%)' }} />
             </motion.div>
 
             {/* Glowing Gradient Overlay */}
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 0%, rgba(139,94,52,0.1) 100%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 0%, rgba(139,94,52,0.15) 100%)', pointerEvents: 'none' }} />
 
             {/* Floating Indicators */}
             <motion.div 
@@ -213,10 +219,10 @@ export default function HealingStoriesPage() {
                 position: 'absolute',
                 top: 24,
                 left: 24,
-                background: 'rgba(255,255,255,0.9)',
+                background: 'rgba(255,255,255,0.95)',
                 backdropFilter: 'blur(8px)',
                 color: '#166534',
-                padding: '8px 16px',
+                padding: '8px 18px',
                 borderRadius: '99px',
                 fontSize: '11.5px',
                 fontWeight: 900,
@@ -227,8 +233,8 @@ export default function HealingStoriesPage() {
                 alignItems: 'center',
                 gap: 6
               }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#166534', boxShadow: '0 0 8px #166534' }} />
-                85% Recovery Progress
+                <GraduationCap size={14} color="#166534" />
+                8,000+ Students Educated
             </motion.div>
             
             <motion.div 
@@ -239,18 +245,18 @@ export default function HealingStoriesPage() {
                 position: 'absolute',
                 bottom: 24,
                 right: 24,
-                background: 'rgba(61,43,26,0.85)',
+                background: 'rgba(61,43,26,0.9)',
                 backdropFilter: 'blur(8px)',
                 color: '#FDE68A',
-                padding: '8px 16px',
+                padding: '8px 18px',
                 borderRadius: '99px',
-                fontSize: '11px',
+                fontSize: '11.5px',
                 fontWeight: 800,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.2)'
               }}>
-                Community Support Active
+                Project Vidhai (The Seed)
             </motion.div>
           </div>
 
@@ -259,13 +265,13 @@ export default function HealingStoriesPage() {
             <div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', marginBottom: 20 }}>
                 <span style={{ fontSize: '32px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit', letterSpacing: '-1px' }}>
-                  Aarav Mehta
+                  Agaram Foundation
                 </span>
                 <span style={{ fontSize: '13px', fontWeight: 800, color: '#8B5E34', background: 'rgba(139, 94, 52, 0.08)', padding: '6px 14px', borderRadius: '12px' }}>
-                  8 Months Old
+                  Founded 2006
                 </span>
                 <span style={{ fontSize: '12px', fontWeight: 800, color: '#166534', background: '#DCFCE7', padding: '6px 14px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <Shield size={13} /> Verified Pediatric Monitoring
+                  <Shield size={13} /> Verified Educational Outreach
                 </span>
               </div>
 
@@ -277,22 +283,29 @@ export default function HealingStoriesPage() {
                 letterSpacing: '0.08em', 
                 marginBottom: 24 
               }}>
-                Condition: Biliary Atresia (Liver Disease)
+                Mission: 100% Free Higher Education & Soft Skills Mentorship
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20, fontSize: '16.5px', color: '#6A5C4F', lineHeight: 1.8, fontWeight: 500 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20, fontSize: '15.5px', color: '#6A5C4F', lineHeight: 1.8, fontWeight: 500 }}>
                 <p>
-                  Aarav was born with a rare liver condition that rapidly worsened during his first months of life. His parents struggled emotionally and financially as treatment costs increased every week.
+                  Founded on 25 September 2006 by Tamil film actor <strong>Suriya</strong>, the Agaram Foundation was deeply inspired by his father Actor Sivakumar’s long-standing educational trust. But it was Dr. APJ Abdul Kalam’s powerful vision for youth empowerment that breathed massive energy and a distinct direction into building something much bigger.
                 </p>
                 <p>
-                  Through thousands of small micro-contributions made via Heal & Play, Aarav’s treatment milestones began getting funded gradually. What started as ₹10 support entries from strangers became a meaningful network of healing support.
+                  Suriya noticed a heartbreaking reality: many brilliant students who topped their school exams in rural areas were forced to abandon college because of absolute poverty. Giving small prizes was not enough. He wanted to fully transform lives.
                 </p>
+                
+                {/* Kalam Quote */}
+                <div style={{ borderLeft: '3px solid #C8773A', paddingLeft: '16px', margin: '12px 0', fontStyle: 'italic', color: '#8B5E34' }}>
+                  “Education is the most powerful weapon which you can use to change the world.” 
+                  <span style={{ display: 'block', fontSize: '12px', fontWeight: 800, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>— Dr. APJ Abdul Kalam</span>
+                </div>
+
                 <p>
-                  His surgery preparation, medication monitoring, and pediatric recovery assistance were partially sustained through the collective support ecosystem. Today, Aarav is recovering safely under continued hospital supervision.
+                  Through their flagship initiative, <strong>Project Vidhai</strong>, Agaram does not wait for applications. Active volunteers travel deep into remote villages, tribal pockets, and refugee camps to find deserving, first-generation learners. The foundation provides 100% free college education, housing, computer literacy, soft skills training, and emotional guidance to turn dreams into dignity.
                 </p>
               </div>
 
-              {/* Upgraded Parents Gratitude Quote */}
+              {/* Suriya Quote */}
               <motion.div 
                 whileHover={{ y: -4, boxShadow: '0 12px 30px rgba(139, 94, 52, 0.08)' }}
                 style={{ 
@@ -310,30 +323,32 @@ export default function HealingStoriesPage() {
                   <Quote size={16} color="#C8773A" />
                 </div>
                 <p style={{ margin: 0, fontSize: '16.5px', fontStyle: 'italic', fontFamily: 'Georgia, serif', color: '#4A3427', lineHeight: 1.6 }}>
-                  “Even the smallest support gave us strength during the hardest nights. We will always remember the hands that helped save Aarav.”
+                  “Watching a child from a struggling rural family become a doctor or software engineer gives me greater happiness than any box-office success.”
                 </p>
                 <span style={{ display: 'block', marginTop: 16, fontSize: '11.5px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                  — Aarav's Parents
+                  — Suriya (Founder, Actor)
                 </span>
               </motion.div>
             </div>
 
-            {/* Micro Funding Tracker */}
+            {/* Quick Agaram Achievements Stats */}
             <div style={{ marginTop: 48, borderTop: '1px solid rgba(235, 224, 214, 0.6)', paddingTop: 32 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <span style={{ fontSize: 13.5, color: '#7A6A58', fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase' }}>Treatment Funding Progress</span>
-                <span style={{ fontSize: 16, color: '#166534', fontWeight: 900, fontFamily: 'Outfit' }}>94% Funded</span>
-              </div>
-              <div style={{ height: 12, background: 'rgba(232, 224, 214, 0.8)', borderRadius: 99, overflow: 'hidden', marginBottom: 16, boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)' }}>
-                <motion.div 
-                  initial={{ width: 0 }}
-                  whileInView={{ width: '94%' }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  style={{ height: '100%', background: 'linear-gradient(90deg, #166534, #22C55E)', borderRadius: 99, boxShadow: '0 0 10px rgba(34,197,94,0.5)' }} 
-                />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: 20 }}>
+                <div>
+                  <div style={{ fontSize: '24px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit' }}>6,700+</div>
+                  <div style={{ fontSize: '11px', color: '#7A6A58', fontWeight: 700, textTransform: 'uppercase' }}>First-Gen Graduates</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '24px', fontWeight: 900, color: '#C8773A', fontFamily: 'Outfit' }}>51</div>
+                  <div style={{ fontSize: '11px', color: '#7A6A58', fontWeight: 700, textTransform: 'uppercase' }}>Doctors Supported</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '24px', fontWeight: 900, color: '#166534', fontFamily: 'Outfit' }}>1,800</div>
+                  <div style={{ fontSize: '11px', color: '#7A6A58', fontWeight: 700, textTransform: 'uppercase' }}>Engineers Created</div>
+                </div>
               </div>
               <div style={{ fontSize: '12.5px', color: '#7C6B5B', fontWeight: 600 }}>
-                ₹2,82,000 raised through 28,200 micro-support game transactions.
+                Over ₹10 Crores committed personally by Suriya from movie earnings to fund these futures.
               </div>
             </div>
           </div>
@@ -346,7 +361,7 @@ export default function HealingStoriesPage() {
               Chronological Milestones
             </span>
             <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(32px, 5vw, 42px)', color: '#3D2B1A', margin: '8px 0 0', letterSpacing: '-1.5px' }}>
-              Aarav's Treatment Timeline
+              Agaram Foundation Journey 🌱
             </h2>
           </div>
 
@@ -416,10 +431,10 @@ export default function HealingStoriesPage() {
         <section style={{ marginBottom: 120 }}>
           <div style={{ textAlign: 'center', marginBottom: 60 }}>
             <span style={{ fontSize: '12px', fontWeight: 900, color: '#8B5E34', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-              Messages From Supporters
+              Voices of the Graduates
             </span>
             <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(32px, 5vw, 42px)', color: '#3D2B1A', margin: '8px 0 0', letterSpacing: '-1.5px' }}>
-              Encouragement Ledger ✨
+              Restoring Dignity & Hope ✨
             </h2>
           </div>
 
@@ -428,7 +443,7 @@ export default function HealingStoriesPage() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
             gap: 32 
           }}>
-            {floatingMessages.map((item, idx) => (
+            {graduatesTestimonials.map((item, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -478,7 +493,7 @@ export default function HealingStoriesPage() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 16 }}>
                     <Star size={12} fill="#D4AF37" color="#D4AF37" />
                     <span style={{ fontSize: '10.5px', fontWeight: 900, color: '#D4AF37', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                      Verified Healing Entry
+                      Verified Alumnus
                     </span>
                   </div>
                 </div>

@@ -390,54 +390,8 @@ export default function InspirationsPage() {
                 }}
                 className="inspiration-profile-card"
               >
-                {/* Floating glow behind image */}
-                <div style={{
-                  position: 'absolute',
-                  top: '10%',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '160px',
-                  height: '160px',
-                  background: `radial-gradient(circle, ${person.accent}20 0%, transparent 70%)`,
-                  borderRadius: '50%',
-                  pointerEvents: 'none',
-                  zIndex: 0
-                }} />
-
-                {/* Circular Profile Image Container */}
-                <div style={{ position: 'relative', zIndex: 1, width: 120, height: 120 }}>
-                  <img
-                    src={person.image}
-                    alt={person.name}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      border: '4px solid #fff',
-                      boxShadow: '0 12px 28px rgba(139, 98, 57, 0.15)'
-                    }}
-                  />
-                  {/* Subtle decorative mini sparkle badge */}
-                  <div style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 4,
-                    width: 24,
-                    height: 24,
-                    borderRadius: '50%',
-                    background: person.accent,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                  }}>
-                    <Sparkles size={11} color="#fff" />
-                  </div>
-                </div>
-
                 {/* Info & Typography */}
-                <div style={{ relative: 1, zIndex: 1, width: '100%' }}>
+                <div style={{ position: 'relative', zIndex: 1, width: '100%' }}>
                   <h3 style={{
                     fontFamily: 'Outfit',
                     fontWeight: 850,

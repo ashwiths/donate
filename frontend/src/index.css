@@ -401,4 +401,107 @@ html, body {
   }
 }
 
+/* ───────── Responsive Certificate Cards ───────── */
+.certificate-card {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  background: #FFFDFB;
+  border: 1px solid #EBD5C2;
+  border-radius: 24px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(139, 94, 52, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.certificate-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(139, 94, 52, 0.06);
+}
+
+.certificate-badge {
+  display: inline-block;
+  background: #FEF3C7;
+  color: #92400E;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  align-self: flex-start;
+}
+
+.certificate-card-buttons {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.certificate-card-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 38px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.certificate-card-btn-primary {
+  background: #8C4F1A;
+  color: #FFF;
+  border: none;
+}
+
+.certificate-card-btn-primary:hover {
+  background: #A0522D;
+  transform: translateY(-1px);
+}
+
+.certificate-card-btn-secondary {
+  background: transparent;
+  color: #8C4F1A;
+  border: 1px solid #8C4F1A;
+}
+
+.certificate-card-btn-secondary:hover {
+  background: rgba(140, 79, 26, 0.05);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .certificate-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    gap: 16px;
+  }
+  
+  .certificate-badge {
+    align-self: center !important;
+  }
+  
+  .certificate-card-buttons {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .certificate-card-btn {
+    width: 100%;
+  }
+}
+
 

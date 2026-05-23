@@ -8,18 +8,28 @@ import Footer from '../components/Footer'
 import DonationProgress from '../components/DonationProgress'
 import { staggerContainer, fadeUp, cardVariant } from '../animations/variants'
 import { HeroBackground, DonationBackground, GamesBackground, WarmSectionBackground } from '../components/PremiumBackground'
+import helpJanaImg from '../assets/janamithra.png'
+import { db } from '../firebase'
+import { collection, onSnapshot } from 'firebase/firestore'
 
 const URGENT_CASE = {
-  id: '1',
-  name: 'Baby Aarav',
-  age: '8 months old',
-  condition: 'Liver Disease (Biliary Atresia)',
-  image: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1000&q=90',
-  requiredAmount: 7000000,
-  raisedAmount: 214385,
-  remainingAmount: 6785615,
-  percentage: 3,
-  hospital: 'Nanavati Max Hospital'
+  id: 'jana_case',
+  name: 'Baby Jana',
+  age: '1 Year Old',
+  condition: 'Spinal Muscular Atrophy (SMA Type 2)',
+  image: helpJanaImg,
+  requiredAmount: 90000000,
+  baseRaisedAmount: 2745900,
+  hospital: 'Aster Women & Children Hospital'
+}
+
+const formatCrore = (num) => {
+  if (num >= 10000000) {
+    return `₹${(num / 10000000).toFixed(2)} Cr`;
+  } else if (num >= 100000) {
+    return `₹${(num / 100000).toFixed(2)}L`;
+  }
+  return `₹${num.toLocaleString('en-IN')}`;
 }
 
 
@@ -144,6 +154,24 @@ export default function HomePage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [selectedDirectAmount, setSelectedDirectAmount] = useState(20)
+  const [dynamicRaised, setDynamicRaised] = useState(URGENT_CASE.baseRaisedAmount)
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'contributions'), (snapshot) => {
+      let extraRaised = 0;
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data && data.amount) {
+          extraRaised += Number(data.amount);
+        }
+      });
+      setDynamicRaised(URGENT_CASE.baseRaisedAmount + extraRaised);
+    }, (error) => {
+      console.error("Error listening to contributions: ", error);
+    });
+    
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -319,162 +347,225 @@ export default function HomePage() {
             style={{ display: 'flex', justifyContent: 'center' }}
           >
             <motion.div
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -6, boxShadow: '0 30px 70px rgba(139, 94, 52, 0.15)' }}
               transition={{ duration: 0.3 }}
               style={{
                 background: 'rgba(255, 255, 255, 0.92)',
                 backdropFilter: 'blur(8px)',
-                borderRadius: '24px',
-                border: '1px solid rgba(232, 224, 214, 0.8)',
-                padding: '28px',
+                borderRadius: '32px',
+                border: '1px solid rgba(235, 224, 214, 0.9)',
+                padding: '32px',
                 width: '100%',
                 maxWidth: '480px',
                 boxShadow: '0 25px 60px rgba(123, 63, 0, 0.08)',
                 boxSizing: 'border-box',
-                position: 'relative'
+                position: 'relative',
+                overflow: 'hidden'
               }}
               className="featured-child-premium-card"
             >
+              <style>{`
+                @keyframes heartbeat {
+                  0% { transform: scale(1); }
+                  14% { transform: scale(1.12); }
+                  28% { transform: scale(1); }
+                  42% { transform: scale(1.12); }
+                  70% { transform: scale(1); }
+                }
+                .heartbeat-pulse {
+                  animation: heartbeat 1.4s infinite ease-in-out;
+                  display: inline-block;
+                }
+              `}</style>
+
+              {/* Urgency Badge with Heartbeat Animation */}
               <div style={{
                 position: 'absolute',
-                top: 40,
-                left: 40,
-                background: 'rgba(255, 255, 255, 0.95)',
+                top: 44,
+                left: 44,
+                background: 'rgba(239, 68, 68, 0.95)',
                 backdropFilter: 'blur(8px)',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                fontSize: '10px',
-                fontWeight: 800,
-                color: '#EF4444',
-                zIndex: 2,
+                padding: '6px 14px',
+                borderRadius: '99px',
+                fontSize: '11px',
+                fontWeight: 900,
+                color: '#FFF',
+                zIndex: 10,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 4,
-                boxShadow: 'var(--shadow-sm)'
+                gap: 6,
+                boxShadow: '0 8px 20px rgba(239, 68, 68, 0.25)',
+                letterSpacing: '0.04em'
               }}>
-                <Clock size={11} />
-                TODAY'S MOST URGENT CASE
+                <span className="heartbeat-pulse">🚨</span> URGENT • CRITICAL TIMELINE
               </div>
 
+              {/* Image with Dark Vignette Overlay */}
               <div style={{
                 width: '100%',
-                height: '240px',
-                borderRadius: '16px',
+                height: '300px',
+                borderRadius: '24px',
                 overflow: 'hidden',
                 position: 'relative',
-                marginBottom: 24
+                marginBottom: 24,
+                boxShadow: 'inset 0 0 40px rgba(0,0,0,0.5)'
               }}>
                 <img
                   src={URGENT_CASE.image}
                   alt={URGENT_CASE.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover', 
+                    objectPosition: 'center 20%',
+                    transform: 'scale(1.02)'
+                  }}
                 />
+                
+                {/* Dark cinematic vignette and soft bottom gradient overlay */}
                 <div style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%)',
+                  background: 'linear-gradient(to top, rgba(26, 17, 9, 0.95) 0%, rgba(26, 17, 9, 0.4) 50%, rgba(0,0,0,0) 100%)',
                 }} />
 
+                {/* Patient Info Overlay */}
                 <div style={{
                   position: 'absolute',
-                  bottom: 18,
-                  left: 18,
-                  right: 18,
-                  color: '#fff'
+                  bottom: 20,
+                  left: 20,
+                  right: 20,
+                  color: '#fff',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)'
                 }}>
-                  <span style={{ fontSize: '10px', opacity: 0.8, textTransform: 'uppercase', fontWeight: 700 }}>{URGENT_CASE.hospital}</span>
-                  <h3 style={{ margin: '2px 0 0', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>{URGENT_CASE.name} ({URGENT_CASE.age})</h3>
-                  <p style={{ margin: 0, fontSize: '12px', opacity: 0.8 }}>{URGENT_CASE.condition}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                    <ShieldCheck size={14} color="#D4AF37" />
+                    <span style={{ fontSize: '10.5px', color: '#EBD5C2', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.08em' }}>
+                      {URGENT_CASE.hospital}
+                    </span>
+                  </div>
+                  <h3 style={{ margin: '0 0 2px', fontSize: '24px', fontWeight: 900, fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
+                    {URGENT_CASE.name}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '13px', color: '#EBD5C2', fontWeight: 600 }}>
+                    {URGENT_CASE.age} • {URGENT_CASE.condition}
+                  </p>
                 </div>
               </div>
 
+              {/* Progress & Amounts Section */}
               <div style={{ marginBottom: 24 }}>
-                <div style={{ display: 'flex', justifySelf: 'space-between', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 10 }}>
-                  <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--color-primary)' }}>
-                    {URGENT_CASE.percentage}% Funded
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 10 }}>
+                  <span style={{ fontSize: '15px', fontWeight: 900, color: 'var(--color-primary)', fontFamily: 'Outfit' }}>
+                    {((dynamicRaised / URGENT_CASE.requiredAmount) * 100).toFixed(2)}% Funded
                   </span>
-                  <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
-                    <strong>₹2.14L</strong> raised of <strong>₹70L</strong> goal
+                  <span style={{ fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                    <strong>{formatCrore(dynamicRaised)}</strong> raised of <strong>{formatCrore(URGENT_CASE.requiredAmount)}</strong>
                   </span>
                 </div>
 
+                {/* Smooth Progress Bar with Framer Motion */}
                 <div className="progress-glow" style={{
                   height: 12,
-                  background: 'rgba(232, 224, 214, 0.6)',
+                  background: 'rgba(235, 224, 214, 0.6)',
                   borderRadius: '99px',
                   overflow: 'hidden',
                   marginBottom: 20
                 }}>
-                  <div style={{
-                    width: `${URGENT_CASE.percentage}%`,
-                    height: '100%',
-                    background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
-                    borderRadius: '99px'
-                  }} />
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(dynamicRaised / URGENT_CASE.requiredAmount) * 100}%` }}
+                    transition={{ duration: 1.5, ease: 'easeOut' }}
+                    style={{
+                      height: '100%',
+                      background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
+                      borderRadius: '99px'
+                    }} 
+                  />
                 </div>
 
+                {/* 3-Column Milestone Widget */}
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, 1fr)',
                   gap: 12,
-                  marginBottom: 16
+                  marginBottom: 20
                 }}>
                   <div style={{
-                    background: '#FAF2EA',
-                    border: '1px solid #EBD5C2',
-                    borderRadius: '12px',
-                    padding: '10px',
+                    background: '#FAF6F2',
+                    border: '1px solid rgba(235, 224, 214, 0.5)',
+                    borderRadius: '16px',
+                    padding: '12px 8px',
                     textAlign: 'center'
                   }}>
-                    <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Needed</span>
-                    <div style={{ fontSize: '13px', fontWeight: 900, color: 'var(--color-text)', marginTop: 2 }}>₹70,00,000</div>
+                    <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Goal</span>
+                    <div style={{ fontSize: '13.5px', fontWeight: 900, color: 'var(--color-text)', marginTop: 4 }}>
+                      {formatCrore(URGENT_CASE.requiredAmount)}
+                    </div>
                   </div>
                   <div style={{
-                    background: '#FAF2EA',
-                    border: '1px solid #EBD5C2',
-                    borderRadius: '12px',
-                    padding: '10px',
+                    background: '#FAF6F2',
+                    border: '1px solid rgba(235, 224, 214, 0.5)',
+                    borderRadius: '16px',
+                    padding: '12px 8px',
                     textAlign: 'center'
                   }}>
-                    <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Raised</span>
-                    <div style={{ fontSize: '13px', fontWeight: 900, color: 'var(--color-text)', marginTop: 2 }}>₹2,14,385</div>
+                    <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Raised</span>
+                    <div style={{ fontSize: '13.5px', fontWeight: 900, color: 'var(--color-text)', marginTop: 4 }}>
+                      {formatCrore(dynamicRaised)}
+                    </div>
                   </div>
                   <div style={{
-                    background: '#FAF2EA',
-                    border: '1px solid #EBD5C2',
-                    borderRadius: '12px',
-                    padding: '10px',
+                    background: '#FAF6F2',
+                    border: '1px solid rgba(235, 224, 214, 0.5)',
+                    borderRadius: '16px',
+                    padding: '12px 8px',
                     textAlign: 'center'
                   }}>
-                    <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Remaining</span>
-                    <div style={{ fontSize: '13px', fontWeight: 900, color: '#C8773A', marginTop: 2 }}>₹67,85,615</div>
+                    <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Remaining</span>
+                    <div style={{ fontSize: '13.5px', fontWeight: 900, color: '#C8773A', marginTop: 4 }}>
+                      {formatCrore(URGENT_CASE.requiredAmount - dynamicRaised)}
+                    </div>
                   </div>
                 </div>
 
-                <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-muted)', textAlign: 'center', fontWeight: 600 }}>
-                  🛡️ Verified hospital treatment estimate. Updated directly from hospital billing records.
+                {/* Support Text & Verified Indicator */}
+                <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: '#5C4C3C', textAlign: 'center', fontStyle: 'italic', lineHeight: 1.5, fontWeight: 500 }}>
+                  “Every small contribution brings Jana one step closer to life-saving treatment.”
                 </p>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyCenter: 'center', gap: 6, fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', justifyContent: 'center' }}>
+                  <ShieldCheck size={13} color="#16a34a" /> 100% Verified Hospital Ledger
+                </div>
               </div>
 
+              {/* Help Jana Survive Button */}
               <motion.button
                 onClick={() => navigate('/main')}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.02, boxShadow: '0 12px 30px rgba(239, 68, 68, 0.25)' }}
                 whileTap={{ scale: 0.98 }}
                 className="btn-primary"
                 style={{
                   width: '100%',
-                  padding: '14px',
-                  borderRadius: '12px',
+                  padding: '16px',
+                  borderRadius: '99px',
                   fontSize: '15px',
-                  fontWeight: 800,
-                  background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                  boxShadow: '0 4px 15px rgba(123, 63, 0, 0.15)',
+                  fontWeight: 900,
+                  background: 'linear-gradient(135deg, #EF4444, #991B1B)',
                   cursor: 'pointer',
                   border: 'none',
-                  color: '#fff'
+                  color: '#fff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  boxShadow: '0 8px 24px rgba(239, 68, 68, 0.2)',
+                  fontFamily: 'Outfit',
+                  letterSpacing: '0.02em',
+                  transition: 'all 0.3s ease'
                 }}
               >
-                Help Aarav While You Play ❤️
+                Help Jana Survive <span className="heartbeat-pulse">❤️</span>
               </motion.button>
             </motion.div>
           </motion.div>
