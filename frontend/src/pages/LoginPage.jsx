@@ -38,7 +38,6 @@ export default function LoginPage() {
 
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
-  const [isForgotPassword, setIsForgotPassword] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [authError, setAuthError] = useState('')
@@ -64,6 +63,32 @@ export default function LoginPage() {
     }
   }
 
+  const handleForgotPassword = async () => {
+    if (!form.email) {
+      setAuthError('Please enter your email address first.')
+      setSuccessMessage('')
+      return
+    }
+    setLoading(true)
+    setAuthError('')
+    setSuccessMessage('')
+    try {
+      await sendPasswordResetEmail(auth, form.email)
+      setSuccessMessage('Password reset link sent to your email!')
+    } catch (error) {
+      console.error("Forgot Password Error:", error)
+      let readableError = error.message
+      if (error.code === 'auth/user-not-found') readableError = 'No user found with this email.'
+      if (error.code === 'auth/invalid-email') readableError = 'Invalid email address.'
+      if (error.code === 'auth/operation-not-allowed') {
+        readableError = 'Email & Password authentication is disabled in your Firebase console. Please go to Firebase Console > Authentication > Sign-in method, click "Email/Password", and toggle it to Enabled.'
+      }
+      setAuthError(readableError)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleEmailAuth = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -71,10 +96,7 @@ export default function LoginPage() {
     setSuccessMessage('')
 
     try {
-      if (isForgotPassword) {
-        await sendPasswordResetEmail(auth, form.email)
-        setSuccessMessage('Password reset link sent to your email!')
-      } else if (isSignUp) {
+      if (isSignUp) {
         const result = await createUserWithEmailAndPassword(auth, form.email, form.password)
         await updateProfile(result.user, { displayName: form.name })
         login({ name: form.name, email: form.email, photoURL: result.user.photoURL, uid: result.user.uid })
@@ -392,10 +414,10 @@ export default function LoginPage() {
                   <Heart size={24} color="#8C4F1A" fill="#8C4F1A" />
                 </div>
                 <h2 className="premium-title-sm" style={{ margin: '0 0 8px' }}>
-                  {isForgotPassword ? 'Reset Password' : isSignUp ? 'Create an Account' : 'Sign In to Support'}
+                  {isSignUp ? 'Create an Account' : 'Sign In to Support'}
                 </h2>
                 <p style={{ margin: 0, fontSize: '14px', color: '#7A6A5A', fontWeight: 500 }}>
-                  {isForgotPassword ? 'Enter your email to receive a recovery link' : isSignUp ? 'Join the ecosystem of healing and play' : 'Join the ecosystem of healing and play'}
+                  Join the ecosystem of healing and play
                 </p>
               </div>
 
@@ -410,29 +432,25 @@ export default function LoginPage() {
                 </div>
               )}
 
-              {!isForgotPassword && (
-                <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: 24 }}>
-                    <button type="button" onClick={handleGoogleLogin} style={{ padding: '12px 16px', border: '1px solid #E8E0D6', borderRadius: '12px', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '13.5px', fontWeight: 800, color: '#3D2B1A', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.06)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.02)'}>
-                      <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.6 2.2 30.2 0 24 0 14.6 0 6.7 5.4 2.7 13.4l7.8 6C12.4 13 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.2-.4-4.7H24v9h12.7c-.6 3-2.4 5.6-5 7.3l7.8 6C43.9 37.8 46.5 31.5 46.5 24.5z"/><path fill="#FBBC05" d="M10.5 28.8A14.6 14.6 0 0 1 9.5 24c0-1.7.3-3.3.8-4.8l-7.8-6A24 24 0 0 0 0 24c0 3.8.9 7.4 2.5 10.5l8-5.7z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.8-6c-2 1.4-4.6 2.2-7.4 2.2-6.2 0-11.5-4.2-13.4-9.9l-8 5.7C6.7 42.6 14.6 48 24 48z"/></svg>
-                      Google
-                    </button>
-                    <button type="button" style={{ padding: '12px 16px', border: '1px solid #E8E0D6', borderRadius: '12px', background: '#FAF8F5', cursor: 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '13px', fontWeight: 800, color: '#A09080', boxShadow: 'none', transition: 'all 0.2s', opacity: 0.6, filter: 'blur(0.5px)' }}>
-                      <svg width="14" height="14" viewBox="0 0 814 1000" style={{ fill: '#A09080' }}><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-38.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.3 134.4-316.9 266.5-316.9 100.9 0 184.4 66.9 245.8 66.9 59.2 0 152-71 272.1-71 38.4 0 110.8 3.9 169.6 38.8zm-171.5-150.8c-108.2 0-226.1 72.1-226.1 220.6v2.6c109.5 0 236.2-81.5 236.2-220.6 0-3.9-.6-7.7-1-10.6l-9.1 7.4z"/></svg>
-                      Coming Soon
-                    </button>
-                  </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: 24 }}>
+                <button type="button" onClick={handleGoogleLogin} style={{ padding: '12px 16px', border: '1px solid #E8E0D6', borderRadius: '12px', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '13.5px', fontWeight: 800, color: '#3D2B1A', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.06)'} onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.02)'}>
+                  <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.6 2.2 30.2 0 24 0 14.6 0 6.7 5.4 2.7 13.4l7.8 6C12.4 13 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.2-.4-4.7H24v9h12.7c-.6 3-2.4 5.6-5 7.3l7.8 6C43.9 37.8 46.5 31.5 46.5 24.5z"/><path fill="#FBBC05" d="M10.5 28.8A14.6 14.6 0 0 1 9.5 24c0-1.7.3-3.3.8-4.8l-7.8-6A24 24 0 0 0 0 24c0 3.8.9 7.4 2.5 10.5l8-5.7z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.8-6c-2 1.4-4.6 2.2-7.4 2.2-6.2 0-11.5-4.2-13.4-9.9l-8 5.7C6.7 42.6 14.6 48 24 48z"/></svg>
+                  Google
+                </button>
+                <button type="button" style={{ padding: '12px 16px', border: '1px solid #E8E0D6', borderRadius: '12px', background: '#FAF8F5', cursor: 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '13px', fontWeight: 800, color: '#A09080', boxShadow: 'none', transition: 'all 0.2s', opacity: 0.6, filter: 'blur(0.5px)' }}>
+                  <svg width="14" height="14" viewBox="0 0 814 1000" style={{ fill: '#A09080' }}><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-38.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.3 134.4-316.9 266.5-316.9 100.9 0 184.4 66.9 245.8 66.9 59.2 0 152-71 272.1-71 38.4 0 110.8 3.9 169.6 38.8zm-171.5-150.8c-108.2 0-226.1 72.1-226.1 220.6v2.6c109.5 0 236.2-81.5 236.2-220.6 0-3.9-.6-7.7-1-10.6l-9.1 7.4z"/></svg>
+                  Coming Soon
+                </button>
+              </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-                    <div style={{ flex: 1, height: 1, background: '#E8E0D6' }} />
-                    <span style={{ fontSize: '11px', color: '#B8A898', fontWeight: 900, letterSpacing: '0.06em' }}>OR EMAIL</span>
-                    <div style={{ flex: 1, height: 1, background: '#E8E0D6' }} />
-                  </div>
-                </>
-              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+                <div style={{ flex: 1, height: 1, background: '#E8E0D6' }} />
+                <span style={{ fontSize: '11px', color: '#B8A898', fontWeight: 900, letterSpacing: '0.06em' }}>OR EMAIL</span>
+                <div style={{ flex: 1, height: 1, background: '#E8E0D6' }} />
+              </div>
 
               <form onSubmit={handleEmailAuth}>
-                {isSignUp && !isForgotPassword && (
+                {isSignUp && (
                   <div style={{ marginBottom: 16 }}>
                     <input name="name" type="text" value={form.name} onChange={handleChange} placeholder="Full Name" required style={{ width: '100%', padding: '16px', border: '1px solid #EBD5C2', borderRadius: '12px', fontSize: '15px', outline: 'none', boxSizing: 'border-box', background: '#FAF6F2', color: '#3D2B1A', fontWeight: 500, transition: 'all 0.2s' }} onFocus={e => e.currentTarget.style.borderColor = '#C8773A'} onBlur={e => e.currentTarget.style.borderColor = '#EBD5C2'} />
                   </div>
@@ -440,36 +458,26 @@ export default function LoginPage() {
                 <div style={{ marginBottom: 16 }}>
                   <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="Email Address" required style={{ width: '100%', padding: '16px', border: '1px solid #EBD5C2', borderRadius: '12px', fontSize: '15px', outline: 'none', boxSizing: 'border-box', background: '#FAF6F2', color: '#3D2B1A', fontWeight: 500, transition: 'all 0.2s' }} onFocus={e => e.currentTarget.style.borderColor = '#C8773A'} onBlur={e => e.currentTarget.style.borderColor = '#EBD5C2'} />
                 </div>
-                {!isForgotPassword && (
-                  <>
-                    <div style={{ marginBottom: 20 }}>
-                      <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="Password" required style={{ width: '100%', padding: '16px', border: '1px solid #EBD5C2', borderRadius: '12px', fontSize: '15px', outline: 'none', boxSizing: 'border-box', background: '#FAF6F2', color: '#3D2B1A', fontWeight: 500, transition: 'all 0.2s' }} onFocus={e => e.currentTarget.style.borderColor = '#C8773A'} onBlur={e => e.currentTarget.style.borderColor = '#EBD5C2'} />
-                    </div>
-                    {!isSignUp && (
-                      <div style={{ textAlign: 'right', marginTop: '-12px', marginBottom: '20px' }}>
-                        <span onClick={() => { setIsForgotPassword(true); setAuthError(''); setSuccessMessage(''); }} style={{ fontSize: '12.5px', color: '#8C4F1A', fontWeight: 800, cursor: 'pointer', fontFamily: 'Outfit' }}>
-                          Forgot Password?
-                        </span>
-                      </div>
-                    )}
-                  </>
+                <div style={{ marginBottom: 20 }}>
+                  <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="Password" required style={{ width: '100%', padding: '16px', border: '1px solid #EBD5C2', borderRadius: '12px', fontSize: '15px', outline: 'none', boxSizing: 'border-box', background: '#FAF6F2', color: '#3D2B1A', fontWeight: 500, transition: 'all 0.2s' }} onFocus={e => e.currentTarget.style.borderColor = '#C8773A'} onBlur={e => e.currentTarget.style.borderColor = '#EBD5C2'} />
+                </div>
+                {!isSignUp && (
+                  <div style={{ textAlign: 'right', marginTop: '-12px', marginBottom: '20px' }}>
+                    <span onClick={handleForgotPassword} style={{ fontSize: '12.5px', color: '#8C4F1A', fontWeight: 800, cursor: 'pointer', fontFamily: 'Outfit', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#C8773A'} onMouseLeave={e => e.currentTarget.style.color = '#8C4F1A'}>
+                      Forgot Password?
+                    </span>
+                  </div>
                 )}
 
                 <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" disabled={loading} style={{ width: '100%', padding: '18px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #8B5E34, #3D2B1A)', color: '#fff', fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit', cursor: 'pointer', boxShadow: '0 8px 24px rgba(61, 43, 26, 0.25)', transition: 'all 0.2s' }}>
-                  {loading ? 'Processing...' : isForgotPassword ? 'Send Reset Link' : isSignUp ? 'Create Account Securely' : 'Sign In Securely'}
+                  {loading ? 'Processing...' : isSignUp ? 'Create Account Securely' : 'Sign In Securely'}
                 </motion.button>
               </form>
 
               <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                {isForgotPassword ? (
-                  <span onClick={() => { setIsForgotPassword(false); setAuthError(''); setSuccessMessage(''); }} style={{ fontSize: '13px', color: '#8C4F1A', fontWeight: 800, cursor: 'pointer', fontFamily: 'Outfit' }}>
-                    Back to Sign In
-                  </span>
-                ) : (
-                  <span onClick={() => { setIsSignUp(!isSignUp); setAuthError(''); setSuccessMessage(''); }} style={{ fontSize: '13px', color: '#8C4F1A', fontWeight: 800, cursor: 'pointer', fontFamily: 'Outfit' }}>
-                    {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-                  </span>
-                )}
+                <span onClick={() => { setIsSignUp(!isSignUp); setAuthError(''); setSuccessMessage(''); }} style={{ fontSize: '13px', color: '#8C4F1A', fontWeight: 800, cursor: 'pointer', fontFamily: 'Outfit' }}>
+                  {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+                </span>
               </div>
 
 
