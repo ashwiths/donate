@@ -72,7 +72,7 @@ export default function AccountPage() {
     printWindow.document.write(`
       <html>
         <head>
-          <title>Healing Certificate - ₹\${cert.amount}</title>
+          <title>Healing Certificate - ₹${cert.amount}</title>
           <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&family=Great+Vibes&family=Playball&family=Pinyon+Script&display=swap" rel="stylesheet">
           <style>
             body {
@@ -201,8 +201,8 @@ export default function AccountPage() {
               font-size: 36px;
               color: #1E3A8A;
               opacity: 0.8;
-              margin-bottom: -15px;
-              transform: rotate(-6deg) translateY(-5px);
+              margin-bottom: -4px;
+              transform: rotate(-6deg) translateY(-12px);
             }
             .signature-graphic-right {
               font-family: 'Playball', cursive;
@@ -305,7 +305,6 @@ export default function AccountPage() {
         </head>
         <body>
           <div class="certificate-container">
-            {/* Elegant watermark background */}
             <div class="watermark">
               <svg width="450" height="450" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M50 82C50 82 82 58 82 36C82 18 68 8 50 26C32 8 18 18 18 36C18 58 50 82 50 82Z" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -319,10 +318,10 @@ export default function AccountPage() {
             <h2>Heal & Play Ecosystem</h2>
             
             <div class="presented-to">This official token of medical gratitude is proudly awarded to</div>
-            <div class="name">\${userData?.name || 'Verified Supporter'}</div>
+            <div class="name">${userData?.name || 'Verified Supporter'}</div>
             
             <div class="description">
-              In sincere recognition of their compassionate contribution of <span class="amount">₹\${cert.amount}</span> supporting essential clinical pediatric care and specialized hospital treatment for <span class="amount">\${cert.childName}</span>. Your generous contribution has directly helped secure verified medical operations.
+              In sincere recognition of their compassionate contribution of <span class="amount">₹${cert.amount}</span> supporting essential clinical pediatric care and specialized hospital treatment for <span class="amount">${cert.childName}</span>. Your generous contribution has directly helped secure verified medical operations.
             </div>
             
             <div class="footer-info">
@@ -342,13 +341,13 @@ export default function AccountPage() {
               </div>
               
               <div class="signature-block">
-                <div class="signature-graphic-right">Suriya</div>
+                <div class="signature-graphic-right" style="font-family: 'Great Vibes', cursive; font-size: 34px; color: #1e3a8a; opacity: 0.9; margin-bottom: -4px; transform: rotate(-4deg) translateY(-15px);">Infant Ashil</div>
                 <div class="signature-line"></div>
-                <div class="signature-title">Agaram Foundation Founder</div>
+                <div class="signature-title">Founder • Heal & Play Ecosystem</div>
               </div>
             </div>
 
-            <div class="registry-no">Verified Blockchain Registry No: H&P-REF-REG-\${cert.id.toUpperCase().slice(-10)}</div>
+            <div class="registry-no">Verified Blockchain Registry No: H&P-REF-REG-${cert.id.toUpperCase().slice(-10)}</div>
           </div>
           <script>
             window.onload = function() {
@@ -833,7 +832,7 @@ export default function AccountPage() {
                   
                   {/* Signature 1 */}
                   <div style={{ textAlign: 'center', width: '160px' }}>
-                    <div style={{ fontFamily: "'Pinyon Script', cursive", fontSize: '28px', color: '#1E3A8A', opacity: 0.8, marginBottom: '-8px', transform: 'rotate(-5deg) translateY(-4px)' }}>
+                    <div style={{ fontFamily: "'Pinyon Script', cursive", fontSize: '28px', color: '#1E3A8A', opacity: 0.8, marginBottom: '-3px', transform: 'rotate(-5deg) translateY(-8px)' }}>
                       Dr. Rebecca Sterling
                     </div>
                     <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)', marginBottom: '4px' }} />
@@ -859,12 +858,12 @@ export default function AccountPage() {
 
                   {/* Signature 2 */}
                   <div style={{ textAlign: 'center', width: '160px' }}>
-                    <div style={{ fontFamily: "'Playball', cursive", fontSize: '20px', color: '#1E3A8A', opacity: 0.85, marginBottom: '-4px', transform: 'rotate(-3deg) translateY(-2px)' }}>
-                      Suriya
+                    <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: '24px', color: '#1E3A8A', opacity: 0.9, marginBottom: '-2px', transform: 'rotate(-4deg) translateY(-8px)' }}>
+                      Infant Ashil
                     </div>
                     <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)', marginBottom: '4px' }} />
                     <div style={{ fontSize: '9px', color: '#8C745C', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
-                      Agaram Founder
+                      Founder • Heal & Play
                     </div>
                   </div>
 

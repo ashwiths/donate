@@ -164,7 +164,7 @@ export default function ThankYouPage() {
     // 9. Premium Rewritten Body Text (wrapped beautifully)
     ctx.fillStyle = '#5A4635'
     ctx.font = '22px Georgia, serif'
-    const bodyText = "This certificate is proudly awarded in heartfelt appreciation for supporting life-saving pediatric medical care through Heal & Play’s verified micro-contribution initiative. Your kindness has directly contributed toward critical treatment support for Baby Aarav."
+    const bodyText = "This certificate is proudly awarded in heartfelt appreciation for supporting life-saving pediatric medical care through Heal & Play’s verified micro-contribution initiative. Your kindness has directly contributed toward critical treatment support for Janamithra."
     
     const wrapText = (context, text, x, y, maxWidth, lineHeight) => {
       const words = text.split(' ')
@@ -264,7 +264,7 @@ export default function ThankYouPage() {
     // 13. Secure Cryptographic Verification Bar at Very Bottom
     ctx.fillStyle = '#7A6A5A'
     ctx.font = '11px "Outfit", sans-serif'
-    ctx.fillText(`SECURE ONLINE VERIFICATION ID: ${txId}  •  CASE DESK REFERENCE: Aarav-Pediatric-Critical-Care`, width / 2, 1055)
+    ctx.fillText(`SECURE ONLINE VERIFICATION ID: ${txId}  •  CASE DESK REFERENCE: Janamithra-Pediatric-Critical-Care`, width / 2, 1055)
   }
 
   // Trigger high-res canvas-based certificate image download
@@ -341,8 +341,8 @@ export default function ThankYouPage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "I supported Baby Aarav's critical treatment! ❤️",
-          text: `I just unlocked interactive play and directly supported Baby Aarav's hospital fund. Join me in playing games to save lives!`,
+          title: "I supported Janamithra's critical treatment! ❤️",
+          text: `I just unlocked interactive play and directly supported Janamithra's hospital fund. Join me in playing games to save lives!`,
           url: window.location.origin
         })
       } catch (err) {
@@ -575,7 +575,7 @@ export default function ThankYouPage() {
                 <div>
                   <span style={{ fontSize: 11.5, color: '#7A6A5A', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>Recipient Case</span>
                   <h5 style={{ margin: '4px 0 0', fontSize: 16, color: '#3D2B1A', fontWeight: 800 }}>
-                    {selectedChild?.name || 'Baby Aarav'}
+                    {selectedChild?.name || 'Janamithra'}
                   </h5>
                 </div>
                 <span style={{ fontSize: 12.5, color: '#166534', background: '#DCFCE7', padding: '3px 10px', borderRadius: '12px', fontWeight: 700 }}>Verified Patient</span>
@@ -756,7 +756,7 @@ export default function ThankYouPage() {
               <div style={{ width: '120px', height: '2px', background: '#D4AF37', margin: '6px auto 14px', opacity: 0.7 }} />
 
               <p style={{ margin: '0 auto 20px', fontSize: 12, color: '#5A4635', lineHeight: 1.5, maxWidth: '280px' }}>
-                for micro-contribution support toward verified lifesaving treatment for Baby Aarav.
+                for micro-contribution support toward verified lifesaving treatment for Janamithra.
               </p>
 
               {/* Embossed seal & signature preview */}
