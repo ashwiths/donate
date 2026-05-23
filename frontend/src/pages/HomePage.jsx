@@ -1865,7 +1865,61 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ────────────────── 8. BOTTOM CALL FOR HUMANITY ────────────────── */}
+        <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
+          <div style={{
+            textAlign: 'center',
+            maxWidth: '900px',
+            margin: '0 auto',
+            background: 'rgba(255, 255, 255, 0.45)',
+            backdropFilter: 'blur(8px)',
+            borderRadius: '32px',
+            padding: '56px 48px',
+            border: '1.5px solid rgba(235, 224, 214, 0.7)',
+            boxShadow: '0 20px 40px rgba(140, 79, 26, 0.04)'
+          }}>
+            <span style={{ fontSize: '11px', fontWeight: 900, color: 'var(--color-primary)', letterSpacing: '0.15em', textTransform: 'uppercase', display: 'block', marginBottom: 12 }}>
+              A Call for Humanity
+            </span>
+            <h3 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(22px, 3.5vw, 28px)', color: '#3D2B1A', margin: '0 0 16px', letterSpacing: '-0.8px' }}>
+              This is not just a fundraiser.
+            </h3>
+            <p style={{ fontSize: '19px', fontWeight: 800, color: '#C8773A', margin: '0 0 24px', fontFamily: 'Outfit' }}>
+              This is a mother asking the world for a miracle. 🙏
+            </p>
+            <p style={{ fontSize: '15.5px', color: '#5C4C3C', lineHeight: 1.75, fontWeight: 500, margin: '0 auto 36px', maxWidth: '680px' }}>
+              Every contribution, every share, every act of kindness brings Janamithra one step closer to a future where she can stand, walk, smile, and joyfully call out ‘Amma’.
+            </p>
+            
+            <motion.button
+              onClick={() => navigate('/main')}
+              whileHover={{ scale: 1.02, boxShadow: '0 12px 30px rgba(140, 79, 26, 0.25)' }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                background: 'linear-gradient(135deg, #8C4F1A, #C8773A)',
+                color: '#FFF',
+                border: 'none',
+                borderRadius: '99px',
+                padding: '16px 44px',
+                fontSize: '15.5px',
+                fontWeight: 900,
+                fontFamily: 'Outfit',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                boxShadow: '0 8px 24px rgba(140, 79, 26, 0.15)'
+              }}
+            >
+              Extend a Helping Hand <Heart size={16} />
+            </motion.button>
 
+            {/* Bottom Disclaimer */}
+            <p style={{ margin: '40px 0 0', fontSize: '11px', color: 'var(--color-text-muted)', lineHeight: 1.6, fontWeight: 500, maxWidth: '700px', margin: '40px auto 0' }}>
+              * The campaign goal may exceed attached medical estimates to support post-hospitalization care, rehabilitation therapies, medications, diagnostics, and long-term follow-up treatment requirements.
+            </p>
+          </div>
+        </section>
 
       </main>
 
