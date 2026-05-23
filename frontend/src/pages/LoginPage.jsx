@@ -34,7 +34,7 @@ const AVATARS = [
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { user, login, loginAsGuest } = useAuth()
+  const { user, login } = useAuth()
 
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
@@ -45,7 +45,7 @@ export default function LoginPage() {
   const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
-    if (user && !user.isGuest) {
+    if (user) {
       navigate('/home')
     }
   }, [user, navigate])
@@ -100,10 +100,7 @@ export default function LoginPage() {
     }
   }
 
-  const handleGuest = () => {
-    loginAsGuest()
-    navigate('/home')
-  }
+
 
   return (
     <div style={{
@@ -251,20 +248,6 @@ export default function LoginPage() {
               }}
             >
               Choose Game & Help <ChevronRight size={18} />
-            </motion.button>
-            <motion.button 
-              whileHover={{ scale: 1.02, background: '#FFF9F3', boxShadow: '0 12px 30px rgba(139, 94, 52, 0.08)' }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleGuest}
-              style={{ 
-                padding: '18px 36px', fontSize: '16px', borderRadius: '99px',
-                background: 'rgba(255, 255, 255, 0.8)', border: '1px solid rgba(140, 79, 26, 0.3)', color: '#8C4F1A',
-                fontWeight: 800, fontFamily: 'Outfit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10,
-                backdropFilter: 'blur(8px)',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              <Globe size={18} /> Explore as Guest
             </motion.button>
           </motion.div>
 
@@ -486,13 +469,7 @@ export default function LoginPage() {
                 )}
               </div>
 
-              {!isSignUp && !isForgotPassword && (
-                <div style={{ textAlign: 'center', marginTop: '24px', borderTop: '1px solid #E8E0D6', paddingTop: '20px' }}>
-                  <span onClick={handleGuest} style={{ fontSize: '13.5px', color: '#8C4F1A', fontWeight: 800, cursor: 'pointer', fontFamily: 'Outfit' }} onMouseEnter={e => e.currentTarget.style.color = '#C8773A'} onMouseLeave={e => e.currentTarget.style.color = '#8C4F1A'}>
-                    Explore as Guest First
-                  </span>
-                </div>
-              )}
+
             </motion.div>
           </motion.div>
         )}
