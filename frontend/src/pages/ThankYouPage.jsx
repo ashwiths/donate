@@ -3,16 +3,24 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, ArrowRight, Share2, Download, Heart, Shield, Award, Calendar, Landmark, Copy, Check, Sparkles, Activity, Info } from 'lucide-react'
 import { useDonation } from '../context/DonationContext'
+import { useAuth } from '../context/AuthContext'
 import { staggerContainer, fadeUp, scaleIn } from '../animations/variants'
 import confetti from 'canvas-confetti'
 import TransparentBreakdown from '../components/TransparentBreakdown'
 
 export default function ThankYouPage() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const { selectedChild, donationAmount, transactionId } = useDonation()
   const [copied, setCopied] = useState(false)
   const [hoveredCertificate, setHoveredCertificate] = useState(false)
   const [showInfoTooltip, setShowInfoTooltip] = useState(false)
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+  }, [user, navigate])
 
   // Fetch verified user details from localStorage
   const userName = localStorage.getItem('hp_user_name') || 'Generous Supporter'

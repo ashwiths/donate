@@ -22,56 +22,6 @@ const URGENT_CASE = {
   hospital: 'Nanavati Max Hospital'
 }
 
-const ACTIVE_CAMPAIGNS = [
-  {
-    id: '2',
-    name: 'Baby Diya',
-    age: '18 months old',
-    condition: 'Congenital Heart Defect (VSD)',
-    image: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=500&q=80',
-    requiredAmount: 1500000,
-    raisedAmount: 480000,
-    percentage: 32,
-    tag: 'Urgent Case',
-    storyPreview: "A simple open-heart surgery at Nanavati Hospital will patch Diya's congenital heart defect, letting her live a healthy life."
-  },
-  {
-    id: '3',
-    name: 'Baby Vihaan',
-    age: '2 years old',
-    condition: 'Acute Leukemia (Blood Cancer)',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80',
-    requiredAmount: 3000000,
-    raisedAmount: 820000,
-    percentage: 27,
-    tag: 'Recently Added',
-    storyPreview: "Vihaan requires 3 rounds of targeted chemotherapy to defeat blood cancer. Doctors are highly optimistic of a full cure."
-  },
-  {
-    id: '4',
-    name: 'Baby Arjun',
-    age: '1 year old',
-    condition: 'Spinal Muscular Atrophy (Type 1)',
-    image: 'https://images.unsplash.com/photo-1544120190-2751b8e176b0?w=500&q=80',
-    requiredAmount: 16000000,
-    raisedAmount: 1400000,
-    percentage: 8,
-    tag: 'Urgent Case',
-    storyPreview: "Arjun needs Zolgensma gene therapy within the next 4 months to halt progressive muscle loss and breathe naturally."
-  },
-  {
-    id: '5',
-    name: 'Baby Meera',
-    age: '6 months old',
-    condition: 'Severe SCID (Bone Marrow)',
-    image: 'https://images.unsplash.com/photo-1484863137850-59afcfe05386?w=500&q=80',
-    requiredAmount: 2500000,
-    raisedAmount: 310000,
-    percentage: 12,
-    tag: 'Urgent Case',
-    storyPreview: "An urgent bone marrow transplant from a verified matched donor will rebuild Meera's immune system completely."
-  }
-]
 
 const COMPLETED_TREATMENTS = [
   { name: 'Baby Kabir', age: '4 months', illness: 'Congenital Heart Defect', status: 'Successfully Cured!', date: '2 days ago', image: 'https://images.unsplash.com/photo-1519689680058-324335c77ebe?w=200&q=80' },
@@ -342,27 +292,7 @@ export default function HomePage() {
               >
                 <Gamepad2 size={16} /> Open Play Dashboard
               </motion.button>
-              <motion.a
-                href="#active-campaigns"
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="btn-outline"
-                style={{
-                  padding: '12px 26px',
-                  fontSize: '14.5px',
-                  borderRadius: '11px',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text)',
-                  background: '#fff',
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer'
-                }}
-              >
-                Browse Campaigns
-              </motion.a>
+
             </motion.div>
 
             <motion.div
@@ -1329,129 +1259,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 7. ACTIVE CHILD CAMPAIGNS ────────────────── */}
-        <section id="active-campaigns" style={{ position: 'relative', overflow: 'hidden' }}>
-          <WarmSectionBackground />
-          <div style={{
-            padding: '80px 40px',
-            maxWidth: 1200,
-            margin: '0 auto',
-            boxSizing: 'border-box',
-            width: '100%',
-            position: 'relative',
-            zIndex: 1
-          }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }} className="section-header-flex">
-            <div>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Active Clinical Campaigns</span>
-              <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}>More Children Waiting For Help ❤️</h2>
-            </div>
-            <span style={{ fontSize: '12.5px', background: '#FEF3C7', color: '#D97706', padding: '6px 14px', borderRadius: '99px', fontWeight: 700 }}>4 Clinical Verifications</span>
-          </div>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: 28
-          }} className="waiting-children-grid">
-            {ACTIVE_CAMPAIGNS.map((child) => (
-              <motion.div
-                key={child.id}
-                variants={cardVariant}
-                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.08)' }}
-                style={{
-                  background: '#fff',
-                  borderRadius: '20px',
-                  border: '1px solid var(--color-border)',
-                  padding: '18px',
-                  boxSizing: 'border-box',
-                  boxShadow: 'var(--shadow-sm)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  height: '450px',
-                  cursor: 'pointer'
-                }}
-                onClick={() => navigate('/main')}
-              >
-                <div>
-                  <div style={{ position: 'relative', width: '100%', height: '170px', borderRadius: '14px', overflow: 'hidden', marginBottom: 14 }}>
-                    <img
-                      src={child.image}
-                      alt={child.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                    <div style={{
-                      position: 'absolute',
-                      top: 12,
-                      left: 12,
-                      background: child.tag === 'Urgent Case' ? '#FEE2E2' : '#FEF3C7',
-                      color: child.tag === 'Urgent Case' ? '#EF4444' : '#D97706',
-                      padding: '4px 10px',
-                      borderRadius: '6px',
-                      fontSize: '10px',
-                      fontWeight: 800,
-                      textTransform: 'uppercase'
-                    }}>
-                      {child.tag}
-                    </div>
-                  </div>
-
-                  <h3 style={{ margin: '0 0 2px', fontSize: '17px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>{child.name}</h3>
-                  <p style={{ margin: '0 0 8px', fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                    {child.age} old • {child.condition}
-                  </p>
-
-                  <p style={{
-                    fontSize: '12.5px',
-                    color: 'var(--color-text-muted)',
-                    lineHeight: 1.5,
-                    margin: '0 0 16px',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}>
-                    {child.storyPreview}
-                  </p>
-                </div>
-
-                <div>
-                  <div style={{ marginBottom: 14 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', color: 'var(--color-text-muted)', marginBottom: 6 }}>
-                      <span>Raised: <strong>₹{(child.raisedAmount / 100000).toFixed(2)}L</strong></span>
-                      <span>Goal: <strong>₹{(child.requiredAmount / 100000).toFixed(2)}L</strong></span>
-                    </div>
-                    <DonationProgress raised={child.raisedAmount} required={child.requiredAmount} percentage={child.percentage} compact />
-                  </div>
-
-                  <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    className="btn-primary"
-                    style={{
-                      width: '100%',
-                      padding: '10px 14px',
-                      borderRadius: '10px',
-                      fontSize: '13px',
-                      fontWeight: 700,
-                      background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                      border: 'none',
-                      color: '#fff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 6,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Donate & Play <ChevronRight size={14} />
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          </div>
-        </section>
 
         {/* ────────────────── 8. REDESIGNED HIGH-FIDELITY LUXURY MYSTERY REWARD SECTION ────────────────── */}
         <section style={{

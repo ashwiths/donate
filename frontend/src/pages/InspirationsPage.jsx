@@ -4,6 +4,8 @@ import {
   Sparkles, Sun, Heart, Leaf, Zap, Target, Star,
   Wind, Flame, CheckCircle2, Circle, ArrowRight, Quote
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { QuotesBackground } from '../components/PremiumBackground'
@@ -177,6 +179,14 @@ function FloatingParticle({ style }) {
 export default function InspirationsPage() {
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [checked, setChecked] = useState({})
+  const navigate = useNavigate()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+  }, [user, navigate])
 
   useEffect(() => {
     const timer = setInterval(() => {

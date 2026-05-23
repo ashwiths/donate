@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Sparkles, Shield, ChevronRight, Star, Quote } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -45,10 +46,14 @@ const Particles = () => {
 
 export default function HealingStoriesPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const timelineSteps = [
     {

@@ -9,6 +9,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import DonationProgress from '../components/DonationProgress'
 import { useDonation } from '../context/DonationContext'
+import { useAuth } from '../context/AuthContext'
 import TransparentBreakdown from '../components/TransparentBreakdown'
 
 // ── Static premium data with SVGs / minimal styles ────────────────────
@@ -318,7 +319,14 @@ export default function MainPage() {
   const [selectedPreset, setSelectedPreset] = useState(100)
   
   const navigate = useNavigate()
+  const { user } = useAuth()
   const { confirmDonation } = useDonation()
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+  }, [user, navigate])
 
   // Premium Certificate Form Modal states
   const [isModalOpen, setIsModalOpen] = useState(false)
