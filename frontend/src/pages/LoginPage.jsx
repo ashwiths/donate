@@ -94,6 +94,9 @@ export default function LoginPage() {
       if (error.code === 'auth/email-already-in-use') readableError = 'Email is already registered.'
       if (error.code === 'auth/weak-password') readableError = 'Password should be at least 6 characters.'
       if (error.code === 'auth/invalid-email') readableError = 'Invalid email address.'
+      if (error.code === 'auth/operation-not-allowed') {
+        readableError = 'Email & Password authentication is disabled in your Firebase console. Please go to Firebase Console > Authentication > Sign-in method, click "Email/Password", and toggle it to Enabled.'
+      }
       setAuthError(readableError)
     } finally {
       setLoading(false)
