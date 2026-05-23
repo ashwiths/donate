@@ -20,10 +20,10 @@ export default function HeroSection() {
         <motion.div variants={staggerContainer} initial="hidden" animate="visible">
           <motion.h1
             variants={fadeUp}
-            style={{ fontFamily: 'Outfit', fontSize: 'clamp(36px,5vw,56px)', fontWeight: 800, lineHeight: 1.1, margin: '0 0 12px', color: 'var(--color-text)' }}
+            style={{ fontFamily: 'Outfit', fontSize: 'clamp(42px, 6vw, 64px)', fontWeight: 900, lineHeight: 1.05, letterSpacing: '-2px', margin: '0 0 12px', color: '#3D2B1A' }}
           >
             Play Games.<br />
-            <span style={{ color: 'var(--color-primary)' }}>Save Lives.</span>{' '}
+            <span style={{ background: 'linear-gradient(135deg, #8C4F1A, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Save Lives.</span>{' '}
             <span style={{ fontSize: '0.6em' }}>🤍</span>
           </motion.h1>
 

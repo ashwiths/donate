@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { 
   ChevronRight, Gamepad2, Tag, Quote as QuoteIcon, Gift, 
-  LayoutGrid, Shield, Heart, Lock, ArrowRight, Sparkles, Check, Info
+  LayoutGrid, Shield, Heart, Lock, ArrowRight, Sparkles, Check, Info, X
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import DonationProgress from '../components/DonationProgress'
 import { useDonation } from '../context/DonationContext'
+import TransparentBreakdown from '../components/TransparentBreakdown'
 
 // ── Static premium data with SVGs / minimal styles ────────────────────
 const MYSTERY_REWARDS = [
@@ -319,9 +320,26 @@ export default function MainPage() {
   const navigate = useNavigate()
   const { confirmDonation } = useDonation()
 
+  // Premium Certificate Form Modal states
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [pendingPrice, setPendingPrice] = useState(null)
+  const [formData, setFormData] = useState({ name: '', mobile: '', email: '' })
+  const [errors, setErrors] = useState({ name: '', email: '' })
+
+  // ESC Key listener
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsModalOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   const handleUnlock = (price) => {
-    confirmDonation(price)
-    navigate('/thank-you')
+    setPendingPrice(price)
+    setIsModalOpen(true)
   }
 
   const handleDirectDonate = () => {
@@ -329,6 +347,34 @@ export default function MainPage() {
     if (amount > 0) {
       handleUnlock(amount)
     }
+  }
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault()
+    
+    // Validate required fields
+    const newErrors = {}
+    if (!formData.name.trim()) newErrors.name = 'Full Name is required'
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email Address is required'
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address'
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      return
+    }
+
+    // Save details
+    localStorage.setItem('hp_user_name', formData.name.trim())
+    localStorage.setItem('hp_user_mobile', formData.mobile.trim())
+    localStorage.setItem('hp_user_email', formData.email.trim())
+
+    // Proceed to payment
+    setIsModalOpen(false)
+    confirmDonation(pendingPrice)
+    navigate('/thank-you')
   }
 
   const show = (key) => activeTab === 'all' || activeTab === key
@@ -341,13 +387,41 @@ export default function MainPage() {
         
 
         {/* ── PREMIUM FILTER PILLS (Replaces Sidebar) ── */}
-        <div style={{ maxWidth: 1360, margin: '60px auto 0', padding: '0 48px', textAlign: 'center', boxSizing: 'border-box' }}>
-          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Discovery Portal</span>
-          <h2 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '36px', color: '#4A3427', margin: '8px 0 16px', letterSpacing: '-0.8px', lineHeight: 1.25 }}>
-            Choose What You Want to Unlock 🤍
+        <div style={{ maxWidth: 1360, margin: '80px auto 0', padding: '0 48px', textAlign: 'center', boxSizing: 'border-box' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+            borderRadius: 99, padding: '6px 18px', marginBottom: 20
+          }}>
+            <span style={{ fontSize: 11, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              Discovery Portal
+            </span>
+          </div>
+
+          <h2 style={{ 
+            fontFamily: 'Outfit', 
+            fontWeight: 900, 
+            fontSize: 'clamp(36px, 5vw, 64px)', 
+            color: '#3D2B1A', 
+            margin: '0 0 16px', 
+            letterSpacing: '-2px', 
+            lineHeight: 1.1 
+          }}>
+            Unlock Joy While{' '}
+            <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Healing ❤️
+            </span>
           </h2>
-          <p style={{ margin: '0 auto 36px', maxWidth: 640, fontSize: '15.5px', color: '#7A6A5A', fontWeight: 500, lineHeight: 1.75 }}>
-            Direct micro-donations to Baby Aarav\'s medical fund while gaining access to surprise wellness rewards, immersive minimal games, and stories.
+
+          <p style={{ 
+            margin: '0 auto 40px', 
+            maxWidth: 560, 
+            fontSize: '16.5px', 
+            color: '#7A6A58', 
+            fontWeight: 500, 
+            lineHeight: 1.7 
+          }}>
+            Direct support contributions to Baby Aarav's medical fund while gaining access to surprise wellness rewards, immersive minimal games, and stories.
           </p>
 
           <div style={{ 
@@ -400,9 +474,41 @@ export default function MainPage() {
                 background: 'radial-gradient(50% 50% at 50% 50%, rgba(235, 224, 214, 0.15) 0%, rgba(255, 255, 255, 0) 100%)',
                 position: 'relative'
               }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>🎮 Interactive Micro-Play</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 8px', letterSpacing: '-0.5px' }}>Mindful Play & Support</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75, fontWeight: 500 }}>Calm your mind with interactive micro-games while direct funding life-saving treatments.</p>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                  borderRadius: 99, padding: '6px 18px', marginBottom: 20
+                }}>
+                  <span style={{ fontSize: 11, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                    Interactive Healing Moments
+                  </span>
+                </div>
+
+                <h3 style={{ 
+                  fontFamily: 'Outfit', 
+                  fontWeight: 900, 
+                  fontSize: 'clamp(32px, 4.5vw, 48px)', 
+                  color: '#3D2B1A', 
+                  margin: '0 0 12px', 
+                  letterSpacing: '-1.8px', 
+                  lineHeight: 1.15 
+                }}>
+                  Healing Through{' '}
+                  <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Play 🎮
+                  </span>
+                </h3>
+
+                <p style={{ 
+                  margin: '0 auto 24px', 
+                  fontSize: '16px', 
+                  color: '#7A6A58', 
+                  maxWidth: 540, 
+                  lineHeight: 1.7, 
+                  fontWeight: 500 
+                }}>
+                  Calm your mind with interactive micro-games while direct funding life-saving treatments.
+                </p>
                 <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
@@ -496,9 +602,41 @@ export default function MainPage() {
                 background: 'radial-gradient(50% 50% at 50% 50%, rgba(235, 224, 214, 0.15) 0%, rgba(255, 255, 255, 0) 100%)',
                 position: 'relative'
               }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>🎁 Curated Brand Drops</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 8px', letterSpacing: '-0.5px' }}>Mystery Sponsor Rewards</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75, fontWeight: 500 }}>Unlock hidden surprise brand vouchers securely. Brand reward codes are kept completely secret before payment.</p>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                  borderRadius: 99, padding: '6px 18px', marginBottom: 20
+                }}>
+                  <span style={{ fontSize: 11, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                    Curated Mystery Rewards
+                  </span>
+                </div>
+
+                <h3 style={{ 
+                  fontFamily: 'Outfit', 
+                  fontWeight: 900, 
+                  fontSize: 'clamp(32px, 4.5vw, 48px)', 
+                  color: '#3D2B1A', 
+                  margin: '0 0 12px', 
+                  letterSpacing: '-1.8px', 
+                  lineHeight: 1.15 
+                }}>
+                  Play With{' '}
+                  <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Purpose 🎁
+                  </span>
+                </h3>
+
+                <p style={{ 
+                  margin: '0 auto 24px', 
+                  fontSize: '16px', 
+                  color: '#7A6A58', 
+                  maxWidth: 540, 
+                  lineHeight: 1.7, 
+                  fontWeight: 500 
+                }}>
+                  Unlock hidden surprise brand vouchers securely. Brand reward codes are kept completely secret before payment.
+                </p>
                 <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
@@ -547,7 +685,7 @@ export default function MainPage() {
                         width: 150,
                         height: 90,
                         background: 'rgba(255, 255, 255, 0.45)',
-                        backdropFilter: 'blur(16px)',
+                        backdropFilter: 'blur(8px)',
                         borderRadius: '14px',
                         border: '1px solid rgba(255, 255, 255, 0.7)',
                         display: 'flex',
@@ -637,9 +775,41 @@ export default function MainPage() {
                 background: 'radial-gradient(50% 50% at 50% 50%, rgba(235, 224, 214, 0.15) 0%, rgba(255, 255, 255, 0) 100%)',
                 position: 'relative'
               }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>💬 Stories that heal</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 8px', letterSpacing: '-0.5px' }}>Quotes & Emotional Capsules</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75, fontWeight: 500 }}>Unlock heartwarming gratitude messages, survivor audio stories, and positive pediatric recovery journals.</p>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                  borderRadius: 99, padding: '6px 18px', marginBottom: 20
+                }}>
+                  <span style={{ fontSize: 11, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                    Healing Capsules
+                  </span>
+                </div>
+
+                <h3 style={{ 
+                  fontFamily: 'Outfit', 
+                  fontWeight: 900, 
+                  fontSize: 'clamp(32px, 4.5vw, 48px)', 
+                  color: '#3D2B1A', 
+                  margin: '0 0 12px', 
+                  letterSpacing: '-1.8px', 
+                  lineHeight: 1.15 
+                }}>
+                  Mindful Healing{' '}
+                  <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Games ✨
+                  </span>
+                </h3>
+
+                <p style={{ 
+                  margin: '0 auto 24px', 
+                  fontSize: '16px', 
+                  color: '#7A6A58', 
+                  maxWidth: 540, 
+                  lineHeight: 1.7, 
+                  fontWeight: 500 
+                }}>
+                  Unlock heartwarming gratitude messages, survivor audio stories, and positive pediatric recovery journals.
+                </p>
                 <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
@@ -755,9 +925,41 @@ export default function MainPage() {
                 background: 'radial-gradient(50% 50% at 50% 50%, rgba(235, 224, 214, 0.15) 0%, rgba(255, 255, 255, 0) 100%)',
                 position: 'relative'
               }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>❤️ Simple Pure Contribution</span>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: '30px', color: '#4A3427', margin: '6px 0 8px', letterSpacing: '-0.5px' }}>Help Without Rewards</h3>
-                <p style={{ margin: 0, fontSize: '15px', color: '#7A6A5A', maxWidth: 560, lineHeight: 1.75, fontWeight: 500 }}>Every single rupee goes directly towards Baby Aarav\'s medical balance sheet at the hospital billing desk.</p>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                  borderRadius: 99, padding: '6px 18px', marginBottom: 20
+                }}>
+                  <span style={{ fontSize: 11, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                    Simple Pure Support
+                  </span>
+                </div>
+
+                <h3 style={{ 
+                  fontFamily: 'Outfit', 
+                  fontWeight: 900, 
+                  fontSize: 'clamp(32px, 4.5vw, 48px)', 
+                  color: '#3D2B1A', 
+                  margin: '0 0 12px', 
+                  letterSpacing: '-1.8px', 
+                  lineHeight: 1.15 
+                }}>
+                  Help Without{' '}
+                  <span style={{ background: 'linear-gradient(135deg, #8B5E34, #C8773A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Rewards ❤️
+                  </span>
+                </h3>
+
+                <p style={{ 
+                  margin: '0 auto 24px', 
+                  fontSize: '16px', 
+                  color: '#7A6A58', 
+                  maxWidth: 540, 
+                  lineHeight: 1.7, 
+                  fontWeight: 500 
+                }}>
+                  Every single rupee goes directly towards Baby Aarav's medical balance sheet at the hospital billing desk.
+                </p>
                 <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
@@ -947,6 +1149,254 @@ export default function MainPage() {
 
         </div>
       </main>
+
+      {/* ── PREMIUM CENTER MODAL POPUP ── */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsModalOpen(false)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(26, 17, 10, 0.45)', // dark transparent warm backdrop
+              backdropFilter: 'blur(8px)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '24px',
+              boxSizing: 'border-box'
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: 'spring', duration: 0.45, bounce: 0.15 }}
+              onClick={(e) => e.stopPropagation()} // Prevent close on modal body click
+              style={{
+                background: 'rgba(255, 253, 250, 0.94)', // soft cream glassmorphism
+                border: '1px solid rgba(139, 94, 52, 0.22)',
+                boxShadow: '0 24px 60px rgba(74, 52, 39, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+                borderRadius: '28px',
+                width: '100%',
+                maxWidth: '520px',
+                padding: '36px',
+                boxSizing: 'border-box',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                color: '#3D2B1A'
+              }}
+            >
+              {/* Close Button in corner */}
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '20px',
+                  background: 'rgba(139, 94, 52, 0.08)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#8B5E34',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(139, 94, 52, 0.15)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(139, 94, 52, 0.08)'}
+              >
+                <X size={16} />
+              </button>
+
+              {/* Modal Title Block */}
+              <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 8 }}>
+                  <Sparkles size={12} /> Healing Contribution
+                </span>
+                <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: '#3D2B1A', margin: '0 0 8px', letterSpacing: '-0.8px', lineHeight: 1.15 }}>
+                  Before Unlocking ✨
+                </h2>
+                <p style={{ margin: 0, fontSize: '14px', color: '#7A6A5A', lineHeight: 1.5, fontWeight: 500 }}>
+                  Help us generate your personalized contribution certificate after support.
+                </p>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {/* Full Name */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#5A4635', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Full Name *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Priyanshu Sharma"
+                    required
+                    value={formData.name}
+                    onChange={(e) => {
+                      setFormData({ ...formData, name: e.target.value })
+                      if (errors.name) setErrors({ ...errors, name: '' })
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '14px 18px',
+                      borderRadius: '16px',
+                      border: errors.name ? '1.5px solid #E11D48' : '1px solid rgba(139, 94, 52, 0.25)',
+                      background: '#FFFFFF',
+                      boxShadow: 'inset 0 2px 4px rgba(74, 52, 39, 0.02)',
+                      fontSize: '14.5px',
+                      color: '#3D2B1A',
+                      outline: 'none',
+                      fontFamily: 'Outfit',
+                      boxSizing: 'border-box',
+                      transition: 'all 0.2s ease'
+                    }}
+                  />
+                  {errors.name && <span style={{ fontSize: '11.5px', color: '#E11D48', fontWeight: 600 }}>{errors.name}</span>}
+                </div>
+
+                {/* Mobile Number */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#5A4635', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Mobile Number (Optional)</label>
+                  <input
+                    type="tel"
+                    placeholder="e.g. +91 98765 43210"
+                    value={formData.mobile}
+                    onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '14px 18px',
+                      borderRadius: '16px',
+                      border: '1px solid rgba(139, 94, 52, 0.25)',
+                      background: '#FFFFFF',
+                      boxShadow: 'inset 0 2px 4px rgba(74, 52, 39, 0.02)',
+                      fontSize: '14.5px',
+                      color: '#3D2B1A',
+                      outline: 'none',
+                      fontFamily: 'Outfit',
+                      boxSizing: 'border-box',
+                      transition: 'all 0.2s ease'
+                    }}
+                  />
+                </div>
+
+                {/* Email Address */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#5A4635', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Email Address *</label>
+                  <input
+                    type="email"
+                    placeholder="e.g. priyanshu@gmail.com"
+                    required
+                    value={formData.email}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value })
+                      if (errors.email) setErrors({ ...errors, email: '' })
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '14px 18px',
+                      borderRadius: '16px',
+                      border: errors.email ? '1.5px solid #E11D48' : '1px solid rgba(139, 94, 52, 0.25)',
+                      background: '#FFFFFF',
+                      boxShadow: 'inset 0 2px 4px rgba(74, 52, 39, 0.02)',
+                      fontSize: '14.5px',
+                      color: '#3D2B1A',
+                      outline: 'none',
+                      fontFamily: 'Outfit',
+                      boxSizing: 'border-box',
+                      transition: 'all 0.2s ease'
+                    }}
+                  />
+                  {errors.email && <span style={{ fontSize: '11.5px', color: '#E11D48', fontWeight: 600 }}>{errors.email}</span>}
+                </div>
+
+                {/* Dynamic Transparent Contribution Breakdown */}
+                <div style={{ marginTop: '4px', marginBottom: '8px' }}>
+                  <TransparentBreakdown amount={pendingPrice || 10} />
+                </div>
+
+                {/* Secure disclaimer */}
+                <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', background: 'rgba(139, 94, 52, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px dashed rgba(139, 94, 52, 0.15)', marginTop: '4px' }}>
+                  <Shield size={14} color="#8B5E34" style={{ marginTop: '2px', flexShrink: 0 }} />
+                  <p style={{ margin: 0, fontSize: '11.5px', color: '#7A6A5A', lineHeight: 1.45, fontWeight: 500 }}>
+                    Your details are securely used for contribution acknowledgment and certificate generation only.
+                  </p>
+                </div>
+
+                {/* Buttons */}
+                <div style={{ display: 'flex', gap: 12, marginTop: '16px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    style={{
+                      flex: 1,
+                      padding: '14px',
+                      borderRadius: '99px',
+                      border: '1px solid rgba(139, 94, 52, 0.25)',
+                      background: '#FFFFFF',
+                      color: '#7A6A5A',
+                      fontSize: '14.5px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      fontFamily: 'Outfit',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(139, 94, 52, 0.04)'
+                      e.currentTarget.style.color = '#3D2B1A'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#FFFFFF'
+                      e.currentTarget.style.color = '#7A6A5A'
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    style={{
+                      flex: 1.4,
+                      padding: '14px',
+                      borderRadius: '99px',
+                      border: 'none',
+                      background: 'linear-gradient(135deg, #8C4F1A, #C8773A)',
+                      color: '#FFFFFF',
+                      fontSize: '14.5px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      fontFamily: 'Outfit',
+                      boxShadow: '0 8px 24px rgba(140, 79, 26, 0.22)',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 12px 30px rgba(140, 79, 26, 0.35)'
+                      e.currentTarget.style.filter = 'brightness(1.05)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(140, 79, 26, 0.22)'
+                      e.currentTarget.style.filter = 'none'
+                    }}
+                  >
+                    Continue to ₹{pendingPrice} Support
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
 

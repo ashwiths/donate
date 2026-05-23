@@ -1,6 +1,7 @@
 import { useEffect, useRef, memo } from 'react'
 import { motion } from 'framer-motion'
-import watercolorTexture from '../assets/background.jpg'
+
+
 
 
 // ─── Shared: Floating ambient blob ────────────────────────────────────────────
@@ -492,7 +493,7 @@ export const LoginBackground = memo(function LoginBackground() {
         style={{
           position: 'absolute',
           inset: '-1%', // Extend slightly to cover panning boundaries
-          backgroundImage: `url(${watercolorTexture})`,
+          backgroundImage: 'url("/background.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           opacity: 0.88, // Highly visible to show off the beautiful corner watercolor splashes
@@ -623,7 +624,7 @@ export const GlobalBackground = memo(function GlobalBackground() {
         style={{
           position: 'absolute',
           inset: '-2%', // Extend slightly to cover panning boundaries
-          backgroundImage: `url(${watercolorTexture})`,
+          backgroundImage: 'url("/background.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           opacity: 0.18, // Significantly reduced to prevent washing out content

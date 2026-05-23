@@ -61,7 +61,7 @@ export default function LoginPage() {
         position: 'relative',
         borderBottom: '1px solid rgba(232, 224, 214, 0.3)',
         background: 'rgba(250, 246, 240, 0.65)',
-        backdropFilter: 'blur(12px)'
+        backdropFilter: 'blur(8px)'
       }} className="landing-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
@@ -160,7 +160,6 @@ export default function LoginPage() {
             </span>
           </motion.div>
 
-          {/* Epic minimalist heading */}
           <motion.h1
             variants={fadeUp}
             style={{
@@ -168,9 +167,9 @@ export default function LoginPage() {
               fontSize: 'clamp(40px, 4.8vw, 56px)', // Adjusted slightly for cleaner layout balance
               fontWeight: 900,
               lineHeight: 1.1,
-              color: 'var(--color-text)',
+              color: '#3D2B1A',
               margin: 0,
-              letterSpacing: '-1.5px'
+              letterSpacing: '-2px'
             }}
           >
             Play Small Games.<br />
@@ -438,7 +437,7 @@ export default function LoginPage() {
                 }}>
                   <Heart size={20} color="#8C4F1A" fill="#8C4F1A" />
                 </div>
-                <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '24px', color: 'var(--color-text)', margin: '0 0 6px' }}>Sign in to Support</h2>
+                <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '24px', color: '#3D2B1A', margin: '0 0 6px', letterSpacing: '-0.8px' }}>Sign in to Support</h2>
                 <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)' }}>Choose your preferred option to proceed</p>
               </div>
 

@@ -385,7 +385,7 @@ export default function HomePage() {
               transition={{ duration: 0.3 }}
               style={{
                 background: 'rgba(255, 255, 255, 0.92)',
-                backdropFilter: 'blur(20px)',
+                backdropFilter: 'blur(8px)',
                 borderRadius: '24px',
                 border: '1px solid rgba(232, 224, 214, 0.8)',
                 padding: '28px',
@@ -545,10 +545,9 @@ export default function HomePage() {
 
         {/* ────────────────── 2. LIVE FEED ────────────────── */}
         <section style={{
-          background: 'rgba(255, 255, 255, 0.82)',
-          backdropFilter: 'blur(16px)',
-          borderTop: '1px solid rgba(232, 224, 214, 0.5)',
-          borderBottom: '1px solid rgba(232, 224, 214, 0.5)',
+          background: 'transparent',
+          borderTop: '1px solid rgba(232, 224, 214, 0.25)',
+          borderBottom: '1px solid rgba(232, 224, 214, 0.25)',
           padding: '16px 0',
           overflow: 'hidden',
           position: 'relative',
@@ -601,7 +600,7 @@ export default function HomePage() {
                 100% Direct Payout Audit
               </span>
             </motion.div>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '32px', color: 'var(--color-text)', margin: '4px 0 0', letterSpacing: '-0.75px' }}>
+            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(28px, 4vw, 36px)', color: '#3D2B1A', margin: '4px 0 0', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               Where Your Contribution Goes 💳
             </h2>
             <p style={{ margin: '8px 0 0', fontSize: '15.5px', color: 'var(--color-text-muted)', maxWidth: '580px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.55 }}>
@@ -641,10 +640,10 @@ export default function HomePage() {
                 </div>
 
                 <h3 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
-                  ₹9 Direct Treatment Support
+                  ₹9.76 Treatment Support Secured
                 </h3>
                 <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Ninety percent of your micro-donation routes directly to settling operating theater fees, essential critical ICU setup support, and specialty pediatric pharmacy desks.
+                  Over ninety-seven percent of your micro-donation routes directly to settling operating theater fees, essential critical ICU setup support, and specialty pediatric pharmacy desks.
                 </p>
               </div>
             </motion.div>
@@ -670,20 +669,20 @@ export default function HomePage() {
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: 4 }}>
                       <span>Child Treatment</span>
-                      <span>₹9.00 (90%)</span>
+                      <span>₹9.76 (97.6%)</span>
                     </div>
                     <div style={{ height: 10, background: 'rgba(232, 224, 214, 0.8)', borderRadius: 99, overflow: 'hidden' }}>
-                      <div style={{ width: '90%', height: '100%', background: 'linear-gradient(90deg, #8C4F1A, #C8773A)', borderRadius: 99 }} />
+                      <div style={{ width: '97.6%', height: '100%', background: 'linear-gradient(90deg, #8C4F1A, #C8773A)', borderRadius: 99 }} />
                     </div>
                   </div>
 
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: 4 }}>
                       <span>Secure Gateway Processing</span>
-                      <span>₹1.00 (10%)</span>
+                      <span>₹0.24 (2.4%)</span>
                     </div>
                     <div style={{ height: 10, background: 'rgba(232, 224, 214, 0.8)', borderRadius: 99, overflow: 'hidden' }}>
-                      <div style={{ width: '10%', height: '100%', background: '#5C2D0E', borderRadius: 99 }} />
+                      <div style={{ width: '2.4%', height: '100%', background: '#5C2D0E', borderRadius: 99 }} />
                     </div>
                   </div>
                 </div>
@@ -700,12 +699,12 @@ export default function HomePage() {
                   <div style={{ width: 1, height: 10, background: '#EBD5C2', marginLeft: 2.5 }} />
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
-                    <span>Razorpay SSL verification clears fee (₹1)</span>
+                    <span>Razorpay SSL verification clears fee (₹0.24)</span>
                   </div>
                   <div style={{ width: 1, height: 10, background: '#EBD5C2', marginLeft: 2.5 }} />
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
-                    <span>Direct settlement clears operation billing (₹9)</span>
+                    <span>Direct settlement routes medical support (₹9.76)</span>
                   </div>
                 </div>
 
@@ -987,7 +986,7 @@ export default function HomePage() {
 
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}> Curated Experiences </span>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}> Choose Your Way to Help 🤝 </h2>
+            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}> Choose Your Way to Help 🤝 </h2>
             <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}> Explore gamified clinical tickets, unlock emotional quotes, or contribute direct billing sums. </p>
           </div>
 
@@ -1189,7 +1188,7 @@ export default function HomePage() {
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Clinical Roadmap</span>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>Treatment Journey & Updates ❤️</h2>
+            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}>Treatment Journey & Updates ❤️</h2>
             <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}>Track Baby Aarav's exact surgical and clinical roadmap from diagnosis to final discharge.</p>
           </div>
 
@@ -1241,7 +1240,7 @@ export default function HomePage() {
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Clinical Verification</span>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>Verified Proof & Clinical Authenticity 📄</h2>
+            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}>Verified Proof & Clinical Authenticity 📄</h2>
             <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}>Download and inspect the authentic hospital documents certifying this campaign.</p>
           </div>
 
@@ -1337,7 +1336,7 @@ export default function HomePage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }} className="section-header-flex">
             <div>
               <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Active Clinical Campaigns</span>
-              <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>More Children Waiting For Help ❤️</h2>
+              <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}>More Children Waiting For Help ❤️</h2>
             </div>
             <span style={{ fontSize: '12.5px', background: '#FEF3C7', color: '#D97706', padding: '6px 14px', borderRadius: '99px', fontWeight: 700 }}>4 Clinical Verifications</span>
           </div>
@@ -1448,7 +1447,7 @@ export default function HomePage() {
 
         {/* ────────────────── 8. REDESIGNED HIGH-FIDELITY LUXURY MYSTERY REWARD SECTION ────────────────── */}
         <section style={{
-          background: 'linear-gradient(180deg, #FAF8F5 0%, #FFFDFB 100%)',
+          background: 'transparent',
           borderTop: '1px solid var(--color-border)',
           borderBottom: '1px solid var(--color-border)',
           padding: '80px 40px',
@@ -1461,7 +1460,7 @@ export default function HomePage() {
                 <span style={{ fontSize: '11.5px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Sparkles size={12} /> Mystery Reward Ecosystem
                 </span>
-                <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>
+                <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}>
                   Unlock Real Rewards While Helping ❤️
                 </h2>
                 <p style={{ margin: '4px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}>
@@ -1684,7 +1683,7 @@ export default function HomePage() {
         <section style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Wall of Joy</span>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 800, fontSize: '28px', color: 'var(--color-text)', margin: '2px 0 0', letterSpacing: '-0.75px' }}>Recently Funded Treatments 🎉</h2>
+            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}>Recently Funded Treatments 🎉</h2>
             <p style={{ margin: '6px 0 0', fontSize: '14px', color: 'var(--color-text-muted)' }}>Real hospital success metrics driven entirely by the micro-gaming community.</p>
           </div>
 

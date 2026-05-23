@@ -10,7 +10,12 @@ const trustItems = [
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#fff', borderTop: '1px solid var(--color-border)', marginTop: 'auto' }}>
+    <footer style={{
+      background: 'rgba(255, 255, 255, 0.45)',
+      backdropFilter: 'blur(8px)',
+      borderTop: '1px solid var(--color-border)',
+      marginTop: 'auto'
+    }}>
       {/* Trust Bar */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 24 }}>
         {trustItems.map(({ icon: Icon, label, desc }) => (

@@ -255,7 +255,7 @@ export default function InspirationsPage() {
             transition={{ delay: 0.3, duration: 0.6 }}
             style={{
               background: 'rgba(255,255,255,0.70)',
-              backdropFilter: 'blur(24px)',
+              backdropFilter: 'blur(8px)',
               border: '1px solid rgba(234,223,207,0.70)',
               borderRadius: 32,
               padding: '48px 52px',
@@ -531,7 +531,7 @@ export default function InspirationsPage() {
                 transition={{ duration: 0.55, ease: 'easeInOut' }}
                 style={{
                   background: 'rgba(255,255,255,0.65)',
-                  backdropFilter: 'blur(20px)',
+                  backdropFilter: 'blur(8px)',
                   border: '1px solid rgba(234,223,207,0.7)',
                   borderRadius: 24,
                   padding: '40px 44px',
@@ -594,7 +594,7 @@ export default function InspirationsPage() {
                   style={{
                     display: 'flex', alignItems: 'center', gap: 18,
                     background: done ? 'rgba(139,98,57,0.08)' : 'rgba(255,255,255,0.72)',
-                    backdropFilter: 'blur(16px)',
+                    backdropFilter: 'blur(8px)',
                     border: `1.5px solid ${done ? 'rgba(139,98,57,0.25)' : 'rgba(234,223,207,0.65)'}`,
                     borderRadius: 20, padding: '20px 24px',
                     cursor: 'pointer',
@@ -682,7 +682,7 @@ export default function InspirationsPage() {
               whileTap={{ scale: 0.97 }}
               style={{
                 background: 'rgba(255,255,255,0.15)',
-                backdropFilter: 'blur(12px)',
+                backdropFilter: 'blur(8px)',
                 border: '1.5px solid rgba(255,255,255,0.35)',
                 color: '#fff', fontSize: 14, fontWeight: 700,
                 padding: '13px 32px', borderRadius: 14, cursor: 'pointer',
@@ -705,7 +705,7 @@ export default function InspirationsPage() {
             style={{
               maxWidth: 1100, margin: '0 auto',
               background: 'rgba(255,255,255,0.68)',
-              backdropFilter: 'blur(24px)',
+              backdropFilter: 'blur(8px)',
               border: '1px solid rgba(234,223,207,0.70)',
               borderRadius: 32, padding: '52px 48px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
