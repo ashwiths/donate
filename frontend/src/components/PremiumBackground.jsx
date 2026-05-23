@@ -1,5 +1,7 @@
 import { useEffect, useRef, memo } from 'react'
 import { motion } from 'framer-motion'
+import watercolorTexture from '../assets/background.jpg'
+
 
 // ─── Shared: Floating ambient blob ────────────────────────────────────────────
 function AmbientBlob({ style, delay = 0, duration = 18 }) {
@@ -462,3 +464,216 @@ export const WarmSectionBackground = memo(function WarmSectionBackground() {
     </div>
   )
 })
+
+// ─── 6. LOGIN / LANDING HERO BACKGROUND ────────────────────────────────────────
+// Luxury beige watercolor texture + Ivory overlay + Caramel radial glows + floating orbs
+export const LoginBackground = memo(function LoginBackground() {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }}
+    >
+      {/* Layer 1: Luxury Beige Watercolor Texture */}
+      <motion.div
+        animate={{
+          scale: [1, 1.03, 1],
+          rotate: [0, 0.3, -0.3, 0],
+        }}
+        transition={{
+          duration: 36,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        style={{
+          position: 'absolute',
+          inset: '-1%', // Extend slightly to cover panning boundaries
+          backgroundImage: `url(${watercolorTexture})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.88, // Highly visible to show off the beautiful corner watercolor splashes
+          filter: 'none', // No blur to preserve the elegant paper texture grain and watercolor details
+        }}
+      />
+
+      {/* Layer 2: Soft Ivory/Cream Transparent Overlay + Vignette Fade */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(circle at center, rgba(250, 246, 240, 0.25) 30%, rgba(250, 246, 240, 0.75) 100%)',
+        }}
+      />
+
+      {/* Layer 3: Subtle Caramel Radial Glow behind Hero Content */}
+      {/* Left side caramel glow (behind headline text) */}
+      <motion.div
+        animate={{
+          opacity: [0.15, 0.22, 0.15],
+          scale: [1, 1.05, 1]
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        style={{
+          position: 'absolute',
+          top: '15%',
+          left: '15%',
+          width: 600,
+          height: 600,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(200, 150, 80, 0.24) 0%, rgba(250, 246, 240, 0) 70%)',
+          filter: 'blur(60px)',
+        }}
+      />
+
+      {/* Right side warm radial glow (behind featured card) */}
+      <motion.div
+        animate={{
+          opacity: [0.12, 0.18, 0.12],
+          scale: [1, 1.04, 1]
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay: 2
+        }}
+        style={{
+          position: 'absolute',
+          bottom: '10%',
+          right: '15%',
+          width: 550,
+          height: 550,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(232, 168, 124, 0.20) 0%, rgba(254, 243, 232, 0) 70%)',
+          filter: 'blur(50px)',
+        }}
+      />
+
+      {/* Optional Premium Effects: Ultra Subtle Floating Blur Orbs */}
+      <AmbientBlob
+        delay={1}
+        duration={26}
+        style={{
+          top: '5%',
+          right: '25%',
+          width: 320,
+          height: 320,
+          background: 'radial-gradient(circle, rgba(215, 175, 120, 0.12) 0%, transparent 70%)',
+        }}
+      />
+      <AmbientBlob
+        delay={5}
+        duration={30}
+        style={{
+          bottom: '15%',
+          left: '20%',
+          width: 380,
+          height: 380,
+          background: 'radial-gradient(circle, rgba(139, 98, 57, 0.08) 0%, transparent 70%)',
+        }}
+      />
+
+      {/* Smooth Section Blending at the very bottom edge */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 120,
+          background: 'linear-gradient(to bottom, transparent, #FAF8F5)',
+        }}
+      />
+    </div>
+  )
+})
+
+// ─── 7. GLOBAL PLATFORM BACKGROUND ─────────────────────────────────────────────
+// Premium beige watercolor texture + Ivory overlay + Floating subtle warm caramel blobs
+export const GlobalBackground = memo(function GlobalBackground() {
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }}
+    >
+      {/* Layer 1: Luxury Beige Watercolor Texture */}
+      <motion.div
+        animate={{
+          scale: [1, 1.03, 1],
+          rotate: [0, 0.3, -0.3, 0],
+        }}
+        transition={{
+          duration: 36,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        style={{
+          position: 'absolute',
+          inset: '-2%', // Extend slightly to cover panning boundaries
+          backgroundImage: `url(${watercolorTexture})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.18, // Significantly reduced to prevent washing out content
+          filter: 'none',
+        }}
+      />
+
+      {/* Layer 2: Clean Light White Overlay to Soften Texture & Ensure High Readability */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(255, 255, 255, 0.72)',
+        }}
+      />
+
+      {/* Layer 3: Soft Cream Vignette Fade */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(circle at center, rgba(250, 246, 240, 0.15) 30%, rgba(250, 246, 240, 0.6) 100%)',
+        }}
+      />
+
+      {/* Subtle floating caramel blobs to represent warmth globally across pages */}
+      <AmbientBlob
+        delay={0}
+        duration={28}
+        style={{
+          top: '10%',
+          left: '10%',
+          width: 550,
+          height: 550,
+          background: 'radial-gradient(circle, rgba(200, 150, 80, 0.08) 0%, transparent 70%)',
+        }}
+      />
+      <AmbientBlob
+        delay={4}
+        duration={32}
+        style={{
+          bottom: '10%',
+          right: '10%',
+          width: 600,
+          height: 600,
+          background: 'radial-gradient(circle, rgba(232, 168, 124, 0.06) 0%, transparent 70%)',
+        }}
+      />
+    </div>
+  )
+})
+
+

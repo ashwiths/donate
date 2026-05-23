@@ -194,7 +194,7 @@ export default function InspirationsPage() {
   ]
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F5F1EB', position: 'relative', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', position: 'relative', overflowX: 'hidden' }}>
       {/* Premium ambient background system */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
         <QuotesBackground />
@@ -303,16 +303,15 @@ export default function InspirationsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.07, duration: 0.5 }}
-                  whileHover={{ y: -8, boxShadow: '0 28px 56px rgba(111,77,46,0.13)' }}
+                  whileHover={{ y: -10, boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' }}
                   style={{
-                    background: 'rgba(255,255,255,0.72)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(234,223,207,0.65)',
+                    background: '#FFFFFF',
+                    border: '1px solid rgba(220, 208, 195, 0.7)',
                     borderRadius: 28,
                     padding: '36px 32px',
                     cursor: 'default',
                     transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
-                    boxShadow: '0 6px 24px rgba(111,77,46,0.06)',
+                    boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
                     position: 'relative',
                     overflow: 'hidden'
                   }}
@@ -366,11 +365,10 @@ export default function InspirationsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.05, duration: 0.6 }}
-                whileHover={{ y: -10 }}
+                whileHover={{ y: -12, boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' }}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.45)',
-                  backdropFilter: 'blur(20px)',
-                  border: '1.5px solid rgba(234, 223, 207, 0.6)',
+                  background: '#FFFFFF',
+                  border: '1px solid rgba(220, 208, 195, 0.7)',
                   borderRadius: '32px',
                   padding: '40px 28px 36px',
                   textAlign: 'center',
@@ -378,10 +376,10 @@ export default function InspirationsPage() {
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: 16,
-                  boxShadow: '0 8px 32px rgba(111, 77, 46, 0.04)',
+                  boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
                   position: 'relative',
                   overflow: 'hidden',
-                  transition: 'background 0.3s, border-color 0.3s, box-shadow 0.3s'
+                  transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
                 className="inspiration-profile-card"
               >

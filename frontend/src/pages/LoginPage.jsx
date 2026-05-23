@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { fadeUp, staggerContainer } from '../animations/variants'
 import DonationProgress from '../components/DonationProgress'
 
+
 const AVATARS = [
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&q=80',
   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&q=80',
@@ -42,25 +43,13 @@ export default function LoginPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'radial-gradient(circle at 50% 50%, #FAF6F0 0%, #FAF8F5 100%)',
+      background: 'transparent',
       position: 'relative',
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column'
     }}>
 
-      {/* Subtle warm gradient blob placed right behind the center of the hero grid to bind elements */}
-      <div style={{
-        position: 'absolute',
-        top: '15%',
-        left: '20%',
-        right: '20%',
-        height: '600px',
-        background: 'radial-gradient(circle, rgba(232, 168, 124, 0.08) 0%, rgba(254, 243, 232, 0) 70%)',
-        filter: 'blur(100px)',
-        pointerEvents: 'none',
-        zIndex: 0
-      }} />
 
       {/* ────────────────── 1. PREMIUM MINIMALIST NAVBAR ────────────────── */}
       <header style={{

@@ -229,7 +229,7 @@ export default function HomePage() {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      background: 'radial-gradient(circle at 50% 50%, #FAF6F0 0%, #FAF8F5 100%)',
+      background: 'transparent',
       position: 'relative'
     }}>
 
@@ -545,11 +545,14 @@ export default function HomePage() {
 
         {/* ────────────────── 2. LIVE FEED ────────────────── */}
         <section style={{
-          background: 'rgba(255, 255, 255, 0.6)',
-          borderTop: '1px solid rgba(232, 224, 214, 0.4)',
-          borderBottom: '1px solid rgba(232, 224, 214, 0.4)',
+          background: 'rgba(255, 255, 255, 0.82)',
+          backdropFilter: 'blur(16px)',
+          borderTop: '1px solid rgba(232, 224, 214, 0.5)',
+          borderBottom: '1px solid rgba(232, 224, 214, 0.5)',
           padding: '16px 0',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          position: 'relative',
+          zIndex: 2
         }}>
           <div style={{
             maxWidth: 1200,
@@ -566,9 +569,9 @@ export default function HomePage() {
               <Clock size={12} /> LIVE ACTIVITY:
             </span>
             {LIVE_DONATIONS.map((donation, idx) => (
-              <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12.5px', color: 'var(--color-text-muted)' }}>
+              <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12.5px', color: 'var(--color-text)' }}>
                 <span>{donation.text}</span>
-                <span style={{ fontSize: '10px', color: 'var(--color-text-light)' }}>({donation.time})</span>
+                <span style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>({donation.time})</span>
               </div>
             ))}
           </div>

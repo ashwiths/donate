@@ -334,7 +334,7 @@ export default function MainPage() {
   const show = (key) => activeTab === 'all' || activeTab === key
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FDFBF7', color: '#332211' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#332211' }}>
       <Navbar />
 
       <main style={{ flex: 1, width: '100%', paddingBottom: 120 }}>
@@ -415,15 +415,15 @@ export default function MainPage() {
                   <motion.div
                     key={game.id}
                     whileHover={{ 
-                      y: -6, 
-                      boxShadow: '0 20px 40px rgba(139, 94, 52, 0.08), inset 0 0 0 1px rgba(139, 94, 52, 0.1), inset 0 0 24px rgba(255, 255, 255, 0.9)' 
+                      y: -8, 
+                      boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
                     onClick={() => handleUnlock(game.price)}
                     style={{
-                      background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
-                      border: '1px solid rgba(235, 224, 214, 0.5)',
+                      background: '#FFFFFF',
+                      border: '1px solid rgba(220, 208, 195, 0.7)',
                       borderRadius: '32px',
-                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 4px 16px rgba(139, 94, 52, 0.01)',
+                      boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
                       overflow: 'hidden',
                       cursor: 'pointer',
                       display: 'flex',
@@ -511,15 +511,15 @@ export default function MainPage() {
                   <motion.div
                     key={reward.id}
                     whileHover={{ 
-                      y: -6, 
-                      boxShadow: '0 20px 40px rgba(139, 94, 52, 0.08), inset 0 0 0 1px rgba(139, 94, 52, 0.1), inset 0 0 24px rgba(255, 255, 255, 0.9)' 
+                      y: -8, 
+                      boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
                     onClick={() => handleUnlock(reward.price)}
                     style={{
-                      background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
-                      border: '1px solid rgba(235, 224, 214, 0.5)',
+                      background: '#FFFFFF',
+                      border: '1px solid rgba(220, 208, 195, 0.7)',
                       borderRadius: '32px',
-                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 4px 16px rgba(139, 94, 52, 0.01)',
+                      boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
                       overflow: 'hidden',
                       cursor: 'pointer',
                       display: 'flex',
@@ -652,17 +652,17 @@ export default function MainPage() {
                   <motion.div
                     key={idx}
                     whileHover={{ 
-                      y: -6, 
-                      boxShadow: '0 20px 40px rgba(139, 94, 52, 0.08), inset 0 0 0 1px rgba(139, 94, 52, 0.1), inset 0 0 24px rgba(255, 255, 255, 0.9)' 
+                      y: -8, 
+                      boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
                     onClick={() => handleUnlock(card.price)}
                     style={{
-                      background: `linear-gradient(135deg, #FCFAF7 0%, ${card.bg} 100%)`,
+                      background: '#FFFFFF',
                       borderRadius: '32px',
                       padding: '36px',
                       cursor: 'pointer',
-                      border: '1px solid rgba(235, 224, 214, 0.5)',
-                      boxShadow: 'inset 0 0 24px rgba(255, 255, 255, 0.7), 0 4px 16px rgba(139, 94, 52, 0.01)',
+                      border: '1px solid rgba(220, 208, 195, 0.7)',
+                      boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
@@ -762,11 +762,11 @@ export default function MainPage() {
               </div>
 
               <div style={{
-                background: 'linear-gradient(135deg, #FCFAF7 0%, #FAF5EF 100%)',
-                border: '1px solid rgba(235, 224, 214, 0.8)',
+                background: '#FFFFFF',
+                border: '1px solid rgba(220, 208, 195, 0.7)',
                 borderRadius: '36px',
                 padding: '48px',
-                boxShadow: 'inset 0 0 30px rgba(255, 255, 255, 0.7), 0 8px 32px rgba(139, 94, 52, 0.02)'
+                boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
