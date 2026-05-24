@@ -599,6 +599,7 @@ export default function MainPage() {
   const [unlockType, setUnlockType] = useState('donation')
   const [pendingGamePath, setPendingGamePath] = useState(null)
   const [pendingGameId, setPendingGameId] = useState(null)
+  const [pendingGameTitle, setPendingGameTitle] = useState(null)
   const [formData, setFormData] = useState({ name: '', mobile: '', email: '' })
   const [errors, setErrors] = useState({ name: '', email: '' })
   const [toastMsg, setToastMsg] = useState(null)
@@ -614,11 +615,51 @@ export default function MainPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const handleUnlock = (price, path = null, gameId = null) => {
+  const handleUnlock = (price, path = null, gameId = null, gameTitle = null) => {
     setPendingPrice(price)
     setPendingGamePath(path)
     setPendingGameId(gameId)
+    setPendingGameTitle(gameTitle)
     setIsModalOpen(true)
+  }
+
+  const handleFreeGameUnlock = async (gameId, gameTitle, targetPath) => {
+    if (user?.uid) {
+      const userRef = doc(db, 'users', user.uid);
+      const updateFields = {};
+      
+      updateFields.totalGamesUnlocked = increment(1);
+      
+      if (userData && !Array.isArray(userData.unlockedGames)) {
+        updateFields.unlockedGames = [gameId];
+        updateFields.unlockedGameDetails = [{
+          gameId,
+          gameName: gameTitle,
+          amount: 0,
+          type: "free",
+          unlockedAt: new Date().toISOString()
+        }];
+      } else {
+        updateFields.unlockedGames = arrayUnion(gameId);
+        updateFields.unlockedGameDetails = arrayUnion({
+          gameId,
+          gameName: gameTitle,
+          amount: 0,
+          type: "free",
+          unlockedAt: new Date().toISOString()
+        });
+      }
+      
+      try {
+        await updateDoc(userRef, updateFields);
+      } catch (err) {
+        console.error('Error unlocking free game:', err);
+      }
+    }
+    
+    setToastMsg('Game successfully unlocked ✨')
+    setTimeout(() => setToastMsg(null), 3000)
+    navigate(targetPath)
   }
 
   const handleDirectDonate = () => {
@@ -664,12 +705,22 @@ export default function MainPage() {
       const userRef = doc(db, 'users', user.uid);
       const updateFields = {};
       if (unlockType === 'game') {
-        updateFields.unlockedGamesCount = increment(1);
+        updateFields.totalGamesUnlocked = increment(1);
         if (pendingGameId) {
+          const detailObj = {
+            gameId: pendingGameId,
+            gameName: pendingGameTitle || 'Premium Game',
+            amount: pendingPrice,
+            type: "paid",
+            unlockedAt: new Date().toISOString()
+          };
+
           if (userData && !Array.isArray(userData.unlockedGames)) {
             updateFields.unlockedGames = [pendingGameId];
+            updateFields.unlockedGameDetails = [detailObj];
           } else {
             updateFields.unlockedGames = arrayUnion(pendingGameId);
+            updateFields.unlockedGameDetails = arrayUnion(detailObj);
           }
         }
       } else if (unlockType === 'coupon') {
@@ -868,7 +919,9 @@ export default function MainPage() {
 
                         if (!isUnlocked && game.price > 0) {
                           setUnlockType('game');
-                          handleUnlock(game.price, targetPath, game.id);
+                          handleUnlock(game.price, targetPath, game.id, game.title);
+                        } else if (game.price === 0 && !unlockedGames.includes(game.id)) {
+                          handleFreeGameUnlock(game.id, game.title, targetPath);
                         } else {
                           navigate(targetPath);
                         }
@@ -958,7 +1011,10 @@ export default function MainPage() {
                               if (!isUnlocked && game.price > 0) {
                                 e.stopPropagation();
                                 setUnlockType('game');
-                                handleUnlock(game.price, null, game.id);
+                                handleUnlock(game.price, null, game.id, game.title);
+                              } else if (game.price === 0 && !unlockedGames.includes(game.id)) {
+                                e.stopPropagation();
+                                handleFreeGameUnlock(game.id, game.title, '/');
                               }
                             }}
                           >
