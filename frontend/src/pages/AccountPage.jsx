@@ -561,7 +561,7 @@ export default function AccountPage() {
                       <stat.icon size={16} color={stat.color} />
                       <span style={{ fontSize: '13px', fontWeight: 800, color: '#5C4C3C' }}>{stat.label}</span>
                     </div>
-                    <span style={{ fontSize: '11px', color: '#8B5E34', fontWeight: 700, textTransform: 'uppercase' }}>Milestone Progress</span>
+
                   </div>
                   <StatRing value={stat.val} total={stat.total} color={stat.color} />
                 </motion.div>

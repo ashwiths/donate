@@ -16,6 +16,7 @@ import FlexPathPage from './pages/FlexPathPage'
 import LuxeXOPage from './pages/LuxeXOPage'
 import MindFlipPage from './pages/MindFlipPage'
 import PulseReflexPage from './pages/PulseReflexPage'
+import MindSlidePage from './pages/MindSlidePage'
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
               <Route path="/luxe-xo" element={<LuxeXOPage />} />
               <Route path="/mind-flip" element={<MindFlipPage />} />
               <Route path="/pulse-reflex" element={<PulseReflexPage />} />
+              <Route path="/mind-slide" element={<MindSlidePage />} />
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

@@ -496,6 +496,41 @@ const PREMIUM_GAMES = [
         <path d="M 14 50 L 15 52 L 18 53 L 15 54 L 14 58 L 13 54 L 10 53 L 13 52 Z" fill="#D4AF37" opacity="0.95" />
       </svg>
     )
+  },
+  {
+    id: 'mind-slide',
+    title: 'MindSlide Puzzle',
+    description: 'Reorder sensory matrix paths in a premium sliding node arena. Align numbered paths, improve moves, and unlock wellness sponsor aid.',
+    price: 0,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="mindSlideCardGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBF7" />
+            <stop offset="100%" stopColor="#F2ECE4" />
+          </radialGradient>
+        </defs>
+        <rect x="5" y="5" width="90" height="90" rx="20" fill="url(#mindSlideCardGlow)" stroke="#EADFCF" strokeWidth="1" />
+        
+        {/* Sliding puzzle grid blocks */}
+        <rect x="18" y="18" width="20" height="20" rx="4" fill="#FFF" stroke="#8B6239" strokeWidth="1" />
+        <rect x="40" y="18" width="20" height="20" rx="4" fill="#FFF" stroke="#8B6239" strokeWidth="1" />
+        <rect x="62" y="18" width="20" height="20" rx="4" fill="#FFF" stroke="#8B6239" strokeWidth="1" />
+        
+        <rect x="18" y="40" width="20" height="20" rx="4" fill="#FFF" stroke="#8B6239" strokeWidth="1" />
+        <rect x="40" y="40" width="20" height="20" rx="4" fill="#8B6239" />
+        <rect x="62" y="40" width="20" height="20" rx="4" fill="#FFF" stroke="#8B6239" strokeWidth="1" />
+        
+        <rect x="18" y="62" width="20" height="20" rx="4" fill="#FFF" stroke="#8B6239" strokeWidth="1" />
+        <rect x="40" y="62" width="20" height="20" rx="4" fill="#FFF" stroke="#8B6239" strokeWidth="1" />
+        
+        {/* Dotted empty slot placeholder */}
+        <rect x="62" y="62" width="20" height="20" rx="4" fill="none" stroke="#D4C5B9" strokeWidth="1.5" strokeDasharray="3, 3" />
+        
+        {/* Symmetrical alignment stars */}
+        <circle cx="50" cy="50" r="3" fill="#FFFDF5" />
+      </svg>
+    )
   }
 ]
 
@@ -558,6 +593,7 @@ export default function MainPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPrice, setPendingPrice] = useState(null)
   const [unlockType, setUnlockType] = useState('donation')
+  const [pendingGamePath, setPendingGamePath] = useState(null)
   const [formData, setFormData] = useState({ name: '', mobile: '', email: '' })
   const [errors, setErrors] = useState({ name: '', email: '' })
 
@@ -572,8 +608,9 @@ export default function MainPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const handleUnlock = (price) => {
+  const handleUnlock = (price, path = null) => {
     setPendingPrice(price)
+    setPendingGamePath(path)
     setIsModalOpen(true)
   }
 
@@ -631,7 +668,11 @@ export default function MainPage() {
       }
     }
 
-    navigate('/thank-you')
+    if (unlockType === 'game' && pendingGamePath) {
+      navigate(pendingGamePath)
+    } else {
+      navigate('/thank-you')
+    }
   }
 
   const show = (key) => activeTab === 'all' || activeTab === key
@@ -766,25 +807,22 @@ export default function MainPage() {
                       boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
                     onClick={() => {
-                      if (game.id === 'sound-wave-serenade') {
-                        navigate('/sound-wave-serenade');
-                      } else if (game.id === 'breathe-bloom') {
-                        navigate('/breathe-bloom');
-                      } else if (game.id === 'bio-path-tracer') {
-                        navigate('/bio-path-tracer');
-                      } else if (game.id === 'therapeutic-path-matrix') {
-                        navigate('/therapeutic-path-matrix');
-                      } else if (game.id === 'flex-path') {
-                        navigate('/flex-path');
-                      } else if (game.id === 'luxe-xo') {
-                        navigate('/luxe-xo');
-                      } else if (game.id === 'mind-flip') {
-                        navigate('/mind-flip');
-                      } else if (game.id === 'pulse-reflex') {
-                        navigate('/pulse-reflex');
-                      } else {
+                      let targetPath = '/';
+                      if (game.id === 'sound-wave-serenade') targetPath = '/sound-wave-serenade';
+                      else if (game.id === 'breathe-bloom') targetPath = '/breathe-bloom';
+                      else if (game.id === 'bio-path-tracer') targetPath = '/bio-path-tracer';
+                      else if (game.id === 'therapeutic-path-matrix') targetPath = '/therapeutic-path-matrix';
+                      else if (game.id === 'flex-path') targetPath = '/flex-path';
+                      else if (game.id === 'luxe-xo') targetPath = '/luxe-xo';
+                      else if (game.id === 'mind-flip') targetPath = '/mind-flip';
+                      else if (game.id === 'pulse-reflex') targetPath = '/pulse-reflex';
+                      else if (game.id === 'mind-slide') targetPath = '/mind-slide';
+
+                      if (game.price > 0) {
                         setUnlockType('game');
-                        handleUnlock(game.price);
+                        handleUnlock(game.price, targetPath);
+                      } else {
+                        navigate(targetPath);
                       }
                     }}
                     style={{

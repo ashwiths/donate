@@ -9,13 +9,30 @@ import { db } from '../firebase';
  * @param {string} status - Contribution status (e.g., 'Success').
  * @returns {Promise<void>}
  */
-export async function addContribution(userId, amount, childName, status = 'Success') {
+export async function addContribution(userId, amount, childName, status = 'Success', isGameActivity = false) {
   if (!userId) return;
 
   const userRef = doc(db, 'users', userId);
   const contributionsCol = collection(db, 'contributions');
   const activitiesCol = collection(db, 'activities');
   const certificatesCol = collection(db, 'certificates');
+
+  // Event-safe auto-detection of game events from status to double-guarantee separation
+  const statusLower = (status || '').toLowerCase();
+  const detectedGameActivity = isGameActivity || 
+    statusLower.includes('reward') || 
+    statusLower.includes('matched') || 
+    statusLower.includes('symmetrical') || 
+    statusLower.includes('alignment') || 
+    statusLower.includes('game') || 
+    statusLower.includes('play') || 
+    statusLower.includes('matrix') || 
+    statusLower.includes('tracer') || 
+    statusLower.includes('reflex') || 
+    statusLower.includes('sound wave') || 
+    statusLower.includes('flexpath') ||
+    statusLower.includes('victory') ||
+    statusLower.includes('complete');
 
   try {
     await runTransaction(db, async (transaction) => {
@@ -41,7 +58,9 @@ export async function addContribution(userId, amount, childName, status = 'Succe
       // 3. Add Activity record
       const newActivity = {
         userId,
-        text: `Contributed ₹${amount} towards ${childName}'s recovery`,
+        text: detectedGameActivity 
+          ? `Earned ₹${amount} sponsor-matched treatment support via game achievement`
+          : `Contributed ₹${amount} towards ${childName}'s recovery`,
         createdAt: serverTimestamp()
       };
       const activityDocRef = doc(activitiesCol);
@@ -50,7 +69,7 @@ export async function addContribution(userId, amount, childName, status = 'Succe
       // 4. Add Certificate record
       const newCertificate = {
         userId,
-        title: 'Certificate of Healing Support',
+        title: detectedGameActivity ? 'Certificate of Play Matching' : 'Certificate of Healing Support',
         amount,
         childName,
         certificateUrl: '', // placeholder for future storage URL
@@ -65,13 +84,24 @@ export async function addContribution(userId, amount, childName, status = 'Succe
       const childrenHelped = (userData.childrenHelped || 0) + 1;
       const healingStreak = contributionsCount > 1 ? `${contributionsCount} Months` : '1 Month';
 
-      transaction.update(userRef, {
+      const updateFields = {
         totalSupport,
         contributions: contributionsCount,
         childrenHelped,
-        healingStreak,
-        healingSupports: contributionsCount
-      });
+        healingStreak
+      };
+
+      if (!detectedGameActivity) {
+        // Direct/Real healing support action or donation
+        const nextHealingSupports = (userData.healingSupports || 0) + 1;
+        updateFields.healingSupports = nextHealingSupports;
+      } else {
+        // Game played events - update games/play counters, NOT healingSupports
+        updateFields.gamesPlayed = (userData.gamesPlayed || 0) + 1;
+        updateFields.totalWins = (userData.totalWins || 0) + 1;
+      }
+
+      transaction.update(userRef, updateFields);
     });
   } catch (err) {
     console.error('Failed to add contribution inside transaction:', err);

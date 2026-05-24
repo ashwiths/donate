@@ -254,7 +254,7 @@ export default function TherapeuticPathMatrixPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Quest Complete')
+      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Quest Complete', true)
     } catch (err) {
       console.error('Failed writing contribution:', err)
     } finally {

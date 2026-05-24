@@ -316,7 +316,7 @@ export default function FlexPathPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched FlexPath Victory')
+      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched FlexPath Victory', true)
     } catch (err) {
       console.error('Failed writing match contribution:', err)
     } finally {

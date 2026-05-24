@@ -184,18 +184,33 @@ export default function InspirationsPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
 
+  const [activeInspiration, setActiveInspiration] = useState(null)
+  const [viewedCards, setViewedCards] = useState(new Set())
+
+  const handleOpenInspiration = (item, itemId) => {
+    setActiveInspiration(item)
+    
+    // Event-safe check: only increment once per card view per session to prevent spamming
+    if (!viewedCards.has(itemId) && user?.uid) {
+      setViewedCards(prev => {
+        const next = new Set(prev)
+        next.add(itemId)
+        return next
+      })
+
+      // Secure database increment in Firestore
+      const userRef = doc(db, 'users', user.uid);
+      updateDoc(userRef, {
+        quotesOpened: increment(1)
+      }).catch(err => console.error('Error incrementing quotesOpened:', err));
+    }
+  }
+
   useEffect(() => {
     if (!user) {
       navigate('/')
       return
     }
-
-    // Increment quotesOpened when user loads the inspirations page
-    const userRef = doc(db, 'users', user.uid);
-    updateDoc(userRef, {
-      quotesOpened: increment(1)
-    }).catch(err => console.error('Error incrementing quotesOpened:', err));
-
   }, [user, navigate])
 
   useEffect(() => {
@@ -320,13 +335,14 @@ export default function InspirationsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.07, duration: 0.5 }}
+                  onClick={() => handleOpenInspiration(card, 'wisdom_' + idx)}
                   whileHover={{ y: -10, boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' }}
                   style={{
                     background: '#FFFFFF',
                     border: '1px solid rgba(220, 208, 195, 0.7)',
                     borderRadius: 28,
                     padding: '36px 32px',
-                    cursor: 'default',
+                    cursor: 'pointer',
                     transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
                     boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
                     position: 'relative',
@@ -382,6 +398,13 @@ export default function InspirationsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.05, duration: 0.6 }}
+                onClick={() => handleOpenInspiration({
+                  title: person.name,
+                  text: person.description,
+                  quote: person.quote,
+                  accent: person.accent,
+                  badge: person.badge
+                }, 'mind_' + idx)}
                 whileHover={{ y: -12, boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' }}
                 style={{
                   background: '#FFFFFF',
@@ -396,6 +419,7 @@ export default function InspirationsPage() {
                   boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
                   position: 'relative',
                   overflow: 'hidden',
+                  cursor: 'pointer',
                   transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
                 className="inspiration-profile-card"
@@ -708,6 +732,140 @@ export default function InspirationsPage() {
 
         <Footer />
       </div>
+
+      {/* ── LUXURY DETAILS MODAL (quotesOpened incremented event-safely) ── */}
+      <AnimatePresence>
+        {activeInspiration && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveInspiration(null)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(26, 17, 9, 0.45)',
+              backdropFilter: 'blur(10px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 9999,
+              padding: '24px'
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.92, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.92, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: '#FFFDFB',
+                border: `2px solid ${activeInspiration.accent || '#8B6239'}`,
+                borderRadius: '36px',
+                padding: '48px 40px',
+                maxWidth: '520px',
+                width: '100%',
+                textAlign: 'center',
+                boxShadow: '0 30px 70px rgba(139, 94, 52, 0.25)',
+                position: 'relative',
+                boxSizing: 'border-box',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Corner accent background */}
+              <div style={{
+                position: 'absolute',
+                top: -40,
+                right: -40,
+                width: 140,
+                height: 140,
+                background: `radial-gradient(circle, ${activeInspiration.accent || '#8B6239'}22, transparent 70%)`,
+                borderRadius: '50%'
+              }} />
+
+              <span style={{
+                display: 'inline-block',
+                fontSize: 10,
+                fontWeight: 900,
+                color: activeInspiration.accent || '#8B6239',
+                background: `${activeInspiration.accent || '#8B6239'}10`,
+                border: `1px solid ${activeInspiration.accent || '#8B6239'}20`,
+                borderRadius: '99px',
+                padding: '4px 16px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                marginBottom: 20
+              }}>
+                {activeInspiration.badge || 'Cognitive Insight'}
+              </span>
+
+              <h2 style={{
+                fontFamily: 'Outfit',
+                fontWeight: 900,
+                fontSize: '25px',
+                color: '#3D2B1A',
+                margin: '0 0 16px',
+                letterSpacing: '-0.5px'
+              }}>
+                {activeInspiration.title}
+              </h2>
+
+              <p style={{
+                fontSize: '15px',
+                color: '#5C4C3C',
+                lineHeight: 1.7,
+                fontWeight: 500,
+                margin: '0 auto 28px'
+              }}>
+                {activeInspiration.text}
+              </p>
+
+              {activeInspiration.quote && (
+                <div style={{
+                  background: 'rgba(139, 98, 57, 0.04)',
+                  borderLeft: `4px solid ${activeInspiration.accent || '#8B6239'}`,
+                  padding: '16px 20px',
+                  borderRadius: '12px',
+                  textAlign: 'left',
+                  marginBottom: 32
+                }}>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '13.5px',
+                    fontStyle: 'italic',
+                    color: '#6F4D2E',
+                    lineHeight: 1.5,
+                    fontWeight: 600
+                  }}>
+                    “{activeInspiration.quote}”
+                  </p>
+                </div>
+              )}
+
+              <button
+                onClick={() => setActiveInspiration(null)}
+                style={{
+                  width: '100%',
+                  padding: '15px',
+                  background: `linear-gradient(135deg, ${activeInspiration.accent || '#8B6239'}, #6F4D2E)`,
+                  border: 'none',
+                  borderRadius: '99px',
+                  color: '#FFF',
+                  fontSize: '13px',
+                  fontWeight: 800,
+                  fontFamily: 'Outfit',
+                  cursor: 'pointer',
+                  boxShadow: '0 6px 20px rgba(139, 94, 52, 0.15)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                Close Wisdom Node
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Responsive styles */}
       <style>{`

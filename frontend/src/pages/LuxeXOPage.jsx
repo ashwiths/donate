@@ -206,7 +206,7 @@ export default function LuxeXOPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 20, 'Baby Aarav', 'Luxe XO Perfect Alignment Sponsor Reward')
+      await addContribution(user.uid, 20, 'Baby Aarav', 'Luxe XO Perfect Alignment Sponsor Reward', true)
       setLogs(prev => ['✓ Matched sponsor pool contribution ₹20 dispatched to Aarav\'s ledger!', ...prev])
     } catch (err) {
       console.error('Failed writing match contribution:', err)

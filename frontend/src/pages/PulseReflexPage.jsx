@@ -467,7 +467,7 @@ export default function PulseReflexPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 20, 'Baby Aarav', 'Pulse Reflex Neural Symmetrical Alignment Match Reward')
+      await addContribution(user.uid, 20, 'Baby Aarav', 'Pulse Reflex Neural Symmetrical Alignment Match Reward', true)
       setLogs(prev => ['✓ Sponsoring pediatric healthcare pools ₹20 contribution alignment generated successfully!', ...prev])
     } catch (err) {
       console.error('Failed writing match contribution:', err)

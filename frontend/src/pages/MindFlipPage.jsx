@@ -816,7 +816,7 @@ export default function MindFlipPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 20, 'Baby Aarav', 'MindFlip Cognitive Symmetrical Alignment Match Reward')
+      await addContribution(user.uid, 20, 'Baby Aarav', 'MindFlip Cognitive Symmetrical Alignment Match Reward', true)
       setLogs(prev => ['✓ Corporate sponsor matched contribution ₹20 dispatched directly to Aarav\'s pediatric ledgers!', ...prev])
     } catch (err) {
       console.error('Failed writing match contribution:', err)

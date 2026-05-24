@@ -195,7 +195,7 @@ export default function BioPathTracerPage() {
     if (!user?.uid || savingContribution) return
     setSavingContribution(true)
     try {
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Neural Path')
+      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Neural Path', true)
     } catch (err) {
       console.error('Failed writing contribution:', err)
     } finally {

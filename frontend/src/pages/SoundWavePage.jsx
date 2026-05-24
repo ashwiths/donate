@@ -375,7 +375,7 @@ export default function SoundWavePage() {
     setSavingContribution(true)
     try {
       // Record ₹10 matched sponsor donation in single transaction
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Sound Wave')
+      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Sound Wave', true)
     } catch (err) {
       console.error('Error adding sponsor contribution:', err)
     } finally {

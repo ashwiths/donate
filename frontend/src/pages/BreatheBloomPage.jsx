@@ -250,7 +250,7 @@ export default function BreatheBloomPage() {
     setSavingContribution(true)
     try {
       // Call Firebase Transaction to record ₹10 matched sponsor donation
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Play')
+      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Play', true)
     } catch (err) {
       console.error('Error adding sponsor contribution:', err)
     } finally {
