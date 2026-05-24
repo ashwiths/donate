@@ -95,7 +95,7 @@ const BRAND_PULL_LIST = [
 const LIVE_DONATIONS = [
   { text: "Someone donated ₹10 from Chennai just now ❤️", time: "1s ago" },
   { text: "Flat ₹50 Flipkart coupon unlocked in Bangalore 🏷️", time: "12s ago" },
-  { text: "₹2,500 raised for Baby Aarav this hour 📈", time: "3m ago" },
+  { text: "₹2,500 raised for Janamithra this hour 📈", time: "3m ago" },
   { text: "Nanavati Max Hospital cleared billing milestone 🛡️", time: "8m ago" }
 ]
 

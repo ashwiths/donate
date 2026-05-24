@@ -467,7 +467,7 @@ export default function PulseReflexPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 20, 'Baby Aarav', 'Pulse Reflex Neural Symmetrical Alignment Match Reward', true)
+      await addContribution(user.uid, 20, 'Janamithra', 'Pulse Reflex Neural Symmetrical Alignment Match Reward', true)
       setLogs(prev => ['✓ Sponsoring pediatric healthcare pools ₹20 contribution alignment generated successfully!', ...prev])
     } catch (err) {
       console.error('Failed writing match contribution:', err)
@@ -518,7 +518,7 @@ export default function PulseReflexPage() {
         ))}
       </div>
 
-      <main className="flex-1 relative z-10 w-full pb-20">
+      <main className="flex-1 relative z-10 w-full pb-20 overflow-x-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 4rem)' }}>
         
         {/* Back Link Header */}
         <div className="max-w-[1200px] mx-auto mt-8 px-6 box-border">
@@ -533,10 +533,10 @@ export default function PulseReflexPage() {
         {/* Tactile Luxe PulseReflex Layout Canvas */}
         <div className="max-w-[1100px] mx-auto mt-6 px-6 box-border">
           
-          <div className="bg-[#FFFDFB]/90 backdrop-blur-2xl border border-[#EADFCF] rounded-[44px] shadow-2xl p-8 lg:p-12 overflow-hidden relative">
+          <div className="bg-[#FFFDFB]/90 backdrop-blur-2xl border border-[#EADFCF] rounded-[32px] md:rounded-[44px] shadow-2xl p-5 sm:p-8 lg:p-12 overflow-hidden relative">
             <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-radial-gradient from-amber-50 to-transparent pointer-events-none opacity-60" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative z-10">
               
               {/* LEFT COLUMN: PULSE TARGETS ARENA */}
               <div className="lg:col-span-8 flex flex-col items-center">
@@ -547,7 +547,7 @@ export default function PulseReflexPage() {
                     <span className="text-[10px] font-black tracking-widest text-[#8B6239] uppercase flex items-center gap-1.5">
                       <Target size={12} className="animate-pulse text-[#8B6239]" /> NEURAL REFLEX ARENA
                     </span>
-                    <h2 className="text-2xl font-black text-[#3A281A] mt-1">Pulse Reflex</h2>
+                    <h2 className="text-xl md:text-2xl font-black text-[#3A281A] mt-1">Pulse Reflex</h2>
                   </div>
                   
                   {/* Streak Multiplier HUD Node */}
@@ -566,7 +566,7 @@ export default function PulseReflexPage() {
                 <div 
                   ref={arenaRef}
                   onClick={handleArenaMiss}
-                  className="w-full h-[480px] bg-gradient-to-tr from-[#F5F1EB]/50 to-[#FFFDFB] border-2 border-[#EADFCF] rounded-[40px] shadow-inner relative box-border overflow-hidden cursor-crosshair flex items-center justify-center"
+                  className="w-full h-[360px] md:h-[480px] bg-gradient-to-tr from-[#F5F1EB]/50 to-[#FFFDFB] border-2 border-[#EADFCF] rounded-[24px] md:rounded-[40px] shadow-inner relative box-border overflow-hidden cursor-crosshair flex items-center justify-center"
                 >
                   {/* Background grid texture lines for premium blueprint depth */}
                   <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 opacity-[0.04] pointer-events-none">
@@ -706,7 +706,7 @@ export default function PulseReflexPage() {
               </div>
 
               {/* RIGHT COLUMN: HIGH-END GAME HUD & LEADERBOARD */}
-              <div className="lg:col-span-4 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-8">
+              <div className="lg:col-span-4 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-8 mt-8 lg:mt-0">
                 
                 <div>
                   
@@ -877,7 +877,7 @@ export default function PulseReflexPage() {
                   <p className="text-xs text-[#6F4D2E] leading-relaxed mb-6">
                     Sensory coordination test complete! You completed the <strong>{mode}</strong> challenge with <strong>{victoryModal.score} points</strong> and <strong>{victoryModal.accuracy}% accuracy</strong>.
                     <br />
-                    A matching transaction of ₹20 has been dispatched by corporate wellness sponsors directly to Aarav's treatment pool ledger.
+                    A matching transaction of ₹20 has been dispatched by corporate wellness sponsors directly to Janamithra's treatment pool ledger.
                   </p>
 
                   <div className="bg-[#FFFDF9] border border-[#EADFCF] rounded-2xl p-5 text-left mb-6">

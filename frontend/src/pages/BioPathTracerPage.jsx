@@ -195,7 +195,7 @@ export default function BioPathTracerPage() {
     if (!user?.uid || savingContribution) return
     setSavingContribution(true)
     try {
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Neural Path', true)
+      await addContribution(user.uid, 10, 'Janamithra', 'Sponsor Matched Neural Path', true)
     } catch (err) {
       console.error('Failed writing contribution:', err)
     } finally {
@@ -613,7 +613,7 @@ export default function BioPathTracerPage() {
 
                     {/* Deep-tier expanded sub-paragraph */}
                     <p style={{ margin: 0, fontSize: '11.5px', color: '#8C4F1A', lineHeight: 1.5, fontWeight: 600, paddingLeft: 10, borderLeft: '2px solid #8C4F1A', fontStyle: 'italic' }}>
-                      Each precise trajectory completed pools deep-tier Oncology Treatment Asset Credits directly from our clinical brand partners, automatically updating Aarav's real-time care chart with critical oncology fund allocations.
+                      Each precise trajectory completed pools deep-tier Oncology Treatment Asset Credits directly from our clinical brand partners, automatically updating Janamithra's real-time care chart with critical oncology fund allocations.
                     </p>
                   </div>
 
@@ -703,7 +703,7 @@ export default function BioPathTracerPage() {
                       {/* Metric 1 */}
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
-                          <span>Aarav's Chart Status (Oncology)</span>
+                          <span>Janamithra's Chart Status (Oncology)</span>
                           <span style={{ color: '#47682C', fontWeight: 900 }}>{Math.floor(chartProgress)}% Vitality Match</span>
                         </div>
                         <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
@@ -842,7 +842,7 @@ export default function BioPathTracerPage() {
                   PARTNER ACKNOWLEDGEMENT
                 </span>
                 <span style={{ fontSize: 12, color: '#7A6A5A', fontWeight: 500 }}>
-                  Aarav's treatment facilitated by partner contributions.
+                  Janamithra's treatment facilitated by partner contributions.
                 </span>
               </div>
 
@@ -957,7 +957,7 @@ export default function BioPathTracerPage() {
                   </h2>
 
                   <p style={{ margin: '0 auto 24px', fontSize: '14px', color: '#7A6A5A', lineHeight: 1.6, maxWidth: 440 }}>
-                    You have successfully finalized the geometric neural alignment. Your motor tracing has triggered a matching sponsor payment of <strong>₹10</strong> directed straight to verified hospital bills for Baby Aarav's treatment!
+                    You have successfully finalized the geometric neural alignment. Your motor tracing has triggered a matching sponsor payment of <strong>₹10</strong> directed straight to verified hospital bills for Janamithra's treatment!
                   </p>
 
                   {/* ────────────────── HIGH-END LUXURY CERTIFICATE CARD ────────────────── */}

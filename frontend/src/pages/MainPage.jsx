@@ -536,9 +536,9 @@ const PREMIUM_GAMES = [
 
 const INSPIRATIONAL_CARDS = [
   {
-    title: 'Baby Aarav\'s Healing Milestone',
-    description: 'Thanks to over 4,200 small gaming plays, Aarav\'s pre-operation checkup has been fully funded.',
-    curiosity: 'Discover the heartfelt recovery milestone shared by Aarav\'s family after successful pre-op stabilization.',
+    title: 'Janamithra\'s Healing Milestone',
+    description: 'Thanks to over 4,200 small gaming plays, Janamithra\'s pre-operation checkup has been fully funded.',
+    curiosity: 'Discover the heartfelt recovery milestone shared by Janamithra\'s family after successful pre-op stabilization.',
     tag: 'SUCCESS STORY',
     accent: '#8C4F1A',
     bg: '#FAF4EE',
@@ -711,7 +711,7 @@ export default function MainPage() {
             fontWeight: 500, 
             lineHeight: 1.7 
           }}>
-            Direct support contributions to Baby Aarav's medical fund while gaining access to surprise wellness rewards, immersive minimal games, and stories.
+            Direct support contributions to Janamithra's medical fund while gaining access to surprise wellness rewards, immersive minimal games, and stories.
           </p>
 
           <div style={{ 
@@ -1242,7 +1242,7 @@ export default function MainPage() {
                   lineHeight: 1.7, 
                   fontWeight: 500 
                 }}>
-                  Every single rupee goes directly towards Baby Aarav's medical balance sheet at the hospital billing desk.
+                  Every single rupee goes directly towards Janamithra's medical balance sheet at the hospital billing desk.
                 </p>
                 <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
@@ -1360,7 +1360,7 @@ export default function MainPage() {
                     <Shield size={18} color="#8B5E34" style={{ marginTop: 2, flexShrink: 0 }} />
                     <div>
                       <h5 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#4A3427' }}>Split-Term Routing Guarantee</h5>
-                      <p style={{ margin: '4px 0 0', fontSize: 12, color: '#7A6A5A', lineHeight: 1.6 }}>100% of contributions land directly inside Baby Aarav\'s pre-op stabilization billing account (Fortis ID #F89410).</p>
+                      <p style={{ margin: '4px 0 0', fontSize: 12, color: '#7A6A5A', lineHeight: 1.6 }}>100% of contributions land directly inside Janamithra\'s pre-op stabilization billing account (Fortis ID #F89410).</p>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: 12 }}>
@@ -1423,7 +1423,7 @@ export default function MainPage() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13.5, color: '#5C4C3C', fontWeight: 500 }}>
               <Shield size={18} color="#8C4F1A" />
-              <span>100% of your micro-donation goes directly towards Baby Aarav\'s medical fund balance. Zero corporate hidden commissions.</span>
+              <span>100% of your micro-donation goes directly towards Janamithra\'s medical fund balance. Zero corporate hidden commissions.</span>
             </div>
             <button style={{ background: 'none', border: 'none', fontSize: 13.5, fontWeight: 800, color: '#8C4F1A', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
               <span>Auditing Dashboard</span>

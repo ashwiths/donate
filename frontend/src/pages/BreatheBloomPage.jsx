@@ -250,7 +250,7 @@ export default function BreatheBloomPage() {
     setSavingContribution(true)
     try {
       // Call Firebase Transaction to record ₹10 matched sponsor donation
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Play', true)
+      await addContribution(user.uid, 10, 'Janamithra', 'Sponsor Matched Play', true)
     } catch (err) {
       console.error('Error adding sponsor contribution:', err)
     } finally {
@@ -376,7 +376,7 @@ export default function BreatheBloomPage() {
                     <Heart size={14} color="#FFF" fill="#FFF" />
                   </div>
                   <span style={{ fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8C4F1A' }}>
-                    Baby Aarav's Recovery
+                    Janamithra's Recovery
                   </span>
                 </div>
 
@@ -616,7 +616,7 @@ export default function BreatheBloomPage() {
                     </h2>
                     
                     <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.6, fontWeight: 500 }}>
-                      Complete 3 full cycles of peaceful breathing. Our wellness sponsors will match your focus by executing a direct ₹10 contribution to Baby Aarav's treatment.
+                      Complete 3 full cycles of peaceful breathing. Our wellness sponsors will match your focus by executing a direct ₹10 contribution to Janamithra's treatment.
                     </p>
                   </div>
 
@@ -859,7 +859,7 @@ export default function BreatheBloomPage() {
                   </h2>
 
                   <p style={{ margin: '0 auto 24px', fontSize: '14px', color: '#7A6A5A', lineHeight: 1.6, maxWidth: 440 }}>
-                    You have successfully completed a mindful breathing session. Your focus has activated a matching sponsor payment of <strong>₹10</strong> directed straight to verified hospital bills for Baby Aarav's treatment!
+                    You have successfully completed a mindful breathing session. Your focus has activated a matching sponsor payment of <strong>₹10</strong> directed straight to verified hospital bills for Janamithra's treatment!
                   </p>
 
                   {/* ────────────────── HIGH-END LUXURY CERTIFICATE CARD ────────────────── */}

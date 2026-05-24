@@ -316,7 +316,7 @@ export default function FlexPathPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched FlexPath Victory', true)
+      await addContribution(user.uid, 10, 'Janamithra', 'Sponsor Matched FlexPath Victory', true)
     } catch (err) {
       console.error('Failed writing match contribution:', err)
     } finally {
@@ -413,7 +413,7 @@ export default function FlexPathPage() {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col bg-gradient-to-br ${activeTheme.bgClass} transition-all duration-700 relative font-sans animate-fade-in overflow-hidden pb-16`}>
+    <div className={`min-h-screen flex flex-col bg-gradient-to-br ${activeTheme.bgClass} transition-all duration-700 relative font-sans animate-fade-in overflow-x-hidden pb-16`} style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 4rem)' }}>
       <GlobalBackground />
       <Navbar />
 
@@ -460,12 +460,12 @@ export default function FlexPathPage() {
         {/* Premium Playground Body Layout */}
         <div className="max-w-[1100px] mx-auto mt-6 px-6 box-border">
           
-          <div className="bg-[#FFFDFB]/95 backdrop-blur-2xl border border-[#EADFCF] rounded-[44px] shadow-2xl p-8 lg:p-12 overflow-hidden relative">
+          <div className="bg-[#FFFDFB]/95 backdrop-blur-2xl border border-[#EADFCF] rounded-[32px] md:rounded-[44px] shadow-2xl p-5 sm:p-8 lg:p-12 overflow-hidden relative">
             
             {/* Absolute radial background soft gradient glow */}
             <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-radial-gradient from-amber-50 to-transparent pointer-events-none opacity-60" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative z-10">
               
               {/* LEFT COLUMN: TACTILE PLAYABLE MAZE BOARD */}
               <div className="lg:col-span-7 flex flex-col items-center">
@@ -476,7 +476,7 @@ export default function FlexPathPage() {
                     <span className="text-[10px] font-black tracking-widest text-[#8B6239] uppercase">
                       LEVEL {activeLevel.id} — {activeLevel.name}
                     </span>
-                    <h2 className="text-2xl font-black text-[#3A281A] mt-1">Zen Stretch Journey</h2>
+                    <h2 className="text-xl md:text-2xl font-black text-[#3A281A] mt-1">Zen Stretch Journey</h2>
                   </div>
                   
                   <div className="flex items-center gap-1.5 text-[9px] font-black text-[#8B6239] bg-[#EADFCF]/20 px-3.5 py-1.5 rounded-full border border-[#EADFCF]/40 shadow-inner">
@@ -488,7 +488,7 @@ export default function FlexPathPage() {
                 <motion.div 
                   animate={boardAnimateState}
                   transition={{ type: 'spring', stiffness: 220, damping: 14 }}
-                  className={`w-full aspect-square ${activeTheme.gridBg} rounded-[40px] p-6 shadow-2xl relative box-border flex items-center justify-center`}
+                  className={`w-full aspect-square ${activeTheme.gridBg} rounded-[24px] md:rounded-[40px] p-2 sm:p-4 md:p-6 shadow-xl md:shadow-2xl relative box-border flex items-center justify-center`}
                 >
                   
                   {/* Dynamic Shimmer path line connects segments */}
@@ -604,7 +604,7 @@ export default function FlexPathPage() {
               </div>
 
               {/* RIGHT COLUMN: HIGH-END GAME HUD & PROGRESS Nodes */}
-              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10">
+              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10 mt-8 lg:mt-0">
                 
                 <div>
                   
@@ -854,7 +854,7 @@ export default function FlexPathPage() {
                   </h2>
 
                   <p className="text-sm text-[#6F4D2E] leading-relaxed max-w-sm mx-auto mb-6">
-                    You successfully cleared every intricate level in FlexPath Journey. Corporate sponsors matched a transaction of <strong>₹10</strong> directly to Aarav's clinical care fund balance.
+                    You successfully cleared every intricate level in FlexPath Journey. Corporate sponsors matched a transaction of <strong>₹10</strong> directly to Janamithra's clinical care fund balance.
                   </p>
 
                   <div className="bg-[#FFFDF9] border border-[#EADFCF] rounded-2xl p-5 text-left mb-6">

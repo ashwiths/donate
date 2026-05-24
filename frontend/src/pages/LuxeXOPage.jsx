@@ -206,8 +206,8 @@ export default function LuxeXOPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 20, 'Baby Aarav', 'Luxe XO Perfect Alignment Sponsor Reward', true)
-      setLogs(prev => ['✓ Matched sponsor pool contribution ₹20 dispatched to Aarav\'s ledger!', ...prev])
+      await addContribution(user.uid, 20, 'Janamithra', 'Luxe XO Perfect Alignment Sponsor Reward', true)
+      setLogs(prev => ['✓ Matched sponsor pool contribution ₹20 dispatched to Janamithra\'s ledger!', ...prev])
     } catch (err) {
       console.error('Failed writing match contribution:', err)
     } finally {
@@ -469,7 +469,7 @@ export default function LuxeXOPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#FFFDFB] to-[#F5F1EB] transition-all duration-700 relative font-sans animate-fade-in overflow-hidden pb-16">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#FFFDFB] to-[#F5F1EB] transition-all duration-700 relative font-sans animate-fade-in overflow-x-hidden pb-16" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 4rem)' }}>
       <GlobalBackground />
       <Navbar />
 
@@ -516,10 +516,10 @@ export default function LuxeXOPage() {
         {/* Symmetrical Tactile Luxe Canvas Container */}
         <div className="max-w-[1100px] mx-auto mt-6 px-6 box-border">
           
-          <div className="bg-[#FFFDFB]/95 backdrop-blur-2xl border border-[#EADFCF] rounded-[44px] shadow-2xl p-8 lg:p-12 overflow-hidden relative">
+          <div className="bg-[#FFFDFB]/95 backdrop-blur-2xl border border-[#EADFCF] rounded-[32px] md:rounded-[44px] shadow-2xl p-5 sm:p-8 lg:p-12 overflow-hidden relative">
             <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-radial-gradient from-amber-50 to-transparent pointer-events-none opacity-60" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative z-10">
               
               {/* LEFT COLUMN: TACTILE GAME BOARD */}
               <div className="lg:col-span-7 flex flex-col items-center">
@@ -530,7 +530,7 @@ export default function LuxeXOPage() {
                     <span className="text-[10px] font-black tracking-widest text-[#8B6239] uppercase">
                       LUXURY TACTILE ENGINE
                     </span>
-                    <h2 className="text-2xl font-black text-[#3A281A] mt-1">Luxe XO Arena</h2>
+                    <h2 className="text-xl md:text-2xl font-black text-[#3A281A] mt-1">Luxe XO Arena</h2>
                   </div>
                   
                   {aiThinking && (
@@ -544,14 +544,14 @@ export default function LuxeXOPage() {
                 <motion.div 
                   animate={boardPulse}
                   transition={{ type: 'spring', stiffness: 220, damping: 14 }}
-                  className="w-full max-w-[420px] aspect-square bg-[#F5F1EB]/40 border-2 border-[#EADFCF] rounded-[40px] p-6 shadow-2xl relative box-border flex items-center justify-center mx-auto"
+                  className="w-full max-w-[420px] aspect-square bg-[#F5F1EB]/40 border-2 border-[#EADFCF] rounded-[24px] md:rounded-[40px] p-3 sm:p-4 md:p-6 shadow-xl md:shadow-2xl relative box-border flex items-center justify-center mx-auto"
                 >
                   
                   {/* Glowing Victory connection line */}
                   {renderWinningLine()}
 
                   {/* 3x3 Matrix Grid cells */}
-                  <div className="grid grid-cols-3 gap-4 w-full aspect-square relative z-20">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 w-full aspect-square relative z-20">
                     {board.map((cell, idx) => {
                       const isWinningCell = winnerInfo && winnerInfo.line.includes(idx)
                       const isClickable = !cell && !winnerInfo && !aiThinking
@@ -596,7 +596,7 @@ export default function LuxeXOPage() {
               </div>
 
               {/* RIGHT COLUMN: HIGH-END CONTROLS & HUD */}
-              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10">
+              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10 mt-8 lg:mt-0">
                 
                 <div>
                   
@@ -796,7 +796,7 @@ export default function LuxeXOPage() {
                   <p className="text-xs text-[#6F4D2E] leading-relaxed mb-6">
                     {winnerInfo.winner === 'Draw' 
                       ? 'The alignment grid reached perfect balance without any clash. Play another round to claim a fund match!'
-                      : `Player ${winnerInfo.winner} successfully claimed alignment perfect matching. A matching transaction of ₹20 has been matched by corporate sponsors directly to Aarav's treatment pool.`}
+                      : `Player ${winnerInfo.winner} successfully claimed alignment perfect matching. A matching transaction of ₹20 has been matched by corporate sponsors directly to Janamithra's treatment pool.`}
                   </p>
 
                   <div className="bg-[#FFFDF9] border border-[#EADFCF] rounded-2xl p-5 text-left mb-6">

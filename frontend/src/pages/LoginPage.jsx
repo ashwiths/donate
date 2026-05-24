@@ -325,7 +325,7 @@ export default function LoginPage() {
           >
             {/* Visual Container */}
             <div style={{ position: 'relative', width: '100%', height: '300px', borderRadius: '20px', overflow: 'hidden', marginBottom: 24 }}>
-              <img src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1000&q=90" alt="Baby Aarav" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1000&q=90" alt="Janamithra" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(26, 17, 9, 0.9) 0%, rgba(26, 17, 9, 0.1) 60%)' }} />
 
               {/* Verified Emblem */}
@@ -337,7 +337,7 @@ export default function LoginPage() {
               {/* Title & Stats */}
               <div style={{ position: 'absolute', bottom: 20, left: 20, right: 20 }}>
                 <span style={{ fontSize: '10px', color: '#D4AF37', textTransform: 'uppercase', fontWeight: 900, letterSpacing: '0.06em' }}>Nanavati Max Hospital</span>
-                <h3 style={{ margin: '4px 0 2px', color: '#fff', fontSize: '24px', fontWeight: 900, fontFamily: 'Outfit' }}>Baby Aarav</h3>
+                <h3 style={{ margin: '4px 0 2px', color: '#fff', fontSize: '24px', fontWeight: 900, fontFamily: 'Outfit' }}>Janamithra</h3>
                 <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>8 months old • Biliary Atresia Treatment</p>
               </div>
             </div>

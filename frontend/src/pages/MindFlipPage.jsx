@@ -816,8 +816,8 @@ export default function MindFlipPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 20, 'Baby Aarav', 'MindFlip Cognitive Symmetrical Alignment Match Reward', true)
-      setLogs(prev => ['✓ Corporate sponsor matched contribution ₹20 dispatched directly to Aarav\'s pediatric ledgers!', ...prev])
+      await addContribution(user.uid, 20, 'Janamithra', 'MindFlip Cognitive Symmetrical Alignment Match Reward', true)
+      setLogs(prev => ['✓ Corporate sponsor matched contribution ₹20 dispatched directly to Janamithra\'s pediatric ledgers!', ...prev])
     } catch (err) {
       console.error('Failed writing match contribution:', err)
     } finally {
@@ -843,13 +843,13 @@ export default function MindFlipPage() {
 
   // Grid styling details
   const getGridClass = () => {
-    if (level === 'Easy') return 'grid-cols-3 gap-6 max-w-[500px]' // 3 columns, 2 rows
-    if (level === 'Medium') return 'grid-cols-4 gap-4 max-w-[580px]' // 4 columns, 4 rows
-    return 'grid-cols-6 gap-3 max-w-[680px]' // 6 columns, 6 rows
+    if (level === 'Easy') return 'grid-cols-3 gap-3 md:gap-6 max-w-[500px]' // 3 columns, 2 rows
+    if (level === 'Medium') return 'grid-cols-4 gap-2 md:gap-4 max-w-[580px]' // 4 columns, 4 rows
+    return 'grid-cols-6 gap-1.5 md:gap-3 max-w-[680px]' // 6 columns, 6 rows
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#FFFDFB] to-[#F5F1EB] transition-all duration-700 relative font-sans animate-fade-in overflow-hidden pb-16">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#FFFDFB] to-[#F5F1EB] transition-all duration-700 relative font-sans animate-fade-in overflow-x-hidden pb-16" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 4rem)' }}>
       <GlobalBackground />
       <Navbar />
 
@@ -896,10 +896,10 @@ export default function MindFlipPage() {
         {/* Tactile Luxe MindFlip Layout Canvas */}
         <div className="max-w-[1100px] mx-auto mt-6 px-6 box-border">
           
-          <div className="bg-[#FFFDFB]/90 backdrop-blur-2xl border border-[#EADFCF] rounded-[44px] shadow-2xl p-8 lg:p-12 overflow-hidden relative">
+          <div className="bg-[#FFFDFB]/90 backdrop-blur-2xl border border-[#EADFCF] rounded-[32px] md:rounded-[44px] shadow-2xl p-5 sm:p-8 lg:p-12 overflow-hidden relative">
             <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-radial-gradient from-amber-50 to-transparent pointer-events-none opacity-60" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative z-10">
               
               {/* LEFT COLUMN: MEMORY BOARD GRID */}
               <div className="lg:col-span-7 flex flex-col items-center">
@@ -910,7 +910,7 @@ export default function MindFlipPage() {
                     <span className="text-[10px] font-black tracking-widest text-[#8B6239] uppercase flex items-center gap-1.5">
                       <Brain size={12} className="animate-pulse" /> COGNITIVE SYMMETRY
                     </span>
-                    <h2 className="text-2xl font-black text-[#3A281A] mt-1">Neural Memory Arena</h2>
+                    <h2 className="text-xl md:text-2xl font-black text-[#3A281A] mt-1">Neural Memory Arena</h2>
                   </div>
                   
                   {/* Streak Multiplier HUD Node */}
@@ -926,7 +926,7 @@ export default function MindFlipPage() {
                 </div>
 
                 {/* Tactile Board Card Wrapper */}
-                <div className="w-full flex items-center justify-center min-h-[460px] bg-[#F5F1EB]/40 border-2 border-[#EADFCF] rounded-[40px] p-8 shadow-inner relative box-border">
+                <div className="w-full flex items-center justify-center min-h-[300px] md:min-h-[460px] bg-[#F5F1EB]/40 border-2 border-[#EADFCF] rounded-[24px] md:rounded-[40px] p-4 sm:p-6 md:p-8 shadow-inner relative box-border">
                   
                   {/* Glowing match effects stardust */}
                   <AnimatePresence>
@@ -1046,7 +1046,7 @@ export default function MindFlipPage() {
               </div>
 
               {/* RIGHT COLUMN: HIGH-END GAME HUD & LEADERBOARD */}
-              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10">
+              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10 mt-8 lg:mt-0">
                 
                 <div>
                   
@@ -1230,7 +1230,7 @@ export default function MindFlipPage() {
                   <p className="text-xs text-[#6F4D2E] leading-relaxed mb-6">
                     Congratulations! You aligned exactly all sensory nodes in the <strong>{winnerInfo.level}</strong> MindFlip Arena using <strong>{winnerInfo.moves} moves</strong>.
                     <br />
-                    A matching transaction of ₹20 has been dispatched by corporate wellness sponsors directly to Aarav's treatment pool ledger.
+                    A matching transaction of ₹20 has been dispatched by corporate wellness sponsors directly to Janamithra's treatment pool ledger.
                   </p>
 
                   <div className="bg-[#FFFDF9] border border-[#EADFCF] rounded-2xl p-5 text-left mb-6">

@@ -348,7 +348,7 @@ export default function MindSlidePage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 20, 'Baby Aarav', 'MindSlide Symmetrical Alignment Completed Reward', true)
+      await addContribution(user.uid, 20, 'Janamithra', 'MindSlide Symmetrical Alignment Completed Reward', true)
       setLogs(prev => [`✓ Sponsoring pediatric treatment pools ₹20 contribution aligned successfully!`, ...prev])
     } catch (err) {
       console.error('Failed writing match contribution:', err)
@@ -414,10 +414,10 @@ export default function MindSlidePage() {
         {/* Tactile Luxe MindSlide Canvas */}
         <div className="max-w-[1100px] mx-auto mt-6 px-6 box-border">
           
-          <div className="bg-[#FFFDFB]/90 backdrop-blur-2xl border border-[#EADFCF] rounded-[44px] shadow-2xl p-8 lg:p-12 overflow-hidden relative">
+          <div className="bg-[#FFFDFB]/90 backdrop-blur-2xl border border-[#EADFCF] rounded-[32px] md:rounded-[44px] shadow-2xl p-5 sm:p-8 lg:p-12 overflow-hidden relative">
             <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-radial-gradient from-amber-50 to-transparent pointer-events-none opacity-60" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative z-10">
               
               {/* LEFT COLUMN: INTERACTIVE SLIDING PUZZLE ARENA */}
               <div className="lg:col-span-8 flex flex-col items-center">
@@ -438,7 +438,7 @@ export default function MindSlidePage() {
                 </div>
 
                 {/* Symmetrical Grid Arena Container */}
-                <div className="w-full max-w-[420px] aspect-square bg-[#F5F1EB]/50 border-2 border-[#EADFCF] rounded-[40px] shadow-inner p-4 relative box-border flex items-center justify-center">
+                <div className="w-full max-w-[420px] aspect-square bg-[#F5F1EB]/50 border-2 border-[#EADFCF] rounded-[24px] md:rounded-[40px] shadow-inner p-2 sm:p-4 relative box-border flex items-center justify-center">
                   
                   {/* Grid Layout based on size */}
                   <div 

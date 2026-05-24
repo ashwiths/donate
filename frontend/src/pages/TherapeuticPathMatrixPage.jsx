@@ -254,7 +254,7 @@ export default function TherapeuticPathMatrixPage() {
     if (!user?.uid || savingReward) return
     setSavingReward(true)
     try {
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Quest Complete', true)
+      await addContribution(user.uid, 10, 'Janamithra', 'Sponsor Matched Quest Complete', true)
     } catch (err) {
       console.error('Failed writing contribution:', err)
     } finally {
@@ -397,7 +397,7 @@ export default function TherapeuticPathMatrixPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-[#3A281A] relative font-sans animate-fade-in">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#3A281A] relative font-sans animate-fade-in overflow-x-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 4rem)' }}>
       <GlobalBackground />
       <Navbar />
 
@@ -416,9 +416,9 @@ export default function TherapeuticPathMatrixPage() {
         {/* Premium Redesigned Playground Container */}
         <div className="max-w-[1100px] mx-auto mt-8 px-6 box-border">
           
-          <div className="bg-[#FFFDFB]/98 backdrop-blur-2xl border border-[#EADFCF] rounded-[44px] shadow-xl p-8 lg:p-12 overflow-hidden">
+          <div className="bg-[#FFFDFB]/98 backdrop-blur-2xl border border-[#EADFCF] rounded-[32px] md:rounded-[44px] shadow-xl p-5 sm:p-8 lg:p-12 overflow-hidden">
             
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
               
               {/* LEFT SIDE: REDESIGNED PREMIUM GRID BOARD */}
               <div className="lg:col-span-7 flex flex-col items-center">
@@ -433,7 +433,7 @@ export default function TherapeuticPathMatrixPage() {
                 </div>
 
                 {/* Symmetrical High-End 10x10 Grid container */}
-                <div className="w-full aspect-square bg-[#F5F1EB]/50 border-4 border-[#EADFCF] rounded-[32px] p-5 shadow-2xl relative box-border">
+                <div className="w-full aspect-square bg-[#F5F1EB]/50 border-4 border-[#EADFCF] rounded-[24px] md:rounded-[32px] p-2 sm:p-4 md:p-5 shadow-xl md:shadow-2xl relative box-border">
                   
                   {/* Clean rounded grid cells */}
                   <div className="grid grid-cols-10 grid-rows-10 gap-1.5 w-full h-full">
@@ -539,7 +539,7 @@ export default function TherapeuticPathMatrixPage() {
               </div>
 
               {/* RIGHT SIDE: LUXURY GLASSMORPHISM CONTROLS */}
-              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10">
+              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10 mt-8 lg:mt-0">
                 
                 <div>
                   
@@ -731,7 +731,7 @@ export default function TherapeuticPathMatrixPage() {
                   </h2>
 
                   <p className="text-sm text-[#6F4D2E] leading-relaxed max-w-sm mx-auto mb-6">
-                    Player {winner} reached the final cell 100 successfully! As an audited milestone, sponsors matched a transaction of <strong>₹10</strong> directly to Aarav's real-time care fund balance.
+                    Player {winner} reached the final cell 100 successfully! As an audited milestone, sponsors matched a transaction of <strong>₹10</strong> directly to Janamithra's real-time care fund balance.
                   </p>
 
                   <div className="bg-[#FFFDF9] border border-[#EADFCF] rounded-2xl p-5 text-left mb-6">

@@ -8,14 +8,14 @@ export const useDonation = () => useContext(DonationContext)
 // Static dummy child data
 const DUMMY_CHILD = {
   id: '1',
-  name: 'Baby Aarav',
+  name: 'Janamithra',
   age: '8 months',
   condition: 'Liver Disease (Biliary Atresia)',
   image: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=400&q=80',
   requiredAmount: 7000000,
   raisedAmount: 214385,
   story:
-    'Aarav is 8 months old and needs a liver transplant to survive. Your support can save his life.',
+    'Janamithra is 8 months old and needs a liver transplant to survive. Your support can save his life.',
   verified: true,
 }
 
