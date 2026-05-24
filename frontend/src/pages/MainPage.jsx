@@ -433,6 +433,69 @@ const PREMIUM_GAMES = [
         <path d="M 71 25 L 72 28 L 75 29 L 72 30 L 71 33 L 70 30 L 67 29 L 70 28 Z" fill="#D4AF37" opacity="0.75" />
       </svg>
     )
+  },
+  {
+    id: 'mind-flip',
+    title: 'MindFlip Arena',
+    description: 'Master cognitive focus in a premium Neural Memory Arena. Match minimalist geometric nodes to chain combos and unlock matched sponsor aid.',
+    price: 0,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="mindFlipCardGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBF7" />
+            <stop offset="100%" stopColor="#F2ECE4" />
+          </radialGradient>
+        </defs>
+        <rect x="5" y="5" width="90" height="90" rx="20" fill="url(#mindFlipCardGlow)" stroke="#EADFCF" strokeWidth="1" />
+        
+        {/* Memory Grid nodes layout */}
+        <rect x="22" y="22" width="22" height="22" rx="6" fill="#FFFDF5" stroke="#8B6239" strokeWidth="1.2" />
+        <rect x="54" y="22" width="22" height="22" rx="6" fill="#FFFDF5" stroke="#8B6239" strokeWidth="1.2" />
+        <rect x="22" y="54" width="22" height="22" rx="6" fill="#FFFDF5" stroke="#8B6239" strokeWidth="1.2" />
+        <rect x="54" y="54" width="22" height="22" rx="6" fill="#8B6239" />
+        
+        {/* Glowing match indicators */}
+        <circle cx="65" cy="65" r="4" fill="#FFF" />
+        
+        {/* Star bursts representing active matches */}
+        <path d="M 33 33 L 34 35 L 37 36 L 34 37 L 33 39 L 32 37 L 29 36 L 32 35 Z" fill="#D4AF37" opacity="0.9" />
+        <path d="M 65 33 L 66 35 L 69 36 L 66 37 L 65 39 L 64 37 L 61 36 L 64 35 Z" fill="#D4AF37" opacity="0.5" />
+        
+        {/* Infinite ribbon ripple background */}
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#EADFCF" strokeWidth="1" strokeDasharray="3, 3" />
+      </svg>
+    )
+  },
+  {
+    id: 'pulse-reflex',
+    title: 'Pulse Reflex Arena',
+    description: 'Test your sensory timing in a premium Neural Reaction Arena. Tap glowing pulse targets, chain combos, and earn matched sponsor help.',
+    price: 0,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="pulseReflexCardGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFDF7" />
+            <stop offset="100%" stopColor="#F2ECE4" />
+          </radialGradient>
+        </defs>
+        <rect x="5" y="5" width="90" height="90" rx="20" fill="url(#pulseReflexCardGlow)" stroke="#EADFCF" strokeWidth="1" />
+        
+        {/* Concentric glowing pulse ripples */}
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#8B6239" strokeWidth="1" strokeDasharray="4, 4" opacity="0.4" />
+        <circle cx="50" cy="50" r="24" fill="none" stroke="#8B6239" strokeWidth="1.5" opacity="0.6" />
+        
+        {/* Core glowing target orb */}
+        <circle cx="50" cy="50" r="14" fill="#8B6239" />
+        <circle cx="50" cy="50" r="6" fill="#FFFDF5" />
+        
+        {/* Star bursts representing tap response feedback */}
+        <path d="M 50 14 L 51 18 L 54 19 L 51 20 L 50 24 L 49 20 L 46 19 L 49 18 Z" fill="#D4AF37" opacity="0.95" />
+        <path d="M 86 50 L 87 52 L 90 53 L 87 54 L 86 58 L 85 54 L 82 53 L 85 52 Z" fill="#D4AF37" opacity="0.95" />
+        <path d="M 14 50 L 15 52 L 18 53 L 15 54 L 14 58 L 13 54 L 10 53 L 13 52 Z" fill="#D4AF37" opacity="0.95" />
+      </svg>
+    )
   }
 ]
 
@@ -715,6 +778,10 @@ export default function MainPage() {
                         navigate('/flex-path');
                       } else if (game.id === 'luxe-xo') {
                         navigate('/luxe-xo');
+                      } else if (game.id === 'mind-flip') {
+                        navigate('/mind-flip');
+                      } else if (game.id === 'pulse-reflex') {
+                        navigate('/pulse-reflex');
                       } else {
                         setUnlockType('game');
                         handleUnlock(game.price);

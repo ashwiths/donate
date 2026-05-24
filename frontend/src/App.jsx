@@ -14,6 +14,8 @@ import BioPathTracerPage from './pages/BioPathTracerPage'
 import TherapeuticPathMatrixPage from './pages/TherapeuticPathMatrixPage'
 import FlexPathPage from './pages/FlexPathPage'
 import LuxeXOPage from './pages/LuxeXOPage'
+import MindFlipPage from './pages/MindFlipPage'
+import PulseReflexPage from './pages/PulseReflexPage'
 
 export default function App() {
   return (
@@ -35,6 +37,8 @@ export default function App() {
               <Route path="/therapeutic-path-matrix" element={<TherapeuticPathMatrixPage />} />
               <Route path="/flex-path" element={<FlexPathPage />} />
               <Route path="/luxe-xo" element={<LuxeXOPage />} />
+              <Route path="/mind-flip" element={<MindFlipPage />} />
+              <Route path="/pulse-reflex" element={<PulseReflexPage />} />
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
