@@ -12,6 +12,8 @@ import BreatheBloomPage from './pages/BreatheBloomPage'
 import SoundWavePage from './pages/SoundWavePage'
 import BioPathTracerPage from './pages/BioPathTracerPage'
 import TherapeuticPathMatrixPage from './pages/TherapeuticPathMatrixPage'
+import FlexPathPage from './pages/FlexPathPage'
+import LuxeXOPage from './pages/LuxeXOPage'
 
 export default function App() {
   return (
@@ -31,6 +33,8 @@ export default function App() {
               <Route path="/sound-wave-serenade" element={<SoundWavePage />} />
               <Route path="/bio-path-tracer" element={<BioPathTracerPage />} />
               <Route path="/therapeutic-path-matrix" element={<TherapeuticPathMatrixPage />} />
+              <Route path="/flex-path" element={<FlexPathPage />} />
+              <Route path="/luxe-xo" element={<LuxeXOPage />} />
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

@@ -341,6 +341,98 @@ const PREMIUM_GAMES = [
         <circle cx="50" cy="50" r="1.5" fill="#FFF" />
       </svg>
     )
+  },
+  {
+    id: 'flex-path',
+    title: 'FlexPath Journey',
+    description: 'Guide a stretching companion through elegant maze pathways using smooth directional movement and strategic positioning.',
+    price: 20,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="flexCardGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBF7" />
+            <stop offset="100%" stopColor="#F2ECE4" />
+          </radialGradient>
+        </defs>
+        <rect x="5" y="5" width="90" height="90" rx="20" fill="url(#flexCardGlow)" stroke="#EADFCF" strokeWidth="1" />
+        
+        <rect x="20" y="20" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+        <rect x="42" y="20" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+        <rect x="64" y="20" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+
+        <rect x="20" y="42" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+        <rect x="42" y="42" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+        <rect x="64" y="42" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+
+        <rect x="20" y="64" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+        <rect x="42" y="64" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+        <rect x="64" y="64" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#EADFCF" strokeWidth="0.8" />
+        
+        <rect x="42" y="42" width="16" height="16" rx="4" fill="#3A281A" />
+        
+        <path d="M 28 72 L 28 50 L 50 50" fill="none" stroke="#8B6239" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" opacity="0.4" />
+        <path d="M 28 72 L 28 50 L 50 50" fill="none" stroke="#8B6239" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M 28 72 L 28 50 L 50 50" fill="none" stroke="#EADFCF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1.5, 3" />
+        
+        <circle cx="50" cy="50" r="5" fill="#3A281A" />
+        <polygon points="46,47 48,43 50,47" fill="#3A281A" />
+        <polygon points="50,47 52,43 54,47" fill="#3A281A" />
+        <circle cx="50" cy="50" r="1.5" fill="#FFF" />
+      </svg>
+    )
+  },
+  {
+    id: 'luxe-xo',
+    title: 'Luxe XO',
+    description: 'Engage in an elegant, premium Tic Tac Toe battle vs friends or a smart strategic AI. Achieve perfect alignment to unlock matched sponsor pools.',
+    price: 20,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="xoCardGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBF7" />
+            <stop offset="100%" stopColor="#F2ECE4" />
+          </radialGradient>
+        </defs>
+        <rect x="5" y="5" width="90" height="90" rx="20" fill="url(#xoCardGlow)" stroke="#EADFCF" strokeWidth="1" />
+        
+        {/* Intricate premium 3x3 grid */}
+        <line x1="38" y1="20" x2="38" y2="80" stroke="#8B6239" strokeWidth="2.5" strokeLinecap="round" opacity="0.3" />
+        <line x1="62" y1="20" x2="62" y2="80" stroke="#8B6239" strokeWidth="2.5" strokeLinecap="round" opacity="0.3" />
+        <line x1="20" y1="38" x2="80" y2="38" stroke="#8B6239" strokeWidth="2.5" strokeLinecap="round" opacity="0.3" />
+        <line x1="20" y1="62" x2="80" y2="62" stroke="#8B6239" strokeWidth="2.5" strokeLinecap="round" opacity="0.3" />
+
+        {/* Elegant glowing O mark */}
+        <circle
+          cx="29"
+          cy="29"
+          r="8"
+          fill="none"
+          stroke="#8B6239"
+          strokeWidth="3.2"
+        />
+        
+        {/* Elegant glowing X mark */}
+        <g opacity="0.9">
+          <line
+            x1="45" y1="45" x2="55" y2="55"
+            stroke="#3A281A"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+          />
+          <line
+            x1="55" y1="45" x2="45" y2="55"
+            stroke="#3A281A"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+          />
+        </g>
+
+        {/* Soft floating stars */}
+        <path d="M 71 25 L 72 28 L 75 29 L 72 30 L 71 33 L 70 30 L 67 29 L 70 28 Z" fill="#D4AF37" opacity="0.75" />
+      </svg>
+    )
   }
 ]
 
@@ -619,6 +711,10 @@ export default function MainPage() {
                         navigate('/bio-path-tracer');
                       } else if (game.id === 'therapeutic-path-matrix') {
                         navigate('/therapeutic-path-matrix');
+                      } else if (game.id === 'flex-path') {
+                        navigate('/flex-path');
+                      } else if (game.id === 'luxe-xo') {
+                        navigate('/luxe-xo');
                       } else {
                         setUnlockType('game');
                         handleUnlock(game.price);
