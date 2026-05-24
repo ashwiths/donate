@@ -573,38 +573,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ────────────────── 2. LIVE FEED ────────────────── */}
-        <section style={{
-          background: 'transparent',
-          borderTop: '1px solid rgba(232, 224, 214, 0.25)',
-          borderBottom: '1px solid rgba(232, 224, 214, 0.25)',
-          padding: '16px 0',
-          overflow: 'hidden',
-          position: 'relative',
-          zIndex: 2
-        }}>
-          <div style={{
-            maxWidth: 1200,
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            gap: 20,
-            flexWrap: 'wrap',
-            padding: '0 40px',
-            boxSizing: 'border-box'
-          }} className="live-feed-flex">
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Clock size={12} /> LIVE ACTIVITY:
-            </span>
-            {LIVE_DONATIONS.map((donation, idx) => (
-              <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12.5px', color: 'var(--color-text)' }}>
-                <span>{donation.text}</span>
-                <span style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>({donation.time})</span>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* ────────────────── 3. PAYMENT TRANSPARENCY ────────────────── */}
         <section style={{ position: 'relative', overflow: 'hidden' }}>
