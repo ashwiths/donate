@@ -25,6 +25,7 @@ export default function CouponDetailPage() {
   const [coupon, setCoupon] = useState(null)
   const [copied, setCopied] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalStep, setModalStep] = useState(1) // 1: Name, 2: Payment
   const [formData, setFormData] = useState({ name: '', mobile: '', email: '' })
   const [errors, setErrors] = useState({ name: '', email: '' })
   const [toastMsg, setToastMsg] = useState(null)
@@ -72,7 +73,19 @@ export default function CouponDetailPage() {
   }
 
   const handleUnlockClick = () => {
+    setModalStep(1)
+    setErrors({ name: '', email: '' })
     setIsModalOpen(true)
+  }
+
+  const handleContinueName = (e) => {
+    e.preventDefault()
+    if (!formData.name.trim()) {
+      setErrors({ ...errors, name: 'Full Name is required' })
+      return
+    }
+    setErrors({ ...errors, name: '' })
+    setModalStep(2)
   }
 
   const handleFormSubmit = async (e) => {
@@ -80,7 +93,6 @@ export default function CouponDetailPage() {
 
     // Validate fields
     const newErrors = {}
-    if (!formData.name.trim()) newErrors.name = 'Full Name is required'
     if (!formData.email.trim()) {
       newErrors.email = 'Email Address is required'
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -88,7 +100,7 @@ export default function CouponDetailPage() {
     }
 
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors)
+      setErrors({ ...errors, ...newErrors })
       return
     }
 
@@ -112,13 +124,17 @@ export default function CouponDetailPage() {
           contributionType: 'coupon_unlock',
           couponId: coupon.id,
           couponBrand: coupon.brand,
-          couponCode: coupon.code
+          couponCode: coupon.code,
+          supporterName: formData.name.trim()
         })
 
         // Unlock locally first
         setLocalUnlocked(true)
         setToastMsg('Coupon successfully unlocked! 🎁')
-        setTimeout(() => setToastMsg(null), 3000)
+        setTimeout(() => {
+          setToastMsg(null)
+          navigate(`/coupon-thank-you/${coupon.id}`)
+        }, 1500)
       } catch (err) {
         console.error('Error saving coupon unlock to Firestore:', err)
         setToastMsg('Failed to process unlock. Please try again.')
@@ -128,7 +144,10 @@ export default function CouponDetailPage() {
       // Offline / fallback
       setLocalUnlocked(true)
       setToastMsg('Coupon successfully unlocked! 🎁')
-      setTimeout(() => setToastMsg(null), 3000)
+      setTimeout(() => {
+        setToastMsg(null)
+        navigate(`/coupon-thank-you/${coupon.id}`)
+      }, 1500)
     }
   }
 
@@ -449,8 +468,6 @@ export default function CouponDetailPage() {
                 padding: '32px',
                 boxShadow: '0 24px 64px rgba(61, 43, 26, 0.15)',
                 position: 'relative'
-              }}
-            >
               <button 
                 onClick={() => setIsModalOpen(false)}
                 style={{ 
@@ -460,128 +477,199 @@ export default function CouponDetailPage() {
                   background: 'none', 
                   border: 'none', 
                   color: '#7A6A58', 
-                  cursor: 'pointer' 
+                  cursor: 'pointer',
+                  fontWeight: 700,
+                  fontSize: '13px'
                 }}
               >
                 Close
               </button>
 
-              <div style={{ textAlign: 'center', marginBottom: 24 }}>
-                <div style={{ 
-                  width: '60px', 
-                  height: '60px', 
-                  borderRadius: '50%', 
-                  background: 'linear-gradient(135deg, #FFF9F3, #F5E6D3)', 
-                  border: '2px solid #D4AF37', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  margin: '0 auto 16px' 
-                }}>
-                  <Heart size={28} color="#8C4F1A" />
-                </div>
-                <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#3D2B1A', margin: '0 0 6px' }}>
-                  Secure Coupon Unlock
-                </h2>
-                <p style={{ margin: 0, fontSize: '13px', color: '#7A6A58', fontWeight: 600 }}>
-                  A contribution of ₹{coupon.price} helps fund verified pediatric treatments.
-                </p>
-              </div>
+              <AnimatePresence mode="wait">
+                {modalStep === 1 ? (
+                  <motion.div
+                    key="step-name"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div style={{ textAlign: 'center', marginBottom: 24 }}>
+                      <div style={{ 
+                        width: '60px', 
+                        height: '60px', 
+                        borderRadius: '50%', 
+                        background: 'linear-gradient(135deg, #FFF9F3, #F5E6D3)', 
+                        border: '2px solid #D4AF37', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        margin: '0 auto 16px' 
+                      }}>
+                        <Award size={28} color="#8C4F1A" />
+                      </div>
+                      <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#3D2B1A', margin: '0 0 6px' }}>
+                        Certificate Awardee
+                      </h2>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#7A6A58', fontWeight: 600 }}>
+                        Who should this certificate be awarded to?
+                      </p>
+                    </div>
 
-              <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#3D2B1A', marginBottom: 6, textTransform: 'uppercase' }}>Full Name *</label>
-                  <input 
-                    type="text" 
-                    placeholder="Enter your name" 
-                    value={formData.name} 
-                    onChange={e => setFormData({ ...formData, name: e.target.value })} 
-                    style={{ 
-                      width: '100%', 
-                      padding: '14px 16px', 
-                      borderRadius: '12px', 
-                      border: '1px solid #EBD5C2', 
-                      background: '#FFFFFF', 
-                      outline: 'none', 
-                      color: '#3D2B1A', 
-                      fontSize: '14.5px', 
-                      fontWeight: 500,
-                      boxSizing: 'border-box'
-                    }} 
-                  />
-                  {errors.name && <span style={{ fontSize: '12px', color: '#EF4444', fontWeight: 600, marginTop: 4, display: 'block' }}>{errors.name}</span>}
-                </div>
+                    <form onSubmit={handleContinueName} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#3D2B1A', marginBottom: 6, textTransform: 'uppercase' }}>Supporter Name *</label>
+                        <input 
+                          type="text" 
+                          placeholder="Enter recipient's full name" 
+                          value={formData.name} 
+                          onChange={e => setFormData({ ...formData, name: e.target.value })} 
+                          style={{ 
+                            width: '100%', 
+                            padding: '14px 16px', 
+                            borderRadius: '12px', 
+                            border: '1px solid #EBD5C2', 
+                            background: '#FFFFFF', 
+                            outline: 'none', 
+                            color: '#3D2B1A', 
+                            fontSize: '14.5px', 
+                            fontWeight: 500,
+                            boxSizing: 'border-box'
+                          }} 
+                        />
+                        {errors.name && <span style={{ fontSize: '12px', color: '#EF4444', fontWeight: 600, marginTop: 4, display: 'block' }}>{errors.name}</span>}
+                      </div>
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#3D2B1A', marginBottom: 6, textTransform: 'uppercase' }}>Mobile Number</label>
-                  <input 
-                    type="text" 
-                    placeholder="Enter 10-digit mobile" 
-                    value={formData.mobile} 
-                    onChange={e => setFormData({ ...formData, mobile: e.target.value })} 
-                    style={{ 
-                      width: '100%', 
-                      padding: '14px 16px', 
-                      borderRadius: '12px', 
-                      border: '1px solid #EBD5C2', 
-                      background: '#FFFFFF', 
-                      outline: 'none', 
-                      color: '#3D2B1A', 
-                      fontSize: '14.5px', 
-                      fontWeight: 500,
-                      boxSizing: 'border-box'
-                    }} 
-                  />
-                </div>
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center', background: '#FDF8F3', border: '1px solid #F3ECE2', padding: 12, borderRadius: 12, marginTop: 8 }}>
+                        <Sparkles size={16} color="#D4AF37" />
+                        <span style={{ fontSize: '11px', color: '#8B5E34', fontWeight: 700 }}>
+                          This name will be cryptographically printed on your official certificate.
+                        </span>
+                      </div>
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#3D2B1A', marginBottom: 6, textTransform: 'uppercase' }}>Email Address *</label>
-                  <input 
-                    type="email" 
-                    placeholder="Enter email address" 
-                    value={formData.email} 
-                    onChange={e => setFormData({ ...formData, email: e.target.value })} 
-                    style={{ 
-                      width: '100%', 
-                      padding: '14px 16px', 
-                      borderRadius: '12px', 
-                      border: '1px solid #EBD5C2', 
-                      background: '#FFFFFF', 
-                      outline: 'none', 
-                      color: '#3D2B1A', 
-                      fontSize: '14.5px', 
-                      fontWeight: 500,
-                      boxSizing: 'border-box'
-                    }} 
-                  />
-                  {errors.email && <span style={{ fontSize: '12px', color: '#EF4444', fontWeight: 600, marginTop: 4, display: 'block' }}>{errors.email}</span>}
-                </div>
+                      <button 
+                        type="submit"
+                        style={{ 
+                          padding: '16px', 
+                          background: 'linear-gradient(135deg, #8C4F1A, #C8773A)', 
+                          border: 'none', 
+                          borderRadius: '99px', 
+                          color: '#FFFFFF', 
+                          fontSize: '15px', 
+                          fontWeight: 800, 
+                          cursor: 'pointer', 
+                          marginTop: 12,
+                          boxShadow: '0 8px 24px rgba(140, 79, 26, 0.2)'
+                        }}
+                      >
+                        Continue
+                      </button>
+                    </form>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="step-payment"
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div style={{ textAlign: 'center', marginBottom: 24 }}>
+                      <div style={{ 
+                        width: '60px', 
+                        height: '60px', 
+                        borderRadius: '50%', 
+                        background: 'linear-gradient(135deg, #FFF9F3, #F5E6D3)', 
+                        border: '2px solid #D4AF37', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        margin: '0 auto 16px' 
+                      }}>
+                        <Heart size={28} color="#8C4F1A" />
+                      </div>
+                      <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#3D2B1A', margin: '0 0 6px' }}>
+                        Secure Coupon Unlock
+                      </h2>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#7A6A58', fontWeight: 600 }}>
+                        A contribution of ₹{coupon.price} helps fund verified pediatric treatments.
+                      </p>
+                    </div>
 
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center', background: '#FDF8F3', border: '1px solid #F3ECE2', padding: 12, borderRadius: 12, marginTop: 8 }}>
-                  <Shield size={16} color="#D4AF37" />
-                  <span style={{ fontSize: '11px', color: '#8B5E34', fontWeight: 700 }}>
-                    Powered by secure simulation. No real money will be charged.
-                  </span>
-                </div>
+                    <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#3D2B1A', marginBottom: 6, textTransform: 'uppercase' }}>Mobile Number</label>
+                        <input 
+                          type="text" 
+                          placeholder="Enter 10-digit mobile" 
+                          value={formData.mobile} 
+                          onChange={e => setFormData({ ...formData, mobile: e.target.value })} 
+                          style={{ 
+                            width: '100%', 
+                            padding: '14px 16px', 
+                            borderRadius: '12px', 
+                            border: '1px solid #EBD5C2', 
+                            background: '#FFFFFF', 
+                            outline: 'none', 
+                            color: '#3D2B1A', 
+                            fontSize: '14.5px', 
+                            fontWeight: 500,
+                            boxSizing: 'border-box'
+                          }} 
+                        />
+                      </div>
 
-                <button 
-                  type="submit"
-                  style={{ 
-                    padding: '16px', 
-                    background: 'linear-gradient(135deg, #8C4F1A, #C8773A)', 
-                    border: 'none', 
-                    borderRadius: '99px', 
-                    color: '#FFFFFF', 
-                    fontSize: '15px', 
-                    fontWeight: 800, 
-                    cursor: 'pointer', 
-                    marginTop: 12,
-                    boxShadow: '0 8px 24px rgba(140, 79, 26, 0.2)'
-                  }}
-                >
-                  Pay ₹{coupon.price} & Reveal Code
-                </button>
-              </form>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#3D2B1A', marginBottom: 6, textTransform: 'uppercase' }}>Email Address *</label>
+                        <input 
+                          type="email" 
+                          placeholder="Enter email address" 
+                          value={formData.email} 
+                          onChange={e => setFormData({ ...formData, email: e.target.value })} 
+                          style={{ 
+                            width: '100%', 
+                            padding: '14px 16px', 
+                            borderRadius: '12px', 
+                            border: '1px solid #EBD5C2', 
+                            background: '#FFFFFF', 
+                            outline: 'none', 
+                            color: '#3D2B1A', 
+                            fontSize: '14.5px', 
+                            fontWeight: 500,
+                            boxSizing: 'border-box'
+                          }} 
+                        />
+                        {errors.email && <span style={{ fontSize: '12px', color: '#EF4444', fontWeight: 600, marginTop: 4, display: 'block' }}>{errors.email}</span>}
+                      </div>
+
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center', background: '#FDF8F3', border: '1px solid #F3ECE2', padding: 12, borderRadius: 12, marginTop: 8 }}>
+                        <Shield size={16} color="#D4AF37" />
+                        <span style={{ fontSize: '11px', color: '#8B5E34', fontWeight: 700 }}>
+                          Powered by secure simulation. No real money will be charged.
+                        </span>
+                      </div>
+
+                      <button 
+                        type="submit"
+                        style={{ 
+                          padding: '16px', 
+                          background: 'linear-gradient(135deg, #8C4F1A, #C8773A)', 
+                          border: 'none', 
+                          borderRadius: '99px', 
+                          color: '#FFFFFF', 
+                          fontSize: '15px', 
+                          fontWeight: 800, 
+                          cursor: 'pointer', 
+                          marginTop: 12,
+                          boxShadow: '0 8px 24px rgba(140, 79, 26, 0.2)'
+                        }}
+                      >
+                        Pay ₹{coupon.price} & Reveal Code
+                      </button>
+                    </form>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         )}

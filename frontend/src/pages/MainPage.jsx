@@ -1129,12 +1129,7 @@ export default function MainPage() {
                           whileHover={{ scale: 1.02 }}
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (isCouponUnlocked) {
-                              navigate(`/coupon/${reward.id}`);
-                            } else {
-                              setUnlockType('coupon');
-                              handleUnlock(reward.price, null, reward.id, reward.brand);
-                            }
+                            navigate(`/coupon/${reward.id}`);
                           }}
                           style={{ 
                             display: 'flex', 

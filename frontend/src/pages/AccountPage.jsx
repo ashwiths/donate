@@ -64,7 +64,7 @@ export default function AccountPage() {
   const [selectedCert, setSelectedCert] = useState(null);
 
   const handleDownloadCert = (cert) => {
-    const safeName = userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter';
+    const safeName = cert.supporterName || userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter';
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
       alert("Please allow popups to download your certificate.");
@@ -908,7 +908,7 @@ export default function AccountPage() {
                   </p>
                   
                   <h3 style={{ fontSize: '24px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit', borderBottom: '1.5px solid #EBD5C2', display: 'inline-block', paddingBottom: 6, marginBottom: 20, minWidth: '240px' }}>
-                    {userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter'}
+                    {selectedCert.supporterName || userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter'}
                   </h3>
 
                   <p style={{ fontSize: '14.5px', color: '#5C4C3C', lineHeight: 1.7, fontWeight: 500, margin: '0 auto 28px', maxWidth: '520px' }}>

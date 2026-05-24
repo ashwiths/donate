@@ -16,7 +16,8 @@ export async function generateHealingCertificate({
   couponBrand = '',
   couponCode = '',
   gameId = '',
-  gameName = ''
+  gameName = '',
+  supporterName = ''
 }) {
   if (!userId) return null;
 
@@ -77,9 +78,24 @@ export async function generateHealingCertificate({
         certificateUrl: '', // placeholder
         couponId: couponId || '',
         gameId: gameId || '',
-        contributionType
+        contributionType,
+        supporterName: supporterName || ''
       };
       transaction.set(certificateDocRef, newCertificate);
+
+      if (contributionType === 'coupon_unlock') {
+        const couponUnlocksCol = collection(db, 'couponUnlocks');
+        const couponUnlockDocRef = doc(couponUnlocksCol);
+        const newCouponUnlock = {
+          supporterName: supporterName || '',
+          brand: couponBrand || '',
+          code: couponCode || '',
+          amount,
+          userId,
+          createdAt: serverTimestamp()
+        };
+        transaction.set(couponUnlockDocRef, newCouponUnlock);
+      }
 
       // 5. Update user stats
       const totalSupport = (userData.totalSupport || 0) + amount;
