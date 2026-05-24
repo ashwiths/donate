@@ -22,7 +22,7 @@ export async function createUserDocument(firebaseUser) {
       contributions: 0,
       childrenHelped: 0,
       healingStreak: '0 Days',
-      unlockedGames: 0,
+      unlockedGames: [],
       couponsClaimed: 0,
       quotesOpened: 0,
       healingSupports: 0,

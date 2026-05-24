@@ -585,7 +585,7 @@ export default function MainPage() {
   const { confirmDonation } = useDonation()
   const { userData } = useUserData()
 
-  const unlockedGames = userData?.unlockedGames || []
+  const unlockedGames = Array.isArray(userData?.unlockedGames) ? userData.unlockedGames : []
 
   useEffect(() => {
     if (!user) {
@@ -666,7 +666,11 @@ export default function MainPage() {
       if (unlockType === 'game') {
         updateFields.unlockedGamesCount = increment(1);
         if (pendingGameId) {
-          updateFields.unlockedGames = arrayUnion(pendingGameId);
+          if (userData && !Array.isArray(userData.unlockedGames)) {
+            updateFields.unlockedGames = [pendingGameId];
+          } else {
+            updateFields.unlockedGames = arrayUnion(pendingGameId);
+          }
         }
       } else if (unlockType === 'coupon') {
         updateFields.couponsClaimed = increment(1);

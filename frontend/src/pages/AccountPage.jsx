@@ -550,7 +550,7 @@ export default function AccountPage() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
               {[
-                { label: 'Games Unlocked', val: userData?.unlockedGames || 0, total: 10, icon: Gamepad2, color: '#3B82F6' },
+                { label: 'Games Unlocked', val: Array.isArray(userData?.unlockedGames) ? userData.unlockedGames.length : 0, total: 10, icon: Gamepad2, color: '#3B82F6' },
                 { label: 'Coupons Claimed', val: userData?.couponsClaimed || 0, total: 5, icon: Gift, color: '#EAB308' },
                 { label: 'Quotes Opened', val: userData?.quotesOpened || 0, total: 20, icon: Quote, color: '#8B5CF6' },
                 { label: 'Healing Supports', val: userData?.healingSupports || 0, total: 10, icon: Heart, color: '#EF4444' }
