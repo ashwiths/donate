@@ -12,6 +12,8 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import { addSupportTicket } from '../services/userService';
+import { db } from '../firebase';
+import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 
 // Ambient floating particles (optimized for performance)
 const Particles = () => (
@@ -62,6 +64,26 @@ export default function AccountPage() {
   const navigate = useNavigate();
   const { userData, contributions, certificates, activities, loading } = useUserData();
   const [selectedCert, setSelectedCert] = useState(null);
+  const [unlockedMessages, setUnlockedMessages] = useState([]);
+
+  useEffect(() => {
+    if (!user?.uid) return;
+    const q = query(
+      collection(db, 'healingMessageUnlocks'),
+      where('userId', '==', user.uid),
+      orderBy('unlockedAt', 'desc')
+    );
+    const unsubscribe = onSnapshot(q, (snap) => {
+      const list = [];
+      snap.forEach((doc) => {
+        list.push({ id: doc.id, ...doc.data() });
+      });
+      setUnlockedMessages(list);
+    }, (err) => {
+      console.error("Error fetching healingMessageUnlocks in AccountPage:", err);
+    });
+    return () => unsubscribe();
+  }, [user]);
 
   const handleDownloadCert = (cert) => {
     const safeName = cert.supporterName || userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter';
@@ -648,6 +670,58 @@ export default function AccountPage() {
                     </div>
                     <div style={{ fontSize: '11px', color: '#7A6A58', fontWeight: 600, textAlign: 'right' }}>
                       {new Date(coupon.unlockedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </div>
+                  </motion.div>
+                ))
+              )}
+            </div>
+          </motion.section>
+
+          {/* Unlocked Healing Messages History Grid */}
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: '64px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '24px' }}>
+              <Quote size={20} color="#8C4F1A" />
+              <h3 className="premium-title-sm" style={{ margin: 0 }}>Unlocked Healing Messages</h3>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+              {unlockedMessages.length === 0 ? (
+                <div style={{ background: '#FFFDFB', border: '1px solid rgba(235, 224, 214, 0.8)', borderRadius: '24px', padding: '32px', textAlign: 'center', color: '#7A6A58', fontWeight: 500, fontSize: '14px', gridColumn: '1 / -1' }}>
+                  No healing messages unlocked yet. Visit the Discovery Portal to support a child's recovery! 🌸
+                </div>
+              ) : (
+                unlockedMessages.map((msg, i) => (
+                  <motion.div key={i} whileHover={{ y: -4, boxShadow: '0 12px 30px rgba(139, 94, 52, 0.08)' }} style={{ background: '#FFFDFB', border: '1px solid rgba(235, 224, 214, 0.8)', borderRadius: '20px', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.3s ease' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, marginRight: 16, overflow: 'hidden' }}>
+                      <div style={{ width: 48, height: 48, background: 'linear-gradient(135deg, #FFF9F3, #F5E6D3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #EADFCF', flexShrink: 0 }}>
+                        <Quote size={22} color="#8C4F1A" />
+                      </div>
+                      <div style={{ overflow: 'hidden' }}>
+                        <div style={{ fontSize: '15px', fontWeight: 800, color: '#3D2B1A', marginBottom: '4px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{msg.title}</div>
+                        <div style={{ fontSize: '12.5px', color: '#7A6A5A', fontWeight: 500, marginBottom: '2px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>Dedicated to: <strong>{msg.supporterName || 'Supporter'}</strong></div>
+                        <div style={{ fontSize: '11px', color: '#8C745C', fontWeight: 600 }}>Unlocked for ₹{msg.amount}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10, flexShrink: 0 }}>
+                      <div style={{ fontSize: '11px', color: '#7A6A58', fontWeight: 600 }}>
+                        {msg.unlockedAt ? new Date(msg.unlockedAt.seconds ? msg.unlockedAt.seconds * 1000 : msg.unlockedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Today'}
+                      </div>
+                      <button
+                        onClick={() => navigate(`/reveal-message/${msg.messageId}`)}
+                        style={{
+                          padding: '6px 12px',
+                          background: 'linear-gradient(135deg, #8C4F1A, #C8773A)',
+                          color: '#fff',
+                          border: 'none',
+                          borderRadius: '8px',
+                          fontSize: '11px',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 6px rgba(140, 79, 26, 0.15)'
+                        }}
+                      >
+                        View Message
+                      </button>
                     </div>
                   </motion.div>
                 ))

@@ -60,6 +60,9 @@ export async function generateHealingCertificate({
       } else if (contributionType === 'sponsor_reward') {
         activityType = 'reward_claimed';
         activityTarget = 'Sponsor-matched support';
+      } else if (contributionType === 'healing_message_unlock') {
+        activityType = 'coupon_unlock';
+        activityTarget = gameName || 'Healing Message';
       }
       
       const newActivity = {
@@ -92,7 +95,7 @@ export async function generateHealingCertificate({
       const newCertificate = {
         amount,
         childName,
-        title: title || (contributionType === 'game_unlock' ? 'Certificate of Play Matching' : 'Certificate of Healing Support'),
+        title: title || (contributionType === 'game_unlock' ? 'Certificate of Play Matching' : contributionType === 'healing_message_unlock' ? 'Certificate of Healing Message' : 'Certificate of Healing Support'),
         userId,
         createdAt: serverTimestamp(),
         certificateUrl: '', // placeholder
@@ -164,8 +167,22 @@ export async function generateHealingCertificate({
           unlockedAt: serverTimestamp(),
           certificateId: newCertId
         };
-        transaction.set(gameUnlockDocRef, newGameUnlock);
+      // Healing Message Unlock logic
+      if (contributionType === 'healing_message_unlock') {
+        const messageUnlocksCol = collection(db, 'healingMessageUnlocks');
+        const messageUnlockDocRef = doc(messageUnlocksCol);
+        const newMessageUnlock = {
+          userId,
+          supporterName: supporterName || userData.name || 'Verified Supporter',
+          messageId: gameId || '',
+          title: gameName || 'Healing Message',
+          amount,
+          unlockedAt: serverTimestamp(),
+          certificateId: newCertId
+        };
+        transaction.set(messageUnlockDocRef, newMessageUnlock);
       }
+    }
 
       // Update global analytics document inside transaction
       const statsRef = doc(db, 'analytics', 'globalStats');
@@ -180,6 +197,8 @@ export async function generateHealingCertificate({
         statsUpdate.totalCouponsUnlocked = increment(1);
       } else if (contributionType === 'game_unlock') {
         statsUpdate.totalGamesUnlocked = increment(1);
+      } else if (contributionType === 'healing_message_unlock') {
+        statsUpdate.totalQuotesUnlocked = increment(1);
       } else if (contributionType === 'donation' || contributionType === 'sponsor_reward') {
         statsUpdate.totalHealingSupport = increment(amount);
       }
@@ -198,6 +217,8 @@ export async function generateHealingCertificate({
       if (contributionType === 'sponsor_reward') {
         updateFields.gamesPlayed = increment(1);
         updateFields.totalWins = increment(1);
+      } else if (contributionType === 'healing_message_unlock') {
+        updateFields.quotesOpened = increment(1);
       } else if (contributionType === 'coupon_unlock') {
         updateFields.couponsClaimed = increment(1);
         

@@ -21,6 +21,7 @@ import MindSlidePage from './pages/MindSlidePage'
 import CouponDetailPage from './pages/CouponDetailPage'
 import CouponThankYouPage from './pages/CouponThankYouPage'
 import AdminAnalyticsPage from './pages/AdminAnalyticsPage'
+import RevealMessagePage from './pages/RevealMessagePage'
 import { seedCouponsIfEmpty } from './services/contributionService'
 
 function ScrollToTop() {
@@ -64,6 +65,7 @@ export default function App() {
               <Route path="/coupon/:couponId" element={<CouponDetailPage />} />
               <Route path="/coupon-thank-you/:couponId" element={<CouponThankYouPage />} />
               <Route path="/admin-analytics" element={<AdminAnalyticsPage />} />
+              <Route path="/reveal-message/:messageId" element={<RevealMessagePage />} />
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

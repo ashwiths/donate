@@ -612,10 +612,12 @@ export default function MainPage() {
 
   const handleDirectDonate = () => {
     const amount = customAmount ? parseInt(customAmount) : selectedPreset
-    if (amount > 0) {
-      setUnlockType('donation')
-      handleUnlock(amount)
+    if (amount < 50) {
+      alert("The minimum contribution amount is ₹50.")
+      return
     }
+    setUnlockType('donation')
+    handleUnlock(amount)
   }
 
   const handleFormSubmit = (e) => {
@@ -1279,7 +1281,7 @@ export default function MainPage() {
                       y: -8, 
                       boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
-                    onClick={() => { setUnlockType('donation'); handleUnlock(card.price); }}
+                    onClick={() => navigate(`/reveal-message/${idx}`)}
                     style={{
                       background: '#FFFFFF',
                       borderRadius: '32px',
@@ -1488,11 +1490,12 @@ export default function MainPage() {
 
                 <div style={{ marginBottom: 32 }}>
                   <label style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 10 }}>
-                    Or Enter Custom Amount (₹)
+                    Or Enter Custom Amount (₹) — Min ₹50
                   </label>
                   <input
                     type="number"
-                    placeholder="Enter custom support amount"
+                    min="50"
+                    placeholder="Enter custom support amount (minimum ₹50)"
                     value={customAmount}
                     onChange={(e) => {
                       setCustomAmount(e.target.value)
