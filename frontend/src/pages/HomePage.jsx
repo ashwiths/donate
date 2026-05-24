@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import DonationProgress from '../components/DonationProgress'
+import MedicalProofSection from '../components/MedicalProofSection'
 import { staggerContainer, fadeUp, cardVariant } from '../animations/variants'
 import { HeroBackground, DonationBackground, GamesBackground, WarmSectionBackground } from '../components/PremiumBackground'
 import helpJanaImg from '../assets/janamithra.png'
@@ -1629,7 +1630,8 @@ export default function HomePage() {
           </div>
         </section>
 
-
+        {/* ────────────────── 7. MEDICAL PROOF & TRANSPARENCY ────────────────── */}
+        <MedicalProofSection />
 
         {/* ────────────────── 8. REDESIGNED HIGH-FIDELITY LUXURY MYSTERY REWARD SECTION ────────────────── */}
         <section style={{
