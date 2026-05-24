@@ -198,9 +198,24 @@ export default function DirectSupportPaymentPage() {
         <h1 style={{ margin: '0 0 8px', fontSize: 'clamp(22px, 5vw, 28px)', fontWeight: 900, letterSpacing: '-0.5px', color: '#3D2B1A' }}>
           Support Janamithra’s Healing Journey ❤️
         </h1>
-        <p style={{ margin: '0 0 32px', fontSize: '14.5px', color: '#7A6A5A', lineHeight: 1.5 }}>
+        <p style={{ margin: '0 0 24px', fontSize: '14.5px', color: '#7A6A5A', lineHeight: 1.5 }}>
           You are directly supporting verified pediatric treatment and recovery care.
         </p>
+
+        {/* Prominent Bold Emotional Quote Card (Moved to Front/Top) */}
+        <div style={{
+          background: 'rgba(140, 79, 26, 0.05)',
+          border: '1.5px dashed rgba(140, 79, 26, 0.3)',
+          borderRadius: '20px',
+          padding: '20px 24px',
+          marginBottom: '28px',
+          textAlign: 'center',
+          boxSizing: 'border-box'
+        }}>
+          <p style={{ margin: 0, fontSize: '16.5px', color: '#8C4F1A', fontWeight: 900, lineHeight: 1.6 }}>
+            “Every contribution helps support a child’s medical recovery journey. Please support honestly and compassionately ❤️”
+          </p>
+        </div>
 
         {/* Selected Amount Indicator */}
         <div style={{
@@ -375,10 +390,7 @@ export default function DirectSupportPaymentPage() {
           flexDirection: 'column',
           gap: '12px'
         }}>
-          <p style={{ margin: 0, fontSize: '13.5px', color: '#8C4F1A', fontWeight: 600, lineHeight: 1.5 }}>
-            “Every contribution helps support a child’s medical recovery journey. Please support honestly and compassionately ❤️”
-          </p>
-          <p style={{ margin: 0, fontSize: '12.5px', color: '#7A6A5A', lineHeight: 1.5 }}>
+          <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', fontWeight: 700, lineHeight: 1.5 }}>
             This platform currently works on community trust and transparent support.
           </p>
           <p style={{ margin: 0, fontSize: '11px', color: '#9A8A7A', fontStyle: 'italic' }}>
