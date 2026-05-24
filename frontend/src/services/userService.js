@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, addDoc, increment } from 'firebase/firestore';
 import { db } from '../firebase';
 
 /**
@@ -34,6 +34,14 @@ export async function createUserDocument(firebaseUser) {
 
     try {
       await setDoc(userRef, defaultData);
+      
+      // Increment globalStats totalUsers
+      const statsRef = doc(db, 'analytics', 'globalStats');
+      await setDoc(statsRef, {
+        totalUsers: increment(1),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+
       return defaultData;
     } catch (err) {
       console.error('Error creating user document:', err);

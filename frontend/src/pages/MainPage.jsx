@@ -16,6 +16,7 @@ import { doc, updateDoc, increment, arrayUnion, collection, addDoc, serverTimest
 import { db } from '../firebase'
 import { useUserData } from '../hooks/useUserData'
 import { COUPONS as MYSTERY_REWARDS } from '../data/coupons'
+import { subscribeCoupons } from '../services/contributionService'
 
 const PREMIUM_GAMES = [
   {
@@ -522,6 +523,16 @@ export default function MainPage() {
   const { confirmDonation } = useDonation()
   const { userData } = useUserData()
 
+  const [couponsList, setCouponsList] = useState([])
+
+  useEffect(() => {
+    const unsubscribe = subscribeCoupons((data) => {
+      setCouponsList(data.sort((a, b) => a.id.localeCompare(b.id)))
+    })
+    return () => unsubscribe()
+  }, [])
+
+  const activeCoupons = couponsList.length > 0 ? couponsList : MYSTERY_REWARDS
   const unlockedGames = Array.isArray(userData?.unlockedGames) ? userData.unlockedGames : []
 
   useEffect(() => {
@@ -1028,30 +1039,37 @@ export default function MainPage() {
                 gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
                 gap: 32 
               }}>
-                {MYSTERY_REWARDS.map((reward) => {
+                {activeCoupons.map((reward) => {
                   const isCouponUnlocked = userData?.unlockedCoupons?.some(c => c.id === reward.id) || false;
+                  const isOutOfStock = reward.remainingStock !== undefined && reward.remainingStock <= 0;
 
                   return (
                     <motion.div
                       key={reward.id}
-                      whileHover={{ 
+                      whileHover={isOutOfStock ? {} : { 
                         y: -8, 
                         boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                       }}
-                      onClick={() => navigate(`/coupon/${reward.id}`)}
+                      onClick={() => {
+                        if (!isOutOfStock) {
+                          navigate(`/coupon/${reward.id}`);
+                        }
+                      }}
                       style={{
-                      background: '#FFFFFF',
-                      border: '1px solid rgba(220, 208, 195, 0.7)',
-                      borderRadius: '32px',
-                      boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                      position: 'relative',
-                      minHeight: 410
-                    }}
+                        background: '#FFFFFF',
+                        border: isOutOfStock ? '1px solid rgba(220, 208, 195, 0.4)' : '1px solid rgba(220, 208, 195, 0.7)',
+                        borderRadius: '32px',
+                        boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
+                        overflow: 'hidden',
+                        cursor: isOutOfStock ? 'not-allowed' : 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                        position: 'relative',
+                        minHeight: 410,
+                        opacity: isOutOfStock ? 0.65 : 1,
+                        filter: isOutOfStock ? 'grayscale(40%)' : 'none'
+                      }}
                   >
                     {/* Blurred Secret Preview Area */}
                     <div style={{ 
@@ -1065,6 +1083,49 @@ export default function MainPage() {
                       borderBottom: '1px solid rgba(235, 224, 214, 0.3)'
                     }}>
                       <div className="shimmer-bg" style={{ position: 'absolute', inset: 0, opacity: 0.15 }} />
+                      
+                      {/* Realtime stock / unlock counts badges */}
+                      <div style={{ position: 'absolute', top: 12, left: 12, right: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
+                        {/* Remaining Stock Badge */}
+                        {reward.remainingStock !== undefined && (
+                          isOutOfStock ? (
+                            <span style={{
+                              background: '#FEE2E2', color: '#991B1B', border: '1px solid #FCA5A5',
+                              fontSize: '9px', fontWeight: 900, textTransform: 'uppercase',
+                              padding: '3px 8px', borderRadius: '8px', letterSpacing: '0.04em'
+                            }}>
+                              Out of Stock
+                            </span>
+                          ) : reward.remainingStock <= 20 ? (
+                            <span style={{
+                              background: '#FEF3C7', color: '#92400E', border: '1px solid #FDE68A',
+                              fontSize: '9px', fontWeight: 900, textTransform: 'uppercase',
+                              padding: '3px 8px', borderRadius: '8px', letterSpacing: '0.04em'
+                            }}>
+                              Only {reward.remainingStock} left!
+                            </span>
+                          ) : (
+                            <span style={{
+                              background: 'rgba(255, 255, 255, 0.85)', color: '#4A3427', border: '1px solid rgba(139, 94, 52, 0.15)',
+                              fontSize: '9px', fontWeight: 700,
+                              padding: '3px 8px', borderRadius: '8px', backdropFilter: 'blur(4px)'
+                            }}>
+                              {reward.remainingStock} left
+                            </span>
+                          )
+                        )}
+                        
+                        {/* Unlocked Count Social Proof Badge */}
+                        {reward.unlockedCount !== undefined && reward.unlockedCount > 0 && (
+                          <span style={{
+                            background: 'rgba(255, 255, 255, 0.85)', color: '#8C4F1A', border: '1px solid rgba(139, 94, 52, 0.15)',
+                            fontSize: '9px', fontWeight: 700,
+                            padding: '3px 8px', borderRadius: '8px', backdropFilter: 'blur(4px)'
+                          }}>
+                            Unlocked {reward.unlockedCount}x
+                          </span>
+                        )}
+                      </div>
                       
                       {/* Blurred teaser gift card */}
                       <div style={{
@@ -1110,7 +1171,7 @@ export default function MainPage() {
                         gap: 6
                       }}>
                         <Lock size={11.5} color="#8B5E34" />
-                        <span style={{ fontSize: 10, fontWeight: 800, color: '#8B5E34', letterSpacing: '0.02em', textTransform: 'uppercase' }}>SECURE REVEAL</span>
+                        <span style={{ fontSize: 10, fontWeight: 800, color: '#8B5E34', letterSpacing: '0.02em', textTransform: 'uppercase' }}>{isOutOfStock ? 'EXHAUSTED' : 'SECURE REVEAL'}</span>
                       </div>
                     </div>
 
@@ -1126,30 +1187,32 @@ export default function MainPage() {
 
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px' }}>
                         <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                          {isCouponUnlocked ? 'Unlocked' : `₹${reward.price} Reward Code`}
+                          {isOutOfStock ? 'Sold Out' : (isCouponUnlocked ? 'Unlocked' : `₹${reward.unlockAmount ?? reward.price} Reward Code`)}
                         </span>
                         <motion.div 
-                          whileHover={{ scale: 1.02 }}
+                          whileHover={isOutOfStock ? {} : { scale: 1.02 }}
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate(`/coupon/${reward.id}`);
+                            if (!isOutOfStock) {
+                              navigate(`/coupon/${reward.id}`);
+                            }
                           }}
                           style={{ 
                             display: 'flex', 
                             alignItems: 'center', 
                             gap: 6, 
-                            color: isCouponUnlocked ? '#8C4F1A' : '#fff', 
+                            color: isOutOfStock ? '#71717A' : (isCouponUnlocked ? '#8C4F1A' : '#fff'), 
                             fontWeight: 700, 
                             fontSize: '12.5px',
-                            background: isCouponUnlocked ? '#FAF6F0' : 'linear-gradient(135deg, #8C4F1A, #C8773A)',
-                            border: isCouponUnlocked ? '1px solid #EADFCF' : 'none',
+                            background: isOutOfStock ? '#E4E4E7' : (isCouponUnlocked ? '#FAF6F0' : 'linear-gradient(135deg, #8C4F1A, #C8773A)'),
+                            border: isOutOfStock ? '1px solid #D4D4D8' : (isCouponUnlocked ? '1px solid #EADFCF' : 'none'),
                             padding: '10px 20px',
                             borderRadius: '14px',
-                            boxShadow: isCouponUnlocked ? 'none' : 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)',
-                            cursor: 'pointer'
+                            boxShadow: isOutOfStock || isCouponUnlocked ? 'none' : 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)',
+                            cursor: isOutOfStock ? 'not-allowed' : 'pointer'
                           }}
                         >
-                          <span>{isCouponUnlocked ? 'View Coupon' : `Unlock for ₹${reward.price}`}</span>
+                          <span>{isOutOfStock ? 'Out of Stock' : (isCouponUnlocked ? 'View Coupon' : `Unlock for ₹${reward.unlockAmount ?? reward.price}`)}</span>
                           <ChevronRight size={13} />
                         </motion.div>
                       </div>

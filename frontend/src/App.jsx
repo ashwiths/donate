@@ -20,6 +20,7 @@ import PulseReflexPage from './pages/PulseReflexPage'
 import MindSlidePage from './pages/MindSlidePage'
 import CouponDetailPage from './pages/CouponDetailPage'
 import CouponThankYouPage from './pages/CouponThankYouPage'
+import { seedCouponsIfEmpty } from './services/contributionService'
 
 function ScrollToTop() {
   const { pathname, search } = useLocation()
@@ -32,6 +33,10 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  useEffect(() => {
+    seedCouponsIfEmpty()
+  }, [])
+
   return (
     <BrowserRouter>
       <ScrollToTop />

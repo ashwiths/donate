@@ -65,6 +65,9 @@ export default function AccountPage() {
 
   const handleDownloadCert = (cert) => {
     const safeName = cert.supporterName || userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter';
+    const parts = (cert.title || 'Certificate of Healing Support').split(/\s*[-–]\s*/);
+    const titleLine1 = parts[0];
+    const titleLine2 = parts.slice(1).join(' - ');
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
       alert("Please allow popups to download your certificate.");
@@ -128,21 +131,29 @@ export default function AccountPage() {
               position: relative;
               z-index: 1;
             }
-            h1 {
-              font-family: 'Great Vibes', cursive;
-              font-size: 64px;
-              color: #8C4F1A;
-              margin: 0 0 4px;
+            .title-line1 {
+              font-family: 'Georgia', serif;
+              font-size: 32px;
+              color: #3D2B1A;
+              margin: 0 0 8px;
+              font-weight: 700;
               position: relative;
               z-index: 1;
-              text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+            }
+            .title-line2 {
+              font-family: 'Great Vibes', cursive;
+              font-size: 42px;
+              color: #C8773A;
+              margin: 0 0 16px;
+              position: relative;
+              z-index: 1;
             }
             h2 {
-              font-size: 15px;
+              font-size: 14px;
               color: #7A6A58;
               text-transform: uppercase;
               letter-spacing: 0.25em;
-              margin: 0 0 36px;
+              margin: 0 0 28px;
               font-weight: 700;
               position: relative;
               z-index: 1;
@@ -315,7 +326,8 @@ export default function AccountPage() {
 
             <div class="header-institution">Pediatric Healthcare Transparency Alliance • Global Registry</div>
             
-            <h1>${cert.title || 'Certificate of Healing Support'}</h1>
+            <h1 class="title-line1">${titleLine1}</h1>
+            ${titleLine2 ? `<div class="title-line2">${titleLine2}</div>` : ''}
             <h2>Heal & Play Ecosystem • ${cert.contributionType ? cert.contributionType.replace('_', ' ').toUpperCase() : 'HEALING SUPPORT'}</h2>
             
             <div class="presented-to">This official token of medical gratitude is proudly awarded to</div>
@@ -896,9 +908,23 @@ export default function AccountPage() {
                     Pediatric Healthcare Transparency Alliance • Global Registry
                   </div>
 
-                  <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: '#8C4F1A', margin: '0 0 4px', letterSpacing: '-0.5px' }}>
-                    {selectedCert.title || 'Certificate of Healing Support'}
-                  </h2>
+                  {(() => {
+                    const titleParts = (selectedCert.title || 'Certificate of Healing Support').split(/\s*[-–]\s*/);
+                    const line1 = titleParts[0];
+                    const line2 = titleParts.slice(1).join(' - ');
+                    return (
+                      <>
+                        <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: '24px', color: '#3D2B1A', margin: '0 0 4px' }}>
+                          {line1}
+                        </h2>
+                        {line2 && (
+                          <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: '32px', color: '#C8773A', margin: '0 0 12px' }}>
+                            {line2}
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
                   <span style={{ fontSize: '11px', fontWeight: 800, color: '#7A6A58', textTransform: 'uppercase', letterSpacing: '0.15em', display: 'block', marginBottom: 28 }}>
                     Official Verified Token • {selectedCert.contributionType ? selectedCert.contributionType.replace('_', ' ').toUpperCase() : 'HEALING SUPPORT'}
                   </span>

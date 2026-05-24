@@ -11,7 +11,7 @@ import { useAuth } from '../context/AuthContext'
 import { useUserData } from '../hooks/useUserData'
 import { useDonation } from '../context/DonationContext'
 import { COUPONS } from '../data/coupons'
-import { generateHealingCertificate } from '../services/contributionService'
+import { generateHealingCertificate, subscribeCoupon } from '../services/contributionService'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
@@ -32,12 +32,18 @@ export default function CouponDetailPage() {
   const [localUnlocked, setLocalUnlocked] = useState(false)
 
   useEffect(() => {
-    const found = COUPONS.find(c => c.id === couponId)
-    if (found) {
-      setCoupon(found)
-    } else {
-      navigate('/main')
+    const foundLocal = COUPONS.find(c => c.id === couponId)
+    if (foundLocal) {
+      setCoupon(foundLocal)
     }
+
+    const unsubscribe = subscribeCoupon(couponId, (liveCoupon) => {
+      if (liveCoupon) {
+        setCoupon(liveCoupon)
+      }
+    })
+
+    return () => unsubscribe()
   }, [couponId, navigate])
 
   // Pre-fill form from localStorage
@@ -59,6 +65,7 @@ export default function CouponDetailPage() {
   // Check if coupon is already unlocked
   const isUnlocked = localUnlocked || userData?.unlockedCoupons?.some(c => c.id === coupon.id) || false
   const unlockedDetails = userData?.unlockedCoupons?.find(c => c.id === coupon.id)
+  const isOutOfStock = coupon.remainingStock !== undefined && coupon.remainingStock <= 0
 
   const handleCopy = () => {
     if (!isUnlocked) return
@@ -112,13 +119,13 @@ export default function CouponDetailPage() {
     setIsModalOpen(false)
 
     // Run donation simulation
-    confirmDonation(coupon.price)
+    confirmDonation(coupon.unlockAmount ?? coupon.price)
 
     if (currentUser?.uid) {
       try {
         await generateHealingCertificate({
           userId: currentUser.uid,
-          amount: coupon.price,
+          amount: coupon.unlockAmount ?? coupon.price,
           childName: 'Janamithra',
           title: `Certificate of Coupon Unlock - ${coupon.brand}`,
           contributionType: 'coupon_unlock',
@@ -213,9 +220,33 @@ export default function CouponDetailPage() {
                   </p>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FFF9F3', border: '1px solid #EADFCF', padding: '8px 16px', borderRadius: '14px' }}>
-                  <Calendar size={14} color="#8B5E34" />
-                  <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34' }}>Expires in 30 days</span>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FFF9F3', border: '1px solid #EADFCF', padding: '8px 16px', borderRadius: '14px' }}>
+                    <Calendar size={14} color="#8B5E34" />
+                    <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34' }}>Expires in 30 days</span>
+                  </div>
+
+                  {coupon.remainingStock !== undefined && (
+                    isOutOfStock ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FEE2E2', border: '1px solid #FCA5A5', padding: '6px 12px', borderRadius: '10px', color: '#991B1B', fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        Out of Stock
+                      </div>
+                    ) : coupon.remainingStock <= 20 ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FEF3C7', border: '1px solid #FDE68A', padding: '6px 12px', borderRadius: '10px', color: '#92400E', fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        ⚠️ Only {coupon.remainingStock} left!
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#ECFDF5', border: '1px solid #A7F3D0', padding: '6px 12px', borderRadius: '10px', color: '#047857', fontSize: '11.5px', fontWeight: 700 }}>
+                        ✓ {coupon.remainingStock} available
+                      </div>
+                    )
+                  )}
+
+                  {coupon.unlockedCount !== undefined && coupon.unlockedCount > 0 && (
+                    <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#8C4F1A', opacity: 0.8 }}>
+                      ★ Unlocked {coupon.unlockedCount} times
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -250,7 +281,7 @@ export default function CouponDetailPage() {
                   </div>
                   <div>
                     <div style={{ fontSize: '11px', color: '#8C745C', fontWeight: 700 }}>UNLOCK FEE</div>
-                    <div style={{ fontSize: '13px', color: '#3D2B1A', fontWeight: 800 }}>₹{coupon.price} Support</div>
+                    <div style={{ fontSize: '13px', color: '#3D2B1A', fontWeight: 800 }}>₹{coupon.unlockAmount ?? coupon.price} Support</div>
                   </div>
                 </div>
 
@@ -345,23 +376,24 @@ export default function CouponDetailPage() {
                       </>
                     ) : (
                       <button 
-                        onClick={handleUnlockClick}
+                        onClick={isOutOfStock ? undefined : handleUnlockClick}
+                        disabled={isOutOfStock}
                         style={{ 
                           padding: '16px 36px', 
-                          background: 'linear-gradient(135deg, #8C4F1A, #C8773A)', 
-                          border: 'none', 
+                          background: isOutOfStock ? '#E4E4E7' : 'linear-gradient(135deg, #8C4F1A, #C8773A)', 
+                          border: isOutOfStock ? '1px solid #D4D4D8' : 'none', 
                           borderRadius: '18px', 
-                          color: '#FFFFFF', 
+                          color: isOutOfStock ? '#A1A1AA' : '#FFFFFF', 
                           fontWeight: 800, 
                           fontSize: '15px', 
-                          cursor: 'pointer',
+                          cursor: isOutOfStock ? 'not-allowed' : 'pointer',
                           display: 'flex',
                           alignItems: 'center',
                           gap: 10,
-                          boxShadow: '0 8px 24px rgba(140, 79, 26, 0.2)'
+                          boxShadow: isOutOfStock ? 'none' : '0 8px 24px rgba(140, 79, 26, 0.2)'
                         }}
                       >
-                        <Lock size={16} /> Unlock Code for ₹{coupon.price}
+                        <Lock size={16} /> {isOutOfStock ? 'Out of Stock' : `Unlock Code for ₹${coupon.unlockAmount ?? coupon.price}`}
                       </button>
                     )}
                   </div>
@@ -375,7 +407,7 @@ export default function CouponDetailPage() {
                 </h3>
                 <ul style={{ margin: 0, paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <li style={{ fontSize: '14.5px', color: '#7A6A58', fontWeight: 500, lineHeight: 1.5 }}>
-                    Click the <strong>Unlock</strong> button to make a verified donation of ₹{coupon.price}.
+                    Click the <strong>Unlock</strong> button to make a verified donation of ₹{coupon.unlockAmount ?? coupon.price}.
                   </li>
                   <li style={{ fontSize: '14.5px', color: '#7A6A58', fontWeight: 500, lineHeight: 1.5 }}>
                     After successful payment, the hidden coupon code will be permanently revealed.
@@ -468,6 +500,8 @@ export default function CouponDetailPage() {
                 padding: '32px',
                 boxShadow: '0 24px 64px rgba(61, 43, 26, 0.15)',
                 position: 'relative'
+              }}
+            >
               <button 
                 onClick={() => setIsModalOpen(false)}
                 style={{ 
