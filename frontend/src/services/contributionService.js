@@ -167,6 +167,9 @@ export async function generateHealingCertificate({
           unlockedAt: serverTimestamp(),
           certificateId: newCertId
         };
+        transaction.set(gameUnlockDocRef, newGameUnlock);
+      }
+
       // Healing Message Unlock logic
       if (contributionType === 'healing_message_unlock') {
         const messageUnlocksCol = collection(db, 'healingMessageUnlocks');
@@ -182,7 +185,6 @@ export async function generateHealingCertificate({
         };
         transaction.set(messageUnlockDocRef, newMessageUnlock);
       }
-    }
 
       // Update global analytics document inside transaction
       const statsRef = doc(db, 'analytics', 'globalStats');

@@ -114,53 +114,21 @@ export default function CouponDetailPage() {
     }
 
     // Save user details
+    localStorage.setItem('hp_supporter_name', formData.name.trim())
+    localStorage.setItem('hp_supporter_mobile', formData.mobile.trim())
+    localStorage.setItem('hp_supporter_email', formData.email.trim())
     localStorage.setItem('hp_user_name', formData.name.trim())
     localStorage.setItem('hp_user_mobile', formData.mobile.trim())
     localStorage.setItem('hp_user_email', formData.email.trim())
 
+    localStorage.setItem('hp_unlock_type', 'coupon')
+    localStorage.setItem('hp_pending_price', (coupon.unlockAmount ?? coupon.price).toString())
+    localStorage.setItem('hp_pending_game_id', coupon.id)
+    localStorage.setItem('hp_pending_game_title', coupon.brand)
+    localStorage.setItem('hp_pending_game_path', '')
+
     setIsModalOpen(false)
-
-    try {
-      const amount = coupon.unlockAmount ?? coupon.price
-      // Call secure unified payment utility (live Razorpay or simulated mock)
-      await requestPayment(amount, `Unlock Coupon: ${coupon.brand}`)
-
-      confirmDonation(amount)
-
-      if (currentUser?.uid) {
-        await generateHealingCertificate({
-          userId: currentUser.uid,
-          amount: amount,
-          childName: 'Janamithra',
-          title: `Certificate of Coupon Unlock - ${coupon.brand}`,
-          contributionType: 'coupon_unlock',
-          couponId: coupon.id,
-          couponBrand: coupon.brand,
-          couponCode: coupon.code,
-          supporterName: formData.name.trim()
-        })
-
-        // Unlock locally first
-        setLocalUnlocked(true)
-        setToastMsg('Coupon successfully unlocked! 🎁')
-        setTimeout(() => {
-          setToastMsg(null)
-          navigate(`/coupon-thank-you/${coupon.id}`)
-        }, 1500)
-      } else {
-        // Offline / fallback
-        setLocalUnlocked(true)
-        setToastMsg('Coupon successfully unlocked! 🎁')
-        setTimeout(() => {
-          setToastMsg(null)
-          navigate(`/coupon-thank-you/${coupon.id}`)
-        }, 1500)
-      }
-    } catch (err) {
-      console.error('Payment workflow failed or was dismissed:', err.message)
-      setToastMsg('Payment not completed ❌')
-      setTimeout(() => setToastMsg(null), 3000)
-    }
+    navigate('/direct-payment')
   }
 
   return (

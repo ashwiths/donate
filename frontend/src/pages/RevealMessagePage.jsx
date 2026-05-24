@@ -71,40 +71,18 @@ export default function RevealMessagePage() {
   const handleNameSubmit = async (e) => {
     e.preventDefault()
     if (!supporterName.trim()) return
-    setLoading(true)
 
-    try {
-      // Call secure unified payment utility (live Razorpay or simulated mock)
-      await requestPayment(message.price, `Unlock Mindful Message: ${message.title}`)
+    // Save details to localStorage
+    localStorage.setItem('hp_supporter_name', supporterName.trim())
+    localStorage.setItem('hp_user_name', supporterName.trim())
 
-      // 1. Generate Healing Certificate via Firebase transaction
-      const certId = await generateHealingCertificate({
-        userId: user.uid,
-        amount: message.price,
-        childName: 'Janamithra',
-        title: `Certificate of Healing Message - ${message.title}`,
-        contributionType: 'healing_message_unlock',
-        gameId: message.id, // stores messageId
-        gameName: message.title, // stores message title
-        supporterName: supporterName.trim()
-      })
-      
-      setCreatedCertId(certId)
-      setStep('reveal')
+    localStorage.setItem('hp_unlock_type', 'message')
+    localStorage.setItem('hp_pending_price', message.price.toString())
+    localStorage.setItem('hp_pending_game_id', message.id)
+    localStorage.setItem('hp_pending_game_title', message.title)
+    localStorage.setItem('hp_pending_game_path', '')
 
-      // Fire celebratory confetti
-      confetti({
-        particleCount: 120,
-        spread: 80,
-        origin: { y: 0.5 },
-        colors: ['#8C4F1A', '#C8773A', '#D4AF37', '#FDFBF7']
-      })
-    } catch (err) {
-      console.error("Failed to unlock healing message:", err)
-      alert("Failed to unlock: " + err.message)
-    } finally {
-      setLoading(false)
-    }
+    navigate('/direct-payment')
   }
 
   const handleDownloadCert = () => {
