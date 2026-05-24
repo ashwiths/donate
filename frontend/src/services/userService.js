@@ -26,6 +26,7 @@ export async function createUserDocument(firebaseUser) {
       unlockedGameDetails: [],
       totalGamesUnlocked: 0,
       couponsClaimed: 0,
+      unlockedCoupons: [],
       quotesOpened: 0,
       healingSupports: 0,
       createdAt: serverTimestamp()

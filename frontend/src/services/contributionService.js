@@ -1,23 +1,159 @@
-import { collection, addDoc, getDocs, query, where, doc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, doc, runTransaction, serverTimestamp, increment, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase';
 
 /**
- * Creates a contribution, adds an activity entry, generates a certificate, and updates user stats in a single safe transaction.
- * @param {string} userId - The user's UID.
- * @param {number} amount - The contribution amount.
- * @param {string} childName - Name of the child helped.
- * @param {string} status - Contribution status (e.g., 'Success').
- * @returns {Promise<void>}
+ * Centralized helper to generate a healing certificate and related records (contribution, activity).
+ * @param {object} params
+ * @returns {Promise<string>} Created certificate document ID.
  */
-export async function addContribution(userId, amount, childName, status = 'Success', isGameActivity = false) {
-  if (!userId) return;
+export async function generateHealingCertificate({
+  userId,
+  amount,
+  childName = 'Janamithra',
+  title = '',
+  contributionType = 'donation', // 'donation', 'game_unlock', 'coupon_unlock', 'sponsor_reward'
+  couponId = '',
+  couponBrand = '',
+  couponCode = '',
+  gameId = '',
+  gameName = ''
+}) {
+  if (!userId) return null;
 
   const userRef = doc(db, 'users', userId);
   const contributionsCol = collection(db, 'contributions');
   const activitiesCol = collection(db, 'activities');
   const certificatesCol = collection(db, 'certificates');
 
-  // Event-safe auto-detection of game events from status to double-guarantee separation
+  try {
+    let newCertId = '';
+    await runTransaction(db, async (transaction) => {
+      // 1. Fetch user data within transaction
+      const userSnap = await transaction.get(userRef);
+      if (!userSnap.exists()) {
+        throw new Error('User document does not exist.');
+      }
+      const userData = userSnap.data();
+
+      // 2. Add Contribution record
+      const newContribution = {
+        userId,
+        amount,
+        childName,
+        status: `${contributionType.toUpperCase()}_SUCCESS`,
+        createdAt: serverTimestamp()
+      };
+      const contributionDocRef = doc(contributionsCol);
+      transaction.set(contributionDocRef, newContribution);
+
+      // 3. Add Activity record
+      let activityText = `Contributed ₹${amount} towards ${childName}'s recovery`;
+      if (contributionType === 'game_unlock') {
+        activityText = `Unlocked premium game "${gameName || 'Game'}" for ₹${amount} supporting ${childName}`;
+      } else if (contributionType === 'coupon_unlock') {
+        activityText = `Unlocked premium coupon for "${couponBrand || 'Sponsor'}" for ₹${amount} supporting ${childName}`;
+      } else if (contributionType === 'sponsor_reward') {
+        activityText = `Earned ₹${amount} sponsor-matched treatment support via game achievement`;
+      }
+      
+      const newActivity = {
+        userId,
+        text: activityText,
+        createdAt: serverTimestamp()
+      };
+      const activityDocRef = doc(activitiesCol);
+      transaction.set(activityDocRef, newActivity);
+
+      // 4. Add Certificate record
+      const certificateDocRef = doc(certificatesCol);
+      newCertId = certificateDocRef.id;
+      
+      const newCertificate = {
+        amount,
+        childName,
+        title: title || (contributionType === 'game_unlock' ? 'Certificate of Play Matching' : 'Certificate of Healing Support'),
+        userId,
+        createdAt: serverTimestamp(),
+        certificateUrl: '', // placeholder
+        couponId: couponId || '',
+        gameId: gameId || '',
+        contributionType
+      };
+      transaction.set(certificateDocRef, newCertificate);
+
+      // 5. Update user stats
+      const totalSupport = (userData.totalSupport || 0) + amount;
+      const contributionsCount = (userData.contributions || 0) + 1;
+      const childrenHelped = (userData.childrenHelped || 0) + 1;
+      const healingStreak = contributionsCount > 1 ? `${contributionsCount} Months` : '1 Month';
+
+      const updateFields = {
+        totalSupport,
+        contributions: contributionsCount,
+        childrenHelped,
+        healingStreak
+      };
+
+      if (contributionType === 'sponsor_reward') {
+        updateFields.gamesPlayed = (userData.gamesPlayed || 0) + 1;
+        updateFields.totalWins = (userData.totalWins || 0) + 1;
+      } else if (contributionType === 'coupon_unlock') {
+        updateFields.couponsClaimed = (userData.couponsClaimed || 0) + 1;
+        
+        if (couponId) {
+          const detailObj = {
+            id: couponId,
+            brand: couponBrand || 'Premium Sponsor',
+            code: couponCode || 'SECRET',
+            unlockedAt: new Date().toISOString(),
+            amount: amount
+          };
+          if (!Array.isArray(userData.unlockedCoupons)) {
+            updateFields.unlockedCoupons = [detailObj];
+          } else {
+            updateFields.unlockedCoupons = arrayUnion(detailObj);
+          }
+        }
+      } else if (contributionType === 'game_unlock') {
+        updateFields.totalGamesUnlocked = (userData.totalGamesUnlocked || 0) + 1;
+        
+        if (gameId) {
+          const detailObj = {
+            gameId,
+            gameName: gameName || 'Premium Game',
+            amount,
+            type: 'paid',
+            unlockedAt: new Date().toISOString()
+          };
+          if (!Array.isArray(userData.unlockedGames)) {
+            updateFields.unlockedGames = [gameId];
+            updateFields.unlockedGameDetails = [detailObj];
+          } else {
+            updateFields.unlockedGames = arrayUnion(gameId);
+            updateFields.unlockedGameDetails = arrayUnion(detailObj);
+          }
+        }
+      } else {
+        updateFields.healingSupports = (userData.healingSupports || 0) + 1;
+      }
+
+      transaction.update(userRef, updateFields);
+    });
+
+    return newCertId;
+  } catch (err) {
+    console.error('Failed to generate healing certificate inside transaction:', err);
+    throw err;
+  }
+}
+
+/**
+ * Creates a contribution, adds an activity entry, generates a certificate, and updates user stats in a single safe transaction.
+ * Retained for backward compatibility with existing game components.
+ */
+export async function addContribution(userId, amount, childName, status = 'Success', isGameActivity = false) {
+  if (!userId) return;
+
   const statusLower = (status || '').toLowerCase();
   const detectedGameActivity = isGameActivity || 
     statusLower.includes('reward') || 
@@ -34,79 +170,16 @@ export async function addContribution(userId, amount, childName, status = 'Succe
     statusLower.includes('victory') ||
     statusLower.includes('complete');
 
-  try {
-    await runTransaction(db, async (transaction) => {
-      // 1. Fetch user data within transaction
-      const userSnap = await transaction.get(userRef);
-      if (!userSnap.exists()) {
-        throw new Error('User document does not exist.');
-      }
+  const contributionType = detectedGameActivity ? 'sponsor_reward' : 'donation';
+  const title = detectedGameActivity ? 'Certificate of Play Matching' : 'Certificate of Healing Support';
 
-      const userData = userSnap.data();
-
-      // 2. Add Contribution record
-      const newContribution = {
-        userId,
-        amount,
-        childName,
-        status,
-        createdAt: serverTimestamp()
-      };
-      const contributionDocRef = doc(contributionsCol);
-      transaction.set(contributionDocRef, newContribution);
-
-      // 3. Add Activity record
-      const newActivity = {
-        userId,
-        text: detectedGameActivity 
-          ? `Earned ₹${amount} sponsor-matched treatment support via game achievement`
-          : `Contributed ₹${amount} towards ${childName}'s recovery`,
-        createdAt: serverTimestamp()
-      };
-      const activityDocRef = doc(activitiesCol);
-      transaction.set(activityDocRef, newActivity);
-
-      // 4. Add Certificate record
-      const newCertificate = {
-        userId,
-        title: detectedGameActivity ? 'Certificate of Play Matching' : 'Certificate of Healing Support',
-        amount,
-        childName,
-        certificateUrl: '', // placeholder for future storage URL
-        createdAt: serverTimestamp()
-      };
-      const certificateDocRef = doc(certificatesCol);
-      transaction.set(certificateDocRef, newCertificate);
-
-      // 5. Update user stats
-      const totalSupport = (userData.totalSupport || 0) + amount;
-      const contributionsCount = (userData.contributions || 0) + 1;
-      const childrenHelped = (userData.childrenHelped || 0) + 1;
-      const healingStreak = contributionsCount > 1 ? `${contributionsCount} Months` : '1 Month';
-
-      const updateFields = {
-        totalSupport,
-        contributions: contributionsCount,
-        childrenHelped,
-        healingStreak
-      };
-
-      if (!detectedGameActivity) {
-        // Direct/Real healing support action or donation
-        const nextHealingSupports = (userData.healingSupports || 0) + 1;
-        updateFields.healingSupports = nextHealingSupports;
-      } else {
-        // Game played events - update games/play counters, NOT healingSupports
-        updateFields.gamesPlayed = (userData.gamesPlayed || 0) + 1;
-        updateFields.totalWins = (userData.totalWins || 0) + 1;
-      }
-
-      transaction.update(userRef, updateFields);
-    });
-  } catch (err) {
-    console.error('Failed to add contribution inside transaction:', err);
-    throw err;
-  }
+  return generateHealingCertificate({
+    userId,
+    amount,
+    childName,
+    title,
+    contributionType
+  });
 }
 
 /**

@@ -11,74 +11,11 @@ import DonationProgress from '../components/DonationProgress'
 import { useDonation } from '../context/DonationContext'
 import { useAuth } from '../context/AuthContext'
 import TransparentBreakdown from '../components/TransparentBreakdown'
-import { addContribution } from '../services/contributionService'
-import { doc, updateDoc, increment, arrayUnion } from 'firebase/firestore'
+import { addContribution, generateHealingCertificate } from '../services/contributionService'
+import { doc, updateDoc, increment, arrayUnion, collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useUserData } from '../hooks/useUserData'
-
-// ── Static premium data with SVGs / minimal styles ────────────────────
-const MYSTERY_REWARDS = [
-  {
-    id: 'paytm',
-    title: 'Calmness Promise Drop',
-    brand: 'Exclusive Partner Gift',
-    description: 'A genuine mystery support reward code promised by our leading healthcare and wellness brand partners.',
-    price: 10,
-    blurBg: 'linear-gradient(135deg, rgba(0, 41, 112, 0.08) 0%, rgba(0, 163, 224, 0.12) 100%)',
-    accentColor: '#8C4F1A',
-    teaserLogo: 'Gift'
-  },
-  {
-    id: 'gpay',
-    title: 'Golden Wellness Surprise',
-    brand: 'Premium Care Drop',
-    description: 'Unlock a guaranteed surprise partner perk curated specifically to celebrate your generous gameplay.',
-    price: 10,
-    blurBg: 'linear-gradient(135deg, rgba(234, 67, 53, 0.08) 0%, rgba(66, 133, 244, 0.12) 100%)',
-    accentColor: '#8C4F1A',
-    teaserLogo: 'Gift'
-  },
-  {
-    id: 'amazon',
-    title: 'Serene Care Bonus',
-    brand: 'Wellness Sponsor Reward',
-    description: 'Enjoy a surprise healthcare voucher or exclusive brand drop provided by our dedicated care partners.',
-    price: 20,
-    blurBg: 'linear-gradient(135deg, rgba(255, 153, 0, 0.08) 0%, rgba(0, 0, 0, 0.1) 100%)',
-    accentColor: '#8C4F1A',
-    teaserLogo: 'Gift'
-  },
-  {
-    id: 'swiggy',
-    title: 'Care Circle Gift',
-    brand: 'Mindfulness Gift Drop',
-    description: 'A surprise lifestyle code or wellness reward drops promised by top organic lifestyle sponsors.',
-    price: 10,
-    blurBg: 'linear-gradient(135deg, rgba(252, 128, 25, 0.08) 0%, rgba(252, 128, 25, 0.15) 100%)',
-    accentColor: '#8C4F1A',
-    teaserLogo: 'Gift'
-  },
-  {
-    id: 'flipkart',
-    title: 'Pure Joy Voucher',
-    brand: 'Hospital Sponsor Drop',
-    description: 'Unlock a promised surprise wellness credit or positive living voucher from our wellness partners.',
-    price: 20,
-    blurBg: 'linear-gradient(135deg, rgba(40, 116, 240, 0.08) 0%, rgba(255, 222, 0, 0.12) 100%)',
-    accentColor: '#8C4F1A',
-    teaserLogo: 'Gift'
-  },
-  {
-    id: 'healing-token',
-    title: 'Hope & Healing Token',
-    brand: 'Special Support Code',
-    description: 'A surprise healing reward promised by our leading healthcare and mindfulness partners to support your recovery quest.',
-    price: 30,
-    blurBg: 'linear-gradient(135deg, rgba(71, 104, 44, 0.08) 0%, rgba(71, 104, 44, 0.15) 100%)',
-    accentColor: '#8C4F1A',
-    teaserLogo: 'Gift'
-  }
-]
+import { COUPONS as MYSTERY_REWARDS } from '../data/coupons'
 
 const PREMIUM_GAMES = [
   {
@@ -697,45 +634,55 @@ export default function MainPage() {
     confirmDonation(pendingPrice)
     
     if (user?.uid) {
-      addContribution(user.uid, pendingPrice, 'Janamithra').catch(err => {
-        console.error('Error adding contribution:', err)
-      })
-
-      // Increment specific field based on unlockType in Firestore
-      const userRef = doc(db, 'users', user.uid);
-      const updateFields = {};
       if (unlockType === 'game') {
-        updateFields.totalGamesUnlocked = increment(1);
-        if (pendingGameId) {
-          const detailObj = {
-            gameId: pendingGameId,
-            gameName: pendingGameTitle || 'Premium Game',
-            amount: pendingPrice,
-            type: "paid",
-            unlockedAt: new Date().toISOString()
-          };
-
-          if (userData && !Array.isArray(userData.unlockedGames)) {
-            updateFields.unlockedGames = [pendingGameId];
-            updateFields.unlockedGameDetails = [detailObj];
-          } else {
-            updateFields.unlockedGames = arrayUnion(pendingGameId);
-            updateFields.unlockedGameDetails = arrayUnion(detailObj);
-          }
-        }
+        generateHealingCertificate({
+          userId: user.uid,
+          amount: pendingPrice,
+          childName: 'Janamithra',
+          title: 'Certificate of Game Unlock',
+          contributionType: 'game_unlock',
+          gameId: pendingGameId,
+          gameName: pendingGameTitle || 'Premium Game'
+        }).catch(err => console.error('Error generating game unlock certificate:', err));
       } else if (unlockType === 'coupon') {
-        updateFields.couponsClaimed = increment(1);
-      }
-      if (Object.keys(updateFields).length > 0) {
-        updateDoc(userRef, updateFields).catch(err => {
-          console.error('Error updating user stats in Firestore:', err);
-        });
+        const targetCoupon = MYSTERY_REWARDS.find(c => c.id === pendingGameId);
+        if (targetCoupon) {
+          generateHealingCertificate({
+            userId: user.uid,
+            amount: pendingPrice,
+            childName: 'Janamithra',
+            title: `Certificate of Coupon Unlock - ${targetCoupon.brand}`,
+            contributionType: 'coupon_unlock',
+            couponId: targetCoupon.id,
+            couponBrand: targetCoupon.brand,
+            couponCode: targetCoupon.code
+          }).catch(err => console.error('Error generating coupon unlock certificate:', err));
+        }
+      } else {
+        generateHealingCertificate({
+          userId: user.uid,
+          amount: pendingPrice,
+          childName: 'Janamithra',
+          title: 'Certificate of Healing Support',
+          contributionType: 'donation'
+        }).catch(err => console.error('Error generating donation certificate:', err));
       }
     }
 
     if (unlockType === 'game') {
       setToastMsg('Game successfully unlocked ✨')
-      setTimeout(() => setToastMsg(null), 3000)
+      setTimeout(() => {
+        setToastMsg(null)
+        if (pendingGamePath) {
+          navigate(pendingGamePath)
+        }
+      }, 1000)
+    } else if (unlockType === 'coupon') {
+      setToastMsg('Coupon successfully unlocked ✨')
+      setTimeout(() => {
+        setToastMsg(null)
+        navigate(`/coupon/${pendingGameId}`)
+      }, 1000)
     } else {
       navigate('/thank-you')
     }
@@ -898,6 +845,17 @@ export default function MainPage() {
                 {PREMIUM_GAMES.map((game) => {
                   const isUnlocked = game.price === 0 || unlockedGames.includes(game.id)
                   
+                  let targetPath = '/';
+                  if (game.id === 'sound-wave-serenade') targetPath = '/sound-wave-serenade';
+                  else if (game.id === 'breathe-bloom') targetPath = '/breathe-bloom';
+                  else if (game.id === 'bio-path-tracer') targetPath = '/bio-path-tracer';
+                  else if (game.id === 'therapeutic-path-matrix') targetPath = '/therapeutic-path-matrix';
+                  else if (game.id === 'flex-path') targetPath = '/flex-path';
+                  else if (game.id === 'luxe-xo') targetPath = '/luxe-xo';
+                  else if (game.id === 'mind-flip') targetPath = '/mind-flip';
+                  else if (game.id === 'pulse-reflex') targetPath = '/pulse-reflex';
+                  else if (game.id === 'mind-slide') targetPath = '/mind-slide';
+
                   return (
                     <motion.div
                       key={game.id}
@@ -906,17 +864,6 @@ export default function MainPage() {
                         boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                       } : {}}
                       onClick={() => {
-                        let targetPath = '/';
-                        if (game.id === 'sound-wave-serenade') targetPath = '/sound-wave-serenade';
-                        else if (game.id === 'breathe-bloom') targetPath = '/breathe-bloom';
-                        else if (game.id === 'bio-path-tracer') targetPath = '/bio-path-tracer';
-                        else if (game.id === 'therapeutic-path-matrix') targetPath = '/therapeutic-path-matrix';
-                        else if (game.id === 'flex-path') targetPath = '/flex-path';
-                        else if (game.id === 'luxe-xo') targetPath = '/luxe-xo';
-                        else if (game.id === 'mind-flip') targetPath = '/mind-flip';
-                        else if (game.id === 'pulse-reflex') targetPath = '/pulse-reflex';
-                        else if (game.id === 'mind-slide') targetPath = '/mind-slide';
-
                         if (!isUnlocked && game.price > 0) {
                           setUnlockType('game');
                           handleUnlock(game.price, targetPath, game.id, game.title);
@@ -1011,10 +958,10 @@ export default function MainPage() {
                               if (!isUnlocked && game.price > 0) {
                                 e.stopPropagation();
                                 setUnlockType('game');
-                                handleUnlock(game.price, null, game.id, game.title);
+                                handleUnlock(game.price, targetPath, game.id, game.title);
                               } else if (game.price === 0 && !unlockedGames.includes(game.id)) {
                                 e.stopPropagation();
-                                handleFreeGameUnlock(game.id, game.title, '/');
+                                handleFreeGameUnlock(game.id, game.title, targetPath);
                               }
                             }}
                           >
@@ -1078,15 +1025,18 @@ export default function MainPage() {
                 gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
                 gap: 32 
               }}>
-                {MYSTERY_REWARDS.map((reward) => (
-                  <motion.div
-                    key={reward.id}
-                    whileHover={{ 
-                      y: -8, 
-                      boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
-                    }}
-                    onClick={() => { setUnlockType('coupon'); handleUnlock(reward.price); }}
-                    style={{
+                {MYSTERY_REWARDS.map((reward) => {
+                  const isCouponUnlocked = userData?.unlockedCoupons?.some(c => c.id === reward.id) || false;
+
+                  return (
+                    <motion.div
+                      key={reward.id}
+                      whileHover={{ 
+                        y: -8, 
+                        boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
+                      }}
+                      onClick={() => navigate(`/coupon/${reward.id}`)}
+                      style={{
                       background: '#FFFFFF',
                       border: '1px solid rgba(220, 208, 195, 0.7)',
                       borderRadius: '32px',
@@ -1163,34 +1113,52 @@ export default function MainPage() {
 
                     <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifySelf: 'space-between', justifyContent: 'space-between', gap: 20 }}>
                       <div>
-                        <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{reward.title}</h4>
-                        <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.75, fontWeight: 500 }}>{reward.description}</p>
+                        <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>
+                          {isCouponUnlocked ? reward.title : '🎁 Premium Mystery Reward'}
+                        </h4>
+                        <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.75, fontWeight: 500 }}>
+                          {isCouponUnlocked ? reward.description : 'Unlock this exclusive mystery reward to support Janamithra and reveal a premium discount voucher code from one of our luxury wellness brand partners.'}
+                        </p>
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>₹{reward.price} Reward Code</span>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          {isCouponUnlocked ? 'Unlocked' : `₹${reward.price} Reward Code`}
+                        </span>
                         <motion.div 
                           whileHover={{ scale: 1.02 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (isCouponUnlocked) {
+                              navigate(`/coupon/${reward.id}`);
+                            } else {
+                              setUnlockType('coupon');
+                              handleUnlock(reward.price, null, reward.id, reward.brand);
+                            }
+                          }}
                           style={{ 
                             display: 'flex', 
                             alignItems: 'center', 
                             gap: 6, 
-                            color: '#fff', 
+                            color: isCouponUnlocked ? '#8C4F1A' : '#fff', 
                             fontWeight: 700, 
                             fontSize: '12.5px',
-                            background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
+                            background: isCouponUnlocked ? '#FAF6F0' : 'linear-gradient(135deg, #8C4F1A, #C8773A)',
+                            border: isCouponUnlocked ? '1px solid #EADFCF' : 'none',
                             padding: '10px 20px',
                             borderRadius: '14px',
-                            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)'
+                            boxShadow: isCouponUnlocked ? 'none' : 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)',
+                            cursor: 'pointer'
                           }}
                         >
-                          <span>Unlock for ₹{reward.price}</span>
+                          <span>{isCouponUnlocked ? 'View Coupon' : `Unlock for ₹${reward.price}`}</span>
                           <ChevronRight size={13} />
                         </motion.div>
                       </div>
                     </div>
                   </motion.div>
-                ))}
+                )
+              })}
               </div>
             </section>
           )}

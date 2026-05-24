@@ -18,6 +18,8 @@ import LuxeXOPage from './pages/LuxeXOPage'
 import MindFlipPage from './pages/MindFlipPage'
 import PulseReflexPage from './pages/PulseReflexPage'
 import MindSlidePage from './pages/MindSlidePage'
+import CouponDetailPage from './pages/CouponDetailPage'
+import CouponThankYouPage from './pages/CouponThankYouPage'
 
 function ScrollToTop() {
   const { pathname, search } = useLocation()
@@ -53,6 +55,8 @@ export default function App() {
               <Route path="/mind-flip" element={<MindFlipPage />} />
               <Route path="/pulse-reflex" element={<PulseReflexPage />} />
               <Route path="/mind-slide" element={<MindSlidePage />} />
+              <Route path="/coupon/:couponId" element={<CouponDetailPage />} />
+              <Route path="/coupon-thank-you/:couponId" element={<CouponThankYouPage />} />
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
