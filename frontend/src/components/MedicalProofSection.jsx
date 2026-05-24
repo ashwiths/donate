@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShieldCheck, Download, Maximize2, X, Eye, FileText, CheckCircle } from 'lucide-react'
+import { DonationBackground } from './PremiumBackground'
 
 // Import assets
 import doc1 from '../assets/document1.jpg'
@@ -61,12 +62,16 @@ export default function MedicalProofSection() {
   }
 
   return (
-    <section style={{
-      padding: '96px 40px',
-      background: 'linear-gradient(to bottom, #FAF6F2 0%, #FFFDFB 50%, #FAF6F2 100%)',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
+    <section
+      id="medical-documents"
+      style={{
+        padding: '96px 40px',
+        background: 'transparent',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      <DonationBackground />
       {/* Decorative Warm Ambient Glows */}
       <div style={{
         position: 'absolute',
@@ -157,7 +162,7 @@ export default function MedicalProofSection() {
               lineHeight: 1.6
             }}
           >
-            We believe in complete transparency. Supporters can review authentic hospital and diagnostic reports related to Janamithra’s treatment journey.
+            We believe in complete transparency. Supporters can review authentic hospital and diagnostic reports related to Janamitra’s treatment journey.
           </motion.p>
         </div>
 

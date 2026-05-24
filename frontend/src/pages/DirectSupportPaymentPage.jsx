@@ -8,6 +8,7 @@ import { generateHealingCertificate } from '../services/contributionService'
 import qrImage from '../assets/payment-qr.png'
 import { fadeUp } from '../animations/variants'
 import confetti from 'canvas-confetti'
+import { getSupporterDisplayName } from '../utils/nameHelper'
 
 export default function DirectSupportPaymentPage() {
   const navigate = useNavigate()
@@ -19,7 +20,7 @@ export default function DirectSupportPaymentPage() {
   const [paymentSuccess, setPaymentSuccess] = useState(false)
 
   // Retrieve temporary contribution details stored in localStorage
-  const supporterName = localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name') || 'Kind Supporter'
+  const supporterName = getSupporterDisplayName(user, localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name'))
   const supporterEmail = localStorage.getItem('hp_supporter_email') || localStorage.getItem('hp_user_email') || ''
   const supporterMobile = localStorage.getItem('hp_supporter_mobile') || localStorage.getItem('hp_user_mobile') || ''
   
@@ -57,7 +58,7 @@ export default function DirectSupportPaymentPage() {
             await generateHealingCertificate({
               userId: user.uid,
               amount: pendingPrice,
-              childName: 'Janamithra',
+              childName: 'Janamitra',
               title: 'Certificate of Game Unlock',
               contributionType: 'game_unlock',
               gameId: pendingGameId,
@@ -68,7 +69,7 @@ export default function DirectSupportPaymentPage() {
             await generateHealingCertificate({
               userId: user.uid,
               amount: pendingPrice,
-              childName: 'Janamithra',
+              childName: 'Janamitra',
               title: `Certificate of Coupon Unlock - ${pendingGameTitle}`,
               contributionType: 'coupon_unlock',
               couponId: pendingGameId,
@@ -80,7 +81,7 @@ export default function DirectSupportPaymentPage() {
             await generateHealingCertificate({
               userId: user.uid,
               amount: pendingPrice,
-              childName: 'Janamithra',
+              childName: 'Janamitra',
               title: `Certificate of Healing Message - ${pendingGameTitle}`,
               contributionType: 'healing_message_unlock',
               gameId: pendingGameId,
@@ -91,7 +92,7 @@ export default function DirectSupportPaymentPage() {
             await generateHealingCertificate({
               userId: user.uid,
               amount: pendingPrice,
-              childName: 'Janamithra',
+              childName: 'Janamitra',
               title: 'Certificate of Healing Support',
               contributionType: 'donation',
               supporterName: supporterName
@@ -196,7 +197,7 @@ export default function DirectSupportPaymentPage() {
 
         {/* Headings */}
         <h1 style={{ margin: '0 0 8px', fontSize: 'clamp(22px, 5vw, 28px)', fontWeight: 900, letterSpacing: '-0.5px', color: '#3D2B1A' }}>
-          Support Janamithra’s Healing Journey ❤️
+          Support Janamitra’s Healing Journey ❤️
         </h1>
         <p style={{ margin: '0 0 24px', fontSize: '14.5px', color: '#7A6A5A', lineHeight: 1.5 }}>
           You are directly supporting verified pediatric treatment and recovery care.
@@ -474,7 +475,7 @@ export default function DirectSupportPaymentPage() {
                 lineHeight: 1.6,
                 fontWeight: 500
               }}>
-                Your direct support is fully verified and routed directly to Janamithra’s pediatric care.
+                Your direct support is fully verified and routed directly to Janamitra’s pediatric care.
               </p>
 
               {/* Glowing Heart indicator */}

@@ -96,7 +96,7 @@ const BRAND_PULL_LIST = [
 const LIVE_DONATIONS = [
   { text: "Someone donated ₹10 from Chennai just now ❤️", time: "1s ago" },
   { text: "Flat ₹50 Flipkart coupon unlocked in Bangalore 🏷️", time: "12s ago" },
-  { text: "₹2,500 raised for Janamithra this hour 📈", time: "3m ago" },
+  { text: "₹2,500 raised for Janamitra this hour 📈", time: "3m ago" },
   { text: "Nanavati Max Hospital cleared billing milestone 🛡️", time: "8m ago" }
 ]
 
@@ -319,7 +319,7 @@ export default function HomePage() {
                     cursor: 'pointer'
                   }}
                 >
-                  <Gamepad2 size={16} /> Unlock
+                  <Gamepad2 size={16} /> Heal
                 </motion.button>
 
                 <motion.button
@@ -348,17 +348,43 @@ export default function HomePage() {
 
               <motion.div
                 variants={fadeUp}
-                style={{ display: 'flex', gap: 16, alignItems: 'center', borderTop: '1px solid rgba(232, 224, 214, 0.5)', paddingTop: 20 }}
+                style={{ display: 'flex', flexDirection: 'column', gap: 12, borderTop: '1px solid rgba(232, 224, 214, 0.5)', paddingTop: 20 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <CheckCircle2 size={14} color="#16a34a" />
-                  <span style={{ fontSize: '13px', fontWeight: 700 }}>25.8K Helpers Active</span>
+                <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <CheckCircle2 size={14} color="#16a34a" />
+                    <span style={{ fontSize: '13px', fontWeight: 700 }}>25.8K Helpers Active</span>
+                  </div>
+                  <span style={{ color: 'var(--color-text-light)' }}>•</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Shield size={14} color="var(--color-primary)" />
+                    <span style={{ fontSize: '13px', fontWeight: 700 }}>100% Hospital Directed</span>
+                  </div>
                 </div>
-                <span style={{ color: 'var(--color-text-light)' }}>•</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Shield size={14} color="var(--color-primary)" />
-                  <span style={{ fontSize: '13px', fontWeight: 700 }}>100% Hospital Directed</span>
-                </div>
+
+                <a
+                  href="#medical-documents"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('medical-documents')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  style={{
+                    fontSize: '11.5px',
+                    fontWeight: 700,
+                    color: 'var(--color-accent)',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    transition: 'all 0.2s ease',
+                    marginTop: 4,
+                    alignSelf: 'flex-start'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary-dark)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
+                >
+                  <FileText size={12} /> Scroll down to see the Medical Documents
+                </a>
               </motion.div>
             </motion.div>
 
@@ -1183,10 +1209,10 @@ export default function HomePage() {
                   Umamaheswari never imagined that motherhood would become a fight for survival.
                 </p>
                 <p style={{ margin: '0 0 18px' }}>
-                  Her little daughter, <strong>Janamithra</strong>, just <strong>1 year and 4 months old</strong>, is her first child, her only child, and her entire world. <span className="heartbeat-pulse">💔</span>
+                  Her little daughter, <strong>Janamitra</strong>, just <strong>1 year and 4 months old</strong>, is her first child, her only child, and her entire world. <span className="heartbeat-pulse">💔</span>
                 </p>
                 <p style={{ margin: '0 0 18px' }}>
-                  At an age when children begin taking tiny steps and exploring life, Janamithra is fighting for something much more basic — the strength to even move.
+                  At an age when children begin taking tiny steps and exploring life, Janamitra is fighting for something much more basic — the strength to even move.
                 </p>
                 <p style={{ margin: '0 0 18px' }}>
                   Doctors diagnosed her with <strong>Spinal Muscular Atrophy Type 2 (SMA Type 2)</strong>, a rare and life-threatening genetic condition that slowly weakens the muscles over time.
@@ -1195,7 +1221,7 @@ export default function HomePage() {
                   Every day without treatment steals a little more of her strength.
                 </p>
                 <p style={{ margin: 0 }}>
-                  While other children laugh, run, and play, Janamithra struggles silently — and her mother watches helplessly, praying every single day for a miracle.
+                  While other children laugh, run, and play, Janamitra struggles silently — and her mother watches helplessly, praying every single day for a miracle.
                 </p>
               </div>
             </motion.div>
@@ -1229,7 +1255,7 @@ export default function HomePage() {
 
                 <img
                   src={helpJanaImg}
-                  alt="Baby Janamithra"
+                  alt="Baby Janamitra"
                   style={{
                     width: '100%',
                     height: '100%',
@@ -1279,7 +1305,7 @@ export default function HomePage() {
                     <ShieldCheck size={12} color="#D4AF37" /> Clinical Case No: H&P-JANA-2026
                   </div>
                   <h4 style={{ margin: 0, fontSize: '20px', fontWeight: 900, fontFamily: 'Outfit' }}>
-                    Janamithra (1 Year Old)
+                    Janamitra (1 Year Old)
                   </h4>
                 </div>
               </div>
@@ -1299,7 +1325,7 @@ export default function HomePage() {
                   <HeartPulse className="heartbeat-pulse" size={24} color="#EF4444" style={{ marginTop: 2, flexShrink: 0 }} />
                   <div>
                     <p style={{ margin: '0 0 10px', fontSize: '14.5px', color: '#3D2B1A', fontWeight: 800, lineHeight: 1.5 }}>
-                      Janamithra urgently needs a one-time gene therapy treatment that could save her life and give her a chance at a normal childhood.
+                      Janamitra urgently needs a one-time gene therapy treatment that could save her life and give her a chance at a normal childhood.
                     </p>
                     <p style={{ margin: 0, fontSize: '13px', color: '#7A6A58', fontWeight: 600, lineHeight: 1.5 }}>
                       The treatment cost is unimaginably high — far beyond what this family can afford alone.
@@ -1446,7 +1472,7 @@ export default function HomePage() {
                   Video Proof & Appeal
                 </h4>
                 <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5, fontWeight: 500 }}>
-                  Real emotional video appeal showing Janamithra’s condition and urgent treatment requirement.
+                  Real emotional video appeal showing Janamitra’s condition and urgent treatment requirement.
                 </p>
               </div>
 
@@ -1815,7 +1841,7 @@ export default function HomePage() {
               This is a mother asking the world for a miracle. 🙏
             </p>
             <p style={{ fontSize: '15.5px', color: '#5C4C3C', lineHeight: 1.75, fontWeight: 500, margin: '0 auto 36px', maxWidth: '680px' }}>
-              Every contribution, every share, every act of kindness brings Janamithra one step closer to a future where she can stand, walk, smile, and joyfully call out ‘Amma’.
+              Every contribution, every share, every act of kindness brings Janamitra one step closer to a future where she can stand, walk, smile, and joyfully call out ‘Amma’.
             </p>
 
             <motion.button

@@ -9,7 +9,7 @@ import { db } from '../firebase';
 export async function generateHealingCertificate({
   userId,
   amount,
-  childName = 'Janamithra',
+  childName = 'Janamitra',
   title = '',
   contributionType = 'donation', // 'donation', 'game_unlock', 'coupon_unlock', 'sponsor_reward'
   couponId = '',

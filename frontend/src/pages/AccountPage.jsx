@@ -14,6 +14,7 @@ import LoadingSkeleton from '../components/LoadingSkeleton';
 import { addSupportTicket } from '../services/userService';
 import { db } from '../firebase';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { getSupporterDisplayName } from '../utils/nameHelper';
 
 // Ambient floating particles (optimized for performance)
 const Particles = () => (
@@ -86,7 +87,7 @@ export default function AccountPage() {
   }, [user]);
 
   const handleDownloadCert = (cert) => {
-    const safeName = cert.supporterName || userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter';
+    const safeName = getSupporterDisplayName(user, cert.supporterName || localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name'));
     const parts = (cert.title || 'Certificate of Healing Support').split(/\s*[-–]\s*/);
     const titleLine1 = parts[0];
     const titleLine2 = parts.slice(1).join(' - ');
@@ -521,12 +522,12 @@ export default function AccountPage() {
                     border: '3px solid #FFF', boxShadow: '0 8px 24px rgba(139, 94, 52, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: '32px', fontWeight: 900, color: '#8C4F1A', fontFamily: 'Outfit'
                   }}>
-                    {(userData?.name || user?.name || 'V')[0].toUpperCase()}
+                    {getSupporterDisplayName(user, userData?.name)[0].toUpperCase()}
                   </div>
                 )}
                 <div>
                   <h2 style={{ margin: '0 0 4px', fontSize: '24px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
-                    {userData?.name || user?.name || 'Helper Account'}
+                    {getSupporterDisplayName(user, userData?.name)}
                   </h2>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px', color: '#7A6A58', fontWeight: 600, marginBottom: '8px' }}>
                     <User size={14} /> {userData?.email || user?.email || 'verified.supporter@email.com'}
@@ -1008,7 +1009,7 @@ export default function AccountPage() {
                   </p>
                   
                   <h3 style={{ fontSize: '24px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit', borderBottom: '1.5px solid #EBD5C2', display: 'inline-block', paddingBottom: 6, marginBottom: 20, minWidth: '240px' }}>
-                    {selectedCert.supporterName || userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter'}
+                    {getSupporterDisplayName(user, selectedCert.supporterName || localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name'))}
                   </h3>
 
                   <p style={{ fontSize: '14.5px', color: '#5C4C3C', lineHeight: 1.7, fontWeight: 500, margin: '0 auto 28px', maxWidth: '520px' }}>

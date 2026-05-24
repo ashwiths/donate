@@ -13,8 +13,8 @@ import { db } from '../firebase'
 import { useAuth } from '../context/AuthContext'
 import { useUserData } from '../hooks/useUserData'
 import { staggerContainer, fadeUp, scaleIn } from '../animations/variants'
-import confetti from 'canvas-confetti'
 import TransparentBreakdown from '../components/TransparentBreakdown'
+import { getSupporterDisplayName } from '../utils/nameHelper'
 
 export default function CouponThankYouPage() {
   const { couponId } = useParams()
@@ -92,7 +92,7 @@ export default function CouponThankYouPage() {
     return { line1: fullTitle, line2: '' }
   }
 
-  const userName = cert?.supporterName || userData?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter'
+  const userName = getSupporterDisplayName(user, cert?.supporterName || localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name'))
   const userEmail = userData?.email || user?.email || localStorage.getItem('hp_user_email') || ''
 
   const formatDate = (timestamp) => {

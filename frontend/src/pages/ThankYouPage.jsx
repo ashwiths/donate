@@ -8,6 +8,7 @@ import { useUserData } from '../hooks/useUserData'
 import { staggerContainer, fadeUp, scaleIn } from '../animations/variants'
 import confetti from 'canvas-confetti'
 import TransparentBreakdown from '../components/TransparentBreakdown'
+import { getSupporterDisplayName } from '../utils/nameHelper'
 
 export default function ThankYouPage() {
   const navigate = useNavigate()
@@ -25,7 +26,7 @@ export default function ThankYouPage() {
   }, [user, navigate])
 
   // Fetch verified user details with high-fidelity resolution hierarchy
-  const userName = userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter'
+  const userName = getSupporterDisplayName(user, localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name'))
   const userEmail = userData?.email || user?.email || localStorage.getItem('hp_user_email') || ''
 
   // Fire confetti on mount for premium delight

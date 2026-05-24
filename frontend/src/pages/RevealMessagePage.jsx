@@ -12,6 +12,7 @@ import { generateHealingCertificate } from '../services/contributionService'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import confetti from 'canvas-confetti'
+import { getSupporterDisplayName } from '../utils/nameHelper'
 
 const MESSAGES_DATA = [
   {
@@ -70,11 +71,13 @@ export default function RevealMessagePage() {
 
   const handleNameSubmit = async (e) => {
     e.preventDefault()
-    if (!supporterName.trim()) return
+    
+    // Resolve helper name if input is empty
+    const finalName = getSupporterDisplayName(user, supporterName)
 
     // Save details to localStorage
-    localStorage.setItem('hp_supporter_name', supporterName.trim())
-    localStorage.setItem('hp_user_name', supporterName.trim())
+    localStorage.setItem('hp_supporter_name', finalName)
+    localStorage.setItem('hp_user_name', finalName)
 
     localStorage.setItem('hp_unlock_type', 'message')
     localStorage.setItem('hp_pending_price', message.price.toString())
@@ -87,7 +90,7 @@ export default function RevealMessagePage() {
 
   const handleDownloadCert = () => {
     if (!createdCertId) return
-    const safeName = supporterName || userData?.name || user?.displayName || 'Verified Supporter'
+    const safeName = getSupporterDisplayName(user, supporterName)
     const printWindow = window.open('', '_blank')
     if (!printWindow) {
       alert("Please allow popups to download your certificate.")
@@ -482,8 +485,7 @@ export default function RevealMessagePage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <input
                     type="text"
-                    required
-                    placeholder="Enter Supporter's Name"
+                    placeholder="Enter Supporter's Name (Optional)"
                     value={supporterName}
                     onChange={(e) => setSupporterName(e.target.value)}
                     style={{

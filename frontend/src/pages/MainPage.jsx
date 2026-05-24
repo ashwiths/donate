@@ -18,6 +18,7 @@ import { db } from '../firebase'
 import { useUserData } from '../hooks/useUserData'
 import { COUPONS as MYSTERY_REWARDS } from '../data/coupons'
 import { subscribeCoupons } from '../services/contributionService'
+import { getSupporterDisplayName } from '../utils/nameHelper'
 
 const PREMIUM_GAMES = [
   {
@@ -644,7 +645,6 @@ export default function MainPage() {
     
     // Validate required fields
     const newErrors = {}
-    if (!formData.name.trim()) newErrors.name = 'Full Name is required'
     if (!formData.email.trim()) {
       newErrors.email = 'Email Address is required'
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -656,11 +656,14 @@ export default function MainPage() {
       return
     }
 
+    // Resolve name dynamically with helper (if empty or provided)
+    const finalSupporterName = getSupporterDisplayName(user, formData.name)
+
     // Save details
-    localStorage.setItem('hp_supporter_name', formData.name.trim())
+    localStorage.setItem('hp_supporter_name', finalSupporterName)
     localStorage.setItem('hp_supporter_mobile', formData.mobile.trim())
     localStorage.setItem('hp_supporter_email', formData.email.trim())
-    localStorage.setItem('hp_user_name', formData.name.trim())
+    localStorage.setItem('hp_user_name', finalSupporterName)
     localStorage.setItem('hp_user_mobile', formData.mobile.trim())
     localStorage.setItem('hp_user_email', formData.email.trim())
 
@@ -1667,11 +1670,10 @@ export default function MainPage() {
               <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {/* Full Name */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#5A4635', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Full Name *</label>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#5A4635', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Full Name (Optional)</label>
                   <input
                     type="text"
                     placeholder="e.g. Priyanshu Sharma"
-                    required
                     value={formData.name}
                     onChange={(e) => {
                       setFormData({ ...formData, name: e.target.value })
