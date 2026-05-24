@@ -642,7 +642,8 @@ export default function MainPage() {
           title: 'Certificate of Game Unlock',
           contributionType: 'game_unlock',
           gameId: pendingGameId,
-          gameName: pendingGameTitle || 'Premium Game'
+          gameName: pendingGameTitle || 'Premium Game',
+          supporterName: formData.name.trim()
         }).catch(err => console.error('Error generating game unlock certificate:', err));
       } else if (unlockType === 'coupon') {
         const targetCoupon = MYSTERY_REWARDS.find(c => c.id === pendingGameId);
@@ -655,7 +656,8 @@ export default function MainPage() {
             contributionType: 'coupon_unlock',
             couponId: targetCoupon.id,
             couponBrand: targetCoupon.brand,
-            couponCode: targetCoupon.code
+            couponCode: targetCoupon.code,
+            supporterName: formData.name.trim()
           }).catch(err => console.error('Error generating coupon unlock certificate:', err));
         }
       } else {
@@ -664,7 +666,8 @@ export default function MainPage() {
           amount: pendingPrice,
           childName: 'Janamithra',
           title: 'Certificate of Healing Support',
-          contributionType: 'donation'
+          contributionType: 'donation',
+          supporterName: formData.name.trim()
         }).catch(err => console.error('Error generating donation certificate:', err));
       }
     }
