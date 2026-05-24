@@ -1451,7 +1451,7 @@ export default function MainPage() {
                     </div>
                     <div>
                       <h4 style={{ margin: 0, fontSize: '19px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>Direct Hospital Support</h4>
-                      <p style={{ margin: '3px 0 0', fontSize: '13.5px', color: '#7A6A5A', fontWeight: 500 }}>Real-time pediatric ward terminal split routing</p>
+                      <p style={{ margin: '3px 0 0', fontSize: '13.5px', color: '#7A6A5A', fontWeight: 500 }}>Real-time pediatric ward treatment routing</p>
                     </div>
                   </div>
 
@@ -1550,7 +1550,7 @@ export default function MainPage() {
                   <div style={{ display: 'flex', gap: 12 }}>
                     <Shield size={18} color="#8B5E34" style={{ marginTop: 2, flexShrink: 0 }} />
                     <div>
-                      <h5 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#4A3427' }}>Split-Term Routing Guarantee</h5>
+                      <h5 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#4A3427' }}>Direct Hospital Support Guarantee</h5>
                       <p style={{ margin: '4px 0 0', fontSize: 12, color: '#7A6A5A', lineHeight: 1.6 }}>100% of contributions land directly inside Janamithra\'s pre-op stabilization billing account (Fortis ID #F89410).</p>
                     </div>
                   </div>
@@ -1590,7 +1590,7 @@ export default function MainPage() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center', marginTop: 20, fontSize: '11px', color: '#7C6B5B', fontWeight: 600 }}>
                   <Shield size={12} color="#47682C" />
-                  <span>100% Direct Hospital Split Routing. Public Ledger Verified.</span>
+                  <span>100% Direct Hospital Payout routing. Public Ledger Verified.</span>
                 </div>
               </div>
             </section>

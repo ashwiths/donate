@@ -621,20 +621,20 @@ export default function HomePage() {
                 background: '#FAF2EA',
                 border: '1px solid #EBD5C2',
                 borderRadius: '99px',
-                padding: '6px 14px',
+                padding: '6px 16px',
                 marginBottom: '12px'
               }}
             >
               <ShieldCheck size={13} color="#8C4F1A" />
               <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                100% Direct Payout Audit
+                100% Direct Patient Support
               </span>
             </motion.div>
             <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(28px, 4vw, 36px)', color: '#3D2B1A', margin: '4px 0 0', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
-              Where Your Contribution Goes 💳
+              Your Contribution Goes Directly to the Patient ❤️
             </h2>
-            <p style={{ margin: '8px 0 0', fontSize: '15.5px', color: 'var(--color-text-muted)', maxWidth: '580px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.55 }}>
-              A premium transparent overview of how your ₹10 ticket routes directly from payment gateway verification into immediate hospital treatment.
+            <p style={{ margin: '8px 0 0', fontSize: '15.5px', color: 'var(--color-text-muted)', maxWidth: '640px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.55 }}>
+              Every contribution is routed toward verified pediatric treatment support, medicines, recovery care, and emergency hospital needs.
             </p>
           </div>
 
@@ -642,138 +642,140 @@ export default function HomePage() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
             gap: 32,
-            marginBottom: 64,
+            marginBottom: 48,
             alignItems: 'stretch'
           }} className="transparency-visual-grid">
 
+            {/* CARD 1 */}
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
               style={{
                 background: '#fff',
                 borderRadius: '24px',
                 border: '1px solid rgba(232, 224, 214, 0.6)',
-                padding: '24px',
+                padding: '32px',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                boxShadow: 'var(--shadow-sm)'
+                gap: 16,
+                boxShadow: 'var(--shadow-sm)',
+                boxSizing: 'border-box'
               }}
             >
+              <div style={{
+                width: 44,
+                height: 44,
+                borderRadius: '12px',
+                background: '#FFF2E6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#8C4F1A'
+              }}>
+                <HeartPulse size={22} />
+              </div>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
-                  <HeartPulse size={22} />
-                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Treatment Allocation</span>
-                </div>
-
-                <div style={{ width: '100%', height: '140px', borderRadius: '16px', overflow: 'hidden', marginBottom: 18 }}>
-                  <HospitalIllustration />
-                </div>
-
-                <h3 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
-                  ₹9.76 Treatment Support Secured
+                <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                  Verified Treatment Support
                 </h3>
-                <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Over ninety-seven percent of your micro-donation routes directly to settling operating theater fees, essential critical ICU setup support, and specialty pediatric pharmacy desks.
+                <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                  Your contribution directly supports medicines, ICU care, treatment procedures, recovery essentials, and pediatric emergency care.
                 </p>
               </div>
             </motion.div>
 
-            <motion.div
-              style={{
-                background: '#FAF2EA',
-                borderRadius: '24px',
-                border: '1px solid #EBD5C2',
-                padding: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between'
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#8C4F1A', marginBottom: 16 }}>
-                  <Activity size={22} />
-                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Allocation Split</span>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: 4 }}>
-                      <span>Child Treatment</span>
-                      <span>₹9.76 (97.6%)</span>
-                    </div>
-                    <div style={{ height: 10, background: 'rgba(232, 224, 214, 0.8)', borderRadius: 99, overflow: 'hidden' }}>
-                      <div style={{ width: '97.6%', height: '100%', background: 'linear-gradient(90deg, #8C4F1A, #C8773A)', borderRadius: 99 }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: 4 }}>
-                      <span>Secure Gateway Processing</span>
-                      <span>₹0.24 (2.4%)</span>
-                    </div>
-                    <div style={{ height: 10, background: 'rgba(232, 224, 214, 0.8)', borderRadius: 99, overflow: 'hidden' }}>
-                      <div style={{ width: '2.4%', height: '100%', background: '#5C2D0E', borderRadius: 99 }} />
-                    </div>
-                  </div>
-                </div>
-
-                <h4 style={{ margin: '0 0 12px', fontSize: '12.5px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.02em', textTransform: 'uppercase' }}>
-                  Micro-Payment Verification Flow
-                </h4>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: '12.5px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
-                    <span>Helper Pays ₹10 securely</span>
-                  </div>
-                  <div style={{ width: 1, height: 10, background: '#EBD5C2', marginLeft: 2.5 }} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
-                    <span>Razorpay SSL verification clears fee (₹0.24)</span>
-                  </div>
-                  <div style={{ width: 1, height: 10, background: '#EBD5C2', marginLeft: 2.5 }} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8C4F1A' }} />
-                    <span>Direct settlement routes medical support (₹9.76)</span>
-                  </div>
-                </div>
-
-              </div>
-            </motion.div>
-
+            {/* CARD 2 */}
             <motion.div
               whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
               style={{
                 background: '#fff',
                 borderRadius: '24px',
                 border: '1px solid rgba(232, 224, 214, 0.6)',
-                padding: '24px',
+                padding: '32px',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                boxShadow: 'var(--shadow-sm)'
+                gap: 16,
+                boxShadow: 'var(--shadow-sm)',
+                boxSizing: 'border-box'
               }}
             >
+              <div style={{
+                width: 44,
+                height: 44,
+                borderRadius: '12px',
+                background: '#FFF2E6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#8C4F1A'
+              }}>
+                <Users size={22} />
+              </div>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
-                  <Lock size={20} />
-                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Security Assurance</span>
-                </div>
-
-                <div style={{ width: '100%', height: '140px', borderRadius: '16px', overflow: 'hidden', marginBottom: 18 }}>
-                  <SecurityIllustration />
-                </div>
-
-                <h3 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
-                  ₹1 Secure Payment Routing
+                <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                  Direct Family Assistance
                 </h3>
-                <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Payment routing handles secure SSL encryption protocols, transactional routing, and verification clearing keys, routing direct payouts to verified hospital ledgers.
+                <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                  Funds are routed toward verified patient support initiatives and emergency healthcare requirements without hidden deductions.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* CARD 3 */}
+            <motion.div
+              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
+              style={{
+                background: '#fff',
+                borderRadius: '24px',
+                border: '1px solid rgba(232, 224, 214, 0.6)',
+                padding: '32px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 16,
+                boxShadow: 'var(--shadow-sm)',
+                boxSizing: 'border-box'
+              }}
+            >
+              <div style={{
+                width: 44,
+                height: 44,
+                borderRadius: '12px',
+                background: '#FFF2E6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#8C4F1A'
+              }}>
+                <Award size={22} />
+              </div>
+              <div>
+                <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                  Transparent Healing Impact
+                </h3>
+                <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                  Every contribution is tracked with transparency records and verified support acknowledgements for accountability and trust.
                 </p>
               </div>
             </motion.div>
 
           </div>
+
+          {/* Bottom Trust Text */}
+          <div style={{
+            textAlign: 'center',
+            fontSize: '14px',
+            fontWeight: 700,
+            color: '#8C4F1A',
+            background: '#FAF2EA',
+            border: '1px solid #EBD5C2',
+            borderRadius: '99px',
+            padding: '10px 24px',
+            display: 'block',
+            margin: '28px auto 0',
+            maxWidth: 'fit-content'
+          }}>
+            Exact contribution amount • No hidden charges • Compassion-first support
+          </div>
+
 
           {/* 3B. TRUST & FRAMEWORK CARDS */}
           <div style={{ marginTop: 80, borderTop: '1px solid rgba(232, 224, 214, 0.6)', paddingTop: 64 }}>
