@@ -15,7 +15,6 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "firebase-admin": "^13.0.2",
-    "mongoose": "^9.6.2",
     "razorpay": "^2.9.5"
   },
   "devDependencies": {
