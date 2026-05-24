@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import helpJanaImg from '../assets/janamithra.png'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, Lock, User, Heart, Shield, Award, Sparkles, CheckCircle2, X, ChevronRight, Activity, Globe } from 'lucide-react'
@@ -325,7 +326,7 @@ export default function LoginPage() {
           >
             {/* Visual Container */}
             <div style={{ position: 'relative', width: '100%', height: '300px', borderRadius: '20px', overflow: 'hidden', marginBottom: 24 }}>
-              <img src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1000&q=90" alt="Janamithra" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={helpJanaImg} alt="Janamithra" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(26, 17, 9, 0.9) 0%, rgba(26, 17, 9, 0.1) 60%)' }} />
 
               {/* Verified Emblem */}
