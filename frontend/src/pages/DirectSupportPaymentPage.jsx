@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Copy, Check, Heart, Shield, ArrowLeft, Smartphone, ShieldCheck } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useDonation } from '../context/DonationContext'
 import { generateHealingCertificate } from '../services/contributionService'
 import qrImage from '../assets/payment-qr.png'
 import { fadeUp } from '../animations/variants'
+import confetti from 'canvas-confetti'
 
 export default function DirectSupportPaymentPage() {
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ export default function DirectSupportPaymentPage() {
 
   const [copied, setCopied] = useState(false)
   const [processing, setProcessing] = useState(false)
+  const [paymentSuccess, setPaymentSuccess] = useState(false)
 
   // Retrieve temporary contribution details stored in localStorage
   const supporterName = localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name') || 'Kind Supporter'
@@ -97,24 +99,36 @@ export default function DirectSupportPaymentPage() {
           }
         }
 
-        // Navigate based on type
-        if (unlockType === 'game') {
-          if (pendingGamePath) {
-            navigate(pendingGamePath)
+        // Show full screen success celebration
+        setPaymentSuccess(true)
+        confetti({
+          particleCount: 180,
+          spread: 100,
+          origin: { y: 0.4 },
+          colors: ['#8C4F1A', '#C8773A', '#D4AF37', '#FAF2EA']
+        })
+
+        // Hold success presentation for 3 seconds of high-fidelity wellness delight
+        setTimeout(() => {
+          // Navigate based on type
+          if (unlockType === 'game') {
+            if (pendingGamePath) {
+              navigate(pendingGamePath)
+            } else {
+              navigate('/main')
+            }
+          } else if (unlockType === 'coupon') {
+            navigate(`/coupon-thank-you/${pendingGameId}`)
+          } else if (unlockType === 'message') {
+            navigate(`/reveal-message/${pendingGameId}`)
           } else {
-            navigate('/main')
+            navigate('/thank-you')
           }
-        } else if (unlockType === 'coupon') {
-          navigate(`/coupon-thank-you/${pendingGameId}`)
-        } else if (unlockType === 'message') {
-          navigate(`/reveal-message/${pendingGameId}`)
-        } else {
-          navigate('/thank-you')
-        }
+        }, 3000)
+
       } catch (err) {
         console.error('Error confirming payment:', err)
         alert('Confirmation failed: ' + err.message)
-      } finally {
         setProcessing(false)
       }
     }, 2000)
@@ -130,7 +144,8 @@ export default function DirectSupportPaymentPage() {
       alignItems: 'center',
       padding: '40px 20px',
       boxSizing: 'border-box',
-      fontFamily: 'Outfit, sans-serif'
+      fontFamily: 'Outfit, sans-serif',
+      position: 'relative'
     }}>
       {/* Header back link */}
       <div style={{ width: '100%', maxWidth: '580px', marginBottom: '24px' }}>
@@ -371,6 +386,107 @@ export default function DirectSupportPaymentPage() {
           </p>
         </div>
       </motion.div>
+
+      {/* FULL SCREEN CELEBRATION SUCCESS OVERLAY */}
+      <AnimatePresence>
+        {paymentSuccess && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(61, 43, 26, 0.96)',
+              zIndex: 99999,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '24px',
+              textAlign: 'center',
+              backdropFilter: 'blur(16px)'
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', damping: 15 }}
+              style={{
+                background: 'linear-gradient(135deg, #FFF, #FAF4E8)',
+                padding: '48px 40px',
+                borderRadius: '36px',
+                border: '1px solid #D4AF37',
+                boxShadow: '0 24px 64px rgba(212, 175, 55, 0.2)',
+                maxWidth: '460px',
+                width: '100%',
+                boxSizing: 'border-box',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}
+            >
+              {/* Pulsing check mark ring */}
+              <div style={{
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                background: '#EAF6E2',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '24px',
+                border: '4px solid #85B96F',
+                boxShadow: '0 8px 24px rgba(133, 185, 111, 0.3)'
+              }}>
+                <ShieldCheck size={40} color="#47682C" />
+              </div>
+
+              <h2 style={{
+                margin: '0 0 12px',
+                fontSize: '26px',
+                fontWeight: 900,
+                color: '#3D2B1A',
+                letterSpacing: '-0.5px'
+              }}>
+                Payment Completed! ✨
+              </h2>
+              
+              <p style={{
+                margin: '0 0 24px',
+                fontSize: '14.5px',
+                color: '#7A6A5A',
+                lineHeight: 1.6,
+                fontWeight: 500
+              }}>
+                Your direct support is fully verified and routed directly to Janamithra’s pediatric care.
+              </p>
+
+              {/* Glowing Heart indicator */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: '#FAF2EA',
+                padding: '10px 20px',
+                borderRadius: '14px',
+                border: '1px solid #EBD5C2',
+                fontSize: '13px',
+                fontWeight: 800,
+                color: '#8C4F1A',
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em'
+              }}>
+                <Heart size={14} fill="#8C4F1A" />
+                Certificate Generated
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
