@@ -81,6 +81,140 @@ const MYSTERY_REWARDS = [
 
 const PREMIUM_GAMES = [
   {
+    id: 'sound-wave-serenade',
+    title: 'Sound Wave Serenade',
+    description: 'Tap moving nodes along peaceful sound waves at the harmony zone to release beautiful Solfeggio chimes and secure sponsor aid.',
+    price: 0,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="waveGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBF7" />
+            <stop offset="100%" stopColor="#F5EFEB" />
+          </radialGradient>
+        </defs>
+        {/* Soft background with subtle rounded corners */}
+        <rect x="5" y="5" width="90" height="90" rx="16" fill="url(#waveGlow)" stroke="#EADFD6" strokeWidth="1" />
+        
+        {/* Soothing moving wave lines (chimes/ocean waves) */}
+        <motion.path
+          animate={{ d: [
+            "M 15 50 Q 32.5 25, 50 50 T 85 50",
+            "M 15 50 Q 32.5 75, 50 50 T 85 50",
+            "M 15 50 Q 32.5 25, 50 50 T 85 50"
+          ] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          fill="none"
+          stroke="#8C4F1A"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+        <motion.path
+          animate={{ d: [
+            "M 15 50 Q 32.5 65, 50 50 T 85 50",
+            "M 15 50 Q 32.5 35, 50 50 T 85 50",
+            "M 15 50 Q 32.5 65, 50 50 T 85 50"
+          ] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          fill="none"
+          stroke="#D4C5B9"
+          strokeWidth="1"
+          strokeLinecap="round"
+          opacity="0.6"
+        />
+
+        {/* Concentric harmony rings radiating behind nodes representing sound frequencies */}
+        <motion.circle
+          animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: 3, repeat: Infinity }}
+          cx="70" cy="50" r="10" fill="none" stroke="#8C4F1A" strokeWidth="0.8" strokeDasharray="2, 2"
+          style={{ originX: '70px', originY: '50px' }}
+        />
+        
+        {/* Interactive nodes along the wave */}
+        {/* Left Node */}
+        <circle cx="30" cy="35" r="3.5" fill="#946B4E" />
+        <circle cx="30" cy="35" r="1.5" fill="#FFF" />
+        
+        {/* Center Node */}
+        <circle cx="50" cy="50" r="4.5" fill="#785338" />
+        <circle cx="50" cy="50" r="2" fill="#FFF" />
+
+        {/* Active Node approaching harmony line */}
+        <motion.g
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          style={{ originX: '70px', originY: '50px' }}
+        >
+          <circle cx="70" cy="50" r="5.5" fill="#5C3D24" />
+          <circle cx="70" cy="50" r="2.5" fill="#FFF" />
+        </motion.g>
+
+        {/* Target alignment harmony zone indicator */}
+        <line x1="70" y1="15" x2="70" y2="85" stroke="#8C4F1A" strokeWidth="1" strokeDasharray="3, 3" opacity="0.4" />
+      </svg>
+    )
+  },
+  {
+    id: 'breathe-bloom',
+    title: 'Breathe & Bloom',
+    description: 'Immerse in deep breathing rhythms with an elegant, expanding flower to find serenity and trigger sponsor aid.',
+    price: 0,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="flowerGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBF7" />
+            <stop offset="100%" stopColor="#F5EFEB" />
+          </radialGradient>
+        </defs>
+        {/* Soft white background with subtle rounded corners */}
+        <rect x="5" y="5" width="90" height="90" rx="16" fill="url(#flowerGlow)" stroke="#EADFD6" strokeWidth="1" />
+        
+        {/* Soft, concentric dashed lines radiating around the flower, representing breathing expansion */}
+        <motion.circle
+          animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.7, 0.3] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+          cx="50%" cy="50%" r="32" fill="none" stroke="#D4C5B9" strokeWidth="1" strokeDasharray="3, 3"
+          style={{ originX: '50px', originY: '50px' }}
+        />
+        <motion.circle
+          animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.8, 0.4] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          cx="50%" cy="50%" r="24" fill="none" stroke="#D4C5B9" strokeWidth="1" strokeDasharray="4, 4"
+          style={{ originX: '50px', originY: '50px' }}
+        />
+        <motion.circle
+          animate={{ scale: [1, 1.05, 1], opacity: [0.5, 0.9, 0.5] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          cx="50%" cy="50%" r="16" fill="none" stroke="#C5B4A6" strokeWidth="0.8" strokeDasharray="2, 2"
+          style={{ originX: '50px', originY: '50px' }}
+        />
+        
+        {/* Elegant flower silhouette in mid-bloom with dark brown accents */}
+        <motion.g
+          animate={{ scale: [0.9, 1.1, 0.9], rotate: [0, 5, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ originX: '50px', originY: '50px' }}
+        >
+          {/* Flower Stem / Base */}
+          <path d="M50 50 L50 72" stroke="#5C3D24" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
+          
+          {/* Flower Petals (Elegant silhouette) */}
+          <path d="M50 50 C46 38, 54 38, 50 50 Z" fill="#5C3D24" opacity="0.9" />
+          <path d="M50 50 C38 42, 44 32, 50 50 Z" fill="#785338" opacity="0.85" />
+          <path d="M50 50 C62 42, 56 32, 50 50 Z" fill="#785338" opacity="0.85" />
+          <path d="M50 50 C34 48, 38 38, 50 50 Z" fill="#946B4E" opacity="0.75" />
+          <path d="M50 50 C66 48, 62 38, 50 50 Z" fill="#946B4E" opacity="0.75" />
+          
+          {/* Flower Center Core (small accent) */}
+          <circle cx="50" cy="48" r="2.5" fill="#EADFD6" />
+          <circle cx="50" cy="48" r="1.5" fill="#5C3D24" />
+        </motion.g>
+      </svg>
+    )
+  },
+  {
     id: 'spin',
     title: 'Spin the Care Wheel',
     description: 'Take a gentle, joyful spin to instantly direct ₹10 from corporate sponsors to Aarav\'s medical fund.',
@@ -542,7 +676,16 @@ export default function MainPage() {
                       y: -8, 
                       boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
-                    onClick={() => { setUnlockType('game'); handleUnlock(game.price); }}
+                    onClick={() => {
+                      if (game.id === 'sound-wave-serenade') {
+                        navigate('/sound-wave-serenade');
+                      } else if (game.id === 'breathe-bloom') {
+                        navigate('/breathe-bloom');
+                      } else {
+                        setUnlockType('game');
+                        handleUnlock(game.price);
+                      }
+                    }}
                     style={{
                       background: '#FFFFFF',
                       border: '1px solid rgba(220, 208, 195, 0.7)',
