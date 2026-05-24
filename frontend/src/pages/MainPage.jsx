@@ -1846,6 +1846,21 @@ export default function MainPage() {
             padding: 16px 20px !important;
           }
         }
+        @media (max-width: 768px) {
+          .main-tabs-row { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap !important; gap: 8px !important; }
+          .main-tabs-row button { flex-shrink: 0; white-space: nowrap; }
+          .games-card-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .coupon-card-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .quotes-card-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .donation-section-inner { padding: 24px 16px !important; }
+          .direct-donation-amounts { flex-wrap: wrap !important; gap: 8px !important; }
+          .direct-donation-amounts button { flex: 1 1 calc(50% - 8px) !important; min-width: 80px !important; }
+        }
+        @media (max-width: 480px) {
+          .main-tabs-row { gap: 6px !important; }
+          .main-tabs-row button { padding: 10px 14px !important; font-size: 13px !important; }
+          .direct-donation-amounts button { flex: 1 1 calc(50% - 6px) !important; }
+        }
       `}</style>
     </div>
   )

@@ -90,7 +90,7 @@ export default function Navbar() {
           alignItems: 'center', 
           gap: 18,
           justifyContent: 'center'
-        }} className="hidden md:flex">
+        }} className="nav-desktop-links" style={{ display: 'flex', alignItems: 'center', gap: 18, justifyContent: 'center' }}>
           {navItems.map(({ label, path, icon: Icon }) => {
             const active = isActive(path)
             return (
@@ -271,6 +271,26 @@ export default function Navbar() {
             </motion.div>
           )}
 
+          {/* Mobile Hamburger - only shown on mobile via CSS */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="nav-hamburger"
+            style={{
+              display: 'none',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 40,
+              height: 40,
+              borderRadius: '12px',
+              background: 'rgba(255,251,245,0.8)',
+              border: '1px solid rgba(235,224,214,0.6)',
+              cursor: 'pointer',
+              flexShrink: 0
+            }}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={20} color="#3D2B1A" /> : <Menu size={20} color="#3D2B1A" />}
+          </button>
         </div>
       </div>
 

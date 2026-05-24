@@ -491,10 +491,10 @@ export default function AccountPage() {
       {loading ? (
         <LoadingSkeleton />
       ) : (
-        <main style={{ maxWidth: 1280, width: '100%', margin: '0 auto', padding: '0 24px 100px', boxSizing: 'border-box', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: '60px' }}>
+        <main style={{ maxWidth: 1280, width: '100%', margin: '0 auto', padding: 'clamp(0px,2vw,0px) clamp(12px,3vw,24px) clamp(60px,8vw,100px)', boxSizing: 'border-box', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 'clamp(32px,5vw,60px)' }}>
           
           {/* Top Grid: Profile & Analytics / Quote */}
-          <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
+          <div className="responsive-grid account-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 'clamp(16px,3vw,32px)' }}>
             
             {/* Section 1: Profile Overview */}
             <motion.section 

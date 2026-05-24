@@ -363,9 +363,10 @@ export default function ThankYouPage() {
       display: 'flex', 
       flexDirection: 'column', 
       alignItems: 'center', 
-      padding: '40px 24px 60px', 
+      padding: 'clamp(24px,4vw,40px) clamp(12px,3vw,24px) clamp(40px,6vw,60px)', 
       boxSizing: 'border-box',
-      position: 'relative'
+      position: 'relative',
+      overflowX: 'hidden'
     }}>
       
       {/* Luxury ambient background glow orbs */}
@@ -540,8 +541,8 @@ export default function ThankYouPage() {
       {/* Main Grid: Editorial Asymmetric Layout with staggered columns */}
       <div className="thank-you-grid" style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: '40px', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+        gap: 'clamp(20px, 3vw, 40px)', 
         maxWidth: '1150px', 
         width: '100%', 
         alignItems: 'start',

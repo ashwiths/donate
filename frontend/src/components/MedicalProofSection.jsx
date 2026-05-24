@@ -65,7 +65,7 @@ export default function MedicalProofSection() {
     <section
       id="medical-documents"
       style={{
-        padding: '96px 40px',
+        padding: 'clamp(48px,7vw,96px) clamp(16px,4vw,40px)',
         background: 'transparent',
         position: 'relative',
         overflow: 'hidden'
@@ -207,8 +207,8 @@ export default function MedicalProofSection() {
         {/* Documents Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: 32
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+          gap: 'clamp(16px, 3vw, 32px)'
         }}>
           {DOCUMENTS.map((doc, idx) => (
             <motion.div

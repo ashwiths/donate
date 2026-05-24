@@ -215,10 +215,10 @@ export default function LoginPage() {
         flex: 1,
         maxWidth: 1240,
         margin: '0 auto',
-        padding: '40px 32px 100px',
+        padding: 'clamp(24px,4vw,40px) clamp(16px,3vw,32px) clamp(60px,8vw,100px)',
         display: 'grid',
         gridTemplateColumns: '1.2fr 1fr',
-        gap: 60,
+        gap: 'clamp(32px,5vw,60px)',
         alignItems: 'center',
         boxSizing: 'border-box',
         width: '100%',
@@ -495,36 +495,38 @@ export default function LoginPage() {
           transition: color 0.2s ease;
           position: relative;
         }
-        .nav-hover-link:hover {
-          color: #8C4F1A;
-        }
+        .nav-hover-link:hover { color: #8C4F1A; }
         .nav-hover-link::after {
           content: '';
           position: absolute;
-          bottom: -6px;
-          left: 0;
-          width: 0%;
-          height: 2px;
+          bottom: -6px; left: 0;
+          width: 0%; height: 2px;
           background: #8C4F1A;
           transition: width 0.3s ease;
         }
-        .nav-hover-link:hover::after {
-          width: 100%;
-        }
+        .nav-hover-link:hover::after { width: 100%; }
         @keyframes pulseRing {
-          0% { transform: scale(1); opacity: 0.5; }
+          0%   { transform: scale(1); opacity: 0.5; }
           100% { transform: scale(3.5); opacity: 0; }
         }
-        @media (max-width: 960px) {
-          .landing-header { padding: 12px 20px !important; margin: 16px auto !important; width: calc(100% - 32px) !important; }
+        @media (max-width: 900px) {
+          .landing-header { padding: 12px 20px !important; margin: 12px auto !important; width: calc(100% - 24px) !important; }
           .landing-nav-links { display: none !important; }
-          .hero-split-grid { grid-template-columns: 1fr !important; padding: 20px 24px 80px !important; gap: 48px !important; text-align: center !important; }
-          .hero-split-grid > div:first-child { align-items: center; }
-          .hero-split-grid p { text-align: center; }
-          .hero-split-grid > div > div:first-child { align-self: center !important; }
+          .hero-split-grid {
+            grid-template-columns: 1fr !important;
+            text-align: center !important;
+            padding: 24px 20px 80px !important;
+            gap: 40px !important;
+          }
+          .hero-split-grid > div:first-child { align-items: center !important; display: flex !important; flex-direction: column !important; }
+          .hero-split-grid p { text-align: center !important; }
           .mobile-full-btn { display: none !important; }
-          .hero-buttons { flex-direction: column; width: 100%; }
-          .hero-buttons button { width: 100%; justify-content: center; }
+          .hero-buttons { flex-direction: column !important; width: 100% !important; }
+          .hero-buttons button { width: 100% !important; justify-content: center !important; }
+        }
+        @media (max-width: 480px) {
+          .hero-split-grid { padding: 20px 14px 60px !important; }
+          .landing-header { margin: 10px auto !important; }
         }
       `}</style>
     </div>

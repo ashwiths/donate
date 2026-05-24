@@ -143,10 +143,11 @@ export default function DirectSupportPaymentPage() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: '40px 20px',
+      padding: 'clamp(20px, 4vw, 40px) clamp(12px, 4vw, 20px)',
       boxSizing: 'border-box',
       fontFamily: 'Outfit, sans-serif',
-      position: 'relative'
+      position: 'relative',
+      overflowX: 'hidden'
     }}>
       {/* Header back link */}
       <div style={{ width: '100%', maxWidth: '580px', marginBottom: '24px' }}>
@@ -173,15 +174,16 @@ export default function DirectSupportPaymentPage() {
         initial="hidden"
         animate="visible"
         variants={fadeUp}
+        className="payment-card"
         style={{
           width: '100%',
           maxWidth: '580px',
           background: '#FFF',
           borderRadius: '32px',
-          border: '1px solid rgba(232, 224, 214, 0.7)',
-          padding: '40px 32px',
+          border: '1px solid rgba(232,224,214,0.7)',
+          padding: 'clamp(24px, 5vw, 40px) clamp(16px, 5vw, 32px)',
           boxSizing: 'border-box',
-          boxShadow: '0 24px 64px rgba(140, 79, 26, 0.08)',
+          boxShadow: '0 24px 64px rgba(140,79,26,0.08)',
           textAlign: 'center',
           position: 'relative',
           overflow: 'hidden'
@@ -241,11 +243,15 @@ export default function DirectSupportPaymentPage() {
         </div>
 
         {/* QR Code Container */}
-        <div style={{
-          margin: '0 auto 32px',
-          maxWidth: '240px',
-          position: 'relative'
-        }}>
+        <div
+          className="qr-container"
+          style={{
+            margin: '0 auto 32px',
+            maxWidth: '240px',
+            width: '100%',
+            position: 'relative'
+          }}
+        >
           {/* Subtle Golden Glow Accent */}
           <div style={{
             position: 'absolute',
@@ -285,16 +291,20 @@ export default function DirectSupportPaymentPage() {
           <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>
             UPI ID
           </span>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            background: '#FAF8F5',
-            border: '1px solid rgba(232, 224, 214, 0.6)',
-            borderRadius: '16px',
-            padding: '14px 20px',
-            gap: 12
-          }}>
+          <div
+            className="payment-upi-row"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: '#FAF8F5',
+              border: '1px solid rgba(232,224,214,0.6)',
+              borderRadius: '16px',
+              padding: '14px 20px',
+              gap: 12,
+              flexWrap: 'wrap'
+            }}
+          >
             <code style={{ fontSize: '14px', fontWeight: 700, color: '#3D2B1A', fontFamily: 'monospace', wordBreak: 'break-all' }}>
               {upiId}
             </code>
@@ -330,7 +340,7 @@ export default function DirectSupportPaymentPage() {
           <div style={{ fontSize: '12px', color: '#7A6A5A', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
             Scan using any UPI App
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <div className="payment-apps-row" style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
             {['PhonePe', 'Google Pay', 'Paytm', 'WhatsApp Pay'].map((app) => (
               <div
                 key={app}
@@ -358,6 +368,7 @@ export default function DirectSupportPaymentPage() {
         <button
           onClick={handlePaymentComplete}
           disabled={processing}
+          className="payment-action-btn"
           style={{
             width: '100%',
             padding: '18px',
@@ -368,13 +379,14 @@ export default function DirectSupportPaymentPage() {
             fontWeight: 800,
             fontSize: '15px',
             cursor: 'pointer',
-            boxShadow: '0 8px 24px rgba(140, 79, 26, 0.16)',
+            boxShadow: '0 8px 24px rgba(140,79,26,0.16)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '8px',
             transition: 'opacity 0.2s',
-            opacity: processing ? 0.8 : 1
+            opacity: processing ? 0.8 : 1,
+            touchAction: 'manipulation'
           }}
         >
           <Heart size={16} fill="#fff" />
