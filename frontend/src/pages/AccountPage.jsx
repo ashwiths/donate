@@ -64,6 +64,7 @@ export default function AccountPage() {
   const [selectedCert, setSelectedCert] = useState(null);
 
   const handleDownloadCert = (cert) => {
+    const safeName = userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter';
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
       alert("Please allow popups to download your certificate.");
@@ -314,14 +315,18 @@ export default function AccountPage() {
 
             <div class="header-institution">Pediatric Healthcare Transparency Alliance • Global Registry</div>
             
-            <h1>Certificate of Healing Support</h1>
-            <h2>Heal & Play Ecosystem</h2>
+            <h1>${cert.title || 'Certificate of Healing Support'}</h1>
+            <h2>Heal & Play Ecosystem • ${cert.contributionType ? cert.contributionType.replace('_', ' ').toUpperCase() : 'HEALING SUPPORT'}</h2>
             
             <div class="presented-to">This official token of medical gratitude is proudly awarded to</div>
-            <div class="name">${userData?.name || 'Verified Supporter'}</div>
+            <div class="name">${safeName}</div>
             
             <div class="description">
-              In sincere recognition of their compassionate contribution of <span class="amount">₹${cert.amount}</span> supporting essential clinical pediatric care and specialized hospital treatment for <span class="amount">${cert.childName}</span>. Your generous contribution has directly helped secure verified medical operations.
+              In sincere recognition of their compassionate contribution of <span class="amount">₹${cert.amount}</span> supporting essential clinical pediatric care and specialized hospital treatment for <span class="amount">${cert.childName || 'Janamithra'}</span>. Your generous contribution has directly helped secure verified medical operations.
+            </div>
+
+            <div style="font-size: 13px; font-weight: bold; color: #8C745C; margin-top: 10px; margin-bottom: 20px;">
+              Date of Contribution: ${cert.createdAt ? (cert.createdAt.toDate ? cert.createdAt.toDate().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date(cert.createdAt.seconds ? cert.createdAt.seconds * 1000 : cert.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })) : new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
             </div>
             
             <div class="footer-info">
@@ -347,7 +352,7 @@ export default function AccountPage() {
               </div>
             </div>
 
-            <div class="registry-no">Verified Blockchain Registry No: H&P-REF-REG-${cert.id.toUpperCase().slice(-10)}</div>
+            <div class="registry-no">Verified Blockchain Registry No: H&P-REF-REG-${cert.id ? cert.id.toUpperCase().slice(-10) : 'N/A'}</div>
           </div>
           <script>
             window.onload = function() {
@@ -872,101 +877,116 @@ export default function AccountPage() {
                 <X size={18} />
               </button>
 
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <div style={{ fontSize: '9px', fontWeight: 900, color: '#8C745C', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '16px' }}>
-                  Pediatric Healthcare Transparency Alliance • Global Registry
+              {loading ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '280px', gap: 16, position: 'relative', zIndex: 1 }}>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+                    style={{ width: 36, height: 36 }}
+                  >
+                    <Award size={36} color="#D4AF37" />
+                  </motion.div>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#8B5E34', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                    Securing Cryptographic Certificate...
+                  </span>
                 </div>
+              ) : (
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <div style={{ fontSize: '9px', fontWeight: 900, color: '#8C745C', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '16px' }}>
+                    Pediatric Healthcare Transparency Alliance • Global Registry
+                  </div>
 
-                <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: '#8C4F1A', margin: '0 0 4px', letterSpacing: '-0.5px' }}>
-                  Certificate of Healing Support
-                </h2>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#7A6A58', textTransform: 'uppercase', letterSpacing: '0.15em', display: 'block', marginBottom: 28 }}>
-                  Official Verified Token • Heal & Play Ecosystem
-                </span>
+                  <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '28px', color: '#8C4F1A', margin: '0 0 4px', letterSpacing: '-0.5px' }}>
+                    {selectedCert.title || 'Certificate of Healing Support'}
+                  </h2>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#7A6A58', textTransform: 'uppercase', letterSpacing: '0.15em', display: 'block', marginBottom: 28 }}>
+                    Official Verified Token • {selectedCert.contributionType ? selectedCert.contributionType.replace('_', ' ').toUpperCase() : 'HEALING SUPPORT'}
+                  </span>
 
-                <p style={{ fontSize: '13.5px', fontStyle: 'italic', color: '#8C745C', margin: '0 0 8px' }}>
-                  This official token of medical gratitude is proudly awarded to
-                </p>
-                
-                <h3 style={{ fontSize: '24px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit', borderBottom: '1.5px solid #EBD5C2', display: 'inline-block', paddingBottom: 6, marginBottom: 20, minWidth: '240px' }}>
-                  {userData?.name || 'Helper Account'}
-                </h3>
-
-                <p style={{ fontSize: '14.5px', color: '#5C4C3C', lineHeight: 1.7, fontWeight: 500, margin: '0 auto 28px', maxWidth: '520px' }}>
-                  In sincere recognition of their compassionate contribution of <strong style={{ color: '#8C4F1A' }}>₹{selectedCert.amount}</strong> supporting essential clinical pediatric care and specialized hospital treatment for <strong style={{ color: '#8C4F1A' }}>{selectedCert.childName}</strong>. Your generous contribution has directly helped secure verified medical operations.
-                </p>
-
-                {/* Institutional Signatures & Seal grid */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '1px solid rgba(235, 221, 206, 0.8)', paddingTop: 32, marginBottom: 28 }}>
+                  <p style={{ fontSize: '13.5px', fontStyle: 'italic', color: '#8C745C', margin: '0 0 8px' }}>
+                    This official token of medical gratitude is proudly awarded to
+                  </p>
                   
-                  {/* Signature 1 */}
-                  <div style={{ textAlign: 'center', width: '160px' }}>
-                    <div style={{ fontFamily: "'Pinyon Script', cursive", fontSize: '28px', color: '#1E3A8A', opacity: 0.8, marginBottom: '-3px', transform: 'rotate(-5deg) translateY(-8px)' }}>
-                      Dr. Rebecca Sterling
-                    </div>
-                    <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)', marginBottom: '4px' }} />
-                    <div style={{ fontSize: '9px', color: '#8C745C', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
-                      Pediatric Care Director
-                    </div>
-                  </div>
+                  <h3 style={{ fontSize: '24px', fontWeight: 900, color: '#3D2B1A', fontFamily: 'Outfit', borderBottom: '1.5px solid #EBD5C2', display: 'inline-block', paddingBottom: 6, marginBottom: 20, minWidth: '240px' }}>
+                    {userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter'}
+                  </h3>
 
-                  {/* Gold Seal with Ribbons */}
-                  <div style={{ position: 'relative', width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '-10px' }}>
-                    {/* Left Ribbon */}
-                    <div style={{ position: 'absolute', width: '15px', height: '45px', background: 'linear-gradient(135deg, #B91C1C, #EF4444)', top: '40px', left: '26px', transform: 'rotate(20deg)', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)', zIndex: 1 }} />
-                    {/* Right Ribbon */}
-                    <div style={{ position: 'absolute', width: '15px', height: '45px', background: 'linear-gradient(135deg, #991B1B, #DC2626)', top: '40px', left: '35px', transform: 'rotate(-20deg)', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)', zIndex: 1 }} />
-                    {/* Disc */}
-                    <div style={{ position: 'relative', width: '64px', height: '64px', background: 'radial-gradient(circle, #FDE68A 0%, #D4AF37 60%, #B45309 100%)', border: '2px dashed #FFF', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 18px rgba(212, 175, 55, 0.4)', transform: 'rotate(-5deg)', zIndex: 2 }}>
-                      <div style={{ fontSize: '5.5px', fontWeight: 900, color: '#78350F', textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.2 }}>
-                        OFFICIAL<br/>VERIFIED
+                  <p style={{ fontSize: '14.5px', color: '#5C4C3C', lineHeight: 1.7, fontWeight: 500, margin: '0 auto 28px', maxWidth: '520px' }}>
+                    In sincere recognition of their compassionate contribution of <strong style={{ color: '#8C4F1A' }}>₹{selectedCert.amount}</strong> supporting essential clinical pediatric care and specialized hospital treatment for <strong style={{ color: '#8C4F1A' }}>{selectedCert.childName}</strong>. Your generous contribution has directly helped secure verified medical operations.
+                  </p>
+
+                  {/* Institutional Signatures & Seal grid */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '1px solid rgba(235, 221, 206, 0.8)', paddingTop: 32, marginBottom: 28 }}>
+                    
+                    {/* Signature 1 */}
+                    <div style={{ textAlign: 'center', width: '160px' }}>
+                      <div style={{ fontFamily: "'Pinyon Script', cursive", fontSize: '28px', color: '#1E3A8A', opacity: 0.8, marginBottom: '-3px', transform: 'rotate(-5deg) translateY(-8px)' }}>
+                        Dr. Rebecca Sterling
                       </div>
-                      <div style={{ color: '#78350F', fontSize: '7px', marginTop: '1px' }}>★ ★ ★</div>
+                      <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)', marginBottom: '4px' }} />
+                      <div style={{ fontSize: '9px', color: '#8C745C', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
+                        Pediatric Care Director
+                      </div>
+                    </div>
+
+                    {/* Gold Seal with Ribbons */}
+                    <div style={{ position: 'relative', width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '-10px' }}>
+                      {/* Left Ribbon */}
+                      <div style={{ position: 'absolute', width: '15px', height: '45px', background: 'linear-gradient(135deg, #B91C1C, #EF4444)', top: '40px', left: '26px', transform: 'rotate(20deg)', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)', zIndex: 1 }} />
+                      {/* Right Ribbon */}
+                      <div style={{ position: 'absolute', width: '15px', height: '45px', background: 'linear-gradient(135deg, #991B1B, #DC2626)', top: '40px', left: '35px', transform: 'rotate(-20deg)', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)', zIndex: 1 }} />
+                      {/* Disc */}
+                      <div style={{ position: 'relative', width: '64px', height: '64px', background: 'radial-gradient(circle, #FDE68A 0%, #D4AF37 60%, #B45309 100%)', border: '2px dashed #FFF', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 18px rgba(212, 175, 55, 0.4)', transform: 'rotate(-5deg)', zIndex: 2 }}>
+                        <div style={{ fontSize: '5.5px', fontWeight: 900, color: '#78350F', textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.2 }}>
+                          OFFICIAL<br/>VERIFIED
+                        </div>
+                        <div style={{ color: '#78350F', fontSize: '7px', marginTop: '1px' }}>★ ★ ★</div>
+                      </div>
+                    </div>
+
+                    {/* Signature 2 */}
+                    <div style={{ textAlign: 'center', width: '160px' }}>
+                      <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: '24px', color: '#1E3A8A', opacity: 0.9, marginBottom: '-2px', transform: 'rotate(-4deg) translateY(-8px)' }}>
+                        Infant Ashil
+                      </div>
+                      <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)', marginBottom: '4px' }} />
+                      <div style={{ fontSize: '9px', color: '#8C745C', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
+                        Founder • Heal & Play
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10.5px', color: '#7A6A58', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <div>Date: {formatDate(selectedCert.createdAt)}</div>
+                    <div style={{ display: 'flex', gap: 12 }}>
+                      <button 
+                        onClick={() => handleDownloadCert(selectedCert)}
+                        style={{ 
+                          background: '#8C4F1A', 
+                          color: '#FFF', 
+                          border: 'none', 
+                          borderRadius: '99px', 
+                          padding: '10px 22px', 
+                          fontSize: '11px', 
+                          fontWeight: 800, 
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          boxShadow: '0 4px 12px rgba(140, 79, 26, 0.2)'
+                        }}
+                      >
+                        <Download size={13} /> Print luxury PDF
+                      </button>
                     </div>
                   </div>
 
-                  {/* Signature 2 */}
-                  <div style={{ textAlign: 'center', width: '160px' }}>
-                    <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: '24px', color: '#1E3A8A', opacity: 0.9, marginBottom: '-2px', transform: 'rotate(-4deg) translateY(-8px)' }}>
-                      Infant Ashil
-                    </div>
-                    <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)', marginBottom: '4px' }} />
-                    <div style={{ fontSize: '9px', color: '#8C745C', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
-                      Founder • Heal & Play
-                    </div>
-                  </div>
-
-                </div>
-
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10.5px', color: '#7A6A58', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                  <div>Date: {formatDate(selectedCert.createdAt)}</div>
-                  <div style={{ display: 'flex', gap: 12 }}>
-                    <button 
-                      onClick={() => handleDownloadCert(selectedCert)}
-                      style={{ 
-                        background: '#8C4F1A', 
-                        color: '#FFF', 
-                        border: 'none', 
-                        borderRadius: '99px', 
-                        padding: '10px 22px', 
-                        fontSize: '11px', 
-                        fontWeight: 800, 
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6,
-                        boxShadow: '0 4px 12px rgba(140, 79, 26, 0.2)'
-                      }}
-                    >
-                      <Download size={13} /> Print luxury PDF
-                    </button>
+                  <div style={{ fontSize: '8.5px', color: '#A18266', fontWeight: 700, letterSpacing: '0.08em', marginTop: '20px', textTransform: 'uppercase' }}>
+                    Registry Reference: H&P-REF-REG-{selectedCert.id.toUpperCase().slice(-10)}
                   </div>
                 </div>
-
-                <div style={{ fontSize: '8.5px', color: '#A18266', fontWeight: 700, letterSpacing: '0.08em', marginTop: '20px', textTransform: 'uppercase' }}>
-                  Registry Reference: H&P-REF-REG-{selectedCert.id.toUpperCase().slice(-10)}
-                </div>
-              </div>
+              )}
             </motion.div>
           </motion.div>
         )}

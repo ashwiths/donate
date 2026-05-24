@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, ArrowRight, Share2, Download, Heart, Shield, Award, Calendar, Landmark, Copy, Check, Sparkles, Activity, Info } from 'lucide-react'
 import { useDonation } from '../context/DonationContext'
 import { useAuth } from '../context/AuthContext'
+import { useUserData } from '../hooks/useUserData'
 import { staggerContainer, fadeUp, scaleIn } from '../animations/variants'
 import confetti from 'canvas-confetti'
 import TransparentBreakdown from '../components/TransparentBreakdown'
@@ -11,6 +12,7 @@ import TransparentBreakdown from '../components/TransparentBreakdown'
 export default function ThankYouPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { userData, loading: userDataLoading } = useUserData()
   const { selectedChild, donationAmount, transactionId } = useDonation()
   const [copied, setCopied] = useState(false)
   const [hoveredCertificate, setHoveredCertificate] = useState(false)
@@ -22,9 +24,9 @@ export default function ThankYouPage() {
     }
   }, [user, navigate])
 
-  // Fetch verified user details from localStorage
-  const userName = localStorage.getItem('hp_user_name') || 'Generous Supporter'
-  const userEmail = localStorage.getItem('hp_user_email') || ''
+  // Fetch verified user details with high-fidelity resolution hierarchy
+  const userName = userData?.name || user?.name || user?.displayName || localStorage.getItem('hp_user_name') || 'Verified Supporter'
+  const userEmail = userData?.email || user?.email || localStorage.getItem('hp_user_email') || ''
 
   // Fire confetti on mount for premium delight
   useEffect(() => {
@@ -164,7 +166,7 @@ export default function ThankYouPage() {
     // 9. Premium Rewritten Body Text (wrapped beautifully)
     ctx.fillStyle = '#5A4635'
     ctx.font = '22px Georgia, serif'
-    const bodyText = "This certificate is proudly awarded in heartfelt appreciation for supporting life-saving pediatric medical care through Heal & Play’s verified micro-contribution initiative. Your kindness has directly contributed toward critical treatment support for Janamithra."
+    const bodyText = `This certificate is proudly awarded in heartfelt appreciation for supporting life-saving pediatric medical care through Heal & Play’s verified micro-contribution initiative. Your kindness has directly contributed toward critical treatment support for ${selectedChild?.name || 'Janamithra'}.`
     
     const wrapText = (context, text, x, y, maxWidth, lineHeight) => {
       const words = text.split(' ')
@@ -661,233 +663,262 @@ export default function ThankYouPage() {
             transform: 'translateY(-12px)' // staggered height offset
           }}
         >
-          {/* Elevated Floating Certificate Container */}
-          <motion.div
-            onMouseEnter={() => setHoveredCertificate(true)}
-            onMouseLeave={() => setHoveredCertificate(false)}
-            style={{
-              background: 'linear-gradient(135deg, #FCFAF6 0%, #FAF4E8 50%, #F2EAD8 100%)',
-              border: '3px solid #D4AF37',
+          {userDataLoading ? (
+            <div style={{
+              background: '#FFFFFF',
               borderRadius: '24px',
-              padding: '30px 24px',
-              boxShadow: hoveredCertificate 
-                ? '0 35px 80px rgba(139, 94, 52, 0.18), 0 0 40px rgba(212, 175, 55, 0.15)'
-                : '0 25px 60px rgba(139, 94, 52, 0.12), 0 0 25px rgba(212, 175, 55, 0.05)',
-              textAlign: 'center',
-              position: 'relative',
-              overflow: 'hidden',
-              transition: 'box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)',
-              boxSizing: 'border-box'
-            }}
-          >
-              {/* Elegant Gold corners overlay */}
-              <div style={{ position: 'absolute', top: 12, left: 12, width: 16, height: 16, borderTop: '3px solid #D4AF37', borderLeft: '3px solid #D4AF37' }} />
-              <div style={{ position: 'absolute', top: 12, right: 12, width: 16, height: 16, borderTop: '3px solid #D4AF37', borderRight: '3px solid #D4AF37' }} />
-              <div style={{ position: 'absolute', bottom: 12, left: 12, width: 16, height: 16, borderBottom: '3px solid #D4AF37', borderLeft: '3px solid #D4AF37' }} />
-              <div style={{ position: 'absolute', bottom: 12, right: 12, width: 16, height: 16, borderBottom: '3px solid #D4AF37', borderRight: '3px solid #D4AF37' }} />
+              border: '3px solid rgba(212, 175, 55, 0.25)',
+              padding: '60px 40px',
+              minHeight: '420px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxSizing: 'border-box',
+              gap: 16
+            }}>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+                style={{ width: 36, height: 36 }}
+              >
+                <Award size={36} color="#D4AF37" />
+              </motion.div>
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#8B5E34', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                Securing Cryptographic Certificate...
+              </span>
+            </div>
+          ) : (
+            <>
+              {/* Elevated Floating Certificate Container */}
+              <motion.div
+                onMouseEnter={() => setHoveredCertificate(true)}
+                onMouseLeave={() => setHoveredCertificate(false)}
+                style={{
+                  background: 'linear-gradient(135deg, #FCFAF6 0%, #FAF4E8 50%, #F2EAD8 100%)',
+                  border: '3px solid #D4AF37',
+                  borderRadius: '24px',
+                  padding: '30px 24px',
+                  boxShadow: hoveredCertificate 
+                    ? '0 35px 80px rgba(139, 94, 52, 0.18), 0 0 40px rgba(212, 175, 55, 0.15)'
+                    : '0 25px 60px rgba(139, 94, 52, 0.12), 0 0 25px rgba(212, 175, 55, 0.05)',
+                  textAlign: 'center',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                  boxSizing: 'border-box'
+                }}
+              >
+                {/* Elegant Gold corners overlay */}
+                <div style={{ position: 'absolute', top: 12, left: 12, width: 16, height: 16, borderTop: '3px solid #D4AF37', borderLeft: '3px solid #D4AF37' }} />
+                <div style={{ position: 'absolute', top: 12, right: 12, width: 16, height: 16, borderTop: '3px solid #D4AF37', borderRight: '3px solid #D4AF37' }} />
+                <div style={{ position: 'absolute', bottom: 12, left: 12, width: 16, height: 16, borderBottom: '3px solid #D4AF37', borderLeft: '3px solid #D4AF37' }} />
+                <div style={{ position: 'absolute', bottom: 12, right: 12, width: 16, height: 16, borderBottom: '3px solid #D4AF37', borderRight: '3px solid #D4AF37' }} />
 
-              {/* Sweeping shine glass animation effect */}
-              <AnimatePresence>
-                {hoveredCertificate && (
-                  <motion.div
-                    initial={{ x: '-100%' }}
-                    animate={{ x: '100%' }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1.2, ease: 'easeInOut' }}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0) 100%)',
-                      zIndex: 2,
-                      pointerEvents: 'none'
-                    }}
-                  />
-                )}
-              </AnimatePresence>
+                {/* Sweeping shine glass animation effect */}
+                <AnimatePresence>
+                  {hoveredCertificate && (
+                    <motion.div
+                      initial={{ x: '-100%' }}
+                      animate={{ x: '100%' }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1.2, ease: 'easeInOut' }}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0) 100%)',
+                        zIndex: 2,
+                        pointerEvents: 'none'
+                      }}
+                    />
+                  )}
+                </AnimatePresence>
 
-              {/* Translucent Vector Heart Watermark */}
-              <div style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 140,
-                height: 140,
-                opacity: 0.03,
-                pointerEvents: 'none',
-                background: 'radial-gradient(circle, #8B5E34 20%, transparent 80%)'
-              }} />
+                {/* Translucent Vector Heart Watermark */}
+                <div style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 140,
+                  height: 140,
+                  opacity: 0.03,
+                  pointerEvents: 'none',
+                  background: 'radial-gradient(circle, #8B5E34 20%, transparent 80%)'
+                }} />
 
-              {/* Certificate content items */}
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(139, 94, 52, 0.06)', padding: '6px 14px', borderRadius: '20px', marginBottom: 18 }}>
-                <Award size={14} color="#8B5E34" />
-                <span style={{ fontSize: 10.5, fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Personalized Honor</span>
-              </div>
-
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#8B5E34', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: 6 }}>
-                HEAL & PLAY FOUNDATION
-              </div>
-
-              <h3 style={{ margin: '0 0 16px', fontFamily: 'Georgia, serif', fontSize: '20px', fontWeight: 800, color: '#3D2B1A', letterSpacing: '0.5px', borderBottom: '1px solid rgba(139,94,52,0.1)', paddingBottom: 12 }}>
-                Certificate of Healing Support
-              </h3>
-
-              <div style={{ fontSize: 12.5, color: '#7A6A5A', fontStyle: 'italic', marginBottom: 6 }}>
-                This certificate is proudly awarded in heartfelt appreciation to
-              </div>
-
-              <div style={{ 
-                fontSize: 28, 
-                fontFamily: 'Georgia, serif', 
-                fontWeight: 'bold', 
-                background: 'linear-gradient(90deg, #8C4F1A, #D4AF37, #8C4F1A)', 
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                margin: '8px 0',
-                display: 'inline-block'
-              }}>
-                {userName}
-              </div>
-
-              {/* Decorative flourish line */}
-              <div style={{ width: '120px', height: '2px', background: '#D4AF37', margin: '6px auto 14px', opacity: 0.7 }} />
-
-              <p style={{ margin: '0 auto 20px', fontSize: 12, color: '#5A4635', lineHeight: 1.5, maxWidth: '280px' }}>
-                for micro-contribution support toward verified lifesaving treatment for Janamithra.
-              </p>
-
-              {/* Embossed seal & signature preview */}
-              <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginTop: 22 }}>
-                <div>
-                  <div style={{ fontSize: 10, color: '#7A6A5A', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>Contribution</div>
-                  <div style={{ fontSize: 16, fontWeight: 900, color: '#8C4F1A', fontFamily: 'Outfit' }}>₹{donationAmount || 10}</div>
+                {/* Certificate content items */}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(139, 94, 52, 0.06)', padding: '6px 14px', borderRadius: '20px', marginBottom: 18 }}>
+                  <Award size={14} color="#8B5E34" />
+                  <span style={{ fontSize: 10.5, fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Personalized Honor</span>
                 </div>
 
-                {/* Embossed Gold Seal */}
-                <div style={{
-                  width: 58,
-                  height: 58,
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #C59B27 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 10px rgba(139, 94, 52, 0.2), inset 0 2px 4px rgba(255,255,255,0.4)',
-                  position: 'relative'
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#8B5E34', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: 6 }}>
+                  HEAL & PLAY FOUNDATION
+                </div>
+
+                <h3 style={{ margin: '0 0 16px', fontFamily: 'Georgia, serif', fontSize: '20px', fontWeight: 800, color: '#3D2B1A', letterSpacing: '0.5px', borderBottom: '1px solid rgba(139,94,52,0.1)', paddingBottom: 12 }}>
+                  Certificate of Healing Support
+                </h3>
+
+                <div style={{ fontSize: 12.5, color: '#7A6A5A', fontStyle: 'italic', marginBottom: 6 }}>
+                  This certificate is proudly awarded in heartfelt appreciation to
+                </div>
+
+                <div style={{ 
+                  fontSize: 28, 
+                  fontFamily: 'Georgia, serif', 
+                  fontWeight: 'bold', 
+                  background: 'linear-gradient(90deg, #8C4F1A, #D4AF37, #8C4F1A)', 
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  margin: '8px 0',
+                  display: 'inline-block'
                 }}>
-                  <div style={{ width: 48, height: 48, borderRadius: '50%', border: '1px dashed rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Sparkles size={16} color="#FFF" />
+                  {userName}
+                </div>
+
+                {/* Decorative flourish line */}
+                <div style={{ width: '120px', height: '2px', background: '#D4AF37', margin: '6px auto 14px', opacity: 0.7 }} />
+
+                <p style={{ margin: '0 auto 20px', fontSize: 12, color: '#5A4635', lineHeight: 1.5, maxWidth: '280px' }}>
+                  for micro-contribution support toward verified lifesaving treatment for {selectedChild?.name || 'Janamithra'}.
+                </p>
+
+                {/* Embossed seal & signature preview */}
+                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginTop: 22 }}>
+                  <div>
+                    <div style={{ fontSize: 10, color: '#7A6A5A', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>Contribution</div>
+                    <div style={{ fontSize: 16, fontWeight: 900, color: '#8C4F1A', fontFamily: 'Outfit' }}>₹{donationAmount || 10}</div>
+                  </div>
+
+                  {/* Embossed Gold Seal */}
+                  <div style={{
+                    width: 58,
+                    height: 58,
+                    background: 'linear-gradient(135deg, #D4AF37 0%, #C59B27 100%)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 10px rgba(139, 94, 52, 0.2), inset 0 2px 4px rgba(255,255,255,0.4)',
+                    position: 'relative'
+                  }}>
+                    <div style={{ width: 48, height: 48, borderRadius: '50%', border: '1px dashed rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Sparkles size={16} color="#FFF" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: 10, color: '#7A6A5A', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>Signature</div>
+                    <div style={{ fontFamily: 'Great Vibes', fontSize: 20, color: '#5C2D0E', fontWeight: 'bold', transform: 'rotate(-4deg)' }}>Infant Ashil</div>
                   </div>
                 </div>
+              </motion.div>
 
-                <div>
-                  <div style={{ fontSize: 10, color: '#7A6A5A', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>Signature</div>
-                  <div style={{ fontFamily: 'Great Vibes', fontSize: 20, color: '#5C2D0E', fontWeight: 'bold', transform: 'rotate(-4deg)' }}>Infant Ashil</div>
+              {/* Action buttons with premium shadow */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', boxSizing: 'border-box' }}>
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleDownloadCertificate}
+                  style={{
+                    background: 'linear-gradient(135deg, #7B3F00 0%, #A0522D 100%)',
+                    color: '#FFFDF9',
+                    border: 'none',
+                    padding: '16px 28px',
+                    borderRadius: '99px',
+                    fontSize: 14.5,
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    fontFamily: 'Outfit',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 10,
+                    boxShadow: '0 8px 24px rgba(123, 63, 0, 0.22), 0 0 0 1px rgba(123, 63, 0, 0.15)',
+                    transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'
+                  }}
+                >
+                  <Download size={16} style={{ transition: 'transform 0.2s ease' }} /> Download High-Res Certificate
+                </motion.button>
+
+                {/* Print and Share row */}
+                <div className="hero-buttons" style={{ display: 'flex', gap: '12px' }}>
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -1 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleShare}
+                    style={{ 
+                      flex: 1, 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: 8, 
+                      padding: '14px', 
+                      background: '#FFFFFF', 
+                      border: '1px solid rgba(139, 94, 52, 0.25)', 
+                      borderRadius: '99px', 
+                      fontSize: 14, 
+                      fontWeight: 700, 
+                      cursor: 'pointer', 
+                      color: '#7A6A5A',
+                      fontFamily: 'Outfit',
+                      transition: 'all 0.2s ease',
+                      boxShadow: '0 4px 12px rgba(139, 94, 52, 0.02)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(139, 94, 52, 0.04)'
+                      e.currentTarget.style.color = '#3D2B1A'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#FFFFFF'
+                      e.currentTarget.style.color = '#7A6A5A'
+                    }}
+                  >
+                    <Share2 size={15} /> Share Honor
+                  </motion.button>
+                  
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -1 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handlePrintPDF}
+                    style={{ 
+                      flex: 1, 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: 8, 
+                      padding: '14px', 
+                      background: '#FFFFFF', 
+                      border: '1px solid rgba(139, 94, 52, 0.25)', 
+                      borderRadius: '99px', 
+                      fontSize: 14, 
+                      fontWeight: 700, 
+                      cursor: 'pointer', 
+                      color: '#7A6A5A',
+                      fontFamily: 'Outfit',
+                      transition: 'all 0.2s ease',
+                      boxShadow: '0 4px 12px rgba(139, 94, 52, 0.02)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(139, 94, 52, 0.04)'
+                      e.currentTarget.style.color = '#3D2B1A'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#FFFFFF'
+                      e.currentTarget.style.color = '#7A6A5A'
+                    }}
+                  >
+                    <Download size={15} /> Download PDF
+                  </motion.button>
                 </div>
               </div>
-            </motion.div>
-
-          {/* Action buttons with premium shadow */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', boxSizing: 'border-box' }}>
-            <motion.button
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleDownloadCertificate}
-              style={{
-                background: 'linear-gradient(135deg, #7B3F00 0%, #A0522D 100%)',
-                color: '#FFFDF9',
-                border: 'none',
-                padding: '16px 28px',
-                borderRadius: '99px',
-                fontSize: 14.5,
-                fontWeight: 800,
-                cursor: 'pointer',
-                fontFamily: 'Outfit',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 10,
-                boxShadow: '0 8px 24px rgba(123, 63, 0, 0.22), 0 0 0 1px rgba(123, 63, 0, 0.15)',
-                transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'
-              }}
-            >
-              <Download size={16} style={{ transition: 'transform 0.2s ease' }} /> Download High-Res Certificate
-            </motion.button>
-
-            {/* Print and Share row */}
-            <div className="hero-buttons" style={{ display: 'flex', gap: '12px' }}>
-              <motion.button
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleShare}
-                style={{ 
-                  flex: 1, 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  gap: 8, 
-                  padding: '14px', 
-                  background: '#FFFFFF', 
-                  border: '1px solid rgba(139, 94, 52, 0.25)', 
-                  borderRadius: '99px', 
-                  fontSize: 14, 
-                  fontWeight: 700, 
-                  cursor: 'pointer', 
-                  color: '#7A6A5A',
-                  fontFamily: 'Outfit',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 4px 12px rgba(139, 94, 52, 0.02)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(139, 94, 52, 0.04)'
-                  e.currentTarget.style.color = '#3D2B1A'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#FFFFFF'
-                  e.currentTarget.style.color = '#7A6A5A'
-                }}
-              >
-                <Share2 size={15} /> Share Honor
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handlePrintPDF}
-                style={{ 
-                  flex: 1, 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  gap: 8, 
-                  padding: '14px', 
-                  background: '#FFFFFF', 
-                  border: '1px solid rgba(139, 94, 52, 0.25)', 
-                  borderRadius: '99px', 
-                  fontSize: 14, 
-                  fontWeight: 700, 
-                  cursor: 'pointer', 
-                  color: '#7A6A5A',
-                  fontFamily: 'Outfit',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 4px 12px rgba(139, 94, 52, 0.02)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(139, 94, 52, 0.04)'
-                  e.currentTarget.style.color = '#3D2B1A'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#FFFFFF'
-                  e.currentTarget.style.color = '#7A6A5A'
-                }}
-              >
-                <Download size={15} /> Download PDF
-              </motion.button>
-            </div>
-          </div>
+            </>
+          )}
         </motion.div>
 
       </div>
