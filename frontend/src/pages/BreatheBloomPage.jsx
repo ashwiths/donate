@@ -940,7 +940,7 @@ export default function BreatheBloomPage() {
                   {/* Buttons */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <motion.button
-                      onClick={() => navigate('/main')}
+                      onClick={() => navigate('/thank-you')}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       style={{

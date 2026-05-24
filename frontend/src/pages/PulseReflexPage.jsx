@@ -908,7 +908,7 @@ export default function PulseReflexPage() {
                     </button>
 
                     <button
-                      onClick={() => navigate('/main')}
+                      onClick={() => navigate('/thank-you')}
                       className="w-full py-3.5 rounded-2xl border border-[#EADFCF] bg-white text-xs font-black text-[#8B6239] cursor-pointer hover:bg-[#F5F1EB]"
                     >
                       Return to Dashboard

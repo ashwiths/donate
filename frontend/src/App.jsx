@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { AuthProvider } from './context/AuthContext'
 import { DonationProvider } from './context/DonationContext'
 import LoginPage from './pages/LoginPage'
@@ -18,9 +19,20 @@ import MindFlipPage from './pages/MindFlipPage'
 import PulseReflexPage from './pages/PulseReflexPage'
 import MindSlidePage from './pages/MindSlidePage'
 
+function ScrollToTop() {
+  const { pathname, search } = useLocation()
+  
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname, search])
+  
+  return null
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <DonationProvider>
           <div className="app-global-bg">

@@ -886,7 +886,7 @@ export default function FlexPathPage() {
                   {/* Actions */}
                   <div className="flex flex-col gap-3">
                     <button
-                      onClick={() => navigate('/main')}
+                      onClick={() => navigate('/thank-you')}
                       className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#8B6239] to-[#6F4D2E] text-white font-extrabold text-sm tracking-wide shadow-md hover:shadow-lg cursor-pointer"
                     >
                       Return to Dashboard
