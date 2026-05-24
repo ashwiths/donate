@@ -170,7 +170,7 @@ export default function HomePage() {
     }, (error) => {
       console.error("Error listening to contributions: ", error);
     });
-    
+
     return () => unsubscribe();
   }, []);
 
@@ -241,131 +241,153 @@ export default function HomePage() {
             zIndex: 1
           }} className="hero-split-grid">
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
-          >
             <motion.div
-              variants={fadeUp}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                background: '#FAF2EA',
-                border: '1px solid #EBD5C2',
-                borderRadius: '99px',
-                padding: '6px 14px',
-                alignSelf: 'flex-start'
-              }}
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+              style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
             >
-              <Trophy size={13} color="#8C4F1A" />
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                Helper Dashboard Portal
-              </span>
-            </motion.div>
-
-            <motion.h1
-              variants={fadeUp}
-              style={{
-                fontFamily: 'Outfit',
-                fontSize: 'clamp(38px, 4.8vw, 56px)',
-                fontWeight: 900,
-                lineHeight: 1.15,
-                color: 'var(--color-text)',
-                margin: 0,
-                letterSpacing: '-1.5px'
-              }}
-            >
-              Play. Unlock.<br />
-              <span style={{
-                background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>Help Children Heal.</span>
-            </motion.h1>
-
-            <motion.p
-              variants={fadeUp}
-              style={{
-                fontSize: '16.5px',
-                color: 'var(--color-text-muted)',
-                lineHeight: 1.65,
-                maxWidth: '480px',
-                margin: 0
-              }}
-            >
-              Welcome back to the platform! Choose active clinical campaigns below, donate small amounts of ₹10 to play simple games, and unlock discounts from trusted merchant partners.
-            </motion.p>
-
-            <motion.div
-              variants={fadeUp}
-              style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}
-            >
-              <motion.button
-                onClick={() => navigate('/main')}
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="btn-primary"
+              <motion.div
+                variants={fadeUp}
                 style={{
-                  padding: '13px 26px',
-                  fontSize: '14.5px',
-                  borderRadius: '11px',
-                  boxShadow: '0 8px 20px rgba(123, 63, 0, 0.16)',
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
                   gap: 8,
-                  cursor: 'pointer'
+                  background: '#FAF2EA',
+                  border: '1px solid #EBD5C2',
+                  borderRadius: '99px',
+                  padding: '6px 14px',
+                  alignSelf: 'flex-start'
                 }}
               >
-                <Gamepad2 size={16} /> Open Play Dashboard
-              </motion.button>
+                <Trophy size={13} color="#8C4F1A" />
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                  Helper Dashboard Portal
+                </span>
+              </motion.div>
 
+              <motion.h1
+                variants={fadeUp}
+                style={{
+                  fontFamily: 'Outfit',
+                  fontSize: 'clamp(38px, 4.8vw, 56px)',
+                  fontWeight: 900,
+                  lineHeight: 1.15,
+                  color: 'var(--color-text)',
+                  margin: 0,
+                  letterSpacing: '-1.5px'
+                }}
+              >
+                Play. Unlock.<br />
+                <span style={{
+                  background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>Help Children Heal.</span>
+              </motion.h1>
+
+              <motion.p
+                variants={fadeUp}
+                style={{
+                  fontSize: '16.5px',
+                  color: 'var(--color-text-muted)',
+                  lineHeight: 1.65,
+                  maxWidth: '480px',
+                  margin: 0
+                }}
+              >
+                Welcome back to the platform! Choose active clinical campaigns below, donate small amounts of ₹10 to play simple games, and unlock discounts from trusted merchant partners.
+              </motion.p>
+
+              <motion.div
+                variants={fadeUp}
+                style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}
+              >
+                <motion.button
+                  onClick={() => navigate('/main')}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="btn-primary"
+                  style={{
+                    padding: '13px 26px',
+                    fontSize: '14.5px',
+                    borderRadius: '11px',
+                    boxShadow: '0 8px 20px rgba(123, 63, 0, 0.16)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Gamepad2 size={16} /> Unlock
+                </motion.button>
+
+                <motion.button
+                  onClick={() => navigate('/main', { state: { activeTab: 'free-help' } })}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    padding: '13px 26px',
+                    fontSize: '14.5px',
+                    borderRadius: '11px',
+                    border: '1.5px solid #8C4F1A',
+                    background: 'rgba(140, 79, 26, 0.05)',
+                    color: '#8C4F1A',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontFamily: 'Outfit, sans-serif'
+                  }}
+                >
+                  <Heart size={16} fill="#8C4F1A" /> Direct Donation
+                </motion.button>
+              </motion.div>
+
+              <motion.div
+                variants={fadeUp}
+                style={{ display: 'flex', gap: 16, alignItems: 'center', borderTop: '1px solid rgba(232, 224, 214, 0.5)', paddingTop: 20 }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <CheckCircle2 size={14} color="#16a34a" />
+                  <span style={{ fontSize: '13px', fontWeight: 700 }}>25.8K Helpers Active</span>
+                </div>
+                <span style={{ color: 'var(--color-text-light)' }}>•</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Shield size={14} color="var(--color-primary)" />
+                  <span style={{ fontSize: '13px', fontWeight: 700 }}>100% Hospital Directed</span>
+                </div>
+              </motion.div>
             </motion.div>
 
+            {/* Right Column: Featured Child Spotlight */}
             <motion.div
-              variants={fadeUp}
-              style={{ display: 'flex', gap: 16, alignItems: 'center', borderTop: '1px solid rgba(232, 224, 214, 0.5)', paddingTop: 20 }}
+              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              style={{ display: 'flex', justifyContent: 'center' }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <CheckCircle2 size={14} color="#16a34a" />
-                <span style={{ fontSize: '13px', fontWeight: 700 }}>25.8K Helpers Active</span>
-              </div>
-              <span style={{ color: 'var(--color-text-light)' }}>•</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Shield size={14} color="var(--color-primary)" />
-                <span style={{ fontSize: '13px', fontWeight: 700 }}>100% Hospital Directed</span>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Right Column: Featured Child Spotlight */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            style={{ display: 'flex', justifyContent: 'center' }}
-          >
-            <motion.div
-              whileHover={{ y: -6, boxShadow: '0 30px 70px rgba(139, 94, 52, 0.15)' }}
-              transition={{ duration: 0.3 }}
-              style={{
-                background: 'rgba(255, 255, 255, 0.92)',
-                backdropFilter: 'blur(8px)',
-                borderRadius: '32px',
-                border: '1px solid rgba(235, 224, 214, 0.9)',
-                padding: '32px',
-                width: '100%',
-                maxWidth: '480px',
-                boxShadow: '0 25px 60px rgba(123, 63, 0, 0.08)',
-                boxSizing: 'border-box',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-              className="featured-child-premium-card"
-            >
-              <style>{`
+              <motion.div
+                whileHover={{ y: -6, boxShadow: '0 30px 70px rgba(139, 94, 52, 0.15)' }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.92)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '32px',
+                  border: '1px solid rgba(235, 224, 214, 0.9)',
+                  padding: '32px',
+                  width: '100%',
+                  maxWidth: '480px',
+                  boxShadow: '0 25px 60px rgba(123, 63, 0, 0.08)',
+                  boxSizing: 'border-box',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+                className="featured-child-premium-card"
+              >
+                <style>{`
                 @keyframes heartbeat {
                   0% { transform: scale(1); }
                   14% { transform: scale(1.12); }
@@ -379,197 +401,197 @@ export default function HomePage() {
                 }
               `}</style>
 
-              {/* Urgency Badge with Heartbeat Animation */}
-              <div style={{
-                position: 'absolute',
-                top: 44,
-                left: 44,
-                background: 'rgba(239, 68, 68, 0.95)',
-                backdropFilter: 'blur(8px)',
-                padding: '6px 14px',
-                borderRadius: '99px',
-                fontSize: '11px',
-                fontWeight: 900,
-                color: '#FFF',
-                zIndex: 10,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                boxShadow: '0 8px 20px rgba(239, 68, 68, 0.25)',
-                letterSpacing: '0.04em'
-              }}>
-                <span className="heartbeat-pulse">🚨</span> URGENT • CRITICAL TIMELINE
-              </div>
-
-              {/* Image with Dark Vignette Overlay */}
-              <div style={{
-                width: '100%',
-                height: '300px',
-                borderRadius: '24px',
-                overflow: 'hidden',
-                position: 'relative',
-                marginBottom: 24,
-                boxShadow: 'inset 0 0 40px rgba(0,0,0,0.5)'
-              }}>
-                <img
-                  src={URGENT_CASE.image}
-                  alt={URGENT_CASE.name}
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover', 
-                    objectPosition: 'center 20%',
-                    transform: 'scale(1.02)'
-                  }}
-                />
-                
-                {/* Dark cinematic vignette and soft bottom gradient overlay */}
+                {/* Urgency Badge with Heartbeat Animation */}
                 <div style={{
                   position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to top, rgba(26, 17, 9, 0.95) 0%, rgba(26, 17, 9, 0.4) 50%, rgba(0,0,0,0) 100%)',
-                }} />
-
-                {/* Patient Info Overlay */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: 20,
-                  left: 20,
-                  right: 20,
-                  color: '#fff',
-                  textShadow: '0 2px 4px rgba(0,0,0,0.3)'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                    <ShieldCheck size={14} color="#D4AF37" />
-                    <span style={{ fontSize: '10.5px', color: '#EBD5C2', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.08em' }}>
-                      {URGENT_CASE.hospital}
-                    </span>
-                  </div>
-                  <h3 style={{ margin: '0 0 2px', fontSize: '24px', fontWeight: 900, fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
-                    {URGENT_CASE.name}
-                  </h3>
-                  <p style={{ margin: 0, fontSize: '13px', color: '#EBD5C2', fontWeight: 600 }}>
-                    {URGENT_CASE.age} • {URGENT_CASE.condition}
-                  </p>
-                </div>
-              </div>
-
-              {/* Progress & Amounts Section */}
-              <div style={{ marginBottom: 24 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 10 }}>
-                  <span style={{ fontSize: '15px', fontWeight: 900, color: 'var(--color-primary)', fontFamily: 'Outfit' }}>
-                    {((dynamicRaised / URGENT_CASE.requiredAmount) * 100).toFixed(2)}% Funded
-                  </span>
-                  <span style={{ fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                    <strong>{formatCrore(dynamicRaised)}</strong> raised of <strong>{formatCrore(URGENT_CASE.requiredAmount)}</strong>
-                  </span>
-                </div>
-
-                {/* Smooth Progress Bar with Framer Motion */}
-                <div className="progress-glow" style={{
-                  height: 12,
-                  background: 'rgba(235, 224, 214, 0.6)',
+                  top: 44,
+                  left: 44,
+                  background: 'rgba(239, 68, 68, 0.95)',
+                  backdropFilter: 'blur(8px)',
+                  padding: '6px 14px',
                   borderRadius: '99px',
-                  overflow: 'hidden',
-                  marginBottom: 20
-                }}>
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(dynamicRaised / URGENT_CASE.requiredAmount) * 100}%` }}
-                    transition={{ duration: 1.5, ease: 'easeOut' }}
-                    style={{
-                      height: '100%',
-                      background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
-                      borderRadius: '99px'
-                    }} 
-                  />
-                </div>
-
-                {/* 3-Column Milestone Widget */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: 12,
-                  marginBottom: 20
-                }}>
-                  <div style={{
-                    background: '#FAF6F2',
-                    border: '1px solid rgba(235, 224, 214, 0.5)',
-                    borderRadius: '16px',
-                    padding: '12px 8px',
-                    textAlign: 'center'
-                  }}>
-                    <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Goal</span>
-                    <div style={{ fontSize: '13.5px', fontWeight: 900, color: 'var(--color-text)', marginTop: 4 }}>
-                      {formatCrore(URGENT_CASE.requiredAmount)}
-                    </div>
-                  </div>
-                  <div style={{
-                    background: '#FAF6F2',
-                    border: '1px solid rgba(235, 224, 214, 0.5)',
-                    borderRadius: '16px',
-                    padding: '12px 8px',
-                    textAlign: 'center'
-                  }}>
-                    <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Raised</span>
-                    <div style={{ fontSize: '13.5px', fontWeight: 900, color: 'var(--color-text)', marginTop: 4 }}>
-                      {formatCrore(dynamicRaised)}
-                    </div>
-                  </div>
-                  <div style={{
-                    background: '#FAF6F2',
-                    border: '1px solid rgba(235, 224, 214, 0.5)',
-                    borderRadius: '16px',
-                    padding: '12px 8px',
-                    textAlign: 'center'
-                  }}>
-                    <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Remaining</span>
-                    <div style={{ fontSize: '13.5px', fontWeight: 900, color: '#C8773A', marginTop: 4 }}>
-                      {formatCrore(URGENT_CASE.requiredAmount - dynamicRaised)}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Support Text & Verified Indicator */}
-                <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: '#5C4C3C', textAlign: 'center', fontStyle: 'italic', lineHeight: 1.5, fontWeight: 500 }}>
-                  “Every small contribution brings Jana one step closer to life-saving treatment.”
-                </p>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyCenter: 'center', gap: 6, fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', justifyContent: 'center' }}>
-                  <ShieldCheck size={13} color="#16a34a" /> 100% Verified Hospital Ledger
-                </div>
-              </div>
-
-              {/* Help Jana Survive Button */}
-              <motion.button
-                onClick={() => navigate('/main')}
-                whileHover={{ scale: 1.02, boxShadow: '0 12px 30px rgba(140, 79, 26, 0.3)' }}
-                whileTap={{ scale: 0.98 }}
-                className="btn-primary"
-                style={{
-                  width: '100%',
-                  padding: '16px',
-                  borderRadius: '99px',
-                  fontSize: '15px',
+                  fontSize: '11px',
                   fontWeight: 900,
-                  background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                  cursor: 'pointer',
-                  border: 'none',
-                  color: '#fff',
+                  color: '#FFF',
+                  zIndex: 10,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  boxShadow: '0 8px 24px rgba(140, 79, 26, 0.2)',
-                  fontFamily: 'Outfit',
-                  letterSpacing: '0.02em',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                Help Jana Survive <span className="heartbeat-pulse">❤️</span>
-              </motion.button>
+                  gap: 6,
+                  boxShadow: '0 8px 20px rgba(239, 68, 68, 0.25)',
+                  letterSpacing: '0.04em'
+                }}>
+                  <span className="heartbeat-pulse">🚨</span> URGENT • CRITICAL TIMELINE
+                </div>
+
+                {/* Image with Dark Vignette Overlay */}
+                <div style={{
+                  width: '100%',
+                  height: '300px',
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                  position: 'relative',
+                  marginBottom: 24,
+                  boxShadow: 'inset 0 0 40px rgba(0,0,0,0.5)'
+                }}>
+                  <img
+                    src={URGENT_CASE.image}
+                    alt={URGENT_CASE.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center 20%',
+                      transform: 'scale(1.02)'
+                    }}
+                  />
+
+                  {/* Dark cinematic vignette and soft bottom gradient overlay */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(26, 17, 9, 0.95) 0%, rgba(26, 17, 9, 0.4) 50%, rgba(0,0,0,0) 100%)',
+                  }} />
+
+                  {/* Patient Info Overlay */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 20,
+                    left: 20,
+                    right: 20,
+                    color: '#fff',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                      <ShieldCheck size={14} color="#D4AF37" />
+                      <span style={{ fontSize: '10.5px', color: '#EBD5C2', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.08em' }}>
+                        {URGENT_CASE.hospital}
+                      </span>
+                    </div>
+                    <h3 style={{ margin: '0 0 2px', fontSize: '24px', fontWeight: 900, fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
+                      {URGENT_CASE.name}
+                    </h3>
+                    <p style={{ margin: 0, fontSize: '13px', color: '#EBD5C2', fontWeight: 600 }}>
+                      {URGENT_CASE.age} • {URGENT_CASE.condition}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Progress & Amounts Section */}
+                <div style={{ marginBottom: 24 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 10 }}>
+                    <span style={{ fontSize: '15px', fontWeight: 900, color: 'var(--color-primary)', fontFamily: 'Outfit' }}>
+                      {((dynamicRaised / URGENT_CASE.requiredAmount) * 100).toFixed(2)}% Funded
+                    </span>
+                    <span style={{ fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                      <strong>{formatCrore(dynamicRaised)}</strong> raised of <strong>{formatCrore(URGENT_CASE.requiredAmount)}</strong>
+                    </span>
+                  </div>
+
+                  {/* Smooth Progress Bar with Framer Motion */}
+                  <div className="progress-glow" style={{
+                    height: 12,
+                    background: 'rgba(235, 224, 214, 0.6)',
+                    borderRadius: '99px',
+                    overflow: 'hidden',
+                    marginBottom: 20
+                  }}>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(dynamicRaised / URGENT_CASE.requiredAmount) * 100}%` }}
+                      transition={{ duration: 1.5, ease: 'easeOut' }}
+                      style={{
+                        height: '100%',
+                        background: 'linear-gradient(90deg, #8C4F1A, #C8773A)',
+                        borderRadius: '99px'
+                      }}
+                    />
+                  </div>
+
+                  {/* 3-Column Milestone Widget */}
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: 12,
+                    marginBottom: 20
+                  }}>
+                    <div style={{
+                      background: '#FAF6F2',
+                      border: '1px solid rgba(235, 224, 214, 0.5)',
+                      borderRadius: '16px',
+                      padding: '12px 8px',
+                      textAlign: 'center'
+                    }}>
+                      <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Goal</span>
+                      <div style={{ fontSize: '13.5px', fontWeight: 900, color: 'var(--color-text)', marginTop: 4 }}>
+                        {formatCrore(URGENT_CASE.requiredAmount)}
+                      </div>
+                    </div>
+                    <div style={{
+                      background: '#FAF6F2',
+                      border: '1px solid rgba(235, 224, 214, 0.5)',
+                      borderRadius: '16px',
+                      padding: '12px 8px',
+                      textAlign: 'center'
+                    }}>
+                      <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Raised</span>
+                      <div style={{ fontSize: '13.5px', fontWeight: 900, color: 'var(--color-text)', marginTop: 4 }}>
+                        {formatCrore(dynamicRaised)}
+                      </div>
+                    </div>
+                    <div style={{
+                      background: '#FAF6F2',
+                      border: '1px solid rgba(235, 224, 214, 0.5)',
+                      borderRadius: '16px',
+                      padding: '12px 8px',
+                      textAlign: 'center'
+                    }}>
+                      <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Remaining</span>
+                      <div style={{ fontSize: '13.5px', fontWeight: 900, color: '#C8773A', marginTop: 4 }}>
+                        {formatCrore(URGENT_CASE.requiredAmount - dynamicRaised)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Support Text & Verified Indicator */}
+                  <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: '#5C4C3C', textAlign: 'center', fontStyle: 'italic', lineHeight: 1.5, fontWeight: 500 }}>
+                    “Every small contribution brings Jana one step closer to life-saving treatment.”
+                  </p>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyCenter: 'center', gap: 6, fontSize: '11px', color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', justifyContent: 'center' }}>
+                    <ShieldCheck size={13} color="#16a34a" /> 100% Verified Hospital Ledger
+                  </div>
+                </div>
+
+                {/* Help Jana Survive Button */}
+                <motion.button
+                  onClick={() => navigate('/main')}
+                  whileHover={{ scale: 1.02, boxShadow: '0 12px 30px rgba(140, 79, 26, 0.3)' }}
+                  whileTap={{ scale: 0.98 }}
+                  className="btn-primary"
+                  style={{
+                    width: '100%',
+                    padding: '16px',
+                    borderRadius: '99px',
+                    fontSize: '15px',
+                    fontWeight: 900,
+                    background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                    cursor: 'pointer',
+                    border: 'none',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    boxShadow: '0 8px 24px rgba(140, 79, 26, 0.2)',
+                    fontFamily: 'Outfit',
+                    letterSpacing: '0.02em',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  Help Jana Survive <span className="heartbeat-pulse">❤️</span>
+                </motion.button>
+              </motion.div>
             </motion.div>
-          </motion.div>
           </div>
         </section>
 
@@ -579,335 +601,335 @@ export default function HomePage() {
           <DonationBackground />
           <div style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box', position: 'relative', zIndex: 1 }}>
 
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <motion.div
-              variants={fadeUp}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                background: '#FAF2EA',
-                border: '1px solid #EBD5C2',
-                borderRadius: '99px',
-                padding: '6px 16px',
-                marginBottom: '12px'
-              }}
-            >
-              <ShieldCheck size={13} color="#8C4F1A" />
-              <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                100% Direct Patient Support
-              </span>
-            </motion.div>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(28px, 4vw, 36px)', color: '#3D2B1A', margin: '4px 0 0', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
-              Your Contribution Goes Directly to the Patient ❤️
-            </h2>
-            <p style={{ margin: '8px 0 0', fontSize: '15.5px', color: 'var(--color-text-muted)', maxWidth: '640px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.55 }}>
-              Every contribution is routed toward verified pediatric treatment support, medicines, recovery care, and emergency hospital needs.
-            </p>
-          </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: 32,
-            marginBottom: 48,
-            alignItems: 'stretch'
-          }} className="transparency-visual-grid">
-
-            {/* CARD 1 */}
-            <motion.div
-              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
-              style={{
-                background: '#fff',
-                borderRadius: '24px',
-                border: '1px solid rgba(232, 224, 214, 0.6)',
-                padding: '32px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 16,
-                boxShadow: 'var(--shadow-sm)',
-                boxSizing: 'border-box'
-              }}
-            >
-              <div style={{
-                width: 44,
-                height: 44,
-                borderRadius: '12px',
-                background: '#FFF2E6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#8C4F1A'
-              }}>
-                <HeartPulse size={22} />
-              </div>
-              <div>
-                <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
-                  Verified Treatment Support
-                </h3>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
-                  Your contribution directly supports medicines, ICU care, treatment procedures, recovery essentials, and pediatric emergency care.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* CARD 2 */}
-            <motion.div
-              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
-              style={{
-                background: '#fff',
-                borderRadius: '24px',
-                border: '1px solid rgba(232, 224, 214, 0.6)',
-                padding: '32px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 16,
-                boxShadow: 'var(--shadow-sm)',
-                boxSizing: 'border-box'
-              }}
-            >
-              <div style={{
-                width: 44,
-                height: 44,
-                borderRadius: '12px',
-                background: '#FFF2E6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#8C4F1A'
-              }}>
-                <Users size={22} />
-              </div>
-              <div>
-                <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
-                  Direct Family Assistance
-                </h3>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
-                  Funds are routed toward verified patient support initiatives and emergency healthcare requirements without hidden deductions.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* CARD 3 */}
-            <motion.div
-              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
-              style={{
-                background: '#fff',
-                borderRadius: '24px',
-                border: '1px solid rgba(232, 224, 214, 0.6)',
-                padding: '32px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 16,
-                boxShadow: 'var(--shadow-sm)',
-                boxSizing: 'border-box'
-              }}
-            >
-              <div style={{
-                width: 44,
-                height: 44,
-                borderRadius: '12px',
-                background: '#FFF2E6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#8C4F1A'
-              }}>
-                <Award size={22} />
-              </div>
-              <div>
-                <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
-                  Transparent Healing Impact
-                </h3>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
-                  Every contribution is tracked with transparency records and verified support acknowledgements for accountability and trust.
-                </p>
-              </div>
-            </motion.div>
-
-          </div>
-
-          {/* Bottom Trust Text */}
-          <div style={{
-            textAlign: 'center',
-            fontSize: '14px',
-            fontWeight: 700,
-            color: '#8C4F1A',
-            background: '#FAF2EA',
-            border: '1px solid #EBD5C2',
-            borderRadius: '99px',
-            padding: '10px 24px',
-            display: 'block',
-            margin: '28px auto 0',
-            maxWidth: 'fit-content'
-          }}>
-            Exact contribution amount • No hidden charges • Compassion-first support
-          </div>
-
-
-          {/* 3B. TRUST & FRAMEWORK CARDS */}
-          <div style={{ marginTop: 80, borderTop: '1px solid rgba(232, 224, 214, 0.6)', paddingTop: 64 }}>
-
-            <div style={{ textAlign: 'center', marginBottom: 48 }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                Trust Framework
-              </span>
-              <h3 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '26px', color: 'var(--color-text)', margin: '4px 0 0', letterSpacing: '-0.5px' }}>
-                Our Security & Verification Framework 🛡️
-              </h3>
-              <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
-                Instant transparent operations. Verified medical cases and bank-grade payment encryption guarantee absolute security.
+            <div style={{ textAlign: 'center', marginBottom: 56 }}>
+              <motion.div
+                variants={fadeUp}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  background: '#FAF2EA',
+                  border: '1px solid #EBD5C2',
+                  borderRadius: '99px',
+                  padding: '6px 16px',
+                  marginBottom: '12px'
+                }}
+              >
+                <ShieldCheck size={13} color="#8C4F1A" />
+                <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#8C4F1A', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                  100% Direct Patient Support
+                </span>
+              </motion.div>
+              <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(28px, 4vw, 36px)', color: '#3D2B1A', margin: '4px 0 0', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
+                Your Contribution Goes Directly to the Patient ❤️
+              </h2>
+              <p style={{ margin: '8px 0 0', fontSize: '15.5px', color: 'var(--color-text-muted)', maxWidth: '640px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.55 }}>
+                Every contribution is routed toward verified pediatric treatment support, medicines, recovery care, and emergency hospital needs.
               </p>
             </div>
 
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: 24,
-              marginBottom: 48
-            }} className="framework-cards-grid">
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: 32,
+              marginBottom: 48,
+              alignItems: 'stretch'
+            }} className="transparency-visual-grid">
 
+              {/* CARD 1 */}
               <motion.div
-                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
                 style={{
-                  background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
-                  borderRadius: '20px',
+                  background: '#fff',
+                  borderRadius: '24px',
                   border: '1px solid rgba(232, 224, 214, 0.6)',
-                  padding: '24px',
-                  boxSizing: 'border-box',
+                  padding: '32px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 12
+                  gap: 16,
+                  boxShadow: 'var(--shadow-sm)',
+                  boxSizing: 'border-box'
                 }}
               >
                 <div style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '10px',
-                  background: '#FAF2EA',
+                  width: 44,
+                  height: 44,
+                  borderRadius: '12px',
+                  background: '#FFF2E6',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'var(--color-primary)'
+                  color: '#8C4F1A'
                 }}>
-                  <ShieldCheck size={20} />
+                  <HeartPulse size={22} />
                 </div>
-                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
-                  100% Transparent
-                </h4>
-                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Every rupee is mapped directly to verified hospital billing.
-                </p>
+                <div>
+                  <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                    Verified Treatment Support
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                    Your contribution directly supports medicines, ICU care, treatment procedures, recovery essentials, and pediatric emergency care.
+                  </p>
+                </div>
               </motion.div>
 
+              {/* CARD 2 */}
               <motion.div
-                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
                 style={{
-                  background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
-                  borderRadius: '20px',
+                  background: '#fff',
+                  borderRadius: '24px',
                   border: '1px solid rgba(232, 224, 214, 0.6)',
-                  padding: '24px',
-                  boxSizing: 'border-box',
+                  padding: '32px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 12
+                  gap: 16,
+                  boxShadow: 'var(--shadow-sm)',
+                  boxSizing: 'border-box'
                 }}
               >
                 <div style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '10px',
-                  background: '#FAF2EA',
+                  width: 44,
+                  height: 44,
+                  borderRadius: '12px',
+                  background: '#FFF2E6',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'var(--color-primary)'
+                  color: '#8C4F1A'
                 }}>
-                  <FileText size={20} />
+                  <Users size={22} />
                 </div>
-                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
-                  Verified Medical Cases
-                </h4>
-                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Hospital documents and treatment records are manually verified before publishing.
-                </p>
+                <div>
+                  <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                    Direct Family Assistance
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                    Funds are routed toward verified patient support initiatives and emergency healthcare requirements without hidden deductions.
+                  </p>
+                </div>
               </motion.div>
 
-
-
+              {/* CARD 3 */}
               <motion.div
-                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
                 style={{
-                  background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
-                  borderRadius: '20px',
+                  background: '#fff',
+                  borderRadius: '24px',
                   border: '1px solid rgba(232, 224, 214, 0.6)',
-                  padding: '24px',
-                  boxSizing: 'border-box',
+                  padding: '32px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 12
+                  gap: 16,
+                  boxShadow: 'var(--shadow-sm)',
+                  boxSizing: 'border-box'
                 }}
               >
                 <div style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '10px',
-                  background: '#FAF2EA',
+                  width: 44,
+                  height: 44,
+                  borderRadius: '12px',
+                  background: '#FFF2E6',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'var(--color-primary)'
+                  color: '#8C4F1A'
                 }}>
-                  <Users size={20} />
+                  <Award size={22} />
                 </div>
-                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
-                  Together We Heal
-                </h4>
-                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Thousands of helpers contributing toward life-saving treatments together.
-                </p>
+                <div>
+                  <h3 style={{ margin: '0 0 10px', fontSize: '19px', fontWeight: 800, color: 'var(--color-text)', fontFamily: 'Outfit' }}>
+                    Transparent Healing Impact
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                    Every contribution is tracked with transparency records and verified support acknowledgements for accountability and trust.
+                  </p>
+                </div>
               </motion.div>
 
             </div>
 
+            {/* Bottom Trust Text */}
             <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 20,
-              flexWrap: 'wrap',
-              paddingTop: 28,
-              borderTop: '1px solid rgba(232, 224, 214, 0.4)'
-            }} className="bottom-trust-badges">
+              textAlign: 'center',
+              fontSize: '14px',
+              fontWeight: 700,
+              color: '#8C4F1A',
+              background: '#FAF2EA',
+              border: '1px solid #EBD5C2',
+              borderRadius: '99px',
+              padding: '10px 24px',
+              display: 'block',
+              margin: '28px auto 0',
+              maxWidth: 'fit-content'
+            }}>
+              Exact contribution amount • No hidden charges • Compassion-first support
+            </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
-                <span style={{ color: '#16a34a' }}>🔒</span>
-                <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>SSL Secured</span>
+
+            {/* 3B. TRUST & FRAMEWORK CARDS */}
+            <div style={{ marginTop: 80, borderTop: '1px solid rgba(232, 224, 214, 0.6)', paddingTop: 64 }}>
+
+              <div style={{ textAlign: 'center', marginBottom: 48 }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  Trust Framework
+                </span>
+                <h3 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '26px', color: 'var(--color-text)', margin: '4px 0 0', letterSpacing: '-0.5px' }}>
+                  Our Security & Verification Framework 🛡️
+                </h3>
+                <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
+                  Instant transparent operations. Verified medical cases and bank-grade payment encryption guarantee absolute security.
+                </p>
               </div>
 
-              <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: 24,
+                marginBottom: 48
+              }} className="framework-cards-grid">
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
-                <span style={{ color: '#1A73E8' }}>💳</span>
-                <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>Razorpay Verified</span>
+                <motion.div
+                  whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                  style={{
+                    background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(232, 224, 214, 0.6)',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 12
+                  }}
+                >
+                  <div style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: '10px',
+                    background: '#FAF2EA',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--color-primary)'
+                  }}>
+                    <ShieldCheck size={20} />
+                  </div>
+                  <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
+                    100% Transparent
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                    Every rupee is mapped directly to verified hospital billing.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                  style={{
+                    background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(232, 224, 214, 0.6)',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 12
+                  }}
+                >
+                  <div style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: '10px',
+                    background: '#FAF2EA',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--color-primary)'
+                  }}>
+                    <FileText size={20} />
+                  </div>
+                  <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
+                    Verified Medical Cases
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                    Hospital documents and treatment records are manually verified before publishing.
+                  </p>
+                </motion.div>
+
+
+
+                <motion.div
+                  whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
+                  style={{
+                    background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(232, 224, 214, 0.6)',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 12
+                  }}
+                >
+                  <div style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: '10px',
+                    background: '#FAF2EA',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--color-primary)'
+                  }}>
+                    <Users size={20} />
+                  </div>
+                  <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit' }}>
+                    Together We Heal
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                    Thousands of helpers contributing toward life-saving treatments together.
+                  </p>
+                </motion.div>
+
               </div>
 
-              <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: 20,
+                flexWrap: 'wrap',
+                paddingTop: 28,
+                borderTop: '1px solid rgba(232, 224, 214, 0.4)'
+              }} className="bottom-trust-badges">
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
-                <span style={{ color: '#8C4F1A' }}>🏥</span>
-                <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>Hospital Audited</span>
-              </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
+                  <span style={{ color: '#16a34a' }}>🔒</span>
+                  <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>SSL Secured</span>
+                </div>
 
-              <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
+                <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
-                <span style={{ color: '#C026D3' }}>🔑</span>
-                <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>End-to-End Encrypted</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
+                  <span style={{ color: '#1A73E8' }}>💳</span>
+                  <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>Razorpay Verified</span>
+                </div>
+
+                <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
+                  <span style={{ color: '#8C4F1A' }}>🏥</span>
+                  <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>Hospital Audited</span>
+                </div>
+
+                <span style={{ color: 'rgba(232, 224, 214, 0.8)' }}>|</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: 'var(--color-text-muted)' }}>
+                  <span style={{ color: '#C026D3' }}>🔑</span>
+                  <span style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>End-to-End Encrypted</span>
+                </div>
+
               </div>
 
             </div>
-
-          </div>
 
           </div>
         </section>
@@ -917,209 +939,209 @@ export default function HomePage() {
           <GamesBackground />
           <div style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box', position: 'relative', zIndex: 1 }}>
 
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}> Curated Experiences </span>
-            <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}> Choose Your Way to Help 🤝 </h2>
-            <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}> Explore gamified clinical tickets, unlock emotional quotes, or contribute direct billing sums. </p>
-          </div>
+            <div style={{ textAlign: 'center', marginBottom: 56 }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}> Curated Experiences </span>
+              <h2 style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 'clamp(26px, 3.5vw, 34px)', color: '#3D2B1A', margin: '2px 0 0', letterSpacing: '-1.2px', lineHeight: 1.15 }}> Choose Your Way to Help 🤝 </h2>
+              <p style={{ margin: '6px 0 0', fontSize: '14.5px', color: 'var(--color-text-muted)' }}> Explore gamified clinical tickets, unlock emotional quotes, or contribute direct billing sums. </p>
+            </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 32 }} className="categories-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 32 }} className="categories-grid">
 
-            {/* Category 1 */}
-            <motion.div
-              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
-              style={{
-                background: '#fff',
-                border: '1px solid var(--color-border)',
-                borderRadius: '24px',
-                padding: '32px',
-                boxShadow: 'var(--shadow-sm)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                height: '420px'
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
-                  <Gamepad2 size={24} />
-                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Interactive Play</span>
-                </div>
-
-                <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Games To Unlock</h3>
-                <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Play interactive mini-games while helping fund child treatments. Unlocks high-engagement spins, memory matches, and scratch cards.
-                </p>
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-                  {['spin wheel', 'scratch cards', 'memory games', 'treasure hunts'].map((item, idx) => (
-                    <span key={idx} style={{ fontSize: '11px', background: '#FAF2EA', color: '#8C4F1A', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
-                      🎮 {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={() => navigate('/main?tab=games')}
+              {/* Category 1 */}
+              <motion.div
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
                 style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                  color: '#fff',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(123, 63, 0, 0.1)'
+                  background: '#fff',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '24px',
+                  padding: '32px',
+                  boxShadow: 'var(--shadow-sm)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  height: '420px'
                 }}
               >
-                Explore Games (₹10) 🎮
-              </button>
-            </motion.div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
+                    <Gamepad2 size={24} />
+                    <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Interactive Play</span>
+                  </div>
 
-            {/* Category 2 */}
-            <motion.div
-              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
-              style={{
-                background: '#fff',
-                border: '1px solid var(--color-border)',
-                borderRadius: '24px',
-                padding: '32px',
-                boxShadow: 'var(--shadow-sm)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                height: '420px'
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
-                  <MessageSquare size={22} />
-                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Inspirational Quotes</span>
+                  <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Games To Unlock</h3>
+                  <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                    Play interactive mini-games while helping fund child treatments. Unlocks high-engagement spins, memory matches, and scratch cards.
+                  </p>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                    {['spin wheel', 'scratch cards', 'memory games', 'treasure hunts'].map((item, idx) => (
+                      <span key={idx} style={{ fontSize: '11px', background: '#FAF2EA', color: '#8C4F1A', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
+                        🎮 {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Quotes To Unlock</h3>
-                <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Unlock emotional stories, healing messages, and inspirational quotes. Connect directly with the human mission behind pediatric recovery.
-                </p>
+                <button
+                  onClick={() => navigate('/main?tab=games')}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '12px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(123, 63, 0, 0.1)'
+                  }}
+                >
+                  Explore Games (₹10) 🎮
+                </button>
+              </motion.div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-                  {['motivational quotes', 'success stories', 'healing messages', 'emotional content'].map((item, idx) => (
-                    <span key={idx} style={{ fontSize: '11px', background: '#FAF2EA', color: '#8C4F1A', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
-                      💬 {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={() => navigate('/main?tab=quotes')}
+              {/* Category 2 */}
+              <motion.div
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
                 style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                  color: '#fff',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(123, 63, 0, 0.1)'
+                  background: '#fff',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '24px',
+                  padding: '32px',
+                  boxShadow: 'var(--shadow-sm)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  height: '420px'
                 }}
               >
-                Unlock Inspiration (₹10) 💬
-              </button>
-            </motion.div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
+                    <MessageSquare size={22} />
+                    <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Inspirational Quotes</span>
+                  </div>
 
-            {/* Category 3 */}
-            <motion.div
-              whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
-              style={{
-                background: '#fff',
-                border: '1px solid var(--color-border)',
-                borderRadius: '24px',
-                padding: '32px',
-                boxShadow: 'var(--shadow-sm)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                height: '420px'
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
-                  <Heart size={22} />
-                  <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Direct Clinical Support</span>
+                  <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Quotes To Unlock</h3>
+                  <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                    Unlock emotional stories, healing messages, and inspirational quotes. Connect directly with the human mission behind pediatric recovery.
+                  </p>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                    {['motivational quotes', 'success stories', 'healing messages', 'emotional content'].map((item, idx) => (
+                      <span key={idx} style={{ fontSize: '11px', background: '#FAF2EA', color: '#8C4F1A', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
+                        💬 {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Donate Freely</h3>
-                <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Support treatments directly. Perfect for helpers who simply wish to donate recommended sums directly to clear hospital bills.
-                </p>
+                <button
+                  onClick={() => navigate('/main?tab=quotes')}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '12px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(123, 63, 0, 0.1)'
+                  }}
+                >
+                  Unlock Inspiration (₹10) 💬
+                </button>
+              </motion.div>
 
-                <div style={{ display: 'flex', gap: 10, marginBottom: 18 }} className="amount-chips-row">
-                  {[20, 50, 100].map((amt) => (
-                    <motion.button
-                      key={amt}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setSelectedDirectAmount(amt)}
-                      style={{
-                        flex: 1,
-                        padding: '8px 0',
-                        borderRadius: '10px',
-                        border: '1px solid',
-                        borderColor: selectedDirectAmount === amt ? '#8C4F1A' : 'rgba(232, 224, 214, 0.8)',
-                        background: selectedDirectAmount === amt ? '#FAF2EA' : '#fff',
-                        color: selectedDirectAmount === amt ? '#8C4F1A' : 'var(--color-text-muted)',
-                        fontSize: '13px',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      ₹{amt} {amt === 20 ? '🔥' : ''}
-                    </motion.button>
-                  ))}
-                </div>
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-                  {['direct support', 'hospital billing', 'direct payout', 'tax receipt ready'].map((item, idx) => (
-                    <span key={idx} style={{ fontSize: '11px', background: '#FDF2F2', color: '#EF4444', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
-                      ❤️ {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={() => navigate('/main')}
+              {/* Category 3 */}
+              <motion.div
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
                 style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  background: 'linear-gradient(135deg, #EF4444, #C026D3)',
-                  color: '#fff',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(239, 68, 68, 0.15)'
+                  background: '#fff',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '24px',
+                  padding: '32px',
+                  boxShadow: 'var(--shadow-sm)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  height: '420px'
                 }}
               >
-                Support a Child (₹{selectedDirectAmount}) ❤️
-              </button>
-            </motion.div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-primary)', marginBottom: 16 }}>
+                    <Heart size={22} />
+                    <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Direct Clinical Support</span>
+                  </div>
 
-          </div>
+                  <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, fontFamily: 'Outfit' }}>Donate Freely</h3>
+                  <p style={{ margin: '0 0 16px', fontSize: '13.5px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                    Support treatments directly. Perfect for helpers who simply wish to donate recommended sums directly to clear hospital bills.
+                  </p>
+
+                  <div style={{ display: 'flex', gap: 10, marginBottom: 18 }} className="amount-chips-row">
+                    {[20, 50, 100].map((amt) => (
+                      <motion.button
+                        key={amt}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setSelectedDirectAmount(amt)}
+                        style={{
+                          flex: 1,
+                          padding: '8px 0',
+                          borderRadius: '10px',
+                          border: '1px solid',
+                          borderColor: selectedDirectAmount === amt ? '#8C4F1A' : 'rgba(232, 224, 214, 0.8)',
+                          background: selectedDirectAmount === amt ? '#FAF2EA' : '#fff',
+                          color: selectedDirectAmount === amt ? '#8C4F1A' : 'var(--color-text-muted)',
+                          fontSize: '13px',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        ₹{amt} {amt === 20 ? '🔥' : ''}
+                      </motion.button>
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                    {['direct support', 'hospital billing', 'direct payout', 'tax receipt ready'].map((item, idx) => (
+                      <span key={idx} style={{ fontSize: '11px', background: '#FDF2F2', color: '#EF4444', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
+                        ❤️ {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => navigate('/main')}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '12px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #EF4444, #C026D3)',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(239, 68, 68, 0.15)'
+                  }}
+                >
+                  Support a Child (₹{selectedDirectAmount}) ❤️
+                </button>
+              </motion.div>
+
+            </div>
           </div>
         </section>
 
         {/* ────────────────── 5. DEEPLY EMOTIONAL STORYTELLING ────────────────── */}
         <section style={{ padding: '100px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-          
+
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: 60 }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Clinical Reality</span>
@@ -1137,16 +1159,16 @@ export default function HomePage() {
             gap: 48,
             alignItems: 'center'
           }}>
-            
+
             {/* Left Column: Hero Storytelling Text */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               style={{ display: 'flex', flexDirection: 'column', gap: 24 }}
             >
-              <div style={{ 
+              <div style={{
                 background: 'rgba(255, 255, 255, 0.5)',
                 border: '1px solid rgba(235, 224, 214, 0.6)',
                 borderRadius: '24px',
@@ -1179,7 +1201,7 @@ export default function HomePage() {
             </motion.div>
 
             {/* Right Column: Visual Highlight Card & Emergency Alert */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -1205,9 +1227,9 @@ export default function HomePage() {
                   zIndex: 3
                 }} />
 
-                <img 
-                  src={helpJanaImg} 
-                  alt="Baby Janamithra" 
+                <img
+                  src={helpJanaImg}
+                  alt="Baby Janamithra"
                   style={{
                     width: '100%',
                     height: '100%',
@@ -1353,24 +1375,24 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <a 
-                href="https://www.impactguru.com/fundraiser/help-janamithra" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.impactguru.com/fundraiser/help-janamithra"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{ textDecoration: 'none' }}
               >
-                <motion.button 
+                <motion.button
                   whileHover={{ x: 5 }}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: 'var(--color-primary)', 
-                    fontWeight: 800, 
-                    fontSize: '13.5px', 
-                    cursor: 'pointer', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 6, 
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--color-primary)',
+                    fontWeight: 800,
+                    fontSize: '13.5px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
                     padding: 0,
                     fontFamily: 'Outfit'
                   }}
@@ -1428,24 +1450,24 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <a 
-                href="https://youtube.com/shorts/haHd9T4YmSI?si=LHbNZA3fxjudRoW_" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://youtube.com/shorts/haHd9T4YmSI?si=LHbNZA3fxjudRoW_"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{ textDecoration: 'none' }}
               >
-                <motion.button 
+                <motion.button
                   whileHover={{ x: 5 }}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: '#EF4444', 
-                    fontWeight: 800, 
-                    fontSize: '13.5px', 
-                    cursor: 'pointer', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 6, 
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#EF4444',
+                    fontWeight: 800,
+                    fontSize: '13.5px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
                     padding: 0,
                     fontFamily: 'Outfit'
                   }}
@@ -1503,24 +1525,24 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <a 
-                href="https://my.clevelandclinic.org/health/diseases/14505-spinal-muscular-atrophy-sma" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://my.clevelandclinic.org/health/diseases/14505-spinal-muscular-atrophy-sma"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{ textDecoration: 'none' }}
               >
-                <motion.button 
+                <motion.button
                   whileHover={{ x: 5 }}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: '#0D9488', 
-                    fontWeight: 800, 
-                    fontSize: '13.5px', 
-                    cursor: 'pointer', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 6, 
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#0D9488',
+                    fontWeight: 800,
+                    fontSize: '13.5px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
                     padding: 0,
                     fontFamily: 'Outfit'
                   }}
@@ -1795,7 +1817,7 @@ export default function HomePage() {
             <p style={{ fontSize: '15.5px', color: '#5C4C3C', lineHeight: 1.75, fontWeight: 500, margin: '0 auto 36px', maxWidth: '680px' }}>
               Every contribution, every share, every act of kindness brings Janamithra one step closer to a future where she can stand, walk, smile, and joyfully call out ‘Amma’.
             </p>
-            
+
             <motion.button
               onClick={() => navigate('/main')}
               whileHover={{ scale: 1.02, boxShadow: '0 12px 30px rgba(140, 79, 26, 0.25)' }}

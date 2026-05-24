@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { 
   ChevronRight, Gamepad2, Tag, Quote as QuoteIcon, Gift, 
   LayoutGrid, Shield, Heart, Lock, ArrowRight, Sparkles, Check, Info, X
@@ -515,17 +515,34 @@ const TABS = [
 ]
 
 export default function MainPage() {
-  const [activeTab, setActiveTab] = useState('all')
+  const navigate = useNavigate()
+  const location = useLocation()
+  
+  const [activeTab, setActiveTab] = useState(() => {
+    if (location.state?.activeTab) return location.state.activeTab
+    return 'all'
+  })
   const [customAmount, setCustomAmount] = useState('')
   const [selectedPreset, setSelectedPreset] = useState(100)
   
-  const navigate = useNavigate()
   const { user } = useAuth()
   const { confirmDonation } = useDonation()
   const { requestPayment } = usePayment()
   const { userData } = useUserData()
 
   const [couponsList, setCouponsList] = useState([])
+
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab)
+      setTimeout(() => {
+        const element = document.getElementById('tab-container')
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 150)
+    }
+  }, [location.state])
 
   useEffect(() => {
     const unsubscribe = subscribeCoupons((data) => {
@@ -698,7 +715,7 @@ export default function MainPage() {
         
 
         {/* ── PREMIUM FILTER PILLS (Replaces Sidebar) ── */}
-        <div style={{ maxWidth: 1360, margin: '80px auto 0', padding: '0 48px', textAlign: 'center', boxSizing: 'border-box' }}>
+        <div id="tab-container" style={{ maxWidth: 1360, margin: '80px auto 0', padding: '0 48px', textAlign: 'center', boxSizing: 'border-box' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
