@@ -12,8 +12,9 @@ import { useDonation } from '../context/DonationContext'
 import { useAuth } from '../context/AuthContext'
 import TransparentBreakdown from '../components/TransparentBreakdown'
 import { addContribution } from '../services/contributionService'
-import { doc, updateDoc, increment } from 'firebase/firestore'
+import { doc, updateDoc, increment, arrayUnion } from 'firebase/firestore'
 import { db } from '../firebase'
+import { useUserData } from '../hooks/useUserData'
 
 // ── Static premium data with SVGs / minimal styles ────────────────────
 const MYSTERY_REWARDS = [
@@ -438,7 +439,7 @@ const PREMIUM_GAMES = [
     id: 'mind-flip',
     title: 'MindFlip Arena',
     description: 'Master cognitive focus in a premium Neural Memory Arena. Match minimalist geometric nodes to chain combos and unlock matched sponsor aid.',
-    price: 0,
+    price: 20,
     illustration: (
       <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
         <defs>
@@ -471,7 +472,7 @@ const PREMIUM_GAMES = [
     id: 'pulse-reflex',
     title: 'Pulse Reflex Arena',
     description: 'Test your sensory timing in a premium Neural Reaction Arena. Tap glowing pulse targets, chain combos, and earn matched sponsor help.',
-    price: 0,
+    price: 20,
     illustration: (
       <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
         <defs>
@@ -501,7 +502,7 @@ const PREMIUM_GAMES = [
     id: 'mind-slide',
     title: 'MindSlide Puzzle',
     description: 'Reorder sensory matrix paths in a premium sliding node arena. Align numbered paths, improve moves, and unlock wellness sponsor aid.',
-    price: 0,
+    price: 20,
     illustration: (
       <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
         <defs>
@@ -582,6 +583,9 @@ export default function MainPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { confirmDonation } = useDonation()
+  const { userData } = useUserData()
+
+  const unlockedGames = userData?.unlockedGames || []
 
   useEffect(() => {
     if (!user) {
@@ -594,8 +598,10 @@ export default function MainPage() {
   const [pendingPrice, setPendingPrice] = useState(null)
   const [unlockType, setUnlockType] = useState('donation')
   const [pendingGamePath, setPendingGamePath] = useState(null)
+  const [pendingGameId, setPendingGameId] = useState(null)
   const [formData, setFormData] = useState({ name: '', mobile: '', email: '' })
   const [errors, setErrors] = useState({ name: '', email: '' })
+  const [toastMsg, setToastMsg] = useState(null)
 
   // ESC Key listener
   useEffect(() => {
@@ -608,9 +614,10 @@ export default function MainPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const handleUnlock = (price, path = null) => {
+  const handleUnlock = (price, path = null, gameId = null) => {
     setPendingPrice(price)
     setPendingGamePath(path)
+    setPendingGameId(gameId)
     setIsModalOpen(true)
   }
 
@@ -657,7 +664,10 @@ export default function MainPage() {
       const userRef = doc(db, 'users', user.uid);
       const updateFields = {};
       if (unlockType === 'game') {
-        updateFields.unlockedGames = increment(1);
+        updateFields.unlockedGamesCount = increment(1);
+        if (pendingGameId) {
+          updateFields.unlockedGames = arrayUnion(pendingGameId);
+        }
       } else if (unlockType === 'coupon') {
         updateFields.couponsClaimed = increment(1);
       }
@@ -668,8 +678,9 @@ export default function MainPage() {
       }
     }
 
-    if (unlockType === 'game' && pendingGamePath) {
-      navigate(pendingGamePath)
+    if (unlockType === 'game') {
+      setToastMsg('Game successfully unlocked ✨')
+      setTimeout(() => setToastMsg(null), 3000)
     } else {
       navigate('/thank-you')
     }
@@ -678,8 +689,38 @@ export default function MainPage() {
   const show = (key) => activeTab === 'all' || activeTab === key
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#332211' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#332211', position: 'relative' }}>
       <Navbar />
+
+      {/* SUCCESS TOAST */}
+      <AnimatePresence>
+        {toastMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            style={{
+              position: 'fixed',
+              top: 80,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              background: '#8C4F1A',
+              color: '#FFF',
+              padding: '12px 24px',
+              borderRadius: '99px',
+              fontWeight: 800,
+              fontSize: '12px',
+              zIndex: 9999,
+              boxShadow: '0 8px 32px rgba(140, 79, 26, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <Check size={14} /> {toastMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main style={{ flex: 1, width: '100%', paddingBottom: 120 }}>
         
@@ -799,92 +840,132 @@ export default function MainPage() {
                 gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
                 gap: 32 
               }}>
-                {PREMIUM_GAMES.map((game) => (
-                  <motion.div
-                    key={game.id}
-                    whileHover={{ 
-                      y: -8, 
-                      boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
-                    }}
-                    onClick={() => {
-                      let targetPath = '/';
-                      if (game.id === 'sound-wave-serenade') targetPath = '/sound-wave-serenade';
-                      else if (game.id === 'breathe-bloom') targetPath = '/breathe-bloom';
-                      else if (game.id === 'bio-path-tracer') targetPath = '/bio-path-tracer';
-                      else if (game.id === 'therapeutic-path-matrix') targetPath = '/therapeutic-path-matrix';
-                      else if (game.id === 'flex-path') targetPath = '/flex-path';
-                      else if (game.id === 'luxe-xo') targetPath = '/luxe-xo';
-                      else if (game.id === 'mind-flip') targetPath = '/mind-flip';
-                      else if (game.id === 'pulse-reflex') targetPath = '/pulse-reflex';
-                      else if (game.id === 'mind-slide') targetPath = '/mind-slide';
+                {PREMIUM_GAMES.map((game) => {
+                  const isUnlocked = game.price === 0 || unlockedGames.includes(game.id)
+                  
+                  return (
+                    <motion.div
+                      key={game.id}
+                      whileHover={isUnlocked ? { 
+                        y: -8, 
+                        boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
+                      } : {}}
+                      onClick={() => {
+                        let targetPath = '/';
+                        if (game.id === 'sound-wave-serenade') targetPath = '/sound-wave-serenade';
+                        else if (game.id === 'breathe-bloom') targetPath = '/breathe-bloom';
+                        else if (game.id === 'bio-path-tracer') targetPath = '/bio-path-tracer';
+                        else if (game.id === 'therapeutic-path-matrix') targetPath = '/therapeutic-path-matrix';
+                        else if (game.id === 'flex-path') targetPath = '/flex-path';
+                        else if (game.id === 'luxe-xo') targetPath = '/luxe-xo';
+                        else if (game.id === 'mind-flip') targetPath = '/mind-flip';
+                        else if (game.id === 'pulse-reflex') targetPath = '/pulse-reflex';
+                        else if (game.id === 'mind-slide') targetPath = '/mind-slide';
 
-                      if (game.price > 0) {
-                        setUnlockType('game');
-                        handleUnlock(game.price, targetPath);
-                      } else {
-                        navigate(targetPath);
-                      }
-                    }}
-                    style={{
-                      background: '#FFFFFF',
-                      border: '1px solid rgba(220, 208, 195, 0.7)',
-                      borderRadius: '32px',
-                      boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                      minHeight: 410
-                    }}
-                  >
-                    {/* SVG Illustration Container */}
-                    <div style={{ 
-                      height: 160, 
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.45) 100%)', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      padding: 20,
-                      borderBottom: '1px solid rgba(235, 224, 214, 0.3)'
-                    }}>
-                      <div style={{ width: '100%', height: '100%', maxWidth: 120, maxHeight: 120 }}>
-                        {game.illustration}
-                      </div>
-                    </div>
+                        if (!isUnlocked && game.price > 0) {
+                          setUnlockType('game');
+                          handleUnlock(game.price, targetPath, game.id);
+                        } else {
+                          navigate(targetPath);
+                        }
+                      }}
+                      style={{
+                        background: '#FFFFFF',
+                        border: isUnlocked ? '1px solid rgba(220, 208, 195, 0.7)' : '1px solid rgba(220, 208, 195, 0.4)',
+                        borderRadius: '32px',
+                        boxShadow: '0 12px 36px rgba(122, 78, 43, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02)',
+                        overflow: 'hidden',
+                        cursor: isUnlocked ? 'pointer' : 'default',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                        minHeight: 410,
+                        position: 'relative'
+                      }}
+                    >
+                      {/* Locked Overlay */}
+                      {!isUnlocked && (
+                        <div style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: 'rgba(255, 253, 251, 0.65)',
+                          backdropFilter: 'blur(2px)',
+                          zIndex: 10,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          pointerEvents: 'none'
+                        }}>
+                          <div style={{
+                            background: 'linear-gradient(135deg, #FAF4EE, #F2ECE4)',
+                            border: '1px solid #EADFCF',
+                            padding: '12px',
+                            borderRadius: '50%',
+                            boxShadow: '0 8px 24px rgba(122, 78, 43, 0.15)'
+                          }}>
+                            <Lock size={24} color="#8B5E34" />
+                          </div>
+                        </div>
+                      )}
 
-                    <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 20 }}>
-                      <div>
-                        <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{game.title}</h4>
-                        <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.75, fontWeight: 500 }}>{game.description}</p>
+                      {/* SVG Illustration Container */}
+                      <div style={{ 
+                        height: 160, 
+                        background: 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.45) 100%)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        padding: 20,
+                        borderBottom: '1px solid rgba(235, 224, 214, 0.3)',
+                        opacity: isUnlocked ? 1 : 0.6
+                      }}>
+                        <div style={{ width: '100%', height: '100%', maxWidth: 120, maxHeight: 120 }}>
+                          {game.illustration}
+                        </div>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                          {game.price === 0 ? 'Free Experience' : `₹${game.price} Entry Code`}
-                        </span>
-                        <motion.div 
-                          whileHover={{ scale: 1.02 }}
-                          style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            gap: 6, 
-                            color: '#fff', 
-                            fontWeight: 700, 
-                            fontSize: '12.5px',
-                            background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
-                            padding: '10px 20px',
-                            borderRadius: '14px',
-                            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)'
-                          }}
-                        >
-                          <span>{game.price === 0 ? 'Start Playing' : `Unlock for ₹${game.price}`}</span>
-                          <ChevronRight size={13} />
-                        </motion.div>
+                      <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 20 }}>
+                        <div>
+                          <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{game.title}</h4>
+                          <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.75, fontWeight: 500 }}>{game.description}</p>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px', position: 'relative', zIndex: 11 }}>
+                          <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                            {game.price === 0 ? 'Free Experience' : (isUnlocked ? 'Unlocked' : `₹${game.price} Entry Code`)}
+                          </span>
+                          <motion.div 
+                            whileHover={{ scale: 1.02 }}
+                            style={{ 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: 6, 
+                              color: isUnlocked ? '#fff' : '#6F4D2E', 
+                              fontWeight: 700, 
+                              fontSize: '12.5px',
+                              background: isUnlocked ? 'linear-gradient(135deg, #9A673A, #7A4E2B)' : '#F5F1EB',
+                              border: isUnlocked ? 'none' : '1px solid #EADFCF',
+                              padding: '10px 20px',
+                              borderRadius: '14px',
+                              boxShadow: isUnlocked ? 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)' : 'none',
+                              cursor: 'pointer'
+                            }}
+                            onClick={(e) => {
+                              if (!isUnlocked && game.price > 0) {
+                                e.stopPropagation();
+                                setUnlockType('game');
+                                handleUnlock(game.price, null, game.id);
+                              }
+                            }}
+                          >
+                            <span>{isUnlocked ? 'Start Playing' : `Unlock for ₹${game.price}`}</span>
+                            {isUnlocked && <ChevronRight size={13} />}
+                          </motion.div>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  )
+                })}
               </div>
             </section>
           )}
