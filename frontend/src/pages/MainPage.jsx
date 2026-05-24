@@ -301,8 +301,8 @@ const PREMIUM_GAMES = [
   },
   {
     id: 'therapeutic-path-matrix',
-    title: 'Therapeutic Path Matrix',
-    description: 'Navigate the advanced bio-geometric grid bypass neural inhibitors to unlock sponsor matched pools.',
+    title: 'Snakes & Ladders',
+    description: 'Experience a beautiful, fully-playable modern Snakes & Ladders game in a premium luxury layout to unlock sponsor matched rewards.',
     price: 20,
     illustration: (
       <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>

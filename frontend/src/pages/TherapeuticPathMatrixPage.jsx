@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { 
-  ArrowLeft, Play, RotateCcw, Heart, Sparkles, 
-  Volume2, VolumeX, ShieldCheck, ChevronRight, Award, Share2, 
-  Activity, Zap, Target, Dna, Cpu, Award as BadgeIcon
+  ArrowLeft, RotateCcw, Volume2, VolumeX, ShieldCheck, 
+  ChevronRight, Award, Share2, Bot, User, Trophy, ListTodo, 
+  Sparkles, Star, Target, Loader2
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -12,56 +12,81 @@ import { useAuth } from '../context/AuthContext'
 import { GlobalBackground } from '../components/PremiumBackground'
 import { addContribution } from '../services/contributionService'
 
-// Solfeggio Pentatonic frequencies for Helical jumps and matrix moves
-const SOLFEGGIO_FREQS = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25]
+// Custom Solfeggio / Pentatonic chimes for high-end feel
+const CHIME_FREQS = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25]
 
-// Board Grid size: 6x6 (36 cells total)
-const GRID_SIZE = 6
-const CELLS_TOTAL = 36
-
-// Helical Strands (Ladders: Start -> End)
-const HELICAL_STRANDS = {
-  3: 15,
-  8: 22,
-  12: 28,
-  18: 30,
-  20: 34
+// Balanced, High-End Snakes and Ladders Mapping
+const LADDERS = {
+  3: 21,
+  8: 30,
+  28: 84,
+  58: 77,
+  75: 96
 }
 
-// Neural Inhibitors (Snakes: Start -> End)
-const NEURAL_INHIBITORS = {
-  16: 6,
-  24: 10,
-  29: 14,
-  33: 17,
-  35: 23
+const SNAKES = {
+  17: 4,
+  52: 29,
+  62: 19,
+  88: 57,
+  97: 79
+}
+
+// Total board cell settings
+const TOTAL_CELLS = 100
+
+// Helper: Get cell center coordinates as % (0 to 100) from bottom-left
+function getCellCenter(num) {
+  const zeroIndexed = num - 1
+  const r = Math.floor(zeroIndexed / 10)
+  const isRowOddFromBottom = r % 2 !== 0
+  const c = zeroIndexed % 10
+  const colIdx = isRowOddFromBottom ? (9 - c) : c
+  
+  return {
+    x: colIdx * 10 + 5,
+    y: r * 10 + 5
+  }
+}
+
+// Convert coordinates to top-left SVG coordinate space
+function getSVGBoardCoords(num) {
+  const coords = getCellCenter(num)
+  return {
+    x: coords.x,
+    y: 100 - coords.y
+  }
 }
 
 export default function TherapeuticPathMatrixPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  // Game States
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [playerPosition, setPlayerPosition] = useState(1) // Starts at cell 1
-  const [diceRoll, setDiceRoll] = useState(null)
-  const [isRolling, setIsRolling] = useState(false)
-  const [logMessages, setLogMessages] = useState(['Initialize matrix accelerator.'])
-  const [score, setScore] = useState(0)
-  const [sessionCompleted, setSessionCompleted] = useState(false)
-  const [savingContribution, setSavingContribution] = useState(false)
+  // Game Settings
+  const [gameMode, setGameMode] = useState('AI') // 'PvP' or 'AI'
   const [soundEnabled, setSoundEnabled] = useState(true)
 
-  // Real-time tracking metrics
-  const [multiplier, setMultiplier] = useState(2.5)
-  const [oncologyYield, setOncologyYield] = useState(18200)
+  // Gameplay positions
+  const [player1Pos, setPlayer1Pos] = useState(1)
+  const [player2Pos, setPlayer2Pos] = useState(1)
+  const [currentPlayer, setCurrentPlayer] = useState(1) // 1 or 2
+  const [isRolling, setIsRolling] = useState(false)
+  const [diceValue, setDiceValue] = useState(1)
+  const [isMoving, setIsMoving] = useState(false)
+  const [movementPhase, setMovementPhase] = useState('idle') // 'idle', 'stepping', 'climbing', 'sliding'
 
-  // Custom name for certificate
+  // Logs & victory
+  const [gameLogs, setGameLogs] = useState(['Accelerator board initialized. Ready for play.'])
+  const [winner, setWinner] = useState(null)
+  const [savingReward, setSavingReward] = useState(false)
+
+  // Custom name
   const [helperName, setHelperName] = useState(localStorage.getItem('hp_user_name') || 'Generous Supporter')
   const [isCopied, setIsCopied] = useState(false)
 
-  // Audio Context Ref
+  // Audio Context Ref & Lock references
   const audioContextRef = useRef(null)
+  const aiRollPending = useRef(false)
 
   useEffect(() => {
     if (!user) {
@@ -69,14 +94,29 @@ export default function TherapeuticPathMatrixPage() {
     }
   }, [user, navigate])
 
+  // AI auto roll logic protected by ref locks
+  useEffect(() => {
+    if (gameMode === 'AI' && currentPlayer === 2 && !winner && !isMoving && !isRolling && !aiRollPending.current) {
+      aiRollPending.current = true
+      const timer = setTimeout(() => {
+        aiRollPending.current = false
+        handleTriggerRoll()
+      }, 1500)
+      return () => {
+        clearTimeout(timer)
+        aiRollPending.current = false
+      }
+    }
+  }, [currentPlayer, gameMode, winner, isMoving, isRolling])
+
   const initAudio = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)()
     }
   }
 
-  // Play a beautiful therapeutic chime chord
-  const playMatrixChime = (freqIdx = 0, isHighPitch = false) => {
+  // Soft marimba synth chime sound
+  const playSoundChime = (freqIdx = 0, isHigh = false, isLowGlide = false) => {
     if (!soundEnabled) return
     initAudio()
     try {
@@ -87,157 +127,151 @@ export default function TherapeuticPathMatrixPage() {
 
       const osc = ctx.createOscillator()
       const gainNode = ctx.createGain()
-
-      const baseFreq = SOLFEGGIO_FREQS[freqIdx % SOLFEGGIO_FREQS.length]
-      const freq = isHighPitch ? baseFreq * 1.5 : baseFreq
-
-      osc.type = 'triangle'
-      osc.frequency.setValueAtTime(freq, ctx.currentTime)
-
-      gainNode.gain.setValueAtTime(0, ctx.currentTime)
-      gainNode.gain.linearRampToValueAtTime(0.16, ctx.currentTime + 0.01)
-      gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2)
-
-      // Sub-harmonic for depth
-      const subOsc = ctx.createOscillator()
-      const subGain = ctx.createGain()
-      subOsc.type = 'sine'
-      subOsc.frequency.setValueAtTime(freq / 2, ctx.currentTime)
-      subGain.gain.setValueAtTime(0, ctx.currentTime)
-      subGain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.02)
-      subGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8)
-
-      subOsc.connect(subGain)
-      subGain.connect(ctx.destination)
+      const baseFreq = CHIME_FREQS[freqIdx % CHIME_FREQS.length] || 329.63
+      
+      if (isLowGlide) {
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(260, ctx.currentTime)
+        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.6)
+        gainNode.gain.setValueAtTime(0, ctx.currentTime)
+        gainNode.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.05)
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6)
+      } else {
+        const freq = isHigh ? baseFreq * 1.6 : baseFreq
+        osc.type = 'triangle'
+        osc.frequency.setValueAtTime(freq, ctx.currentTime)
+        gainNode.gain.setValueAtTime(0, ctx.currentTime)
+        gainNode.gain.linearRampToValueAtTime(0.16, ctx.currentTime + 0.01)
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8)
+      }
 
       osc.connect(gainNode)
       gainNode.connect(ctx.destination)
-
       osc.start()
-      subOsc.start()
-
-      osc.stop(ctx.currentTime + 1.3)
-      subOsc.stop(ctx.currentTime + 0.9)
+      osc.stop(ctx.currentTime + 0.9)
     } catch (e) {
       console.warn('Audio synthesis block:', e)
     }
   }
 
-  // Dynamic board progression roll
-  const handleRollDice = () => {
-    if (isRolling || sessionCompleted) return
-    setIsRolling(true)
-    setIsPlaying(true)
-
-    initAudio()
-    if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-      audioContextRef.current.resume()
-    }
-
-    // Play rolling click tick
-    if (soundEnabled) {
-      try {
-        const ctx = audioContextRef.current
-        const osc = ctx.createOscillator()
-        const gain = ctx.createGain()
-        osc.type = 'sine'
-        osc.frequency.setValueAtTime(800, ctx.currentTime)
-        gain.gain.setValueAtTime(0, ctx.currentTime)
-        gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.01)
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1)
-        osc.connect(gain)
-        gain.connect(ctx.destination)
-        osc.start()
-        osc.stop(ctx.currentTime + 0.1)
-      } catch (e) {}
-    }
-
-    setTimeout(() => {
-      const roll = Math.floor(Math.random() * 6) + 1
-      setDiceRoll(roll)
+  // Smooth step-by-step token progression with safety finally locks
+  const movePlayerStepByStep = async (playerNum, startPos, steps) => {
+    setIsMoving(true)
+    setMovementPhase('stepping')
+    try {
+      let currentPos = startPos
       
-      const newPos = playerPosition + roll
-      
-      if (newPos >= CELLS_TOTAL) {
-        // Win game!
-        setPlayerPosition(CELLS_TOTAL)
-        setLogMessages(prev => [`Dice rolled ${roll}. Reached Cortex Terminal Gateway!`, ...prev])
-        playMatrixChime(7, true)
-        setSessionCompleted(true)
-        setOncologyYield(30000) // limit target hit
-        handleClaimSponsorReward()
-      } else {
-        setPlayerPosition(newPos)
-        let msg = `Dice rolled ${roll}. Moved to Cell ${newPos}.`
-        playMatrixChime(newPos)
-
-        // Increment Oncology pool yield
-        setOncologyYield(y => Math.min(30000, y + roll * 240))
-
-        // Check Helical Strands (Ladders)
-        if (HELICAL_STRANDS[newPos]) {
-          const finalPos = HELICAL_STRANDS[newPos]
-          setTimeout(() => {
-            setPlayerPosition(finalPos)
-            setLogMessages(prev => [`🧬 Helical strand acceleration! Jumped from Cell ${newPos} to ${finalPos}.`, ...prev])
-            playMatrixChime(finalPos, true)
-          }, 800)
-          msg += ` DNA repair helical jump ahead!`
+      for (let i = 1; i <= steps; i++) {
+        if (currentPos >= TOTAL_CELLS) break
+        currentPos += 1
+        
+        if (playerNum === 1) {
+          setPlayer1Pos(currentPos)
+        } else {
+          setPlayer2Pos(currentPos)
         }
-        // Check Neural Inhibitors (Snakes)
-        else if (NEURAL_INHIBITORS[newPos]) {
-          const finalPos = NEURAL_INHIBITORS[newPos]
-          setTimeout(() => {
-            setPlayerPosition(finalPos)
-            setLogMessages(prev => [`⚠️ Neural inhibitor challenge! Drifted from Cell ${newPos} to ${finalPos}.`, ...prev])
-            // Play relaxing low slide tone
-            if (soundEnabled) {
-              try {
-                const ctx = audioContextRef.current
-                const osc = ctx.createOscillator()
-                const gain = ctx.createGain()
-                osc.type = 'sine'
-                osc.frequency.setValueAtTime(220, ctx.currentTime)
-                osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.6)
-                gain.gain.setValueAtTime(0, ctx.currentTime)
-                gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.05)
-                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6)
-                osc.connect(gain)
-                gain.connect(ctx.destination)
-                osc.start()
-                osc.stop(ctx.currentTime + 0.7)
-              } catch (e) {}
-            }
-          }, 800)
-          msg += ` Neural inhibitor obstacle encountered.`
-        }
-
-        setLogMessages(prev => [msg, ...prev])
+        
+        playSoundChime(currentPos, false)
+        await new Promise(resolve => setTimeout(resolve, 250))
       }
 
-      setIsRolling(false)
-    }, 600)
+      // Check final target cell for Ladder or Snake
+      let finalPos = currentPos
+      if (LADDERS[finalPos]) {
+        setMovementPhase('climbing')
+        const topPos = LADDERS[finalPos]
+        setGameLogs(prev => [`🧬 Ladder Ascension: Player ${playerNum} climbed from ${finalPos} to ${topPos}!`, ...prev])
+        await new Promise(resolve => setTimeout(resolve, 600))
+        
+        if (playerNum === 1) {
+          setPlayer1Pos(topPos)
+        } else {
+          setPlayer2Pos(topPos)
+        }
+        playSoundChime(topPos % 8, true)
+        finalPos = topPos
+        await new Promise(resolve => setTimeout(resolve, 500))
+      } else if (SNAKES[finalPos]) {
+        setMovementPhase('sliding')
+        const bottomPos = SNAKES[finalPos]
+        setGameLogs(prev => [`⚠️ Neural Inhibitor: Player ${playerNum} drifted down from ${finalPos} to ${bottomPos}.`, ...prev])
+        await new Promise(resolve => setTimeout(resolve, 600))
+        
+        if (playerNum === 1) {
+          setPlayer1Pos(bottomPos)
+        } else {
+          setPlayer2Pos(bottomPos)
+        }
+        playSoundChime(bottomPos % 8, false, true)
+        finalPos = bottomPos
+        await new Promise(resolve => setTimeout(resolve, 500))
+      }
+
+      // Win check
+      if (finalPos >= TOTAL_CELLS) {
+        setWinner(playerNum)
+        setGameLogs(prev => [`🏆 Player ${playerNum} successfully scaled cell 100! Quest Completed!`, ...prev])
+        playSoundChime(4, true)
+        handleClaimVictoryMatch()
+      } else {
+        // Toggle turns cleanly
+        setCurrentPlayer(playerNum === 1 ? 2 : 1)
+      }
+    } catch (err) {
+      console.error('Animation stepping loop failed:', err)
+    } finally {
+      setIsMoving(false)
+      setMovementPhase('idle')
+    }
   }
 
-  const handleClaimSponsorReward = async () => {
-    if (!user?.uid || savingContribution) return
-    setSavingContribution(true)
+  const handleTriggerRoll = () => {
+    if (isRolling || isMoving || winner) return
+    setIsRolling(true)
+    initAudio()
+
+    let tempVal = 1
+    const rollInterval = setInterval(() => {
+      tempVal = Math.floor(Math.random() * 6) + 1
+      setDiceValue(tempVal)
+      playSoundChime(tempVal, false)
+    }, 70)
+
+    setTimeout(() => {
+      clearInterval(rollInterval)
+      const finalRoll = Math.floor(Math.random() * 6) + 1
+      setDiceValue(finalRoll)
+      setIsRolling(false)
+
+      const activePos = currentPlayer === 1 ? player1Pos : player2Pos
+      setGameLogs(prev => [`Player ${currentPlayer} rolled a ${finalRoll}.`, ...prev])
+      
+      movePlayerStepByStep(currentPlayer, activePos, finalRoll)
+    }, 750)
+  }
+
+  const handleClaimVictoryMatch = async () => {
+    if (!user?.uid || savingReward) return
+    setSavingReward(true)
     try {
-      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Matrix Path')
+      await addContribution(user.uid, 10, 'Baby Aarav', 'Sponsor Matched Quest Complete')
     } catch (err) {
       console.error('Failed writing contribution:', err)
     } finally {
-      setSavingContribution(false)
+      setSavingReward(false)
     }
   }
 
-  const handleReset = () => {
-    setPlayerPosition(1)
-    setDiceRoll(null)
-    setSessionCompleted(false)
-    setLogMessages(['Accelerator matrix reinitialized.'])
-    setOncologyYield(18200)
-    setMultiplier(2.5)
+  const handleRestart = () => {
+    setPlayer1Pos(1)
+    setPlayer2Pos(1)
+    setCurrentPlayer(1)
+    setWinner(null)
+    setDiceValue(1)
+    setIsRolling(false)
+    setIsMoving(false)
+    setMovementPhase('idle')
+    setGameLogs(['Board reset. Ready to roll.'])
   }
 
   const handleCopyLink = () => {
@@ -246,568 +280,508 @@ export default function TherapeuticPathMatrixPage() {
     setTimeout(() => setIsCopied(false), 2000)
   }
 
-  // Generate grid mapping coordinates for a standard Snake and Ladders board layout
-  const renderGridCells = () => {
-    const cells = []
-    // 6x6 grid with alternating left-to-right rows
-    for (let r = GRID_SIZE - 1; r >= 0; r--) {
-      const isAlternating = r % 2 !== 0
-      for (let c = 0; c < GRID_SIZE; c++) {
-        const colIdx = isAlternating ? (GRID_SIZE - 1 - c) : c
-        const cellNum = r * GRID_SIZE + colIdx + 1
-        cells.push({ num: cellNum, row: r, col: c })
-      }
+  // Dynamic Premium Status Text
+  const getButtonText = () => {
+    if (winner) return 'Victory Achieved! ✨'
+    if (isRolling) return 'Rolling trajectory... 🎲'
+    if (isMoving) {
+      if (movementPhase === 'climbing') return 'Climbing helix ladder... 🧬'
+      if (movementPhase === 'sliding') return 'Snake encounter detected... ⚠️'
+      return 'Advancing token... 🏃‍♂️'
     }
-    return cells
+    if (gameMode === 'AI' && currentPlayer === 2) return 'AI Bot is planning... 🤖'
+    return 'ROLL THE ACCELERATOR'
+  }
+
+  // Symmetrical calculation to render perpendicular rungs mathematically
+  const renderSVGLadder = (start, end) => {
+    const p1 = getSVGBoardCoords(start)
+    const p2 = getSVGBoardCoords(end)
+    
+    // Perpendicular vectors for rails offset
+    const dx = p2.x - p1.x
+    const dy = p2.y - p1.y
+    const len = Math.sqrt(dx * dx + dy * dy)
+    const nx = -dy / len
+    const ny = dx / len
+    const railOffset = 1.8 // width spacing
+    
+    // Offset rail coordinates
+    const r1x1 = p1.x - nx * railOffset
+    const r1y1 = p1.y - ny * railOffset
+    const r1x2 = p2.x - nx * railOffset
+    const r1y2 = p2.y - ny * railOffset
+
+    const r2x1 = p1.x + nx * railOffset
+    const r2y1 = p1.y + ny * railOffset
+    const r2x2 = p2.x + nx * railOffset
+    const r2y2 = p2.y + ny * railOffset
+
+    // Generate perpendicular rungs mathematically
+    const rungs = []
+    const rungCount = Math.max(3, Math.floor(len / 6))
+    for (let j = 1; j < rungCount; j++) {
+      const t = j / rungCount
+      const cx = p1.x + dx * t
+      const cy = p1.y + dy * t
+      rungs.push({
+        x1: cx - nx * railOffset,
+        y1: cy - ny * railOffset,
+        x2: cx + nx * railOffset,
+        y2: cy + ny * railOffset
+      })
+    }
+
+    return (
+      <g key={`ladder-geom-${start}`}>
+        {/* Shadow layer for 3D depth */}
+        <line x1={r1x1 + 0.6} y1={r1y1 + 0.6} x2={r1x2 + 0.6} y2={r1y2 + 0.6} stroke="rgba(58, 40, 26, 0.15)" strokeWidth="1.6" strokeLinecap="round" />
+        <line x1={r2x1 + 0.6} y1={r2y1 + 0.6} x2={r2x2 + 0.6} y2={r2y2 + 0.6} stroke="rgba(58, 40, 26, 0.15)" strokeWidth="1.6" strokeLinecap="round" />
+        
+        {/* Solid wooden golden rails */}
+        <line x1={r1x1} y1={r1y1} x2={r1x2} y2={r1y2} stroke="url(#goldGrad)" strokeWidth="1.3" strokeLinecap="round" />
+        <line x1={r2x1} y1={r2y1} x2={r2x2} y2={r2y2} stroke="url(#goldGrad)" strokeWidth="1.3" strokeLinecap="round" />
+
+        {/* Perpendicular rungs */}
+        {rungs.map((rung, idx) => (
+          <line
+            key={idx}
+            x1={rung.x1}
+            y1={rung.y1}
+            x2={rung.x2}
+            y2={rung.y2}
+            stroke="#EADFCF"
+            strokeWidth="0.8"
+            strokeLinecap="round"
+          />
+        ))}
+      </g>
+    )
+  }
+
+  // Draw organic curvy slithering snakes
+  const renderSVGSnake = (start, end) => {
+    const p1 = getSVGBoardCoords(start)
+    const p2 = getSVGBoardCoords(end)
+    
+    // Slithering bezier wave calculations
+    const dx = p2.x - p1.x
+    const dy = p2.y - p1.y
+    const len = Math.sqrt(dx * dx + dy * dy)
+    
+    // Smooth S-curve control points
+    const mx1 = p1.x + dx * 0.33 + dy * 0.14
+    const my1 = p1.y + dy * 0.33 - dx * 0.14
+    const mx2 = p1.x + dx * 0.66 - dy * 0.14
+    const my2 = p1.y + dy * 0.66 + dx * 0.14
+
+    const pathD = `M ${p1.x} ${p1.y} C ${mx1} ${my1}, ${mx2} ${my2}, ${p2.x} ${p2.y}`
+
+    return (
+      <g key={`snake-geom-${start}`}>
+        {/* Soft elegant shadow trail */}
+        <path d={pathD} fill="none" stroke="rgba(58, 40, 26, 0.12)" strokeWidth="3.2" strokeLinecap="round" />
+        
+        {/* Smooth slithering snake body */}
+        <path d={pathD} fill="none" stroke="url(#snakeGrad)" strokeWidth="2.0" strokeLinecap="round" />
+        
+        {/* Textured pattern overlay simulating micro scales */}
+        <path d={pathD} fill="none" stroke="#FFF" strokeWidth="0.6" strokeDasharray="1.5, 3.5" opacity="0.6" />
+        
+        {/* Highly visible glowing head */}
+        <circle cx={p1.x} cy={p1.y} r="1.8" fill="#3A281A" stroke="#EADFCF" strokeWidth="0.5" />
+        <circle cx={p1.x - 0.4} cy={p1.y - 0.4} r="0.4" fill="#D4AF37" />
+        <circle cx={p1.x + 0.4} cy={p1.y - 0.4} r="0.4" fill="#D4AF37" />
+      </g>
+    )
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#3D2B1A', position: 'relative' }}>
+    <div className="min-h-screen flex flex-col bg-transparent text-[#3A281A] relative font-sans animate-fade-in">
       <GlobalBackground />
       <Navbar />
 
-      <main style={{ flex: 1, position: 'relative', zIndex: 1, width: '100%', paddingBottom: 100 }}>
+      <main className="flex-1 relative z-10 w-full pb-20">
         
-        {/* Header Back Link */}
-        <div style={{ maxWidth: 1200, margin: '40px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
+        {/* Elegant top back link */}
+        <div className="max-w-[1200px] mx-auto mt-10 px-6 box-border">
           <button 
             onClick={() => navigate('/main')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              background: 'rgba(255, 255, 255, 0.8)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(220, 208, 195, 0.8)',
-              padding: '10px 20px',
-              borderRadius: '99px',
-              fontSize: '13px',
-              fontWeight: 700,
-              color: '#8C4F1A',
-              cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(139, 94, 52, 0.04)',
-              transition: 'all 0.2s'
-            }}
+            className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-md border border-[#EADFCF] px-6 py-3 rounded-full text-xs font-bold text-[#8B6239] cursor-pointer shadow-sm hover:shadow-md transition-all duration-300 animate-fade-in"
           >
             <ArrowLeft size={14} /> Back to Dashboard
           </button>
         </div>
 
-        {/* Premium Therapeutic Path Matrix Deck */}
-        <div style={{ maxWidth: 1100, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
+        {/* Premium Redesigned Playground Container */}
+        <div className="max-w-[1100px] mx-auto mt-8 px-6 box-border">
           
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.88)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(225, 215, 203, 0.9)',
-            borderRadius: '40px',
-            boxShadow: '0 25px 60px rgba(122, 78, 43, 0.09)',
-            overflow: 'hidden',
-            padding: '48px 36px'
-          }}>
+          <div className="bg-[#FFFDFB]/98 backdrop-blur-2xl border border-[#EADFCF] rounded-[44px] shadow-xl p-8 lg:p-12 overflow-hidden">
             
-            <div style={{ display: 'grid', gridTemplateColumns: '50fr 50fr', gap: 44 }} className="gameplay-split-grid">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               
-              {/* LEFT COLUMN: Intricate 3D Bio-Geometric Grid Matrix */}
-              <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+              {/* LEFT SIDE: REDESIGNED PREMIUM GRID BOARD */}
+              <div className="lg:col-span-7 flex flex-col items-center">
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8C4F1A', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                    [ 3D THERAPEUTIC PATHWAY MATRIX ]
+                <div className="w-full flex justify-between items-center mb-6">
+                  <span className="text-[10px] font-black tracking-widest text-[#8B6239] uppercase">
+                    ⭐️ Elite Snakes & Ladders Board
                   </span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 8.5, fontWeight: 900, color: '#47682C', background: '#F3F6F0', padding: '2px 8px', borderRadius: 99 }}>
-                    <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#47682C' }} /> ENGINE ARMED
+                  <div className="flex items-center gap-1.5 text-[9px] font-black text-[#8B6239] bg-[#EADFCF]/20 px-3.5 py-1.5 rounded-full border border-[#EADFCF]/40">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#8B6239] animate-ping" /> MULTIPLAYER ACTIVE
                   </div>
                 </div>
 
-                {/* 6x6 Matrix Board Grid */}
-                <div style={{
-                  width: '100%',
-                  aspectRatio: '1',
-                  background: '#FFFFFF',
-                  border: '1.5px solid rgba(220, 208, 195, 0.8)',
-                  borderRadius: '28px',
-                  boxShadow: 'inset 0 4px 18px rgba(0,0,0,0.015), 0 12px 30px rgba(139, 94, 52, 0.04)',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  padding: 16,
-                  boxSizing: 'border-box'
-                }}>
+                {/* Symmetrical High-End 10x10 Grid container */}
+                <div className="w-full aspect-square bg-[#F5F1EB]/50 border-4 border-[#EADFCF] rounded-[32px] p-5 shadow-2xl relative box-border">
                   
-                  {/* Grid layout */}
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(6, 1fr)',
-                    gridTemplateRows: 'repeat(6, 1fr)',
-                    gap: 6,
-                    height: '100%',
-                    width: '100%'
-                  }}>
-                    {renderGridCells().map(({ num, row, col }) => {
-                      const isActive = playerPosition === num
-                      const isHelical = !!HELICAL_STRANDS[num]
-                      const isInhibitor = !!NEURAL_INHIBITORS[num]
+                  {/* Clean rounded grid cells */}
+                  <div className="grid grid-cols-10 grid-rows-10 gap-1.5 w-full h-full">
+                    {Array.from({ length: 100 }, (_, i) => {
+                      const cellNum = 100 - i
+                      const rowNum = Math.floor((cellNum - 1) / 10)
+                      const isAlternatingRow = rowNum % 2 !== 0
+                      const colNum = (cellNum - 1) % 10
+                      const actualNum = rowNum * 10 + (isAlternatingRow ? (9 - colNum) : colNum) + 1
+                      
+                      const isBeige = (Math.floor((actualNum - 1) / 10) + (actualNum - 1) % 10) % 2 === 0
+                      const isP1Here = player1Pos === actualNum
+                      const isP2Here = player2Pos === actualNum
+                      const isCellActive = (currentPlayer === 1 && isP1Here) || (currentPlayer === 2 && isP2Here)
 
                       return (
-                        <div
-                          key={num}
-                          style={{
-                            background: isActive 
-                              ? 'rgba(140, 79, 26, 0.08)' 
-                              : isHelical 
-                                ? '#FFFDF8' 
-                                : isInhibitor 
-                                  ? 'rgba(253, 250, 246, 0.4)' 
-                                  : '#FFFFFF',
-                            border: isActive 
-                              ? '2px solid #8C4F1A' 
-                              : isHelical 
-                                ? '1px solid #EBD5C2' 
-                                : '1px solid rgba(220, 208, 195, 0.5)',
-                            borderRadius: '12px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            position: 'relative',
-                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-                          }}
+                        <motion.div
+                          key={actualNum}
+                          whileHover={{ scale: 1.04 }}
+                          className={`rounded-xl flex flex-col justify-between p-2 relative transition-all duration-300 ${
+                            isBeige ? 'bg-[#EADFCF]/35' : 'bg-white'
+                          } ${
+                            isCellActive 
+                              ? 'shadow-md border border-[#8B6239] ring-1 ring-[#8B6239]/20' 
+                              : 'border border-[#EADFCF]/15 shadow-sm'
+                          }`}
                         >
-                          {/* Cell number watermark */}
-                          <span style={{
-                            position: 'absolute',
-                            top: 4,
-                            left: 6,
-                            fontSize: '9px',
-                            fontWeight: 800,
-                            color: isActive ? '#8C4F1A' : 'rgba(140, 79, 26, 0.25)'
-                          }}>
-                            {num}
+                          {/* Elegant, high-contrast, bold vector number */}
+                          <span className={`text-[11px] font-black text-[#8B6239]/40`}>
+                            {actualNum}
                           </span>
 
-                          {/* Cell Specific Graphic Overlay */}
-                          {isHelical && (
-                            <Dna size={12} color="#D4AF37" style={{ opacity: 0.8 }} />
-                          )}
-                          {isInhibitor && (
-                            <Activity size={12} color="#A09080" style={{ opacity: 0.6 }} />
-                          )}
-
-                          {/* Player Pulse node overlay */}
-                          {isActive && (
-                            <motion.div
-                              layoutId="matrixPlayerPulse"
-                              style={{
-                                width: 22,
-                                height: 22,
-                                borderRadius: '50%',
-                                background: '#8C4F1A',
-                                border: '3px solid #FFF',
-                                boxShadow: '0 4px 10px rgba(140, 79, 26, 0.3)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifySelf: 'center',
-                                position: 'relative',
-                                zIndex: 5
-                              }}
-                            >
-                              <motion.span
-                                animate={{ opacity: [0.3, 0.9, 0.3] }}
-                                transition={{ repeat: Infinity, duration: 1.5 }}
-                                style={{
-                                  position: 'absolute',
-                                  inset: -6,
-                                  border: '1.5px solid #8C4F1A',
-                                  borderRadius: '50%'
-                                }}
-                              />
-                            </motion.div>
-                          )}
-                        </div>
+                          {/* Symmetrical player piece wrapper */}
+                          <div className="flex gap-1 justify-center items-center mt-auto">
+                            {isP1Here && (
+                              <motion.div
+                                layoutId="tokenP1"
+                                transition={{ type: 'spring', stiffness: 130, damping: 15 }}
+                                className="w-4.5 h-4.5 rounded-full bg-[#8B6239] border-2 border-white shadow-md flex items-center justify-center text-[7px] text-white font-black"
+                              >
+                                P1
+                              </motion.div>
+                            )}
+                            {isP2Here && (
+                              <motion.div
+                                layoutId="tokenP2"
+                                transition={{ type: 'spring', stiffness: 130, damping: 15 }}
+                                className="w-4.5 h-4.5 rounded-full bg-[#3A281A] border-2 border-white shadow-md flex items-center justify-center text-[7px] text-white font-black"
+                              >
+                                P2
+                              </motion.div>
+                            )}
+                          </div>
+                        </motion.div>
                       )
                     })}
                   </div>
 
-                  {/* Helical strands / Inhibitor visual paths overlays */}
-                  <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }} viewBox="0 0 100 100">
-                    {/* Render Helical strand pathways (ladders) as subtle gold connections */}
-                    <g opacity="0.4">
-                      <line x1="30" y1="90" x2="60" y2="40" stroke="#D4AF37" strokeWidth="1" strokeDasharray="3, 3" />
-                      <line x1="15" y1="80" x2="45" y2="30" stroke="#D4AF37" strokeWidth="1" strokeDasharray="3, 3" />
-                    </g>
+                  {/* Redesigned Mathematical Vector overlay */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 100 100">
+                    <defs>
+                      <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#D4AF37" />
+                        <stop offset="50%" stopColor="#8B6239" />
+                        <stop offset="100%" stopColor="#6F4D2E" />
+                      </linearGradient>
+                      <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#A05A3F" />
+                        <stop offset="50%" stopColor="#6F4D2E" />
+                        <stop offset="100%" stopColor="#3A281A" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Mathematically perfectly perpendicular ladders */}
+                    {Object.entries(LADDERS).map(([start, end]) => 
+                      renderSVGLadder(parseInt(start), end)
+                    )}
+
+                    {/* Curved organic slithering vector snakes */}
+                    {Object.entries(SNAKES).map(([start, end]) => 
+                      renderSVGSnake(parseInt(start), end)
+                    )}
                   </svg>
+
                 </div>
 
-                {/* Dice roll accelerator panel */}
-                <div style={{ marginTop: 24, display: 'flex', gap: 16, alignItems: 'center' }}>
-                  <button
-                    onClick={handleRollDice}
-                    disabled={isRolling || sessionCompleted}
-                    style={{
-                      flex: 2,
-                      padding: '14px',
-                      borderRadius: '16px',
-                      border: 'none',
-                      background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                      color: '#FFF',
-                      fontWeight: 800,
-                      fontSize: '14.5px',
-                      fontFamily: 'Outfit',
-                      cursor: (isRolling || sessionCompleted) ? 'not-allowed' : 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
-                      boxShadow: '0 6px 16px rgba(140, 79, 26, 0.12)'
-                    }}
-                  >
-                    {isRolling ? 'Accelerating...' : 'Initiate Acceleration'}
-                  </button>
-
-                  <div style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: '14px',
-                    border: '1.5px solid rgba(140, 79, 26, 0.3)',
-                    background: '#FFFDFB',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '18px',
-                    fontWeight: 900,
-                    color: '#8C4F1A'
-                  }}>
-                    {diceRoll || '-'}
+                {/* Symmetrical legend badges */}
+                <div className="flex flex-wrap gap-4 mt-6 text-[11px] font-black text-[#8B6239] tracking-wide">
+                  <div className="flex items-center gap-1.5 bg-white border border-[#EADFCF]/70 px-3 py-1.5 rounded-full shadow-sm">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#8B6239]" /> Player 1 (You)
                   </div>
-                </div>
-
-                {/* Log messages scrollbox */}
-                <div style={{
-                  marginTop: 16,
-                  height: 90,
-                  overflowY: 'auto',
-                  border: '1px solid rgba(220, 208, 195, 0.4)',
-                  borderRadius: '16px',
-                  padding: '10px 14px',
-                  background: 'rgba(253, 250, 246, 0.4)',
-                  fontSize: '11px',
-                  lineHeight: '1.6',
-                  color: '#7A6A5A'
-                }}>
-                  {logMessages.map((msg, idx) => (
-                    <div key={idx} style={{ marginBottom: 4 }}>
-                      • {msg}
-                    </div>
-                  ))}
+                  <div className="flex items-center gap-1.5 bg-white border border-[#EADFCF]/70 px-3 py-1.5 rounded-full shadow-sm">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#3A281A]" /> Player 2 ({gameMode === 'AI' ? 'AI Bot' : 'Human'})
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-white border border-[#EADFCF]/70 px-3 py-1.5 rounded-full shadow-sm">
+                    <span className="w-3.5 h-0.5 bg-amber-500" /> Vector Helix Ladder
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-white border border-[#EADFCF]/70 px-3 py-1.5 rounded-full shadow-sm">
+                    <span className="w-3.5 h-0.5 bg-orange-400" /> Slithering Inhibitor Snake
+                  </div>
                 </div>
 
               </div>
 
-              {/* RIGHT COLUMN: Highly Packed Clinical & Partner Data */}
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.6)', paddingLeft: 36 }}>
+              {/* RIGHT SIDE: LUXURY GLASSMORPHISM CONTROLS */}
+              <div className="lg:col-span-5 flex flex-col justify-between lg:border-l border-[#EADFCF]/60 lg:pl-10">
+                
                 <div>
                   
-                  {/* Badge Row */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                    <span style={{ fontSize: 9, fontWeight: 900, color: '#8C4F1A', border: '1px solid rgba(140, 79, 26, 0.3)', background: 'rgba(140, 79, 26, 0.03)', padding: '4px 12px', borderRadius: 99, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                      COGNITIVE LIFELINE TRAJECTORY
+                  {/* Title & Mode Switcher */}
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-[10px] font-extrabold tracking-widest text-[#8B6239] uppercase">
+                      PREMIUM PLAYGROUND INTERFACE
                     </span>
-                    
-                    <span style={{ fontSize: 10, fontWeight: 900, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', border: '1.5px dashed rgba(140, 79, 26, 0.3)', padding: '4px 12px', borderRadius: '8px', fontFamily: 'Outfit' }}>
-                      Entry Code: ₹20 ENTRY CODE
-                    </span>
+                    <button
+                      onClick={() => setSoundEnabled(!soundEnabled)}
+                      className="text-[#8B6239] hover:opacity-75 cursor-pointer"
+                    >
+                      {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                    </button>
                   </div>
 
-                  {/* Header Title */}
-                  <h2 style={{ margin: '0 0 6px', fontSize: '28px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
-                    Therapeutic Path Matrix
-                  </h2>
-
-                  <p style={{ margin: '0 0 20px', fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.6, fontWeight: 500 }}>
-                    Navigate the therapeutic matrix grid. Advancing up the helical strands bypasses neural inhibitors to unlock dynamic partner pools.
-                  </p>
-
-                  {/* LIVE ACCELERATOR POOL */}
-                  <div style={{
-                    background: 'rgba(139, 94, 52, 0.04)',
-                    border: '1.5px solid rgba(139, 94, 52, 0.12)',
-                    borderRadius: '20px',
-                    padding: '16px 20px',
-                    marginBottom: 20
-                  }}>
-                    <h4 style={{ margin: '0 0 10px', fontSize: '11.5px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A', display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <Zap size={13} /> LIVE ACCELERATOR POOL
-                    </h4>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(235, 224, 214, 0.6)', paddingBottom: 10, marginBottom: 10 }}>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#4A3427' }}>Sponsor Multiplier</span>
-                      <span style={{ fontSize: 13, fontWeight: 900, color: '#47682C', background: '#F3F6F0', padding: '2px 10px', borderRadius: 99 }}>
-                        {multiplier.toFixed(1)}x Active
-                      </span>
-                    </div>
-
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, color: '#4A3427', marginBottom: 6 }}>
-                        <span>Oncology Asset Yield</span>
-                        <span>₹{oncologyYield.toLocaleString()} / ₹30,000</span>
-                      </div>
-                      <div style={{ height: 6, background: 'rgba(235, 224, 214, 0.5)', borderRadius: 99, overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${(oncologyYield / 30000) * 100}%`, background: '#8C4F1A', borderRadius: 99 }} />
-                      </div>
-                    </div>
+                  {/* Mode select tags */}
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <button
+                      disabled={isRolling || isMoving}
+                      onClick={() => {
+                        setGameMode('AI')
+                        handleRestart()
+                      }}
+                      className={`py-3.5 px-4 rounded-2xl border text-xs font-black flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 disabled:opacity-50 ${
+                        gameMode === 'AI'
+                          ? 'bg-[#8B6239] border-[#8B6239] text-[#FFFDFB] shadow-md'
+                          : 'bg-[#FFFDFB] border-[#EADFCF] text-[#8B6239] hover:bg-[#F5F1EB]'
+                      }`}
+                    >
+                      <Bot size={14} /> PLAY VS AI BOT
+                    </button>
+                    
+                    <button
+                      disabled={isRolling || isMoving}
+                      onClick={() => {
+                        setGameMode('PvP')
+                        handleRestart()
+                      }}
+                      className={`py-3.5 px-4 rounded-2xl border text-xs font-black flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 disabled:opacity-50 ${
+                        gameMode === 'PvP'
+                          ? 'bg-[#8B6239] border-[#8B6239] text-[#FFFDFB] shadow-md'
+                          : 'bg-[#FFFDFB] border-[#EADFCF] text-[#8B6239] hover:bg-[#F5F1EB]'
+                      }`}
+                    >
+                      <User size={14} /> PLAY 2 PLAYERS
+                    </button>
                   </div>
 
-                  {/* CELLULAR ASCENSION STATUS */}
-                  <div style={{ marginBottom: 24 }}>
-                    <h4 style={{ margin: '0 0 10px', fontSize: '11.5px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A' }}>
-                      CELLULAR ASCENSION STATUS
-                    </h4>
+                  {/* NEUMORPHIC ROLLING DICE PANEL */}
+                  <div className="bg-gradient-to-br from-[#FFFDF9] to-[#F5F1EB] border border-[#EADFCF] rounded-[28px] p-6 mb-6 shadow-sm">
+                    <span className="text-[10px] font-black text-[#8B6239] tracking-wider block mb-4 uppercase text-center">
+                      NEUMORPHIC ACCELERATOR CORE
+                    </span>
                     
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(220, 208, 195, 0.4)', borderRadius: '10px', padding: '6px 12px', fontSize: '11px' }}>
-                        <span style={{ fontWeight: 700, color: '#7A6A5A' }}>Base Node</span>
-                        <span style={{ fontWeight: 900, color: '#47682C' }}>STABLE</span>
-                      </div>
+                    <div className="flex justify-center items-center gap-8 mb-6">
                       
-                      <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(220, 208, 195, 0.4)', borderRadius: '10px', padding: '6px 12px', fontSize: '11px' }}>
-                        <span style={{ fontWeight: 700, color: '#7A6A5A' }}>Helical Jump</span>
-                        <span style={{ fontWeight: 900, color: '#8C4F1A' }}>ACTIVE</span>
+                      {/* Animated Dice */}
+                      <motion.div
+                        animate={isRolling ? {
+                          rotate: [0, 90, 180, 270, 360],
+                          scale: [1, 1.25, 0.9, 1.15, 1],
+                          y: [0, -25, 5, -5, 0]
+                        } : {}}
+                        transition={{ duration: 0.75, ease: 'easeInOut' }}
+                        className="w-16 h-16 bg-white border border-[#EADFCF] rounded-2xl shadow-md flex items-center justify-center text-3xl font-black text-[#3A281A] cursor-pointer select-none"
+                        onClick={handleTriggerRoll}
+                        style={{ boxShadow: 'inset 0 2px 4px rgba(234, 223, 207, 0.5), 0 8px 16px rgba(139, 98, 57, 0.08)' }}
+                      >
+                        {diceValue}
+                      </motion.div>
+
+                      <div className="text-left">
+                        <span className="text-[9px] font-black text-[#8B6239]/80 block uppercase">Current turn</span>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className={`w-3 h-3 rounded-full ${currentPlayer === 1 ? 'bg-[#8B6239]' : 'bg-[#3A281A]'}`} />
+                          <span className="text-xs font-black text-[#3A281A]">
+                            {currentPlayer === 1 ? 'Player 1 (You)' : gameMode === 'AI' ? 'AI Bot' : 'Player 2'}
+                          </span>
+                        </div>
                       </div>
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(220, 208, 195, 0.4)', borderRadius: '10px', padding: '6px 12px', fontSize: '11px' }}>
-                        <span style={{ fontWeight: 700, color: '#7A6A5A' }}>Inhibitor Risk</span>
-                        <span style={{ fontWeight: 900, color: '#A09080' }}>MINIMAL</span>
+                    </div>
+
+                    <button
+                      onClick={handleTriggerRoll}
+                      disabled={isRolling || isMoving || !!winner || (gameMode === 'AI' && currentPlayer === 2)}
+                      className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#8B6239] to-[#6F4D2E] text-white font-extrabold text-sm tracking-wide shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      {(isRolling || isMoving) && <Loader2 size={16} className="animate-spin" />}
+                      {getButtonText()}
+                    </button>
+                  </div>
+
+                  {/* DYNAMIC LEADERBOARD */}
+                  <div className="mb-6">
+                    <h4 className="text-[10px] font-black tracking-wider text-[#8B6239] uppercase mb-3 flex items-center gap-1.5">
+                      <Trophy size={13} /> DYNAMIC LEADERBOARD
+                    </h4>
+
+                    <div className="flex flex-col gap-3">
+                      {/* Player 1 rank */}
+                      <div className="flex justify-between items-center bg-white border border-[#EADFCF]/70 rounded-2xl p-3.5 shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-black text-[#8B6239]">#1</span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#8B6239]" />
+                          <span className="text-xs font-extrabold text-[#3A281A]">Player 1 (You)</span>
+                        </div>
+                        <span className="text-xs font-black text-[#8B6239]">Cell {player1Pos} / 100</span>
+                      </div>
+
+                      {/* Player 2 rank */}
+                      <div className="flex justify-between items-center bg-white border border-[#EADFCF]/70 rounded-2xl p-3.5 shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-black text-[#8B6239]">#2</span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#3A281A]" />
+                          <span className="text-xs font-extrabold text-[#3A281A]">
+                            Player 2 ({gameMode === 'AI' ? 'AI Bot' : 'Human'})
+                          </span>
+                        </div>
+                        <span className="text-xs font-black text-[#8B6239]">Cell {player2Pos} / 100</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Tracing Guideline */}
-                  <div style={{
-                    background: 'rgba(139, 94, 52, 0.02)',
-                    border: '1px dashed rgba(139, 94, 52, 0.25)',
-                    borderRadius: '20px',
-                    padding: '14px 18px',
-                    fontSize: '11.5px',
-                    lineHeight: 1.5,
-                    color: '#7A6A5A'
-                  }}>
-                    <span style={{ fontWeight: 800, color: '#8C4F1A', display: 'block', marginBottom: 4 }}>
-                      💡 Matrix Guideline
-                    </span>
-                    Roll the acceleration matrix code. Helical strands elevate your cellular trajectory instantly, while translucent inhibitors drift your pulse back. Reach gateway Cell 36 to trigger chart integrations.
+                  {/* TRANSACTION LOGS */}
+                  <div>
+                    <h4 className="text-[10px] font-black tracking-wider text-[#8B6239] uppercase mb-3 flex items-center gap-1.5">
+                      <ListTodo size={13} /> TRANSACTION LOGS
+                    </h4>
+                    <div className="bg-[#F5F1EB]/40 border border-[#EADFCF]/50 rounded-2xl p-4 h-28 overflow-y-auto text-xs text-[#6F4D2E] leading-relaxed">
+                      {gameLogs.map((log, idx) => (
+                        <div key={idx} className="mb-2 border-b border-[#EADFCF]/20 pb-1.5 text-slate-700">
+                          • {log}
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                 </div>
 
                 {/* Reset button */}
-                <div style={{ display: 'flex', gap: 14, marginTop: 20 }}>
-                  <motion.button
-                    onClick={handleReset}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    style={{
-                      flex: 1,
-                      padding: '14px',
-                      borderRadius: '16px',
-                      border: '1px solid rgba(220, 208, 195, 0.8)',
-                      background: '#FFF',
-                      color: '#7A6A5A',
-                      fontWeight: 700,
-                      fontSize: '13px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 6
-                    }}
+                <div className="mt-8">
+                  <button
+                    disabled={isRolling || isMoving}
+                    onClick={handleRestart}
+                    className="w-full py-3.5 rounded-2xl border border-[#EADFCF] bg-white text-xs font-extrabold text-[#8B6239] cursor-pointer hover:bg-[#F5F1EB] transition-all duration-300 flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
                   >
-                    <RotateCcw size={14} /> Reinitialize Grid
-                  </motion.button>
+                    <RotateCcw size={13} /> Reset Standings & Grid
+                  </button>
                 </div>
 
               </div>
 
-            </div>
-
-            {/* VERY BOTTOM: SPONSOR INTEGRATION CORES */}
-            <div style={{
-              marginTop: 40,
-              paddingTop: 30,
-              borderTop: '1px solid rgba(225, 215, 203, 0.8)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 16
-            }}>
-              <div>
-                <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A', display: 'block', marginBottom: 2 }}>
-                  SPONSOR INTEGRATION CORES
-                </span>
-                <span style={{ fontSize: 12, color: '#7A6A5A', fontWeight: 500 }}>
-                  Progress milestones trigger direct institutional split funding.
-                </span>
-              </div>
-
-              {/* Fictitious elegant partner logos */}
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  background: 'rgba(235, 224, 214, 0.25)',
-                  border: '1px solid rgba(220, 208, 195, 0.5)',
-                  padding: '6px 14px',
-                  borderRadius: '10px'
-                }}>
-                  <ShieldCheck size={13} color="#8C4F1A" />
-                  <span style={{ fontSize: 11, fontWeight: 800, color: '#4A3427', fontFamily: 'Outfit' }}>BioCore Pharma</span>
-                </div>
-                
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  background: 'rgba(235, 224, 214, 0.25)',
-                  border: '1px solid rgba(220, 208, 195, 0.5)',
-                  padding: '6px 14px',
-                  borderRadius: '10px'
-                }}>
-                  <BadgeIcon size={13} color="#8C4F1A" />
-                  <span style={{ fontSize: 11, fontWeight: 800, color: '#4A3427', fontFamily: 'Outfit' }}>NeuroGen Labs</span>
-                </div>
-              </div>
             </div>
 
           </div>
 
         </div>
 
-        {/* Success Modal */}
+        {/* ────────────────── SUCCESS MODAL ────────────────── */}
         <AnimatePresence>
-          {sessionCompleted && (
+          {winner && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              style={{
-                position: 'fixed',
-                inset: 0,
-                background: 'rgba(61, 43, 26, 0.6)',
-                backdropFilter: 'blur(8px)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 24,
-                zIndex: 999
-              }}
+              className="fixed inset-0 bg-[#3A281A]/70 backdrop-blur-md flex items-center justify-center p-6 z-[999]"
             >
               <motion.div
                 initial={{ scale: 0.95, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 20 }}
-                style={{
-                  background: '#FFFFFF',
-                  borderRadius: '36px',
-                  border: '1px solid rgba(225, 215, 203, 0.9)',
-                  boxShadow: '0 30px 70px rgba(61, 43, 26, 0.25)',
-                  width: '100%',
-                  maxWidth: '540px',
-                  padding: '36px',
-                  boxSizing: 'border-box',
-                  position: 'relative'
-                }}
+                className="bg-white rounded-[36px] border border-[#EADFCF] p-8 max-w-lg w-full text-center relative shadow-2xl overflow-hidden"
               >
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: '50%',
-                    background: '#FAF6F0',
-                    border: '1px solid rgba(139, 94, 52, 0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 20px'
-                  }}>
-                    <Award size={32} color="#8C4F1A" />
+                <div className="absolute -top-20 -right-20 w-52 h-52 rounded-full bg-radial-gradient from-amber-100/50 to-transparent pointer-events-none" />
+
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-5 shadow-inner">
+                    <Award size={32} className="text-[#8B6239]" />
                   </div>
 
-                  <span style={{ fontSize: '10.5px', fontWeight: 900, color: '#8C4F1A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    Matrix Alignment Successful ✨
+                  <span className="text-[10px] font-black tracking-widest text-[#8B6239] uppercase">
+                    CHAMPIONSHIP ASCENSION ✨
                   </span>
 
-                  <h2 style={{ fontFamily: 'Outfit', fontSize: 26, fontWeight: 900, color: '#4A3427', margin: '6px 0 12px' }}>
-                    Path Ascension Completed!
+                  <h2 className="text-3xl font-black text-[#3A281A] my-3">
+                    Victory Achieved!
                   </h2>
 
-                  <p style={{ margin: '0 auto 24px', fontSize: '14px', color: '#7A6A5A', lineHeight: 1.6, maxWidth: 440 }}>
-                    You have successfully finalized the geometric path matrix. Your cognitive trajectory has triggered a matching sponsor payment of <strong>₹10</strong> directed straight to verified hospital bills for Baby Aarav's treatment!
+                  <p className="text-sm text-[#6F4D2E] leading-relaxed max-w-sm mx-auto mb-6">
+                    Player {winner} reached the final cell 100 successfully! As an audited milestone, sponsors matched a transaction of <strong>₹10</strong> directly to Aarav's real-time care fund balance.
                   </p>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <motion.button
-                      onClick={() => navigate('/main')}
-                      style={{
-                        padding: '14px',
-                        borderRadius: '16px',
-                        border: 'none',
-                        background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                        color: '#FFF',
-                        fontWeight: 800,
-                        fontSize: '14px',
-                        fontFamily: 'Outfit',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 8
-                      }}
-                    >
-                      Return to Dashboard <ChevronRight size={15} />
-                    </motion.button>
+                  <div className="bg-[#FFFDF9] border border-[#EADFCF] rounded-2xl p-5 text-left mb-6">
+                    <div className="flex justify-between items-center mb-3">
+                      <div>
+                        <span className="text-[9px] font-black text-[#8B6239] tracking-wider uppercase">Holder Name</span>
+                        <input
+                          type="text"
+                          value={helperName}
+                          onChange={(e) => {
+                            setHelperName(e.target.value)
+                            localStorage.setItem('hp_user_name', e.target.value)
+                          }}
+                          className="w-full bg-transparent border-b border-dashed border-[#8B6239]/30 text-sm font-extrabold text-[#3A281A] outline-none py-1"
+                        />
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[9px] font-black text-[#8B6239] tracking-wider uppercase">Match Yield</span>
+                        <div className="text-lg font-black text-[#8B6239]">₹10.00</div>
+                      </div>
+                    </div>
 
-                    <div style={{ display: 'flex', gap: 10 }}>
+                    <div className="flex justify-between items-center text-[9px] text-[#A09080] font-black border-t border-[#EADFCF]/50 pt-2.5">
+                      <span>VERIFIED HELD</span>
+                      <span className="text-[#47682C]">✓ MATCH CODE REGISTERED</span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col gap-3">
+                    <button
+                      onClick={() => navigate('/main')}
+                      className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#8B6239] to-[#6F4D2E] text-white font-extrabold text-sm tracking-wide shadow-md hover:shadow-lg cursor-pointer"
+                    >
+                      Return to Dashboard
+                    </button>
+
+                    <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={handleCopyLink}
-                        style={{
-                          flex: 1,
-                          padding: '12px',
-                          borderRadius: '14px',
-                          border: '1px solid rgba(220, 208, 195, 0.8)',
-                          background: '#FFF',
-                          color: '#7A6A5A',
-                          fontWeight: 700,
-                          fontSize: '12.5px',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 6
-                        }}
+                        className="py-3 rounded-2xl border border-[#EADFCF] bg-white text-xs font-black text-[#8B6239] cursor-pointer hover:bg-[#F5F1EB]"
                       >
-                        <Share2 size={13} /> {isCopied ? 'Link Copied!' : 'Share Achievement'}
+                        {isCopied ? 'Link Copied!' : 'Share Quest'}
                       </button>
 
                       <button
-                        onClick={handleReset}
-                        style={{
-                          flex: 1,
-                          padding: '12px',
-                          borderRadius: '14px',
-                          border: '1px solid rgba(220, 208, 195, 0.8)',
-                          background: '#FFF',
-                          color: '#7A6A5A',
-                          fontWeight: 700,
-                          fontSize: '12.5px',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 6
-                        }}
+                        onClick={handleRestart}
+                        className="py-3 rounded-2xl border border-[#EADFCF] bg-white text-xs font-black text-[#8B6239] cursor-pointer hover:bg-[#F5F1EB]"
                       >
-                        <RotateCcw size={13} /> Trace Again
+                        Play Again
                       </button>
                     </div>
                   </div>
