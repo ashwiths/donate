@@ -8,8 +8,9 @@ import {
 import { doc, updateDoc, increment, arrayUnion, collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useAuth } from '../context/AuthContext'
-import { useUserData } from '../hooks/useUserData'
 import { useDonation } from '../context/DonationContext'
+import { usePayment } from '../context/PaymentContext'
+import { useUserData } from '../hooks/useUserData'
 import { COUPONS } from '../data/coupons'
 import { generateHealingCertificate, subscribeCoupon } from '../services/contributionService'
 import Navbar from '../components/Navbar'
@@ -21,6 +22,7 @@ export default function CouponDetailPage() {
   const { currentUser } = useAuth()
   const { userData } = useUserData()
   const { confirmDonation } = useDonation()
+  const { requestPayment } = usePayment()
 
   const [coupon, setCoupon] = useState(null)
   const [copied, setCopied] = useState(false)
@@ -118,14 +120,17 @@ export default function CouponDetailPage() {
 
     setIsModalOpen(false)
 
-    // Run donation simulation
-    confirmDonation(coupon.unlockAmount ?? coupon.price)
+    try {
+      const amount = coupon.unlockAmount ?? coupon.price
+      // Call secure unified payment utility (live Razorpay or simulated mock)
+      await requestPayment(amount, `Unlock Coupon: ${coupon.brand}`)
 
-    if (currentUser?.uid) {
-      try {
+      confirmDonation(amount)
+
+      if (currentUser?.uid) {
         await generateHealingCertificate({
           userId: currentUser.uid,
-          amount: coupon.unlockAmount ?? coupon.price,
+          amount: amount,
           childName: 'Janamithra',
           title: `Certificate of Coupon Unlock - ${coupon.brand}`,
           contributionType: 'coupon_unlock',
@@ -142,19 +147,19 @@ export default function CouponDetailPage() {
           setToastMsg(null)
           navigate(`/coupon-thank-you/${coupon.id}`)
         }, 1500)
-      } catch (err) {
-        console.error('Error saving coupon unlock to Firestore:', err)
-        setToastMsg('Failed to process unlock. Please try again.')
-        setTimeout(() => setToastMsg(null), 3000)
+      } else {
+        // Offline / fallback
+        setLocalUnlocked(true)
+        setToastMsg('Coupon successfully unlocked! 🎁')
+        setTimeout(() => {
+          setToastMsg(null)
+          navigate(`/coupon-thank-you/${coupon.id}`)
+        }, 1500)
       }
-    } else {
-      // Offline / fallback
-      setLocalUnlocked(true)
-      setToastMsg('Coupon successfully unlocked! 🎁')
-      setTimeout(() => {
-        setToastMsg(null)
-        navigate(`/coupon-thank-you/${coupon.id}`)
-      }, 1500)
+    } catch (err) {
+      console.error('Payment workflow failed or was dismissed:', err.message)
+      setToastMsg('Payment not completed ❌')
+      setTimeout(() => setToastMsg(null), 3000)
     }
   }
 

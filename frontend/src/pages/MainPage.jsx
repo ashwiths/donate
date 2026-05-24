@@ -10,6 +10,7 @@ import Footer from '../components/Footer'
 import DonationProgress from '../components/DonationProgress'
 import { useDonation } from '../context/DonationContext'
 import { useAuth } from '../context/AuthContext'
+import { usePayment } from '../context/PaymentContext'
 import TransparentBreakdown from '../components/TransparentBreakdown'
 import { addContribution, generateHealingCertificate } from '../services/contributionService'
 import { doc, updateDoc, increment, arrayUnion, collection, addDoc, serverTimestamp } from 'firebase/firestore'
@@ -521,6 +522,7 @@ export default function MainPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { confirmDonation } = useDonation()
+  const { requestPayment } = usePayment()
   const { userData } = useUserData()
 
   const [couponsList, setCouponsList] = useState([])
@@ -620,7 +622,7 @@ export default function MainPage() {
     handleUnlock(amount)
   }
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault()
     
     // Validate required fields
@@ -644,63 +646,79 @@ export default function MainPage() {
 
     // Proceed to payment
     setIsModalOpen(false)
-    confirmDonation(pendingPrice)
     
-    if (user?.uid) {
-      if (unlockType === 'game') {
-        generateHealingCertificate({
-          userId: user.uid,
-          amount: pendingPrice,
-          childName: 'Janamithra',
-          title: 'Certificate of Game Unlock',
-          contributionType: 'game_unlock',
-          gameId: pendingGameId,
-          gameName: pendingGameTitle || 'Premium Game',
-          supporterName: formData.name.trim()
-        }).catch(err => console.error('Error generating game unlock certificate:', err));
-      } else if (unlockType === 'coupon') {
-        const targetCoupon = MYSTERY_REWARDS.find(c => c.id === pendingGameId);
-        if (targetCoupon) {
-          generateHealingCertificate({
+    try {
+      const description = unlockType === 'game' 
+        ? `Unlock Game: ${pendingGameTitle}` 
+        : unlockType === 'coupon'
+        ? `Unlock Coupon: ${pendingGameId}`
+        : 'Direct Hospital Support Contribution'
+
+      // Call secure unified payment utility (live Razorpay or simulated mock)
+      await requestPayment(pendingPrice, description)
+
+      confirmDonation(pendingPrice)
+      
+      if (user?.uid) {
+        if (unlockType === 'game') {
+          await generateHealingCertificate({
             userId: user.uid,
             amount: pendingPrice,
             childName: 'Janamithra',
-            title: `Certificate of Coupon Unlock - ${targetCoupon.brand}`,
-            contributionType: 'coupon_unlock',
-            couponId: targetCoupon.id,
-            couponBrand: targetCoupon.brand,
-            couponCode: targetCoupon.code,
+            title: 'Certificate of Game Unlock',
+            contributionType: 'game_unlock',
+            gameId: pendingGameId,
+            gameName: pendingGameTitle || 'Premium Game',
             supporterName: formData.name.trim()
-          }).catch(err => console.error('Error generating coupon unlock certificate:', err));
+          })
+        } else if (unlockType === 'coupon') {
+          const targetCoupon = MYSTERY_REWARDS.find(c => c.id === pendingGameId);
+          if (targetCoupon) {
+            await generateHealingCertificate({
+              userId: user.uid,
+              amount: pendingPrice,
+              childName: 'Janamithra',
+              title: `Certificate of Coupon Unlock - ${targetCoupon.brand}`,
+              contributionType: 'coupon_unlock',
+              couponId: targetCoupon.id,
+              couponBrand: targetCoupon.brand,
+              couponCode: targetCoupon.code,
+              supporterName: formData.name.trim()
+            })
+          }
+        } else {
+          await generateHealingCertificate({
+            userId: user.uid,
+            amount: pendingPrice,
+            childName: 'Janamithra',
+            title: 'Certificate of Healing Support',
+            contributionType: 'donation',
+            supporterName: formData.name.trim()
+          })
         }
-      } else {
-        generateHealingCertificate({
-          userId: user.uid,
-          amount: pendingPrice,
-          childName: 'Janamithra',
-          title: 'Certificate of Healing Support',
-          contributionType: 'donation',
-          supporterName: formData.name.trim()
-        }).catch(err => console.error('Error generating donation certificate:', err));
       }
-    }
 
-    if (unlockType === 'game') {
-      setToastMsg('Game successfully unlocked ✨')
-      setTimeout(() => {
-        setToastMsg(null)
-        if (pendingGamePath) {
-          navigate(pendingGamePath)
-        }
-      }, 1000)
-    } else if (unlockType === 'coupon') {
-      setToastMsg('Coupon successfully unlocked ✨')
-      setTimeout(() => {
-        setToastMsg(null)
-        navigate(`/coupon/${pendingGameId}`)
-      }, 1000)
-    } else {
-      navigate('/thank-you')
+      if (unlockType === 'game') {
+        setToastMsg('Game successfully unlocked ✨')
+        setTimeout(() => {
+          setToastMsg(null)
+          if (pendingGamePath) {
+            navigate(pendingGamePath)
+          }
+        }, 1000)
+      } else if (unlockType === 'coupon') {
+        setToastMsg('Coupon successfully unlocked ✨')
+        setTimeout(() => {
+          setToastMsg(null)
+          navigate(`/coupon/${pendingGameId}`)
+        }, 1000)
+      } else {
+        navigate('/thank-you')
+      }
+    } catch (err) {
+      console.error('Payment workflow failed or was dismissed:', err.message)
+      setToastMsg('Payment not completed ❌')
+      setTimeout(() => setToastMsg(null), 3000)
     }
   }
 

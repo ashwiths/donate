@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { useEffect } from 'react'
 import { AuthProvider } from './context/AuthContext'
 import { DonationProvider } from './context/DonationContext'
+import { PaymentProvider } from './context/PaymentContext'
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import MainPage from './pages/MainPage'
@@ -44,32 +45,34 @@ export default function App() {
       <ScrollToTop />
       <AuthProvider>
         <DonationProvider>
-          <div className="app-global-bg">
-            <Routes>
-              <Route path="/" element={<LoginPage />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/main" element={<MainPage />} />
-              <Route path="/thank-you" element={<ThankYouPage />} />
-              <Route path="/healing-stories" element={<HealingStoriesPage />} />
-              <Route path="/account" element={<AccountPage />} />
-              <Route path="/inspirations" element={<InspirationsPage />} />
-              <Route path="/breathe-bloom" element={<BreatheBloomPage />} />
-              <Route path="/sound-wave-serenade" element={<SoundWavePage />} />
-              <Route path="/bio-path-tracer" element={<BioPathTracerPage />} />
-              <Route path="/therapeutic-path-matrix" element={<TherapeuticPathMatrixPage />} />
-              <Route path="/flex-path" element={<FlexPathPage />} />
-              <Route path="/luxe-xo" element={<LuxeXOPage />} />
-              <Route path="/mind-flip" element={<MindFlipPage />} />
-              <Route path="/pulse-reflex" element={<PulseReflexPage />} />
-              <Route path="/mind-slide" element={<MindSlidePage />} />
-              <Route path="/coupon/:couponId" element={<CouponDetailPage />} />
-              <Route path="/coupon-thank-you/:couponId" element={<CouponThankYouPage />} />
-              <Route path="/admin-analytics" element={<AdminAnalyticsPage />} />
-              <Route path="/reveal-message/:messageId" element={<RevealMessagePage />} />
-              {/* Fallback */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </div>
+          <PaymentProvider>
+            <div className="app-global-bg">
+              <Routes>
+                <Route path="/" element={<LoginPage />} />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/main" element={<MainPage />} />
+                <Route path="/thank-you" element={<ThankYouPage />} />
+                <Route path="/healing-stories" element={<HealingStoriesPage />} />
+                <Route path="/account" element={<AccountPage />} />
+                <Route path="/inspirations" element={<InspirationsPage />} />
+                <Route path="/breathe-bloom" element={<BreatheBloomPage />} />
+                <Route path="/sound-wave-serenade" element={<SoundWavePage />} />
+                <Route path="/bio-path-tracer" element={<BioPathTracerPage />} />
+                <Route path="/therapeutic-path-matrix" element={<TherapeuticPathMatrixPage />} />
+                <Route path="/flex-path" element={<FlexPathPage />} />
+                <Route path="/luxe-xo" element={<LuxeXOPage />} />
+                <Route path="/mind-flip" element={<MindFlipPage />} />
+                <Route path="/pulse-reflex" element={<PulseReflexPage />} />
+                <Route path="/mind-slide" element={<MindSlidePage />} />
+                <Route path="/coupon/:couponId" element={<CouponDetailPage />} />
+                <Route path="/coupon-thank-you/:couponId" element={<CouponThankYouPage />} />
+                <Route path="/admin-analytics" element={<AdminAnalyticsPage />} />
+                <Route path="/reveal-message/:messageId" element={<RevealMessagePage />} />
+                {/* Fallback */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </div>
+          </PaymentProvider>
         </DonationProvider>
       </AuthProvider>
     </BrowserRouter>

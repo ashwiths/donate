@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useUserData } from '../hooks/useUserData'
+import { usePayment } from '../context/PaymentContext'
 import { generateHealingCertificate } from '../services/contributionService'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -44,6 +45,7 @@ export default function RevealMessagePage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { userData } = useUserData()
+  const { requestPayment } = usePayment()
 
   const [step, setStep] = useState('name') // 'name' | 'reveal'
   const [supporterName, setSupporterName] = useState('')
@@ -72,6 +74,9 @@ export default function RevealMessagePage() {
     setLoading(true)
 
     try {
+      // Call secure unified payment utility (live Razorpay or simulated mock)
+      await requestPayment(message.price, `Unlock Mindful Message: ${message.title}`)
+
       // 1. Generate Healing Certificate via Firebase transaction
       const certId = await generateHealingCertificate({
         userId: user.uid,
