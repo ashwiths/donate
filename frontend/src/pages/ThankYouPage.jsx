@@ -519,7 +519,7 @@ export default function ThankYouPage() {
           variants={fadeUp}
           style={{ fontSize: 12.5, color: '#7A6A5A', fontStyle: 'italic', margin: '0 auto 20px', maxWidth: '580px', lineHeight: 1.5, fontWeight: 600 }}
         >
-          Payment gateway charges are securely handled through Razorpay infrastructure. Heal & Play does not deduct platform commissions from treatment contributions.
+          100% of your contribution goes directly toward verified pediatric treatment support.
         </motion.p>
 
         {/* Dynamic Transparent Contribution Breakdown */}

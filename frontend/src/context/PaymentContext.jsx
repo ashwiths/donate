@@ -291,19 +291,39 @@ export function PaymentProvider({ children }) {
               </h3>
 
               {/* Pricing Display */}
-              <div style={{ margin: '20px 0 28px' }}>
-                <span style={{ fontSize: '12px', color: '#7A6A58', fontWeight: 600, display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
-                  Contribution Amount
+              <div style={{ margin: '20px 0 24px' }}>
+                <span style={{ fontSize: '12.5px', color: '#7A6A58', fontWeight: 800, display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                  Direct Support Contribution
                 </span>
                 <span className="text-gradient-animate" style={{ fontSize: '36px', fontWeight: 900, fontFamily: 'Outfit, sans-serif' }}>
                   ₹{paymentState.amount}
                 </span>
               </div>
 
+              {/* Trust badges */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8,
+                alignItems: 'center',
+                marginBottom: 24,
+                fontSize: '12px',
+                color: '#5C4C3C',
+                fontWeight: 700
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#166534', background: 'rgba(22, 101, 52, 0.05)', padding: '3px 10px', borderRadius: '20px' }}>
+                  <ShieldCheck size={13} />
+                  <span>Exact contribution amount only</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.05)', padding: '3px 10px', borderRadius: '20px' }}>
+                  <Sparkles size={12} color="#D4AF37" />
+                  <span>No hidden charges</span>
+                </div>
+              </div>
+
               {/* Trust Footer */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#8C745C', fontSize: '11px', fontWeight: 600 }}>
-                <Sparkles size={12} color="#D4AF37" />
-                <span>100% Direct Pediatric Billing Support</span>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#8C745C', fontSize: '11px', fontWeight: 600, maxWidth: '300px', margin: '0 auto', textAlign: 'center', lineHeight: 1.4 }}>
+                <span>100% of your contribution goes directly toward verified pediatric treatment support.</span>
               </div>
             </motion.div>
           </motion.div>

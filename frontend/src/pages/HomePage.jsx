@@ -1183,7 +1183,7 @@ export default function HomePage() {
                 </div>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-                  {['0% platform fee', 'hospital billing', 'direct payout', 'tax receipt ready'].map((item, idx) => (
+                  {['direct support', 'hospital billing', 'direct payout', 'tax receipt ready'].map((item, idx) => (
                     <span key={idx} style={{ fontSize: '11px', background: '#FDF2F2', color: '#EF4444', padding: '4px 10px', borderRadius: '6px', fontWeight: 700 }}>
                       ❤️ {item}
                     </span>
