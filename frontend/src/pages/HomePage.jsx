@@ -863,74 +863,7 @@ export default function HomePage() {
                 </p>
               </motion.div>
 
-              <motion.div
-                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.06)' }}
-                style={{
-                  background: 'linear-gradient(135deg, #FFF9F2 0%, #FFFFFF 100%)',
-                  borderRadius: '20px',
-                  border: '1px solid #8C4F1A',
-                  padding: '24px',
-                  boxSizing: 'border-box',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 12,
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-              >
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  background: '#8C4F1A',
-                  color: '#fff',
-                  fontSize: '8px',
-                  fontWeight: 900,
-                  padding: '2px 8px',
-                  borderBottomLeftRadius: '8px',
-                  letterSpacing: '0.05em'
-                }}>
-                  AES-256 SSL
-                </div>
 
-                <div style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '10px',
-                  background: '#FFF2E6',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#8C4F1A'
-                }}>
-                  <Lock size={18} />
-                </div>
-
-                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--color-text)' }}>
-                  Secure Payments
-                </h4>
-
-                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                  Protected with Razorpay SSL encryption and secure payment routing.
-                </p>
-
-                <div style={{
-                  marginTop: 4,
-                  background: '#FFFDFB',
-                  border: '1px solid rgba(232, 224, 214, 0.5)',
-                  borderRadius: '8px',
-                  padding: '6px 10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  fontSize: '10px',
-                  color: '#8C4F1A',
-                  fontWeight: 700
-                }}>
-                  <span>🔒 Razorpay Gateway</span>
-                  <span style={{ color: '#16a34a' }}>● Encrypted</span>
-                </div>
-              </motion.div>
 
               <motion.div
                 whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(123, 63, 0, 0.05)' }}
