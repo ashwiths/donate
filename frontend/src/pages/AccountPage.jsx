@@ -569,6 +569,41 @@ export default function AccountPage() {
             </div>
           </motion.section>
 
+          {/* Game Unlock History Grid */}
+          <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: '64px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '24px' }}>
+              <Gamepad2 size={20} color="#8C4F1A" />
+              <h3 className="premium-title-sm" style={{ margin: 0 }}>Unlocked Games History</h3>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+              {!userData?.unlockedGameDetails || userData.unlockedGameDetails.length === 0 ? (
+                <div style={{ background: '#FFFDFB', border: '1px solid rgba(235, 224, 214, 0.8)', borderRadius: '24px', padding: '32px', textAlign: 'center', color: '#7A6A58', fontWeight: 500, fontSize: '14px', gridColumn: '1 / -1' }}>
+                  No games unlocked yet. Visit the Discovery Portal to start your journey! 🎮
+                </div>
+              ) : (
+                [...userData.unlockedGameDetails].sort((a,b) => new Date(b.unlockedAt) - new Date(a.unlockedAt)).map((game, i) => (
+                  <motion.div key={i} whileHover={{ y: -4, boxShadow: '0 12px 30px rgba(139, 94, 52, 0.08)' }} style={{ background: '#FFFDFB', border: '1px solid rgba(235, 224, 214, 0.8)', borderRadius: '20px', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.3s ease' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <div style={{ width: 48, height: 48, background: game.type === 'free' ? 'linear-gradient(135deg, #F0F9FF, #E0F2FE)' : 'linear-gradient(135deg, #FFF9F3, #F5E6D3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: game.type === 'free' ? '1px solid #BAE6FD' : '1px solid #EADFCF' }}>
+                        <Gamepad2 size={24} color={game.type === 'free' ? '#0284C7' : '#8C4F1A'} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '15px', fontWeight: 800, color: '#3D2B1A', marginBottom: '4px' }}>{game.gameName}</div>
+                        <div style={{ fontSize: '11px', color: '#8B5E34', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          {game.type === 'free' ? 'Free Experience' : `₹${game.amount} Unlock`}
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#7A6A58', fontWeight: 600, textAlign: 'right' }}>
+                      {new Date(game.unlockedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </div>
+                  </motion.div>
+                ))
+              )}
+            </div>
+          </motion.section>
+
           {/* Middle Grid: Certificates & Contributions */}
           <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px' }}>
             
