@@ -215,196 +215,130 @@ const PREMIUM_GAMES = [
     )
   },
   {
-    id: 'spin',
-    title: 'Spin the Care Wheel',
-    description: 'Take a gentle, joyful spin to instantly direct ₹10 from corporate sponsors to Aarav\'s medical fund.',
-    price: 10,
-    illustration: (
-      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <defs>
-          <radialGradient id="wheelGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#FFF4EA" />
-            <stop offset="100%" stopColor="#FAF0E6" />
-          </radialGradient>
-        </defs>
-        <circle cx="50%" cy="50%" r="42" fill="url(#wheelGlow)" stroke="#F0E0D0" strokeWidth="1" />
-        <circle cx="50%" cy="50%" r="35" fill="none" stroke="#E6CDB8" strokeWidth="1.5" strokeDasharray="3, 3" />
-        <motion.g
-          animate={{ rotate: 360 }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-          style={{ originX: '50px', originY: '50px' }}
-        >
-          <path d="M50 15 L50 85 M15 50 L85 50 M25 25 L75 75 M25 75 L75 25" stroke="#E3C3A7" strokeWidth="1" />
-          <circle cx="50" cy="18" r="4" fill="#E8A87C" />
-          <circle cx="50" cy="82" r="4" fill="#E8A87C" />
-          <circle cx="18" cy="50" r="4" fill="#E8A87C" />
-          <circle cx="82" cy="50" r="4" fill="#E8A87C" />
-        </motion.g>
-        <circle cx="50" cy="50" r="14" fill="#fff" style={{ filter: 'drop-shadow(0 2px 4px rgba(140,79,26,0.1))' }} />
-        <path d="M47 48 H53 V52 H47 Z" fill="#8C4F1A" />
-        <path d="M50 43 L54 48 H46 Z" fill="#8C4F1A" />
-      </svg>
-    )
-  },
-  {
-    id: 'scratch',
-    title: 'Scratch & Heal Card',
-    description: 'Gently wipe the gold leaf surface to reveal a personalized wellness quote and trigger treatment support.',
-    price: 10,
-    illustration: (
-      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <rect x="15" y="15" width="70" height="70" rx="12" fill="#FCFAF8" stroke="#F0E0D0" strokeWidth="1" />
-        <rect x="22" y="22" width="56" height="56" rx="8" fill="linear-gradient(135deg, #FFF9F3 0%, #FAF0E6 100%)" />
-        <motion.g
-          animate={{ y: [0, -3, 0], x: [0, 4, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <rect x="26" y="26" width="48" height="48" rx="6" fill="#F3E5D8" stroke="#E8D2BF" strokeWidth="1" />
-          <path d="M38 42 L62 58 M62 42 L38 58" stroke="#DFBA9D" strokeWidth="1.5" />
-        </motion.g>
-        <circle cx="50" cy="50" r="12" fill="#fff" />
-        <path d="M48 45 L52 45 L53 53 L47 53 Z" fill="#8C4F1A" />
-        <circle cx="50" cy="56" r="1.5" fill="#8C4F1A" />
-      </svg>
-    )
-  },
-  {
-    id: 'memory',
-    title: 'Mindful Memory Match',
-    description: 'Find matching calming pairs in a beautifully simple cognitive layout to trigger sponsor matches.',
-    price: 20,
-    illustration: (
-      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <g transform="translate(18, 18)">
-          <rect x="0" y="0" width="28" height="28" rx="6" fill="#FFF9F3" stroke="#E8D2BF" strokeWidth="1.2" />
-          <circle cx="14" cy="14" r="5" fill="#E8A87C" />
-        </g>
-        <g transform="translate(54, 18)">
-          <rect x="0" y="0" width="28" height="28" rx="6" fill="#FFF9F3" stroke="#E8D2BF" strokeWidth="1.2" />
-          <path d="M14 8 L20 20 H8 Z" fill="#E8A87C" />
-        </g>
-        <g transform="translate(18, 54)">
-          <rect x="0" y="0" width="28" height="28" rx="6" fill="#FFF5ED" stroke="#E8D2BF" strokeWidth="1.2" />
-          <path d="M14 8 L20 20 H8 Z" fill="#E8A87C" />
-        </g>
-        <g transform="translate(54, 54)">
-          <rect x="0" y="0" width="28" height="28" rx="6" fill="#FFF9F3" stroke="#E8D2BF" strokeWidth="1.2" />
-          <rect x="9" y="9" width="10" height="10" fill="#E8A87C" />
-        </g>
-      </svg>
-    )
-  },
-  {
-    id: 'treasure',
-    title: 'Healing Treasure Hunt',
-    description: 'Journey through a beautifully serene minimal map, discovering milestones that fund critical hospital supplies.',
-    price: 20,
-    illustration: (
-      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <path d="M20 50 C 35 25, 45 75, 80 50" fill="none" stroke="#E8D2BF" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="4, 4" />
-        <circle cx="20" cy="50" r="6" fill="#E8A87C" />
-        <circle cx="80" cy="50" r="8" fill="#8C4F1A" />
-        <path d="M77 46 L83 54 M83 46 L77 54" stroke="#fff" strokeWidth="1.5" />
-        <motion.circle
-          animate={{ scale: [1, 1.3, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          cx="48" cy="52" r={5} fill="#E8A87C" opacity="0.4"
-        />
-        <circle cx="48" cy="52" r={3} fill="#E8A87C" />
-      </svg>
-    )
-  },
-  {
-    id: 'calm-tap',
-    title: 'Calm Tap Challenge',
-    description: 'Breathe and tap expanding circles at their peak alignment to generate sponsor hospital credits.',
-    price: 10,
-    illustration: (
-      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <motion.circle
-          animate={{ r: [15, 38, 15], opacity: [0.3, 0.8, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          cx="50" cy="50" r={25} fill="none" stroke="#E8A87C" strokeWidth="2"
-        />
-        <circle cx="50" cy="50" r={12} fill="#8C4F1A" />
-        <circle cx="50" cy="50" r="32" fill="none" stroke="#E8D2BF" strokeWidth="1" strokeDasharray="6, 4" />
-      </svg>
-    )
-  },
-  {
-    id: 'hope-puzzle',
-    title: 'Hope Tile Puzzle',
-    description: 'Arrange matching therapeutic clinical icons cleanly to release custom matching sponsor rewards.',
-    price: 20,
-    illustration: (
-      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <rect x="20" y="20" width="60" height="60" rx="8" fill="#FCFAF8" stroke="#F0E0D0" strokeWidth="1.2" />
-        <line x1="40" y1="20" x2="40" y2="80" stroke="#F0E0D0" strokeWidth="1" />
-        <line x1="60" y1="20" x2="60" y2="80" stroke="#F0E0D0" strokeWidth="1" />
-        <line x1="20" y1="40" x2="80" y2="40" stroke="#F0E0D0" strokeWidth="1" />
-        <line x1="20" y1="60" x2="80" y2="60" stroke="#F0E0D0" strokeWidth="1" />
-        <motion.circle
-          animate={{ scale: [1, 1.15, 1] }}
-          transition={{ duration: 3, repeat: Infinity }}
-          cx="50" cy="50" r={6} fill="#E8A87C"
-        />
-      </svg>
-    )
-  },
-  {
-    id: 'light-path',
-    title: 'Light Path Journey',
-    description: 'Trace glowing points of healing light through a calming forest path to secure child aid.',
-    price: 10,
-    illustration: (
-      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <path d="M15 80 Q 35 20, 50 50 T 85 20" fill="none" stroke="#E6D4C3" strokeWidth="2.5" strokeLinecap="round" />
-        <motion.circle
-          animate={{ offsetDistance: ["0%", "100%"] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
-          r={5} fill="#8C4F1A"
-          style={{ motionPath: 'path("M15 80 Q 35 20, 50 50 T 85 20")' }}
-        />
-        <circle cx="15" cy="80" r="3" fill="#E8A87C" />
-        <circle cx="85" cy="20" r="3" fill="#E8A87C" />
-      </svg>
-    )
-  },
-  {
-    id: 'sponsor-match',
-    title: 'Sponsor Match Quest',
-    description: 'Bridge two major brand partners directly to unlock double matching contributions instantly.',
-    price: 20,
-    illustration: (
-      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <circle cx="30" cy="50" r="12" fill="#FFF2EA" stroke="#E8A87C" strokeWidth="1" />
-        <circle cx="70" cy="50" r="12" fill="#FFF2EA" stroke="#E8A87C" strokeWidth="1" />
-        <motion.line
-          animate={{ strokeDashoffset: [0, -20] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          x1="42" y1="50" x2="58" y2="50" stroke="#8C4F1A" strokeWidth="2" strokeDasharray="4, 4"
-        />
-        <circle cx="50" cy="50" r="5" fill="#8C4F1A" />
-      </svg>
-    )
-  },
-  {
-    id: 'gratitude-drop',
-    title: 'Gratitude Drop',
-    description: 'Catch slowly descending bubbles of positive emotional recovery to route free hospital split bonuses.',
+    id: 'bio-path-tracer',
+    title: 'Bio-Path Tracer',
+    description: 'Trace abstract neural path networks and bio-geometry spheres in sequence to secure match contributions and promote fine-motor recovery.',
     price: 0,
     illustration: (
       <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-        <motion.circle
-          animate={{ y: [80, 20], opacity: [0, 0.7, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          cx="35" cy="50" r={7} fill="#E8A87C"
+        <defs>
+          <radialGradient id="tracerGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBF7" />
+            <stop offset="100%" stopColor="#F5EFEB" />
+          </radialGradient>
+        </defs>
+        {/* Soft pure white background with rounded corners */}
+        <rect x="5" y="5" width="90" height="90" rx="16" fill="url(#tracerGlow)" stroke="#EADFD6" strokeWidth="1" />
+        
+        {/* Abstract, elegant neural pathway lines (light traces) using dynamic vectors */}
+        <line x1="30" y1="75" x2="50" y2="50" stroke="rgba(220, 208, 195, 0.6)" strokeWidth="1" />
+        <line x1="70" y1="75" x2="50" y2="50" stroke="rgba(220, 208, 195, 0.6)" strokeWidth="1" />
+        <line x1="30" y1="30" x2="50" y2="50" stroke="rgba(220, 208, 195, 0.6)" strokeWidth="1" />
+        <line x1="70" y1="30" x2="50" y2="50" stroke="rgba(220, 208, 195, 0.6)" strokeWidth="1" />
+        
+        {/* Traced Golden connected path line */}
+        <motion.line
+          x1="50" y1="50" x2="50" y2="20"
+          stroke="#8C4F1A"
+          strokeWidth="1.5"
+          strokeDasharray="4, 4"
+          animate={{ strokeDashoffset: [0, -10] }}
+          transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
         />
+        <line x1="30" y1="75" x2="70" y2="75" stroke="#D4C5B9" strokeWidth="0.8" opacity="0.4" />
+        
+        {/* Protective biological cell spheres at junction points */}
+        {/* Bottom Left Cell */}
+        <circle cx="30" cy="75" r="4" fill="#946B4E" />
+        <circle cx="30" cy="75" r="1.5" fill="#FFF" />
+
+        {/* Bottom Right Cell */}
+        <circle cx="70" cy="75" r="4" fill="#946B4E" />
+        <circle cx="70" cy="75" r="1.5" fill="#FFF" />
+
+        {/* Top Left Cell */}
+        <circle cx="30" cy="30" r="4.5" fill="#785338" />
+        <circle cx="30" cy="30" r="1.8" fill="#FFF" />
+
+        {/* Top Right Cell */}
+        <circle cx="70" cy="30" r="4.5" fill="#785338" />
+        <circle cx="70" cy="30" r="1.8" fill="#FFF" />
+
+        {/* Center glowing Cell Sphere */}
         <motion.circle
-          animate={{ y: [90, 10], opacity: [0, 0.6, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          cx="65" cy="50" r={9} fill="#8C4F1A"
+          cx="50"
+          cy="50"
+          r="6"
+          fill="#5C3D24"
+          animate={{ r: [5, 6.5, 5] }}
+          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
         />
+        <circle cx="50" cy="50" r="2.2" fill="#FFF" />
+
+        {/* Target Cortex Gateway Top Cell */}
+        <motion.circle
+          cx="50"
+          cy="20"
+          r="7"
+          fill="none"
+          stroke="#8C4F1A"
+          strokeWidth="0.8"
+          animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.7, 0.3] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+          style={{ originX: '50px', originY: '20px' }}
+        />
+        <circle cx="50" cy="20" r="4.5" fill="#8C4F1A" />
+        <circle cx="50" cy="20" r="1.5" fill="#FFF" />
+
+        {/* Small floating energy pulses traveling between nodes */}
+        <motion.circle
+          cx="30" cy="75" r="1.5" fill="#D4AF37"
+          animate={{ cx: [30, 50], cy: [75, 50] }}
+          transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+        />
+      </svg>
+    )
+  },
+  {
+    id: 'therapeutic-path-matrix',
+    title: 'Therapeutic Path Matrix',
+    description: 'Navigate the advanced bio-geometric grid bypass neural inhibitors to unlock sponsor matched pools.',
+    price: 20,
+    illustration: (
+      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+        <defs>
+          <radialGradient id="matrixCardGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#FFFBF7" />
+            <stop offset="100%" stopColor="#F5EFEB" />
+          </radialGradient>
+        </defs>
+        <rect x="5" y="5" width="90" height="90" rx="16" fill="url(#matrixCardGlow)" stroke="#EADFD6" strokeWidth="1" />
+        
+        <line x1="20" y1="80" x2="80" y2="80" stroke="rgba(220, 208, 195, 0.4)" strokeWidth="0.8" />
+        <line x1="20" y1="50" x2="80" y2="50" stroke="rgba(220, 208, 195, 0.4)" strokeWidth="0.8" />
+        <line x1="20" y1="20" x2="80" y2="20" stroke="rgba(220, 208, 195, 0.4)" strokeWidth="0.8" />
+        
+        <line x1="20" y1="20" x2="20" y2="80" stroke="rgba(220, 208, 195, 0.4)" strokeWidth="0.8" />
+        <line x1="50" y1="20" x2="50" y2="80" stroke="rgba(220, 208, 195, 0.4)" strokeWidth="0.8" />
+        <line x1="80" y1="20" x2="80" y2="80" stroke="rgba(220, 208, 195, 0.4)" strokeWidth="0.8" />
+
+        <path d="M 20 80 Q 35 65, 50 50 T 80 20" fill="none" stroke="#D4AF37" strokeWidth="2" strokeDasharray="3, 3" />
+        
+        <path d="M 80 80 C 65 65, 50 35, 50 20" fill="none" stroke="#A09080" strokeWidth="1.5" opacity="0.6" />
+
+        <circle cx="20" cy="80" r="3" fill="#8C4F1A" />
+        <circle cx="50" cy="50" r="3" fill="#8C4F1A" />
+        <circle cx="80" cy="20" r="3.5" fill="#8C4F1A" />
+
+        <motion.circle
+          cx={20}
+          cy={80}
+          r={4.5}
+          fill="#8C4F1A"
+          animate={{ cx: [20, 50, 80], cy: [80, 50, 20] }}
+          transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
+        />
+        <circle cx="50" cy="50" r="1.5" fill="#FFF" />
       </svg>
     )
   }
@@ -681,6 +615,10 @@ export default function MainPage() {
                         navigate('/sound-wave-serenade');
                       } else if (game.id === 'breathe-bloom') {
                         navigate('/breathe-bloom');
+                      } else if (game.id === 'bio-path-tracer') {
+                        navigate('/bio-path-tracer');
+                      } else if (game.id === 'therapeutic-path-matrix') {
+                        navigate('/therapeutic-path-matrix');
                       } else {
                         setUnlockType('game');
                         handleUnlock(game.price);

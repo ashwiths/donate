@@ -11,6 +11,7 @@ import AccountPage from './pages/AccountPage'
 import BreatheBloomPage from './pages/BreatheBloomPage'
 import SoundWavePage from './pages/SoundWavePage'
 import BioPathTracerPage from './pages/BioPathTracerPage'
+import TherapeuticPathMatrixPage from './pages/TherapeuticPathMatrixPage'
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
               <Route path="/breathe-bloom" element={<BreatheBloomPage />} />
               <Route path="/sound-wave-serenade" element={<SoundWavePage />} />
               <Route path="/bio-path-tracer" element={<BioPathTracerPage />} />
+              <Route path="/therapeutic-path-matrix" element={<TherapeuticPathMatrixPage />} />
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

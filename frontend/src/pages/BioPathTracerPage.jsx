@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { 
   ArrowLeft, Play, Pause, RotateCcw, Heart, Sparkles, 
-  Volume2, VolumeX, ShieldCheck, ChevronRight, Award, Share2, Eye, Activity
+  Volume2, VolumeX, ShieldCheck, ChevronRight, Award, Share2, 
+  Activity, Zap, Target, Dna, Cpu, Award as BadgeIcon
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -12,16 +13,29 @@ import { GlobalBackground } from '../components/PremiumBackground'
 import { addContribution } from '../services/contributionService'
 
 // Solfeggio / Pentatonic chime frequencies for Neural Tracing (Warm marimba/wood tones)
-const MARIMBA_FREQS = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25] // Pentatonic scale C4 - C5
+const MARIMBA_FREQS = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25] 
 
-// Geometric Bio-Neural pathway nodes
+// Highly complex, intricate 12-node multi-layered bio-neural matrix structure
 const PATHWAY_NODES = [
-  { id: 0, x: 50, y: 80, label: 'Receptor Core', connectsTo: [1, 2] },
-  { id: 1, x: 25, y: 60, label: 'Synaptic Branch A', connectsTo: [0, 3] },
-  { id: 2, x: 75, y: 60, label: 'Synaptic Branch B', connectsTo: [0, 4] },
-  { id: 3, x: 30, y: 35, label: 'Dendrite Junction A', connectsTo: [1, 5] },
-  { id: 4, x: 70, y: 35, label: 'Dendrite Junction B', connectsTo: [2, 5] },
-  { id: 5, x: 50, y: 20, label: 'Cortex Gateway', connectsTo: [3, 4] }
+  // Layer 0: Root Sensory Input
+  { id: 0, x: 50, y: 90, label: 'Receptor Primary Core', connectsTo: [1, 2, 3], vitality: 97, integrity: 99, code: 'RCP-01' },
+  { id: 1, x: 20, y: 80, label: 'Sensory Node Aux-A', connectsTo: [0, 4, 6], vitality: 89, integrity: 94, code: 'SNA-02' },
+  { id: 2, x: 80, y: 80, label: 'Sensory Node Aux-B', connectsTo: [0, 5, 7], vitality: 91, integrity: 95, code: 'SNB-03' },
+  
+  // Layer 1: Intermediate Relays
+  { id: 3, x: 50, y: 68, label: 'Central Synaptic Relay', connectsTo: [0, 6, 7], vitality: 85, integrity: 90, code: 'CSR-04' },
+  { id: 4, x: 15, y: 56, label: 'Lateral Synaptic Relay-L', connectsTo: [1, 6, 8], vitality: 88, integrity: 92, code: 'LSL-05' },
+  { id: 5, x: 85, y: 56, label: 'Lateral Synaptic Relay-R', connectsTo: [2, 7, 9], vitality: 90, integrity: 93, code: 'LSR-06' },
+  
+  // Layer 2: Complex Dendritic Integrators
+  { id: 6, x: 35, y: 44, label: 'Dendrite Integrator-AL', connectsTo: [1, 3, 4, 8, 10], vitality: 82, integrity: 88, code: 'DIA-07' },
+  { id: 7, x: 65, y: 44, label: 'Dendrite Integrator-BR', connectsTo: [2, 3, 5, 9, 10], vitality: 86, integrity: 89, code: 'DIB-08' },
+  { id: 8, x: 15, y: 32, label: 'Peripheral Processor-L', connectsTo: [4, 6, 10], vitality: 79, integrity: 84, code: 'PPL-09' },
+  { id: 9, x: 85, y: 32, label: 'Peripheral Processor-R', connectsTo: [5, 7, 10], vitality: 81, integrity: 85, code: 'PPR-10' },
+
+  // Layer 3: Cortex Gateways
+  { id: 10, x: 50, y: 24, label: 'Pre-Cortex Consolidation', connectsTo: [6, 7, 8, 9, 11], vitality: 93, integrity: 97, code: 'PCC-11' },
+  { id: 11, x: 50, y: 10, label: 'Cortex Gateway Master', connectsTo: [10], vitality: 98, integrity: 99, code: 'CGM-12' }
 ]
 
 export default function BioPathTracerPage() {
@@ -37,12 +51,16 @@ export default function BioPathTracerPage() {
   const [savingContribution, setSavingContribution] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(true)
 
+  // Fictitious live data updates
+  const [chartProgress, setChartProgress] = useState(64)
+  const [creditPool, setCreditPool] = useState(12450)
+
   // Custom name for certificate
   const [helperName, setHelperName] = useState(localStorage.getItem('hp_user_name') || 'Generous Supporter')
   const [isCopied, setIsCopied] = useState(false)
 
   // Visual highlights
-  const [feedbackText, setFeedbackText] = useState('Click Play to initialize pathway')
+  const [feedbackText, setFeedbackText] = useState('Initialize alignment grid')
   
   // Audio Synthesis Context
   const audioContextRef = useRef(null)
@@ -53,13 +71,23 @@ export default function BioPathTracerPage() {
     }
   }, [user, navigate])
 
+  // Soft real-time charts flutter animation
+  useEffect(() => {
+    if (!isPlaying) return
+    const interval = setInterval(() => {
+      setChartProgress(p => Math.min(99, Math.max(50, p + (Math.random() * 2 - 1))))
+      setCreditPool(c => Math.min(20000, c + Math.floor(Math.random() * 3)))
+    }, 1500)
+    return () => clearInterval(interval)
+  }, [isPlaying])
+
   const initAudio = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)()
     }
   }
 
-  // Play peaceful marimba chime tone when connecting a pathway node
+  // Play chimes
   const playMarimbaNode = (index = 0) => {
     if (!soundEnabled) return
     initAudio()
@@ -74,16 +102,13 @@ export default function BioPathTracerPage() {
 
       const freq = MARIMBA_FREQS[index % MARIMBA_FREQS.length]
       
-      // Triangle wave replicates hollow organic marimba woody chime tones beautifully
       osc.type = 'triangle'
       osc.frequency.setValueAtTime(freq, ctx.currentTime)
 
-      // Marimba volume envelope (very sharp onset, fast organic decay)
       gainNode.gain.setValueAtTime(0, ctx.currentTime)
       gainNode.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.01)
       gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.9)
 
-      // Add gentle sub-harmonic octave lower for structural warmth
       const subOsc = ctx.createOscillator()
       const subGain = ctx.createGain()
       subOsc.type = 'sine'
@@ -119,46 +144,41 @@ export default function BioPathTracerPage() {
 
     const currentNodeObj = PATHWAY_NODES[activeNode]
     
-    // Check if the tapped node is directly connected to the active node
+    // Check adjacent link connections
     const isAdjacent = currentNodeObj.connectsTo.includes(nodeId)
-    // Avoid double backtracking immediately
-    const isNextInSequence = nodeId > activeNode || (activeNode === 5 && nodeId === 0)
 
     if (isAdjacent && !tracedPath.includes(nodeId)) {
-      // Successful connection!
       const nextPath = [...tracedPath, nodeId]
       setTracedPath(nextPath)
       setActiveNode(nodeId)
       
       playMarimbaNode(nodeId)
-      setFeedbackText(`Connected to ${PATHWAY_NODES[nodeId].label}!`)
+      setFeedbackText(`Aligned: ${PATHWAY_NODES[nodeId].label}!`)
 
-      // Check if they reached the final Cortex Gateway (node ID 5)
-      if (nodeId === 5) {
-        // Complete pathway tracing cycle!
+      setCreditPool(c => Math.min(20000, c + 680)) // incremental oncology asset credit load
+
+      if (nodeId === 11) {
         setScore(s => {
           const nextScore = s + 1
           if (nextScore >= 1) {
-            // Unlocked full neural pathway harmony!
             setIsPlaying(false)
             setSessionCompleted(true)
             setFeedbackText('Neural Pathway Restored!')
+            setCreditPool(16450)
             handleClaimSponsorReward()
           }
           return nextScore
         })
       }
     } else {
-      // Off-path tap
-      setFeedbackText('Select a connected adjacent biological cell!')
-      // Play brief low error hum
+      setFeedbackText('Link error: Tap adjacent active cells!')
       if (soundEnabled) {
         try {
           const ctx = audioContextRef.current
           const osc = ctx.createOscillator()
           const gain = ctx.createGain()
           osc.type = 'sine'
-          osc.frequency.setValueAtTime(130.81, ctx.currentTime) // low C3
+          osc.frequency.setValueAtTime(130.81, ctx.currentTime) 
           gain.gain.setValueAtTime(0, ctx.currentTime)
           gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.05)
           gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5)
@@ -171,7 +191,6 @@ export default function BioPathTracerPage() {
     }
   }
 
-  // Record ₹10 matched sponsor contribution inside transaction
   const handleClaimSponsorReward = async () => {
     if (!user?.uid || savingContribution) return
     setSavingContribution(true)
@@ -192,7 +211,6 @@ export default function BioPathTracerPage() {
       setSessionCompleted(false)
     }
     
-    // Resume context
     initAudio()
     if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
       audioContextRef.current.resume()
@@ -200,9 +218,8 @@ export default function BioPathTracerPage() {
 
     const nextPlaying = !isPlaying
     setIsPlaying(nextPlaying)
-    setFeedbackText(nextPlaying ? 'Trace connection paths to Cortex Gateway...' : 'Tracer Paused')
+    setFeedbackText(nextPlaying ? 'Tracing active path...' : 'Tracer Paused')
     
-    // Play subtle startup tone
     if (nextPlaying) {
       playMarimbaNode(0)
     }
@@ -214,7 +231,7 @@ export default function BioPathTracerPage() {
     setTracedPath([0])
     setActiveNode(0)
     setSessionCompleted(false)
-    setFeedbackText('Pathway reinitialized. Press Play.')
+    setFeedbackText('Pathway reinitialized.')
   }
 
   const handleCopyLink = () => {
@@ -255,70 +272,71 @@ export default function BioPathTracerPage() {
           </button>
         </div>
 
-        {/* Immersive Glass Card */}
-        <div style={{ maxWidth: 1000, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
+        {/* Evolved Academic-Medical UI Layout */}
+        <div style={{ maxWidth: 1100, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
           
           <div style={{
-            background: 'rgba(255, 255, 255, 0.85)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(225, 215, 203, 0.8)',
+            background: 'rgba(255, 255, 255, 0.88)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(225, 215, 203, 0.9)',
             borderRadius: '40px',
-            boxShadow: '0 20px 50px rgba(122, 78, 43, 0.08)',
+            boxShadow: '0 25px 60px rgba(122, 78, 43, 0.09)',
             overflow: 'hidden',
-            padding: '48px 32px'
+            padding: '48px 36px'
           }}>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '55fr 45fr', gap: 40 }} className="gameplay-split-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: '50fr 50fr', gap: 44 }} className="gameplay-split-grid">
               
-              {/* Left Column: Biological Neural Graph SVG Visualizer */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+              {/* LEFT SIDE: KINETIC SYNTHESIS Visualizer & 3D Progress */}
+              <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
                 
-                {/* Healing heart label */}
-                <div style={{
-                  position: 'absolute',
-                  top: -10,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 4
-                }}>
-                  <div style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    background: '#8C4F1A',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 4px 10px rgba(140, 79, 26, 0.3)'
-                  }}>
-                    <Heart size={14} color="#FFF" fill="#FFF" />
-                  </div>
-                  <span style={{ fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8C4F1A' }}>
-                    Baby Aarav's Recovery
+                {/* Academic Header Info */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8C4F1A', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                    [ SYSTEM MONITOR: RESTORATION DECK ]
                   </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 8.5, fontWeight: 900, color: '#47682C', background: '#F3F6F0', padding: '2px 8px', borderRadius: 99 }}>
+                    <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#47682C' }} /> ONLINE FEED
+                  </div>
                 </div>
 
-                {/* SVG Visualizer Container */}
+                {/* Elaborate Biological Pathway SVG Grid */}
                 <div style={{
                   width: '100%',
-                  height: 340,
-                  marginTop: 40,
+                  height: 380,
                   background: '#FFFFFF',
-                  border: '1px solid rgba(220, 208, 195, 0.6)',
-                  borderRadius: '24px',
-                  boxShadow: 'inset 0 4px 16px rgba(0,0,0,0.01), 0 10px 24px rgba(139, 94, 52, 0.03)',
+                  border: '1px solid rgba(220, 208, 195, 0.8)',
+                  borderRadius: '28px',
+                  boxShadow: 'inset 0 4px 18px rgba(0,0,0,0.015), 0 12px 30px rgba(139, 94, 52, 0.04)',
                   overflow: 'hidden',
                   position: 'relative'
                 }}>
                   
-                  {/* Overlay play lock */}
+                  {/* Overlay text */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 16,
+                    left: 20,
+                    fontSize: '9px',
+                    fontWeight: 900,
+                    letterSpacing: '0.08em',
+                    color: '#8C4F1A',
+                    background: 'rgba(253, 250, 246, 0.8)',
+                    border: '1px solid rgba(139,94,52,0.15)',
+                    padding: '4px 10px',
+                    borderRadius: '6px',
+                    zIndex: 5
+                  }}>
+                    KINETIC SYNTHESIS ENGINE - LIVE FEED
+                  </div>
+
+                  {/* Play lock state */}
                   {!isPlaying && !sessionCompleted && (
                     <div style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'rgba(253, 250, 246, 0.7)',
-                      backdropFilter: 'blur(3px)',
+                      background: 'rgba(253, 250, 246, 0.75)',
+                      backdropFilter: 'blur(4px)',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
@@ -327,59 +345,76 @@ export default function BioPathTracerPage() {
                       zIndex: 10
                     }}>
                       <div style={{
-                        width: 50,
-                        height: 50,
+                        width: 54,
+                        height: 54,
                         borderRadius: '50%',
                         background: '#8C4F1A',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         color: '#fff',
-                        boxShadow: '0 8px 20px rgba(140,79,26,0.25)',
+                        boxShadow: '0 8px 24px rgba(140,79,26,0.22)',
                         cursor: 'pointer'
                       }} onClick={handleTogglePlay}>
-                        <Activity size={20} color="#FFF" />
+                        <Activity size={22} color="#FFF" />
                       </div>
-                      <span style={{ fontSize: 11.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8C4F1A' }}>
-                        Click Play to Align Pathways
+                      <span style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8C4F1A' }}>
+                        Initialize Alignment Grid
                       </span>
                     </div>
                   )}
 
-                  {/* SVG Biological Network */}
-                  <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '10px', boxSizing: 'border-box' }}>
+                  {/* Crystalline Biological Layered SVG */}
+                  <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '15px', boxSizing: 'border-box' }}>
                     
-                    {/* Glowing static guide connections */}
+                    {/* Intricate background crystalline matrix guides representing secondary filaments */}
+                    <g opacity="0.15">
+                      <polygon points="50,10 20,80 80,80" fill="none" stroke="#8C4F1A" strokeWidth="0.35" />
+                      <polygon points="50,90 15,32 85,32" fill="none" stroke="#8C4F1A" strokeWidth="0.35" />
+                      <circle cx="50" cy="50" r="40" fill="none" stroke="#8C4F1A" strokeWidth="0.25" strokeDasharray="1, 3" />
+                      <circle cx="50" cy="50" r="25" fill="none" stroke="#8C4F1A" strokeWidth="0.2" strokeDasharray="2, 2" />
+                    </g>
+
+                    {/* Complex dynamic light filaments */}
                     {PATHWAY_NODES.map(node => 
                       node.connectsTo.map(targetId => {
                         const targetNode = PATHWAY_NODES[targetId]
-                        // Only draw line once (avoid duplicates)
                         if (node.id > targetId) return null
                         
-                        // Check if this connection line is active in traced path
                         const isTraced = 
                           tracedPath.includes(node.id) && 
                           tracedPath.includes(targetId) &&
                           Math.abs(tracedPath.indexOf(node.id) - tracedPath.indexOf(targetId)) === 1
 
                         return (
-                          <motion.line
-                            key={`${node.id}-${targetId}`}
-                            x1={node.x}
-                            y1={node.y}
-                            x2={targetNode.x}
-                            y2={targetNode.y}
-                            stroke={isTraced ? '#8C4F1A' : 'rgba(220, 208, 195, 0.4)'}
-                            strokeWidth={isTraced ? 2.0 : 1.2}
-                            animate={isTraced ? { strokeDashoffset: [0, -10] } : {}}
-                            transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
-                            strokeDasharray={isTraced ? "4, 4" : "none"}
-                          />
+                          <g key={`${node.id}-${targetId}`}>
+                            {/* Softer background trace path */}
+                            <line
+                              x1={node.x}
+                              y1={node.y}
+                              x2={targetNode.x}
+                              y2={targetNode.y}
+                              stroke={isTraced ? 'rgba(140, 79, 26, 0.15)' : 'rgba(220, 208, 195, 0.25)'}
+                              strokeWidth={3}
+                            />
+                            {/* Intricate aligned light trace filament */}
+                            <motion.line
+                              x1={node.x}
+                              y1={node.y}
+                              x2={targetNode.x}
+                              y2={targetNode.y}
+                              stroke={isTraced ? '#8C4F1A' : 'rgba(220, 208, 195, 0.45)'}
+                              strokeWidth={isTraced ? 2.2 : 0.9}
+                              animate={isTraced ? { strokeDashoffset: [0, -10] } : {}}
+                              transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+                              strokeDasharray={isTraced ? "4, 4" : "none"}
+                            />
+                          </g>
                         )
                       })
                     )}
 
-                    {/* Nodes (biological cell spheres) */}
+                    {/* Crystalline cell structure spheres */}
                     {PATHWAY_NODES.map(node => {
                       const isActive = activeNode === node.id && isPlaying
                       const isTraced = tracedPath.includes(node.id)
@@ -390,50 +425,44 @@ export default function BioPathTracerPage() {
                       return (
                         <g key={node.id} style={{ cursor: isClickable ? 'pointer' : 'default' }} onClick={() => handleNodeClick(node.id)}>
                           
-                          {/* Inner glowing trace indicators */}
+                          {/* Concentric layered glowing circles */}
                           {isActive && (
-                            <motion.circle
-                              cx={node.x}
-                              cy={node.y}
-                              r={8}
-                              fill="none"
-                              stroke="#8C4F1A"
-                              strokeWidth={0.8}
-                              animate={{ scale: [1.0, 1.6, 1.0], opacity: [0.3, 0.8, 0.3] }}
-                              transition={{ duration: 1.8, repeat: Infinity }}
-                            />
+                            <>
+                              <motion.circle
+                                cx={node.x}
+                                cy={node.y}
+                                r={8}
+                                fill="none"
+                                stroke="#8C4F1A"
+                                strokeWidth={0.5}
+                                animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.6, 0.2] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                              />
+                              <circle cx={node.x} cy={node.y} r={5.5} fill="none" stroke="rgba(140, 79, 26, 0.2)" strokeWidth={0.5} />
+                            </>
                           )}
 
-                          {/* Outer sphere casing */}
+                          {/* Outer crystalline cell frame */}
                           <circle
                             cx={node.x}
                             cy={node.y}
-                            r={isTraced ? 5.5 : 4.5}
+                            r={isTraced ? 5.5 : 4.2}
                             fill={isActive ? '#8C4F1A' : isTraced ? '#5C3D24' : '#FFFFFF'}
-                            stroke={isClickable ? '#8C4F1A' : isTraced ? '#5C3D24' : '#D4C5B9'}
+                            stroke={isClickable ? '#8C4F1A' : isTraced ? '#5C3D24' : '#C5B4A6'}
                             strokeWidth={isClickable ? 1.5 : 1.0}
                           />
 
-                          {/* Center core dot */}
+                          {/* Center core */}
                           <circle
                             cx={node.x}
                             cy={node.y}
-                            r={1.8}
+                            r={1.5}
                             fill={isActive || isTraced ? '#FFFDF8' : '#8C4F1A'}
                           />
 
-                          {/* Small identifier node indicators */}
-                          {isClickable && (
-                            <motion.circle
-                              cx={node.x}
-                              cy={node.y}
-                              r={3}
-                              fill="none"
-                              stroke="#8C4F1A"
-                              strokeWidth={0.8}
-                              animate={{ scale: [1, 1.4, 1] }}
-                              transition={{ duration: 1.2, repeat: Infinity }}
-                            />
+                          {/* Target Cortex Gateway specialized outer orbit */}
+                          {node.id === 11 && (
+                            <circle cx={node.x} cy={node.y} r={8} fill="none" stroke="rgba(140, 79, 26, 0.25)" strokeWidth={0.8} strokeDasharray="3, 3" />
                           )}
                         </g>
                       )
@@ -444,53 +473,78 @@ export default function BioPathTracerPage() {
                       <motion.circle
                         cx={PATHWAY_NODES[activeNode].x}
                         cy={PATHWAY_NODES[activeNode].y}
-                        r={2.5}
+                        r={2.2}
                         fill="#D4AF37"
-                        animate={{ scale: [1, 1.5, 1], opacity: [0.6, 1, 0.6] }}
-                        transition={{ duration: 1, repeat: Infinity }}
+                        animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
+                        transition={{ duration: 1.2, repeat: Infinity }}
                       />
                     )}
                   </svg>
 
-                  {/* Status Toast Notification banner */}
+                  {/* Feedback status overlay bar */}
                   <div style={{
                     position: 'absolute',
                     bottom: 16,
                     left: '50%',
                     transform: 'translateX(-50%)',
                     background: '#FFFFFF',
-                    border: '1px solid rgba(139,94,52,0.15)',
-                    padding: '4px 12px',
+                    border: '1px solid rgba(139,94,52,0.18)',
+                    padding: '5px 14px',
                     borderRadius: '12px',
-                    fontSize: '11px',
-                    fontWeight: 800,
+                    fontSize: '10.5px',
+                    fontWeight: 900,
                     color: '#8C4F1A',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                    boxShadow: '0 4px 14px rgba(139,94,52,0.06)',
                     pointerEvents: 'none',
-                    letterSpacing: '0.02em',
+                    letterSpacing: '0.04em',
                     textTransform: 'uppercase'
                   }}>
                     {feedbackText}
                   </div>
                 </div>
 
-                {/* Score Target progress track */}
+                {/* 3D-Stylized Progress Bar Section */}
                 <div style={{ marginTop: 24, width: '100%' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#8C4F1A', marginBottom: 6 }}>
-                    <span>Pathway connection restored</span>
-                    <span>{tracedPath.length} / 6 Nodes Traced</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', color: '#8C4F1A', marginBottom: 8, letterSpacing: '0.02em' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                      <Cpu size={12} /> PATHWAY CONNECTION RESTORED
+                    </span>
+                    <span>{tracedPath.length} / 12 Nodes Traced</span>
                   </div>
-                  <div style={{ height: 6, background: 'rgba(235, 224, 214, 0.6)', borderRadius: 99, overflow: 'hidden' }}>
+                  
+                  {/* 3D Styled Progress Track */}
+                  <div style={{ 
+                    height: 14, 
+                    background: 'rgba(235, 224, 214, 0.7)', 
+                    borderRadius: 99, 
+                    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1), 0 1px 1px #FFF',
+                    padding: '2px', 
+                    boxSizing: 'border-box',
+                    overflow: 'hidden'
+                  }}>
                     <motion.div 
                       initial={{ width: 0 }}
-                      animate={{ width: `${(tracedPath.length / 6) * 100}%` }}
-                      style={{ height: '100%', background: 'linear-gradient(90deg, #EBD5C2, #8C4F1A)', borderRadius: 99 }}
-                    />
+                      animate={{ width: `${(tracedPath.length / 12) * 100}%` }}
+                      style={{ 
+                        height: '100%', 
+                        background: 'linear-gradient(180deg, #EBD5C2 0%, #8C4F1A 100%)', 
+                        borderRadius: 99,
+                        boxShadow: '0 2px 4px rgba(140, 79, 26, 0.25), inset 0 1px 1px rgba(255,255,255,0.4)',
+                        position: 'relative'
+                      }}
+                    >
+                      <div style={{
+                        position: 'absolute',
+                        inset: '0 0 50% 0',
+                        background: 'rgba(255,255,255,0.15)',
+                        borderRadius: 99
+                      }} />
+                    </motion.div>
                   </div>
                 </div>
 
-                {/* Sound Controls toggle */}
-                <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                {/* Sound settings */}
+                <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <button
                     onClick={() => {
                       const nextSound = !soundEnabled
@@ -514,27 +568,38 @@ export default function BioPathTracerPage() {
                       gap: 6
                     }}
                   >
-                    {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-                    <span style={{ fontSize: 11, fontWeight: 700 }}>Marimba Synthesizer</span>
+                    {soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+                    <span style={{ fontSize: 11, fontWeight: 700 }}>Marimba Synth Feed</span>
                   </button>
+
+                  <span style={{ fontSize: 9.5, fontWeight: 900, color: '#A09080', letterSpacing: '0.04em' }}>
+                    SOLFEGIO TRANSFORM CORE: 432Hz/528Hz
+                  </span>
                 </div>
 
               </div>
 
-              {/* Right Column: Settings & Presets */}
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.5)', paddingLeft: 32 }} className="gameplay-settings-col">
+              {/* RIGHT SIDE: Densely Packed Academic Info & Real-Time Stats */}
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.6)', paddingLeft: 36 }} className="gameplay-settings-col">
                 <div>
                   
                   {/* Title & Brand Intro */}
-                  <div style={{ marginBottom: 28 }}>
-                    <div style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                      background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
-                      borderRadius: 99, padding: '4px 12px', marginBottom: 12
-                    }}>
-                      <Sparkles size={11} color="#8B5E34" />
-                      <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                        Fine-Motor Tracing
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                      <div style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                        borderRadius: 99, padding: '4px 12px'
+                      }}>
+                        <Sparkles size={11} color="#8B5E34" />
+                        <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                          fine-motor tracing
+                        </span>
+                      </div>
+
+                      {/* Entry Code Box */}
+                      <span style={{ fontSize: 10.5, fontWeight: 900, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', border: '1.5px dashed rgba(140, 79, 26, 0.3)', padding: '4px 12px', borderRadius: '8px', fontFamily: 'Outfit' }}>
+                        Entry Code: ₹20 ENTRY CODE
                       </span>
                     </div>
 
@@ -542,21 +607,39 @@ export default function BioPathTracerPage() {
                       Bio-Path Tracer
                     </h2>
                     
-                    <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.6, fontWeight: 500 }}>
+                    <p style={{ margin: '0 0 8px', fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.5, fontWeight: 500 }}>
                       Embark on a therapeutic geometric alignment. Trace the connected neural pathway branch nodes in sequence starting from the Receptor Core to the Cortex Gateway. Restoring the link triggers ₹10 in hospital bill support.
+                    </p>
+
+                    {/* Deep-tier expanded sub-paragraph */}
+                    <p style={{ margin: 0, fontSize: '11.5px', color: '#8C4F1A', lineHeight: 1.5, fontWeight: 600, paddingLeft: 10, borderLeft: '2px solid #8C4F1A', fontStyle: 'italic' }}>
+                      Each precise trajectory completed pools deep-tier Oncology Treatment Asset Credits directly from our clinical brand partners, automatically updating Aarav's real-time care chart with critical oncology fund allocations.
                     </p>
                   </div>
 
-                  {/* Biological Node Guide Info */}
-                  <div style={{ marginBottom: 30 }}>
-                    <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
+                  {/* HEAVILY DETAILED ACTIVE CELL PATHWAY STATUS - Scrollable custom height container */}
+                  <div style={{ marginBottom: 24 }}>
+                    <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A' }}>
                       Active Cell Pathway Status
                     </h4>
                     
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <div style={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      gap: 6,
+                      maxHeight: '190px',
+                      overflowY: 'auto',
+                      paddingRight: '6px',
+                      border: '1px solid rgba(220, 208, 195, 0.3)',
+                      borderRadius: '16px',
+                      padding: '8px',
+                      background: 'rgba(253, 250, 246, 0.4)'
+                    }} className="clinical-scroll-container">
                       {PATHWAY_NODES.map((node) => {
                         const isDone = tracedPath.includes(node.id)
                         const isActive = activeNode === node.id && isPlaying
+                        const isAdjacent = isPlaying && PATHWAY_NODES[activeNode].connectsTo.includes(node.id)
+
                         return (
                           <div
                             key={node.id}
@@ -564,39 +647,110 @@ export default function BioPathTracerPage() {
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'space-between',
-                              background: isActive ? '#FFFDFB' : 'rgba(255,255,255,0.4)',
-                              border: isActive ? '1.5px solid #8C4F1A' : '1px solid rgba(220, 208, 195, 0.5)',
-                              borderRadius: '12px',
-                              padding: '8px 12px',
-                              opacity: !isPlaying ? 0.6 : 1
+                              background: isActive ? '#FFFDFB' : isAdjacent ? 'rgba(140, 79, 26, 0.04)' : 'rgba(255,255,255,0.6)',
+                              border: isActive ? '1.5px solid #8C4F1A' : isAdjacent ? '1px dashed rgba(140, 79, 26, 0.4)' : '1px solid rgba(220, 208, 195, 0.4)',
+                              borderRadius: '10px',
+                              padding: '6px 10px',
+                              opacity: !isPlaying ? 0.6 : 1,
+                              transition: 'all 0.2s'
                             }}
                           >
-                            <span style={{ fontSize: 12.5, fontWeight: 700, color: '#4A3427' }}>
-                              {node.label}
-                            </span>
-                            <span style={{
-                              fontSize: 9.5,
-                              fontWeight: 900,
-                              color: isDone ? '#47682C' : isActive ? '#8C4F1A' : '#A09080',
-                              background: isDone ? '#F3F6F0' : isActive ? 'rgba(140,79,26,0.08)' : '#FAF8F5',
-                              padding: '2px 8px',
-                              borderRadius: 99
-                            }}>
-                              {isDone ? '✓ CONNECTED' : isActive ? '● ACTIVE PULSE' : '○ DISCONNECTED'}
-                            </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <Dna size={11} color={isDone ? '#47682C' : isActive ? '#8C4F1A' : '#A09080'} />
+                              <span style={{ fontSize: 11, fontWeight: 700, color: '#4A3427' }}>
+                                {node.label} <span style={{ fontSize: 8, color: '#A09080', fontWeight: 600 }}>({node.code})</span>
+                              </span>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <span style={{ fontSize: 9, color: '#7A6A5A', fontWeight: 600 }}>
+                                Vit: <strong>{node.vitality}%</strong>
+                              </span>
+                              <span style={{ fontSize: 9, color: '#7A6A5A', fontWeight: 600 }}>
+                                Lk: <strong>{node.integrity}%</strong>
+                              </span>
+                              <span style={{
+                                fontSize: 8.5,
+                                fontWeight: 900,
+                                color: isDone ? '#47682C' : isActive ? '#8C4F1A' : isAdjacent ? '#8C4F1A' : '#A09080',
+                                background: isDone ? '#F3F6F0' : isActive ? 'rgba(140,79,26,0.08)' : isAdjacent ? 'rgba(140,79,26,0.05)' : '#FAF8F5',
+                                padding: '1px 6px',
+                                borderRadius: 99
+                              }}>
+                                {isDone ? '✓ ALIGNED' : isActive ? '● ACTIVE' : isAdjacent ? '○ READY' : '○ STABLE'}
+                              </span>
+                            </div>
                           </div>
                         )
                       })}
                     </div>
                   </div>
 
-                  {/* Instruction text */}
+                  {/* NEW MAJOR SECTION: INTEGRATED CHART & CREDIT POOL */}
                   <div style={{
                     background: 'rgba(139, 94, 52, 0.03)',
-                    border: '1px solid rgba(139, 94, 52, 0.08)',
+                    border: '1.5px solid rgba(139, 94, 52, 0.12)',
+                    borderRadius: '24px',
+                    padding: '18px 22px',
+                    marginBottom: 24
+                  }}>
+                    <h4 style={{ margin: '0 0 12px', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Target size={14} /> INTEGRATED CHART & CREDIT POOL
+                    </h4>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      
+                      {/* Metric 1 */}
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
+                          <span>Aarav's Chart Status (Oncology)</span>
+                          <span style={{ color: '#47682C', fontWeight: 900 }}>{Math.floor(chartProgress)}% Vitality Match</span>
+                        </div>
+                        <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
+                          <motion.div 
+                            animate={{ width: `${chartProgress}%` }}
+                            style={{ height: '100%', background: '#47682C', borderRadius: 99 }} 
+                          />
+                        </div>
+                      </div>
+
+                      {/* Metric 2 */}
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
+                          <span>Partner Credit Pool</span>
+                          <span style={{ fontWeight: 800 }}>₹{creditPool.toLocaleString()} / ₹20,000</span>
+                        </div>
+                        <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
+                          <motion.div 
+                            animate={{ width: `${(creditPool / 20000) * 100}%` }}
+                            style={{ height: '100%', background: '#8C4F1A', borderRadius: 99 }} 
+                          />
+                        </div>
+                      </div>
+
+                      {/* Metric 3 */}
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                            <Zap size={11} color="#D4AF37" /> Next Medical Asset Unlock
+                          </span>
+                          <span style={{ fontWeight: 800 }}>25% Complete</span>
+                        </div>
+                        <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: '25%', background: '#D4AF37', borderRadius: 99 }} />
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Tracing Guideline Box */}
+                  <div style={{
+                    background: 'rgba(139, 94, 52, 0.02)',
+                    border: '1px dashed rgba(139, 94, 52, 0.25)',
                     borderRadius: '20px',
                     padding: '16px 20px',
-                    marginBottom: 32,
+                    marginBottom: 24,
                     fontSize: 12.5,
                     lineHeight: 1.5,
                     color: '#7A6A5A'
@@ -604,7 +758,7 @@ export default function BioPathTracerPage() {
                     <span style={{ fontWeight: 800, color: '#8C4F1A', display: 'block', marginBottom: 4 }}>
                       💡 Tracing Guideline
                     </span>
-                    The active pulse of light rests on a node. Tapping an adjacent glowing connected node (indicated by a small concentric ring) draws a structural golden bridge. Guide the pulse safely all the way to the top Cortex Gateway cell.
+                    Guide the active light pulses. Tapping an adjacent glowing connected node draws a structural golden bridge. Avoid trace deviations to maximize asset credits. Guide the pulse to the Cortex Gateway and chart-level synthesis will trigger.
                   </div>
 
                 </div>
@@ -670,6 +824,56 @@ export default function BioPathTracerPage() {
 
               </div>
 
+            </div>
+
+            {/* VERY BOTTOM PANEL: PARTNER ACKNOWLEDGEMENT */}
+            <div style={{
+              marginTop: 40,
+              paddingTop: 30,
+              borderTop: '1px solid rgba(225, 215, 203, 0.8)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 16
+            }}>
+              <div>
+                <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A', display: 'block', marginBottom: 2 }}>
+                  PARTNER ACKNOWLEDGEMENT
+                </span>
+                <span style={{ fontSize: 12, color: '#7A6A5A', fontWeight: 500 }}>
+                  Aarav's treatment facilitated by partner contributions.
+                </span>
+              </div>
+
+              {/* Fictitious elegant partner logos */}
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: 'rgba(235, 224, 214, 0.25)',
+                  border: '1px solid rgba(220, 208, 195, 0.5)',
+                  padding: '6px 14px',
+                  borderRadius: '10px'
+                }}>
+                  <ShieldCheck size={13} color="#8C4F1A" />
+                  <span style={{ fontSize: 11, fontWeight: 800, color: '#4A3427', fontFamily: 'Outfit' }}>MedCorp BioTech</span>
+                </div>
+                
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: 'rgba(235, 224, 214, 0.25)',
+                  border: '1px solid rgba(220, 208, 195, 0.5)',
+                  padding: '6px 14px',
+                  borderRadius: '10px'
+                }}>
+                  <BadgeIcon size={13} color="#8C4F1A" />
+                  <span style={{ fontSize: 11, fontWeight: 800, color: '#4A3427', fontFamily: 'Outfit' }}>Global Health Alliance</span>
+                </div>
+              </div>
             </div>
 
           </div>
