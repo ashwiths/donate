@@ -19,6 +19,6 @@ exports.googleLogin = async (req, res, next) => {
 
 exports.getMe = async (req, res, next) => {
   try {
-    res.json({ success: true, message: 'Get me — coming soon' })
+    res.json({ success: true, user: req.user, message: 'User info resolved securely via Firebase Admin SDK' })
   } catch (err) { next(err) }
 }

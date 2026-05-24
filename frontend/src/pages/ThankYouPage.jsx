@@ -467,8 +467,9 @@ export default function ThankYouPage() {
         <motion.h1
           variants={fadeUp}
           className="premium-title-lg"
+          style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 900, color: '#3D2B1A', margin: '0 0 16px', lineHeight: 1.2 }}
         >
-          You Just Helped Save a Life ❤️
+          You Just Helped Save a <span style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>Life ❤️</span>
         </motion.h1>
 
         {/* Emotional Subheading */}

@@ -517,7 +517,7 @@ export default function CouponThankYouPage() {
             className="premium-title-lg"
             style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 900, color: '#3D2B1A', margin: '0 0 16px', lineHeight: 1.2 }}
           >
-            Coupon Successfully Unlocked 🎉
+            Coupon Successfully <span style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>Unlocked 🎉</span>
           </motion.h1>
 
           {/* Subtitle */}

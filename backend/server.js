@@ -17,11 +17,29 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 // Connect to MongoDB
-connectDB()
+connectDB().catch(err => console.error('⚠️ Initial DB connection failed (continuing server startup):', err.message))
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5176',
+  'http://localhost:3000',
+  /\.vercel\.app$/
+]
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true)
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (allowed instanceof RegExp) return allowed.test(origin)
+      return allowed === origin
+    })
+    if (isAllowed) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true,
 }))
 app.use(express.json())
@@ -50,8 +68,10 @@ app.use((req, res) => {
 // Error handler
 app.use(errorHandler)
 
-app.listen(PORT, () => {
-  console.log(`🚀 Heal & Play server running on http://localhost:${PORT}`)
-})
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Heal & Play server running on http://localhost:${PORT}`)
+  })
+}
 
 module.exports = app
