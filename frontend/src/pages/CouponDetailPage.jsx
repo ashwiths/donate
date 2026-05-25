@@ -13,6 +13,7 @@ import { usePayment } from '../context/PaymentContext'
 import { useUserData } from '../hooks/useUserData'
 import { COUPONS } from '../data/coupons'
 import { generateHealingCertificate, subscribeCoupon } from '../services/contributionService'
+import { sanitizeInput } from '../utils/sanitize'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
@@ -89,10 +90,12 @@ export default function CouponDetailPage() {
 
   const handleContinueName = (e) => {
     e.preventDefault()
-    if (!formData.name.trim()) {
+    const sanitizedName = sanitizeInput(formData.name)
+    if (!sanitizedName) {
       setErrors({ ...errors, name: 'Full Name is required' })
       return
     }
+    setFormData(prev => ({ ...prev, name: sanitizedName }))
     setErrors({ ...errors, name: '' })
     setModalStep(2)
   }
@@ -100,11 +103,15 @@ export default function CouponDetailPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault()
 
+    const sanitizedEmail = sanitizeInput(formData.email)
+    const sanitizedMobile = sanitizeInput(formData.mobile)
+    const sanitizedName = sanitizeInput(formData.name)
+
     // Validate fields
     const newErrors = {}
-    if (!formData.email.trim()) {
+    if (!sanitizedEmail) {
       newErrors.email = 'Email Address is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(sanitizedEmail)) {
       newErrors.email = 'Please enter a valid email address'
     }
 
@@ -114,12 +121,12 @@ export default function CouponDetailPage() {
     }
 
     // Save user details
-    localStorage.setItem('hp_supporter_name', formData.name.trim())
-    localStorage.setItem('hp_supporter_mobile', formData.mobile.trim())
-    localStorage.setItem('hp_supporter_email', formData.email.trim())
-    localStorage.setItem('hp_user_name', formData.name.trim())
-    localStorage.setItem('hp_user_mobile', formData.mobile.trim())
-    localStorage.setItem('hp_user_email', formData.email.trim())
+    localStorage.setItem('hp_supporter_name', sanitizedName)
+    localStorage.setItem('hp_supporter_mobile', sanitizedMobile)
+    localStorage.setItem('hp_supporter_email', sanitizedEmail)
+    localStorage.setItem('hp_user_name', sanitizedName)
+    localStorage.setItem('hp_user_mobile', sanitizedMobile)
+    localStorage.setItem('hp_user_email', sanitizedEmail)
 
     localStorage.setItem('hp_unlock_type', 'coupon')
     localStorage.setItem('hp_pending_price', (coupon.unlockAmount ?? coupon.price).toString())

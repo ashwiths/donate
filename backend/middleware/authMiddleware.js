@@ -19,8 +19,10 @@ module.exports = async (req, res, next) => {
         console.error('Firebase token verification failed:', err.message)
         return res.status(401).json({ success: false, message: 'Invalid or expired authentication token' })
       }
-    } else {
       // Mock mode / local development fallback
+      if (process.env.NODE_ENV === 'production') {
+        return res.status(401).json({ success: false, message: 'Authentication service uninitialized in production' })
+      }
       console.warn('⚠️ Firebase Admin SDK uninitialized. Decoding token in mock mode.')
       req.user = {
         uid: 'mock_uid_123',

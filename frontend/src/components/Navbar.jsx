@@ -387,7 +387,7 @@ export default function Navbar() {
                   </Link>
                   <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
                   <Link
-                    to="/privacy#terms"
+                    to="/terms"
                     onClick={() => {
                       if ("vibrate" in navigator) navigator.vibrate(15);
                       setMenuOpen(false);
@@ -922,7 +922,7 @@ export default function Navbar() {
                 </Link>
                 <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
                 <Link
-                  to="/privacy#terms"
+                  to="/terms"
                   onClick={() => {
                     if ("vibrate" in navigator) navigator.vibrate(15);
                     setMenuOpen(false);

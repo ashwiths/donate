@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://donate.ashil.space/sitemap.xml
+Sitemap: https://savee.space/sitemap.xml

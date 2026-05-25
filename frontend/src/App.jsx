@@ -28,6 +28,7 @@ const RevealMessagePage = lazy(() => import('./pages/RevealMessagePage'))
 import DirectSupportPaymentPage from './pages/DirectSupportPaymentPage'
 import AboutPage from './pages/AboutPage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
+import TermsPage from './pages/TermsPage'
 import ContactPage from './pages/ContactPage'
 import { seedCouponsIfEmpty } from './services/contributionService'
 
@@ -81,6 +82,7 @@ export default function App() {
                 <Route path="/direct-payment" element={<DirectSupportPaymentPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                <Route path="/terms" element={<TermsPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 {/* Fallback */}
                 <Route path="*" element={<Navigate to="/" replace />} />

@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     Sitemap({
-      hostname: 'https://donate.ashil.space',
+      hostname: 'https://savee.space',
       readable: true,
       changefreq: 'daily',
       priority: 0.8,
@@ -18,6 +18,7 @@ export default defineConfig({
         '/main',
         '/thank-you',
         '/healing-stories',
+        '/terms',
         '/account',
         '/inspirations',
         '/breathe-bloom',

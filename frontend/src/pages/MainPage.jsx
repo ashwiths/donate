@@ -19,6 +19,7 @@ import { useUserData } from '../hooks/useUserData'
 import { COUPONS as MYSTERY_REWARDS } from '../data/coupons'
 import { subscribeCoupons } from '../services/contributionService'
 import { getSupporterDisplayName } from '../utils/nameHelper'
+import { sanitizeInput } from '../utils/sanitize'
 
 const PREMIUM_GAMES = [
   {
@@ -652,11 +653,15 @@ export default function MainPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault()
     
+    const sanitizedEmail = sanitizeInput(formData.email)
+    const sanitizedName = sanitizeInput(formData.name)
+    const sanitizedMobile = sanitizeInput(formData.mobile)
+
     // Validate required fields
     const newErrors = {}
-    if (!formData.email.trim()) {
+    if (!sanitizedEmail) {
       newErrors.email = 'Email Address is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(sanitizedEmail)) {
       newErrors.email = 'Please enter a valid email address'
     }
 
@@ -666,15 +671,15 @@ export default function MainPage() {
     }
 
     // Resolve name dynamically with helper (if empty or provided)
-    const finalSupporterName = getSupporterDisplayName(user, formData.name)
+    const finalSupporterName = getSupporterDisplayName(user, sanitizedName)
 
     // Save details
     localStorage.setItem('hp_supporter_name', finalSupporterName)
-    localStorage.setItem('hp_supporter_mobile', formData.mobile.trim())
-    localStorage.setItem('hp_supporter_email', formData.email.trim())
+    localStorage.setItem('hp_supporter_mobile', sanitizedMobile)
+    localStorage.setItem('hp_supporter_email', sanitizedEmail)
     localStorage.setItem('hp_user_name', finalSupporterName)
-    localStorage.setItem('hp_user_mobile', formData.mobile.trim())
-    localStorage.setItem('hp_user_email', formData.email.trim())
+    localStorage.setItem('hp_user_mobile', sanitizedMobile)
+    localStorage.setItem('hp_user_email', sanitizedEmail)
 
     localStorage.setItem('hp_unlock_type', unlockType)
     localStorage.setItem('hp_pending_price', pendingPrice.toString())

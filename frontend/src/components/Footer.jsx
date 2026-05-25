@@ -63,7 +63,7 @@ export default function Footer() {
           <span style={{ color: 'var(--color-border)', fontSize: 12 }}>|</span>
           <Link to="/privacy" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Privacy Policy</Link>
           <span style={{ color: 'var(--color-border)', fontSize: 12 }}>|</span>
-          <Link to="/privacy#terms" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Terms & Conditions</Link>
+          <Link to="/terms" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Terms & Conditions</Link>
           <span style={{ color: 'var(--color-border)', fontSize: 12 }}>|</span>
           <Link to="/contact" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Contact Us</Link>
         </div>

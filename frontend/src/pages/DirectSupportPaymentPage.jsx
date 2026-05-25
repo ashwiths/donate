@@ -8,6 +8,7 @@ import { generateHealingCertificate, processOfflineQueue } from '../services/con
 import qrImage from '../assets/payment-qr.png'
 import { fadeUp } from '../animations/variants'
 import { getSupporterDisplayName } from '../utils/nameHelper'
+import { sanitizeInput } from '../utils/sanitize'
 
 // App details & High-Fidelity SVG Brand Icons
 const phonepeLogo = (
@@ -84,6 +85,7 @@ export default function DirectSupportPaymentPage() {
   const [showQrFallback, setShowQrFallback] = useState(false)
   const [openingApp, setOpeningApp] = useState(null)
   const [toastMessage, setToastMessage] = useState(null)
+  const [honeypotVal, setHoneypotVal] = useState('')
 
   // Retrieve temporary contribution details stored in localStorage
   const supporterName = getSupporterDisplayName(user, localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name'))
@@ -182,6 +184,33 @@ export default function DirectSupportPaymentPage() {
   }
 
   const handlePaymentComplete = () => {
+    // 1. Bot prevention: honeypot check
+    if (honeypotVal) {
+      console.warn('Bot activity suspected via honeypot.');
+      return;
+    }
+
+    // 2. Cooldown check: prevent duplicate submissions
+    const lastClickTime = sessionStorage.getItem('hp_payment_click_ts')
+    const now = Date.now()
+    if (lastClickTime && now - Number(lastClickTime) < 8000) {
+      console.warn('Payment submit cooldown active.');
+      return;
+    }
+    sessionStorage.setItem('hp_payment_click_ts', now.toString())
+
+    // 3. Automated environment checks
+    if (navigator.webdriver) {
+      console.warn('Automated execution environment blocked.');
+      return;
+    }
+
+    // 4. Input sanity checks
+    if (isNaN(pendingPrice) || pendingPrice < 10 || pendingPrice > 1000000) {
+      console.error('Suspicious contribution amount rejected.');
+      return;
+    }
+
     // Trigger tiny haptic vibration feedback
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       try {
@@ -998,6 +1027,15 @@ export default function DirectSupportPaymentPage() {
 
                   {/* Sticky button container for Mobile */}
                   <div className="payment-action-btn-container" style={{ zIndex: 1, position: 'relative' }}>
+                    <input
+                      type="text"
+                      name="middle_name_alt"
+                      value={honeypotVal}
+                      onChange={(e) => setHoneypotVal(e.target.value)}
+                      style={{ opacity: 0, position: 'absolute', top: 0, left: 0, height: 0, width: 0, zIndex: -1 }}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
                     <button
                       onClick={handlePaymentComplete}
                       disabled={isProcessing}
@@ -1178,6 +1216,15 @@ export default function DirectSupportPaymentPage() {
 
                   {/* Non-sticky Action Button */}
                   <div style={{ zIndex: 1, position: 'relative' }}>
+                    <input
+                      type="text"
+                      name="middle_name_alt"
+                      value={honeypotVal}
+                      onChange={(e) => setHoneypotVal(e.target.value)}
+                      style={{ opacity: 0, position: 'absolute', top: 0, left: 0, height: 0, width: 0, zIndex: -1 }}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
                     <button
                       onClick={handlePaymentComplete}
                       disabled={isProcessing}

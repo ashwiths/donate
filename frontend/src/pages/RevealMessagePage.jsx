@@ -12,6 +12,7 @@ import { generateHealingCertificate } from '../services/contributionService'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { getSupporterDisplayName } from '../utils/nameHelper'
+import { sanitizeInput } from '../utils/sanitize'
 import { db } from '../firebase'
 import { collection, query, where, onSnapshot } from 'firebase/firestore'
 
@@ -114,7 +115,8 @@ export default function RevealMessagePage() {
     navigator.vibrate?.(15)
     
     // Resolve helper name if input is empty
-    const finalName = getSupporterDisplayName(user, supporterName)
+    const sanitizedName = sanitizeInput(supporterName)
+    const finalName = getSupporterDisplayName(user, sanitizedName)
 
     // Save details to localStorage
     localStorage.setItem('hp_supporter_name', finalName)

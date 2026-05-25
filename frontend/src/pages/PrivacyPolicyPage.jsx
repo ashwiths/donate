@@ -64,7 +64,7 @@ export default function PrivacyPolicyPage() {
                   1. Overview & Scope
                 </h2>
                 <p style={{ color: 'var(--color-text-muted)', margin: 0 }}>
-                  At Heal & Play, accessible from <strong>https://donate.ashil.space</strong>, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Heal & Play and how we use it. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.
+                  At Heal & Play, accessible from <strong>https://savee.space</strong>, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Heal & Play and how we use it. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.
                 </p>
               </div>
 

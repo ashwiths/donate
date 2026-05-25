@@ -54,14 +54,20 @@ export default function CouponThankYouPage() {
 
   // Fire confetti on mount for premium delight
   useEffect(() => {
-    const fire = () =>
-      confetti({
-        particleCount: 160,
-        spread: 110,
-        origin: { y: 0.4 },
-        colors: ['#8C4F1A', '#C8773A', '#D4AF37', '#FDFBF7'],
-      })
-    const t = setTimeout(fire, 350)
+    const fireConfetti = async () => {
+      try {
+        const { default: confettiModule } = await import('canvas-confetti')
+        confettiModule({
+          particleCount: 160,
+          spread: 110,
+          origin: { y: 0.4 },
+          colors: ['#8C4F1A', '#C8773A', '#D4AF37', '#FDFBF7']
+        })
+      } catch (err) {
+        console.error('Failed to lazy load confetti:', err)
+      }
+    }
+    const t = setTimeout(fireConfetti, 350)
     return () => clearTimeout(t)
   }, [])
 
