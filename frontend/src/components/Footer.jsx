@@ -64,8 +64,6 @@ export default function Footer() {
           <Link to="/privacy" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Privacy Policy</Link>
           <span style={{ color: 'var(--color-border)', fontSize: 12 }}>|</span>
           <Link to="/terms" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Terms & Conditions</Link>
-          <span style={{ color: 'var(--color-border)', fontSize: 12 }}>|</span>
-          <Link to="/contact" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Contact Us</Link>
         </div>
         <p style={{ fontSize: 13, color: 'var(--color-text-muted)', margin: 0 }}>
           © 2026{' '}

@@ -390,17 +390,7 @@ export default function Navbar() {
                   >
                     Terms of Use
                   </Link>
-                  <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
-                  <Link
-                    to="/contact"
-                    onClick={() => {
-                      if ("vibrate" in navigator) navigator.vibrate(15);
-                      setMenuOpen(false);
-                    }}
-                    style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
-                  >
-                    Contact
-                  </Link>
+
                 </div>
               </motion.div>
             </>
@@ -924,17 +914,7 @@ export default function Navbar() {
                 >
                   Terms of Use
                 </Link>
-                <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
-                <Link
-                  to="/contact"
-                  onClick={() => {
-                    if ("vibrate" in navigator) navigator.vibrate(15);
-                    setMenuOpen(false);
-                  }}
-                  style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
-                >
-                  Contact
-                </Link>
+
               </div>
             </motion.div>
           </>
