@@ -532,6 +532,15 @@ export default function MainPage() {
   const { userData } = useUserData()
 
   const [couponsList, setCouponsList] = useState([])
+  const [loadingMessageIdx, setLoadingMessageIdx] = useState(null)
+
+  // Prefetch RevealMessagePage components while idle
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      import('./RevealMessagePage').catch(() => {})
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     if (location.state?.activeTab) {
@@ -1277,11 +1286,14 @@ export default function MainPage() {
                   <motion.div
                     key={idx}
                     className="quotes-card"
-                    whileHover={{ 
+                    whileHover={loadingMessageIdx === idx ? {} : { 
                       y: -8, 
                       boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
                     }}
-                    onClick={() => navigate(`/reveal-message/${idx}`)}
+                    onClick={() => {
+                      setLoadingMessageIdx(idx)
+                      navigate(`/reveal-message/${idx}`)
+                    }}
                     style={{
                       background: '#FFFFFF',
                       borderRadius: '32px',
@@ -1293,7 +1305,10 @@ export default function MainPage() {
                       flexDirection: 'column',
                       justifyContent: 'space-between',
                       minHeight: 280,
-                      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+                      transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease',
+                      opacity: loadingMessageIdx === idx ? 0.7 : 1,
+                      transform: loadingMessageIdx === idx ? 'scale(0.98) translateZ(0)' : 'translateZ(0)',
+                      willChange: 'transform, opacity'
                     }}
                   >
                     <div>
@@ -1344,7 +1359,7 @@ export default function MainPage() {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 28, paddingTop: 20, borderTop: '1px solid rgba(235, 224, 214, 0.4)' }}>
                       <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', letterSpacing: '0.04em' }}>₹{card.price} Contribution</span>
                       <motion.div 
-                        whileHover={{ scale: 1.02 }}
+                        whileHover={loadingMessageIdx === idx ? {} : { scale: 1.02 }}
                         style={{ 
                           display: 'flex', 
                           alignItems: 'center', 
@@ -1355,11 +1370,30 @@ export default function MainPage() {
                           background: 'linear-gradient(135deg, #9A673A, #7A4E2B)',
                           padding: '10px 20px',
                           borderRadius: '14px',
-                          boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)'
+                          boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 16px rgba(122, 78, 43, 0.16)',
+                          transform: loadingMessageIdx === idx ? 'scale(0.95) translateZ(0)' : 'translateZ(0)',
+                          willChange: 'transform',
+                          transition: 'transform 0.1s ease'
                         }}
                       >
-                        <span>Reveal Healing Message</span>
-                        <ChevronRight size={13} />
+                        {loadingMessageIdx === idx ? (
+                          <>
+                            <span className="inline-spinner" style={{
+                              width: 12,
+                              height: 12,
+                              border: '2px solid rgba(255,255,255,0.3)',
+                              borderTop: '2px solid #fff',
+                              borderRadius: '50%',
+                              display: 'inline-block'
+                            }} />
+                            <span>Loading...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Reveal Healing Message</span>
+                            <ChevronRight size={13} />
+                          </>
+                        )}
                       </motion.div>
                     </div>
                   </motion.div>
@@ -1866,6 +1900,16 @@ export default function MainPage() {
           background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
           background-size: 200% 100%;
           animation: shimmer 3.5s infinite linear;
+        }
+        @keyframes inlineSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .inline-spinner {
+          animation: inlineSpin 0.6s linear infinite;
+          border: 2px solid rgba(255,255,255,0.3);
+          border-top: 2px solid #fff;
+          border-radius: 50%;
         }
         @media (max-width: 960px) {
           .banner-fluid-padding {

@@ -22,7 +22,9 @@ import MindSlidePage from './pages/MindSlidePage'
 import CouponDetailPage from './pages/CouponDetailPage'
 import CouponThankYouPage from './pages/CouponThankYouPage'
 import AdminAnalyticsPage from './pages/AdminAnalyticsPage'
-import RevealMessagePage from './pages/RevealMessagePage'
+import { Suspense, lazy } from 'react'
+import PremiumSkeletonLoader from './components/PremiumSkeletonLoader'
+const RevealMessagePage = lazy(() => import('./pages/RevealMessagePage'))
 import DirectSupportPaymentPage from './pages/DirectSupportPaymentPage'
 import AboutPage from './pages/AboutPage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
@@ -71,7 +73,11 @@ export default function App() {
                 <Route path="/coupon/:couponId" element={<CouponDetailPage />} />
                 <Route path="/coupon-thank-you/:couponId" element={<CouponThankYouPage />} />
                 <Route path="/admin-analytics" element={<AdminAnalyticsPage />} />
-                <Route path="/reveal-message/:messageId" element={<RevealMessagePage />} />
+                <Route path="/reveal-message/:messageId" element={
+                  <Suspense fallback={<PremiumSkeletonLoader />}>
+                    <RevealMessagePage />
+                  </Suspense>
+                } />
                 <Route path="/direct-payment" element={<DirectSupportPaymentPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/privacy" element={<PrivacyPolicyPage />} />

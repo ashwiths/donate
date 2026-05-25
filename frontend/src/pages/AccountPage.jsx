@@ -66,18 +66,32 @@ export default function AccountPage() {
   const { userData, contributions, certificates, activities, loading } = useUserData();
   const [selectedCert, setSelectedCert] = useState(null);
   const [unlockedMessages, setUnlockedMessages] = useState([]);
+  const [loadingMessageId, setLoadingMessageId] = useState(null);
+
+  // Prefetch RevealMessagePage components while idle
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      import('./RevealMessagePage').catch(() => {});
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!user?.uid) return;
     const q = query(
       collection(db, 'healingMessageUnlocks'),
-      where('userId', '==', user.uid),
-      orderBy('unlockedAt', 'desc')
+      where('userId', '==', user.uid)
     );
     const unsubscribe = onSnapshot(q, (snap) => {
       const list = [];
       snap.forEach((doc) => {
         list.push({ id: doc.id, ...doc.data() });
+      });
+      // Sort in memory to avoid Firestore index requirement
+      list.sort((a, b) => {
+        const timeA = a.unlockedAt?.seconds ? a.unlockedAt.seconds : (a.unlockedAt ? new Date(a.unlockedAt).getTime() : 0);
+        const timeB = b.unlockedAt?.seconds ? b.unlockedAt.seconds : (b.unlockedAt ? new Date(b.unlockedAt).getTime() : 0);
+        return timeB - timeA;
       });
       setUnlockedMessages(list);
     }, (err) => {
@@ -451,6 +465,19 @@ export default function AccountPage() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent' }}>
+      <style>{`
+        @keyframes accountInlineSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .account-inline-spinner {
+          animation: accountInlineSpin 0.6s linear infinite;
+          border: 2px solid rgba(255,255,255,0.3);
+          border-top: 2px solid #fff;
+          border-radius: 50%;
+          display: inline-block;
+        }
+      `}</style>
       <Particles />
       <Navbar />
 
@@ -692,7 +719,23 @@ export default function AccountPage() {
                 </div>
               ) : (
                 unlockedMessages.map((msg, i) => (
-                  <motion.div key={i} whileHover={{ y: -4, boxShadow: '0 12px 30px rgba(139, 94, 52, 0.08)' }} style={{ background: '#FFFDFB', border: '1px solid rgba(235, 224, 214, 0.8)', borderRadius: '20px', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.3s ease' }}>
+                  <motion.div 
+                    key={i} 
+                    whileHover={loadingMessageId === msg.messageId ? {} : { y: -4, boxShadow: '0 12px 30px rgba(139, 94, 52, 0.08)' }} 
+                    style={{ 
+                      background: '#FFFDFB', 
+                      border: '1px solid rgba(235, 224, 214, 0.8)', 
+                      borderRadius: '20px', 
+                      padding: '20px', 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center', 
+                      transition: 'transform 0.2s ease, opacity 0.2s ease',
+                      opacity: loadingMessageId === msg.messageId ? 0.7 : 1,
+                      transform: loadingMessageId === msg.messageId ? 'scale(0.98) translateZ(0)' : 'translateZ(0)',
+                      willChange: 'transform, opacity'
+                    }}
+                  >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, marginRight: 16, overflow: 'hidden' }}>
                       <div style={{ width: 48, height: 48, background: 'linear-gradient(135deg, #FFF9F3, #F5E6D3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #EADFCF', flexShrink: 0 }}>
                         <Quote size={22} color="#8C4F1A" />
@@ -708,7 +751,10 @@ export default function AccountPage() {
                         {msg.unlockedAt ? new Date(msg.unlockedAt.seconds ? msg.unlockedAt.seconds * 1000 : msg.unlockedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Today'}
                       </div>
                       <button
-                        onClick={() => navigate(`/reveal-message/${msg.messageId}`)}
+                        onClick={() => {
+                          setLoadingMessageId(msg.messageId);
+                          navigate(`/reveal-message/${msg.messageId}`);
+                        }}
                         style={{
                           padding: '6px 12px',
                           background: 'linear-gradient(135deg, #8C4F1A, #C8773A)',
@@ -718,10 +764,22 @@ export default function AccountPage() {
                           fontSize: '11px',
                           fontWeight: 800,
                           cursor: 'pointer',
-                          boxShadow: '0 2px 6px rgba(140, 79, 26, 0.15)'
+                          boxShadow: '0 2px 6px rgba(140, 79, 26, 0.15)',
+                          transform: loadingMessageId === msg.messageId ? 'scale(0.95) translateZ(0)' : 'translateZ(0)',
+                          transition: 'transform 0.1s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px'
                         }}
                       >
-                        View Message
+                        {loadingMessageId === msg.messageId ? (
+                          <>
+                            <span className="account-inline-spinner" style={{ width: 10, height: 10 }} />
+                            <span>Loading...</span>
+                          </>
+                        ) : (
+                          <span>View Message</span>
+                        )}
                       </button>
                     </div>
                   </motion.div>

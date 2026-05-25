@@ -11,8 +11,9 @@ import { usePayment } from '../context/PaymentContext'
 import { generateHealingCertificate } from '../services/contributionService'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import confetti from 'canvas-confetti'
 import { getSupporterDisplayName } from '../utils/nameHelper'
+import { db } from '../firebase'
+import { collection, query, where, onSnapshot } from 'firebase/firestore'
 
 const MESSAGES_DATA = [
   {
@@ -53,6 +54,18 @@ export default function RevealMessagePage() {
   const [loading, setLoading] = useState(false)
   const [createdCertId, setCreatedCertId] = useState(null)
   const [message, setMessage] = useState(null)
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  // Delay heavy elements/animations until after first paint
+  useEffect(() => {
+    const rAF = requestAnimationFrame(() => {
+      const timer = setTimeout(() => {
+        setIsLoaded(true)
+      }, 50)
+      return () => clearTimeout(timer)
+    })
+    return () => cancelAnimationFrame(rAF)
+  }, [])
 
   useEffect(() => {
     const found = MESSAGES_DATA.find(m => m.id === messageId)
@@ -69,8 +82,36 @@ export default function RevealMessagePage() {
     }
   }, [user, navigate])
 
+  // Real-time listener for current user's message unlocks
+  useEffect(() => {
+    if (!user?.uid || !messageId) return;
+
+    const q = query(
+      collection(db, 'healingMessageUnlocks'),
+      where('userId', '==', user.uid),
+      where('messageId', '==', messageId)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.empty) {
+        const docData = snapshot.docs[0].data();
+        setCreatedCertId(docData.certificateId || null);
+        setSupporterName(docData.supporterName || '');
+        setStep('reveal');
+      } else {
+        setStep('name');
+      }
+    }, (err) => {
+      console.error("Error checking message unlock state:", err);
+    });
+
+    return () => unsubscribe();
+  }, [user, messageId]);
+
   const handleNameSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
+    navigator.vibrate?.(15)
     
     // Resolve helper name if input is empty
     const finalName = getSupporterDisplayName(user, supporterName)
@@ -85,7 +126,9 @@ export default function RevealMessagePage() {
     localStorage.setItem('hp_pending_game_title', message.title)
     localStorage.setItem('hp_pending_game_path', '')
 
-    navigate('/direct-payment')
+    setTimeout(() => {
+      navigate('/direct-payment')
+    }, 150)
   }
 
   const handleDownloadCert = () => {
@@ -416,14 +459,29 @@ export default function RevealMessagePage() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FAF6F0', color: '#3D2B1A', fontFamily: 'Outfit, sans-serif', position: 'relative', overflowX: 'hidden' }}>
-      
+      <style>{`
+        @keyframes revealSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .reveal-inline-spinner {
+          width: 14px;
+          height: 14px;
+          border: 2px solid rgba(255,255,255,0.3);
+          border-top: 2px solid #fff;
+          border-radius: 50%;
+          animation: revealSpin 0.6s linear infinite;
+          display: inline-block;
+        }
+      `}</style>
+
       {/* Soft floating glow background elements */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-10%', left: '10%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(235, 224, 214, 0.5) 0%, rgba(255, 255, 255, 0) 70%)', filter: 'blur(40px)' }} />
         <div style={{ position: 'absolute', bottom: '-10%', right: '10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(255, 255, 255, 0) 70%)', filter: 'blur(50px)' }} />
         
-        {/* Floating particles */}
-        {[...Array(8)].map((_, i) => (
+        {/* Floating particles - Defer until after first paint */}
+        {isLoaded && [...Array(8)].map((_, i) => (
           <motion.div
             key={i}
             animate={{ y: [0, -25, 0], opacity: [0.3, 0.7, 0.3] }}
@@ -453,7 +511,7 @@ export default function RevealMessagePage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
               style={{
                 width: '100%',
                 maxWidth: '520px',
@@ -464,7 +522,9 @@ export default function RevealMessagePage() {
                 padding: '48px 40px',
                 boxShadow: '0 24px 64px rgba(74, 52, 39, 0.08)',
                 textAlign: 'center',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
               }}
             >
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(140, 79, 26, 0.06)', padding: '6px 14px', borderRadius: '20px', marginBottom: 20 }}>
@@ -524,11 +584,22 @@ export default function RevealMessagePage() {
                     justifyContent: 'center',
                     gap: 8,
                     boxShadow: loading ? 'none' : '0 8px 24px rgba(140, 79, 26, 0.15)',
-                    transition: 'all 0.2s ease'
+                    transform: loading ? 'scale(0.96) translateZ(0)' : 'translateZ(0)',
+                    willChange: 'transform',
+                    transition: 'transform 0.1s ease, background 0.2s ease'
                   }}
                 >
-                  {loading ? "Securing Unlock..." : "Continue to Reveal Message"}
-                  <ArrowRight size={16} />
+                  {loading ? (
+                    <>
+                      <span className="reveal-inline-spinner" />
+                      <span>Loading Payment...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Continue to Reveal Message</span>
+                      <ArrowRight size={16} />
+                    </>
+                  )}
                 </button>
               </form>
             </motion.div>
@@ -540,7 +611,7 @@ export default function RevealMessagePage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
               style={{
                 width: '100%',
                 maxWidth: '720px',
@@ -552,7 +623,9 @@ export default function RevealMessagePage() {
                 boxShadow: '0 30px 80px rgba(139, 94, 52, 0.15), 0 0 30px rgba(212, 175, 55, 0.05)',
                 textAlign: 'center',
                 boxSizing: 'border-box',
-                position: 'relative'
+                position: 'relative',
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
               }}
             >
               {/* Soft Golden Corner Glow inside the card */}

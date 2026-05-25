@@ -262,10 +262,65 @@ export async function generateHealingCertificate({
       await Promise.all(batchPromises);
     } catch (err) {
       console.error('Failed to generate healing certificate in background:', err);
+      // Graceful offline fallback: store contribution details in localStorage for silent retry later
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try {
+          const offlineQueue = JSON.parse(localStorage.getItem('hp_offline_contributions') || '[]');
+          offlineQueue.push({
+            userId,
+            amount,
+            childName,
+            title,
+            contributionType,
+            couponId,
+            couponBrand,
+            couponCode,
+            gameId,
+            gameName,
+            supporterName,
+            timestamp: Date.now()
+          });
+          localStorage.setItem('hp_offline_contributions', JSON.stringify(offlineQueue));
+          console.log('Contribution details queued locally for silent offline retry.');
+        } catch (storageErr) {
+          console.error('Failed to queue contribution locally:', storageErr);
+        }
+      }
     }
   })();
 
   return newCertId;
+}
+
+export function processOfflineQueue() {
+  if (typeof window === 'undefined' || !window.localStorage) return;
+  const queueData = localStorage.getItem('hp_offline_contributions');
+  if (!queueData) return;
+
+  try {
+    const queue = JSON.parse(queueData);
+    if (queue.length === 0) return;
+
+    localStorage.removeItem('hp_offline_contributions'); // clear first to avoid potential loops on repeat failure
+
+    queue.forEach(async (item) => {
+      try {
+        console.log('Retrying queued offline contribution:', item);
+        await generateHealingCertificate(item);
+      } catch (err) {
+        console.error('Offline retry failed, re-queueing item:', err);
+        try {
+          const currentQueue = JSON.parse(localStorage.getItem('hp_offline_contributions') || '[]');
+          currentQueue.push(item);
+          localStorage.setItem('hp_offline_contributions', JSON.stringify(currentQueue));
+        } catch (requeueErr) {
+          console.error('Failed to re-queue item:', requeueErr);
+        }
+      }
+    });
+  } catch (err) {
+    console.error('Error processing offline queue:', err);
+  }
 }
 
 /**

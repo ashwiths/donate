@@ -4,11 +4,73 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Copy, Check, Heart, Shield, ArrowLeft, Smartphone, ShieldCheck, HeartPulse, Sparkles, Activity, Smile, Gift } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useDonation } from '../context/DonationContext'
-import { generateHealingCertificate } from '../services/contributionService'
+import { generateHealingCertificate, processOfflineQueue } from '../services/contributionService'
 import qrImage from '../assets/payment-qr.png'
 import { fadeUp } from '../animations/variants'
-import confetti from 'canvas-confetti'
 import { getSupporterDisplayName } from '../utils/nameHelper'
+
+// App details & High-Fidelity SVG Brand Icons
+const phonepeLogo = (
+  <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="40" height="40" rx="10" fill="#5F259F"/>
+    <path d="M20 9C15.58 9 12 12.58 12 17C12 22.5 20 31 20 31C20 31 28 22.5 28 17C28 12.58 24.42 9 20 9ZM20 20C18.34 20 17 18.66 17 17C17 15.34 18.34 14 20 14C21.66 14 23 15.34 23 17C23 18.66 21.66 20 20 20Z" fill="white"/>
+  </svg>
+)
+
+const gpayLogo = (
+  <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M36.16 24a4.16 4.16 0 0 1-4.16 4.16H18.72a4.16 4.16 0 0 1 0-8.32H32a4.16 4.16 0 0 1 4.16 4.16z" fill="#EA4335"/>
+    <path d="M29.76 36.16A4.16 4.16 0 0 1 25.6 32V18.72a4.16 4.16 0 0 1 8.32 0V32a4.16 4.16 0 0 1-4.16 4.16z" fill="#4285F4"/>
+    <path d="M18.24 36.16a4.16 4.16 0 0 1-4.16-4.16V18.72a4.16 4.16 0 0 1 8.32 0V32a4.16 4.16 0 0 1-4.16 4.16z" fill="#34A853"/>
+    <path d="M24 18.24a4.16 4.16 0 0 1-4.16-4.16V8.32a4.16 4.16 0 0 1 8.32 0V14a4.16 4.16 0 0 1-4.16 4.16z" fill="#FBBC05"/>
+  </svg>
+)
+
+const paytmLogo = (
+  <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="40" height="40" rx="10" fill="#00b9f5"/>
+    <text x="20" y="25" fill="#FFFFFF" fontSize="12" fontWeight="950" fontFamily="system-ui, -apple-system, sans-serif" textAnchor="middle">paytm</text>
+  </svg>
+)
+
+const bhimLogo = (
+  <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="40" height="40" rx="10" fill="#1E3D59"/>
+    <path d="M12 11H28L20 29L12 11Z" fill="#FF9933"/>
+    <path d="M15 14H25L20 25L15 14Z" fill="#FFFFFF"/>
+    <path d="M18 17H22L20 21L18 17Z" fill="#128807"/>
+  </svg>
+)
+
+const floatingIcons = [
+  { Icon: HeartPulse, top: '8%', left: '4%', size: 24, color: 'rgba(200, 119, 58, 0.4)', delay: 0 },
+  { Icon: Sparkles, top: '22%', right: '6%', size: 28, color: 'rgba(212, 175, 55, 0.4)', delay: 1.2 },
+  { Icon: Activity, bottom: '25%', left: '3%', size: 26, color: 'rgba(140, 79, 26, 0.3)', delay: 0.6 },
+  { Icon: Gift, bottom: '15%', right: '5%', size: 22, color: 'rgba(232, 168, 124, 0.4)', delay: 1.8 },
+  { Icon: Smile, top: '45%', left: '8%', size: 20, color: 'rgba(140, 79, 26, 0.3)', delay: 2.4 }
+]
+
+const upiApps = [
+  { id: 'phonepe', name: 'PhonePe', scheme: 'phonepe', caption: 'Tap to Pay', logo: phonepeLogo },
+  { id: 'gpay', name: 'Google Pay', scheme: 'gpay', caption: 'Tap to Pay', logo: gpayLogo },
+  { id: 'paytm', name: 'Paytm', scheme: 'paytmmp', caption: 'Tap to Pay', logo: paytmLogo },
+  { id: 'bhim', name: 'BHIM', scheme: 'upi', caption: 'Tap to Pay', logo: bhimLogo }
+]
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08
+    }
+  }
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
+}
 
 export default function DirectSupportPaymentPage() {
   const navigate = useNavigate()
@@ -46,6 +108,20 @@ export default function DirectSupportPaymentPage() {
         document.head.appendChild(fontLink);
       } catch (err) {
         console.error('Failed to preload certificate fonts:', err);
+      }
+
+      // Prefetch thank-you page assets silently in the background
+      try {
+        import('./ThankYouPage')
+      } catch (err) {
+        // Ignore prefetch failures
+      }
+
+      // Silently process any stored offline contributions
+      try {
+        processOfflineQueue()
+      } catch (offlineErr) {
+        console.error('Failed to run offline queue processor:', offlineErr)
       }
     }
   }, [user, navigate])
@@ -106,6 +182,14 @@ export default function DirectSupportPaymentPage() {
   }
 
   const handlePaymentComplete = () => {
+    // Trigger tiny haptic vibration feedback
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate(30)
+      } catch (hapticErr) {
+        // Safe catch
+      }
+    }
     triggerHaptic()
     setIsProcessing(true)
     
@@ -117,56 +201,68 @@ export default function DirectSupportPaymentPage() {
       confirmDonation(pendingPrice)
 
       if (user?.uid) {
-        if (unlockType === 'game') {
-          generateHealingCertificate({
-            userId: user.uid,
-            amount: pendingPrice,
-            childName: 'Janamitra',
-            title: 'Certificate of Game Unlock',
-            contributionType: 'game_unlock',
-            gameId: pendingGameId,
-            gameName: pendingGameTitle || 'Premium Game',
-            supporterName: supporterName
-          })
-        } else if (unlockType === 'coupon') {
-          generateHealingCertificate({
-            userId: user.uid,
-            amount: pendingPrice,
-            childName: 'Janamitra',
-            title: `Certificate of Coupon Unlock - ${pendingGameTitle}`,
-            contributionType: 'coupon_unlock',
-            couponId: pendingGameId,
-            couponBrand: pendingGameTitle,
-            couponCode: 'SECRET_CODE_MOCK',
-            supporterName: supporterName
-          })
-        } else if (unlockType === 'message') {
-          generateHealingCertificate({
-            userId: user.uid,
-            amount: pendingPrice,
-            childName: 'Janamitra',
-            title: `Certificate of Healing Message - ${pendingGameTitle}`,
-            contributionType: 'healing_message_unlock',
-            gameId: pendingGameId,
-            gameName: pendingGameTitle || 'Healing Message',
-            supporterName: supporterName
-          })
-        } else {
-          generateHealingCertificate({
-            userId: user.uid,
-            amount: pendingPrice,
-            childName: 'Janamitra',
-            title: 'Certificate of Healing Support',
-            contributionType: 'donation',
-            supporterName: supporterName
-          })
+        const runBackgroundSave = async () => {
+          try {
+            if (unlockType === 'game') {
+              await generateHealingCertificate({
+                userId: user.uid,
+                amount: pendingPrice,
+                childName: 'Janamitra',
+                title: 'Certificate of Game Unlock',
+                contributionType: 'game_unlock',
+                gameId: pendingGameId,
+                gameName: pendingGameTitle || 'Premium Game',
+                supporterName: supporterName
+              })
+            } else if (unlockType === 'coupon') {
+              await generateHealingCertificate({
+                userId: user.uid,
+                amount: pendingPrice,
+                childName: 'Janamitra',
+                title: `Certificate of Coupon Unlock - ${pendingGameTitle}`,
+                contributionType: 'coupon_unlock',
+                couponId: pendingGameId,
+                couponBrand: pendingGameTitle,
+                couponCode: 'SECRET_CODE_MOCK',
+                supporterName: supporterName
+              })
+            } else if (unlockType === 'message') {
+              await generateHealingCertificate({
+                userId: user.uid,
+                amount: pendingPrice,
+                childName: 'Janamitra',
+                title: `Certificate of Healing Message - ${pendingGameTitle}`,
+                contributionType: 'healing_message_unlock',
+                gameId: pendingGameId,
+                gameName: pendingGameTitle || 'Healing Message',
+                supporterName: supporterName
+              })
+            } else {
+              await generateHealingCertificate({
+                userId: user.uid,
+                amount: pendingPrice,
+                childName: 'Janamitra',
+                title: 'Certificate of Healing Support',
+                contributionType: 'donation',
+                supporterName: supporterName
+              })
+            }
+          } catch (err) {
+            console.error('Background save failed:', err)
+          } finally {
+            setIsProcessing(false)
+          }
         }
+        runBackgroundSave()
+      } else {
+        setIsProcessing(false)
       }
     } catch (err) {
       console.error('Background save registration failed:', err)
+      setIsProcessing(false)
     }
 
-    // 3. Immediately trigger navigation after a short 500ms transition delay
+    // 3. Immediately trigger navigation after a tiny 300ms transition delay
     setTimeout(() => {
       if (unlockType === 'game') {
         if (pendingGamePath) {
@@ -181,71 +277,10 @@ export default function DirectSupportPaymentPage() {
       } else {
         navigate('/thank-you')
       }
-    }, 500)
+    }, 300)
   }
 
-  const floatingIcons = [
-    { Icon: HeartPulse, top: '8%', left: '4%', size: 24, color: 'rgba(200, 119, 58, 0.4)', delay: 0 },
-    { Icon: Sparkles, top: '22%', right: '6%', size: 28, color: 'rgba(212, 175, 55, 0.4)', delay: 1.2 },
-    { Icon: Activity, bottom: '25%', left: '3%', size: 26, color: 'rgba(140, 79, 26, 0.3)', delay: 0.6 },
-    { Icon: Gift, bottom: '15%', right: '5%', size: 22, color: 'rgba(232, 168, 124, 0.4)', delay: 1.8 },
-    { Icon: Smile, top: '45%', left: '8%', size: 20, color: 'rgba(140, 79, 26, 0.3)', delay: 2.4 }
-  ]
 
-  // App details & High-Fidelity SVG Brand Icons
-  const phonepeLogo = (
-    <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="40" height="40" rx="10" fill="#5F259F"/>
-      <path d="M20 9C15.58 9 12 12.58 12 17C12 22.5 20 31 20 31C20 31 28 22.5 28 17C28 12.58 24.42 9 20 9ZM20 20C18.34 20 17 18.66 17 17C17 15.34 18.34 14 20 14C21.66 14 23 15.34 23 17C23 18.66 21.66 20 20 20Z" fill="white"/>
-    </svg>
-  )
-
-  const gpayLogo = (
-    <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M36.16 24a4.16 4.16 0 0 1-4.16 4.16H18.72a4.16 4.16 0 0 1 0-8.32H32a4.16 4.16 0 0 1 4.16 4.16z" fill="#EA4335"/>
-      <path d="M29.76 36.16A4.16 4.16 0 0 1 25.6 32V18.72a4.16 4.16 0 0 1 8.32 0V32a4.16 4.16 0 0 1-4.16 4.16z" fill="#4285F4"/>
-      <path d="M18.24 36.16a4.16 4.16 0 0 1-4.16-4.16V18.72a4.16 4.16 0 0 1 8.32 0V32a4.16 4.16 0 0 1-4.16 4.16z" fill="#34A853"/>
-      <path d="M24 18.24a4.16 4.16 0 0 1-4.16-4.16V8.32a4.16 4.16 0 0 1 8.32 0V14a4.16 4.16 0 0 1-4.16 4.16z" fill="#FBBC05"/>
-    </svg>
-  )
-
-  const paytmLogo = (
-    <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="40" height="40" rx="10" fill="#00b9f5"/>
-      <text x="20" y="25" fill="#FFFFFF" fontSize="12" fontWeight="950" fontFamily="system-ui, -apple-system, sans-serif" textAnchor="middle">paytm</text>
-    </svg>
-  )
-
-  const bhimLogo = (
-    <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="40" height="40" rx="10" fill="#1E3D59"/>
-      <path d="M12 11H28L20 29L12 11Z" fill="#FF9933"/>
-      <path d="M15 14H25L20 25L15 14Z" fill="#FFFFFF"/>
-      <path d="M18 17H22L20 21L18 17Z" fill="#128807"/>
-    </svg>
-  )
-
-  const upiApps = [
-    { id: 'phonepe', name: 'PhonePe', scheme: 'phonepe', caption: 'Tap to Pay', logo: phonepeLogo },
-    { id: 'gpay', name: 'Google Pay', scheme: 'gpay', caption: 'Tap to Pay', logo: gpayLogo },
-    { id: 'paytm', name: 'Paytm', scheme: 'paytmmp', caption: 'Tap to Pay', logo: paytmLogo },
-    { id: 'bhim', name: 'BHIM', scheme: 'upi', caption: 'Tap to Pay', logo: bhimLogo }
-  ]
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08
-      }
-    }
-  }
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
-  }
 
   return (
     <div className="payment-page-container" style={{
@@ -263,12 +298,16 @@ export default function DirectSupportPaymentPage() {
     }}>
       <style>{`
         @keyframes pulseGlow {
-          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(140, 79, 26, 0)); }
-          50% { transform: scale(1.08); filter: drop-shadow(0 0 12px rgba(200, 119, 58, 0.4)); }
+          0%, 100% { transform: scale(1); opacity: 0.95; }
+          50% { transform: scale(1.08); opacity: 1; }
         }
         @keyframes shimmerProgress {
-          0% { left: -50%; }
-          100% { left: 100%; }
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(200%); }
+        }
+        @keyframes shimmerText {
+          0%, 100% { opacity: 0.7; }
+          50% { opacity: 1; }
         }
 
         .payment-grid-layout {
@@ -1238,7 +1277,8 @@ export default function DirectSupportPaymentPage() {
                 fontSize: '24px',
                 fontWeight: 900,
                 color: '#3D2B1A',
-                letterSpacing: '-0.5px'
+                letterSpacing: '-0.5px',
+                animation: 'shimmerText 1.5s infinite ease-in-out'
               }}>
                 Verifying contribution...
               </h2>
@@ -1256,10 +1296,13 @@ export default function DirectSupportPaymentPage() {
                 <div style={{
                   position: 'absolute',
                   height: '100%',
-                  width: '50%',
-                  background: 'linear-gradient(90deg, #C8773A, #8C4F1A)',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  background: 'linear-gradient(90deg, transparent, #C8773A, #8C4F1A, transparent)',
                   borderRadius: '3px',
-                  animation: 'shimmerProgress 1s infinite linear'
+                  animation: 'shimmerProgress 1.2s infinite linear',
+                  willChange: 'transform'
                 }} />
               </div>
             </motion.div>

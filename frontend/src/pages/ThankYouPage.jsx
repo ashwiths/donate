@@ -6,7 +6,6 @@ import { useDonation } from '../context/DonationContext'
 import { useAuth } from '../context/AuthContext'
 import { useUserData } from '../hooks/useUserData'
 import { staggerContainer, fadeUp, scaleIn } from '../animations/variants'
-import confetti from 'canvas-confetti'
 import TransparentBreakdown from '../components/TransparentBreakdown'
 import { getSupporterDisplayName } from '../utils/nameHelper'
 
@@ -29,17 +28,35 @@ export default function ThankYouPage() {
   const userName = getSupporterDisplayName(user, localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name'))
   const userEmail = userData?.email || user?.email || localStorage.getItem('hp_user_email') || ''
 
-  // Fire confetti on mount for premium delight
+  // Lazy-load confetti ONLY after the page/window fully loads for maximum rendering performance
   useEffect(() => {
-    const fire = () =>
-      confetti({
-        particleCount: 160,
-        spread: 110,
-        origin: { y: 0.4 },
-        colors: ['#8C4F1A', '#C8773A', '#D4AF37', '#FDFBF7'],
-      })
-    const t = setTimeout(fire, 350)
-    return () => clearTimeout(t)
+    let t;
+    const fireConfetti = async () => {
+      try {
+        const { default: confettiModule } = await import('canvas-confetti')
+        t = setTimeout(() => {
+          confettiModule({
+            particleCount: 160,
+            spread: 110,
+            origin: { y: 0.4 },
+            colors: ['#8C4F1A', '#C8773A', '#D4AF37', '#FDFBF7'],
+          })
+        }, 350)
+      } catch (err) {
+        console.error('Failed to lazy load confetti:', err)
+      }
+    }
+
+    if (document.readyState === 'complete') {
+      fireConfetti()
+    } else {
+      window.addEventListener('load', fireConfetti)
+    }
+
+    return () => {
+      if (t) clearTimeout(t)
+      window.removeEventListener('load', fireConfetti)
+    }
   }, [])
 
   const txId = transactionId || 'HP' + Date.now().toString().slice(-8)
