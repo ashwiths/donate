@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     Sitemap({
-      hostname: 'https://ashil.space',
+      hostname: 'https://donate.ashil.space',
       readable: true,
       changefreq: 'daily',
       priority: 0.8,
