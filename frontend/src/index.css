@@ -632,9 +632,23 @@ section, main, article, aside, header, footer, div {
   display: none !important;
 }
 
+@media (min-width: 769px) {
+  .nav-mobile-only {
+    display: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .nav-desktop-only {
+    display: none !important;
+  }
+}
+
 /* Mobile: compact premium layout */
 @media (max-width: 768px) {
   body {
+    padding-top: 0 !important;
+  }
+  .app-global-bg {
     padding-top: calc(54px + env(safe-area-inset-top)) !important;
   }
 

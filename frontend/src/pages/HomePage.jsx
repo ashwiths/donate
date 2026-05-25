@@ -319,7 +319,7 @@ export default function HomePage() {
                     cursor: 'pointer'
                   }}
                 >
-                  <Gamepad2 size={16} /> Heal
+                  <Gamepad2 size={16} /> Play & Heal <span style={{ display: 'inline-block', verticalAlign: 'middle' }}>❤️</span>
                 </motion.button>
 
                 <motion.button

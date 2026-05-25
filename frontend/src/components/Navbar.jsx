@@ -35,7 +35,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropOpen, setDropOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(() => typeof window !== 'undefined' ? window.scrollY > 10 : false)
-  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,15 +42,6 @@ export default function Navbar() {
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const handleLogout = () => {
@@ -66,14 +56,14 @@ export default function Navbar() {
     return location.pathname === path;
   }
 
-  if (isMobile) {
-    return (
-      <>
-        <motion.nav
-          key="mobile-nav"
-          initial={{ y: 0, opacity: 1 }}
-          animate={{ y: 0, opacity: 1 }}
-          className={`premium-nav-mobile ${isScrolled ? 'scrolled' : ''}`}
+  return (
+    <>
+      {/* Mobile Navbar */}
+      <motion.nav
+        key="mobile-nav"
+        initial={{ y: 0, opacity: 1 }}
+        animate={{ y: 0, opacity: 1 }}
+        className={`premium-nav-mobile nav-mobile-only ${isScrolled ? 'scrolled' : ''}`}
           style={{
             position: 'fixed',
             top: 0,
@@ -161,7 +151,8 @@ export default function Navbar() {
         </motion.nav>
 
         {/* Mobile Drawer (Bottom Sheet) */}
-        <AnimatePresence>
+        <div className="nav-mobile-only">
+          <AnimatePresence>
           {menuOpen && (
             <>
               <motion.div
@@ -415,17 +406,15 @@ export default function Navbar() {
             </>
           )}
         </AnimatePresence>
-      </>
-    )
-  }
+        </div>
 
-  return (
-    <motion.nav
-      key="desktop-nav"
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`premium-nav ${isScrolled ? 'scrolled' : ''}`}
+        {/* Desktop Navbar */}
+        <motion.nav
+          key="desktop-nav"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className={`premium-nav nav-desktop-only ${isScrolled ? 'scrolled' : ''}`}
       style={{
         margin: '24px auto 0',
         maxWidth: '1200px',
@@ -952,5 +941,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </motion.nav>
+    </>
   )
 }
