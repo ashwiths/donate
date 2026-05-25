@@ -18,6 +18,8 @@ export default function DirectSupportPaymentPage() {
   const [copied, setCopied] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [showQrFallback, setShowQrFallback] = useState(false)
 
   // Retrieve temporary contribution details stored in localStorage
   const supporterName = getSupporterDisplayName(user, localStorage.getItem('hp_supporter_name') || localStorage.getItem('hp_user_name'))
@@ -36,12 +38,44 @@ export default function DirectSupportPaymentPage() {
     }
   }, [user, navigate])
 
+  // Device detection for mobile layout and direct payments
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      const isSmallScreen = window.innerWidth <= 768
+      setIsMobile(isMobileUA || isSmallScreen)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   const upiId = 'supportjanami1459@cashfreesdlpb'
+
+  const getUpiUrl = (appScheme = 'upi') => {
+    const pnEncoded = encodeURIComponent('Janamithra Support')
+    const tnEncoded = encodeURIComponent('Heal & Play Pediatric Support')
+    const schemePrefix = appScheme === 'gpay' ? 'gpay://upi' : appScheme === 'phonepe' ? 'phonepe' : 'upi'
+    return `${schemePrefix}://pay?pa=${upiId}&pn=${pnEncoded}&am=${pendingPrice}&cu=INR&tn=${tnEncoded}`
+  }
 
   const handleCopyUPI = () => {
     navigator.clipboard.writeText(upiId)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleUpiPayment = (scheme) => {
+    const url = getUpiUrl(scheme)
+    const start = Date.now()
+    window.location.href = url
+
+    // Fallback: If browser does not lose focus within 1.2s, the app is likely not installed.
+    setTimeout(() => {
+      if (Date.now() - start < 1500) {
+        setShowQrFallback(true)
+      }
+    }, 1200)
   }
 
   const handlePaymentComplete = async () => {
@@ -214,18 +248,29 @@ export default function DirectSupportPaymentPage() {
           transform: translateX(-2px);
         }
 
+        .mobile-payment-btn {
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .mobile-payment-btn:hover {
+          transform: translateY(-2px);
+          filter: brightness(1.05);
+        }
+        .mobile-payment-btn:active {
+          transform: scale(0.98);
+        }
+
         @media (max-width: 768px) {
           .payment-action-btn-container {
             position: fixed !important;
             bottom: 0 !important;
             left: 0 !important;
             right: 0 !important;
-            background: rgba(253, 251, 247, 0.9) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
+            background: rgba(253, 251, 247, 0.95) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
             padding: 16px 20px !important;
-            box-shadow: 0 -8px 32px rgba(140,79,26,0.08) !important;
-            border-top: 1px solid rgba(232, 224, 214, 0.6) !important;
+            box-shadow: 0 -8px 32px rgba(140,79,26,0.1) !important;
+            border-top: 1px solid rgba(232, 224, 214, 0.8) !important;
             z-index: 1000 !important;
           }
           .payment-action-btn {
@@ -520,51 +565,165 @@ export default function DirectSupportPaymentPage() {
                 pointerEvents: 'none'
               }} />
 
-              {/* Large Centered QR Code Container */}
-              <div
-                className="qr-card-glow"
-                style={{
-                  margin: '0 auto 20px',
-                  maxWidth: '280px',
-                  width: '100%',
-                  position: 'relative',
-                  zIndex: 1
-                }}
-              >
-                <div style={{
-                  position: 'absolute',
-                  top: '-12px',
-                  left: '-12px',
-                  right: '-12px',
-                  bottom: '-12px',
-                  background: 'radial-gradient(circle, rgba(200, 119, 58, 0.22) 0%, rgba(255,255,255,0) 75%)',
-                  borderRadius: '28px',
-                  zIndex: 0
-                }} className="qr-glow-layer" />
+              {/* QR Fallback Notice if deep link fails */}
+              {showQrFallback && isMobile && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{
+                    background: 'rgba(200, 119, 58, 0.08)',
+                    border: '1px solid rgba(200, 119, 58, 0.2)',
+                    borderRadius: '16px',
+                    padding: '12px 16px',
+                    marginBottom: '20px',
+                    fontSize: '13px',
+                    color: '#8C4F1A',
+                    textAlign: 'left',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '8px',
+                    zIndex: 1,
+                    position: 'relative'
+                  }}
+                >
+                  <ShieldCheck size={16} style={{ marginTop: '2px', flexShrink: 0 }} />
+                  <span>
+                    Could not open the selected app directly. We've loaded the QR code below. You can scan it or copy the UPI ID to complete payment.
+                  </span>
+                </motion.div>
+              )}
 
-                <div style={{
-                  background: '#fff',
-                  borderRadius: '24px',
-                  border: '1px solid rgba(232, 224, 214, 0.8)',
-                  padding: '20px',
-                  position: 'relative',
-                  zIndex: 1,
-                  boxShadow: '0 16px 40px rgba(140, 79, 26, 0.06)'
-                }}>
-                  <img
-                    src={qrImage}
-                    alt="Scan to Pay"
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      display: 'block',
-                      borderRadius: '16px'
-                    }}
-                  />
+              {/* QR Code Container (Visible on desktop, or mobile fallback if app not installed) */}
+              {(!isMobile || showQrFallback) ? (
+                <div
+                  className="qr-card-glow"
+                  style={{
+                    margin: '0 auto 20px',
+                    maxWidth: '280px',
+                    width: '100%',
+                    position: 'relative',
+                    zIndex: 1
+                  }}
+                >
+                  <div style={{
+                    position: 'absolute',
+                    top: '-12px',
+                    left: '-12px',
+                    right: '-12px',
+                    bottom: '-12px',
+                    background: 'radial-gradient(circle, rgba(200, 119, 58, 0.22) 0%, rgba(255,255,255,0) 75%)',
+                    borderRadius: '28px',
+                    zIndex: 0
+                  }} className="qr-glow-layer" />
+
+                  <div style={{
+                    background: '#fff',
+                    borderRadius: '24px',
+                    border: '1px solid rgba(232, 224, 214, 0.8)',
+                    padding: '20px',
+                    position: 'relative',
+                    zIndex: 1,
+                    boxShadow: '0 16px 40px rgba(140, 79, 26, 0.06)'
+                  }}>
+                    <img
+                      src={qrImage}
+                      alt="Scan to Pay"
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        borderRadius: '16px'
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                /* Mobile direct payment links */
+                <div style={{ zIndex: 1, position: 'relative', width: '100%', textAlign: 'center', marginBottom: '20px' }}>
+                  <div style={{ fontSize: '11px', color: '#7A6A5A', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
+                    Tap to Pay Directly
+                  </div>
 
-              {/* Small Trust Section Below QR */}
+                  {/* Pay with PhonePe */}
+                  <button
+                    onClick={() => handleUpiPayment('phonepe')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '12px',
+                      width: '100%',
+                      padding: '16px',
+                      borderRadius: '16px',
+                      border: 'none',
+                      background: 'linear-gradient(135deg, #5F259F, #4A1A7D)',
+                      color: '#FFF',
+                      fontWeight: 800,
+                      fontSize: '15px',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 14px rgba(95, 37, 159, 0.2)',
+                      marginBottom: '12px'
+                    }}
+                    className="mobile-payment-btn"
+                  >
+                    <Smartphone size={18} />
+                    <span>Pay with PhonePe</span>
+                  </button>
+
+                  {/* Pay with Google Pay */}
+                  <button
+                    onClick={() => handleUpiPayment('gpay')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '12px',
+                      width: '100%',
+                      padding: '16px',
+                      borderRadius: '16px',
+                      border: 'none',
+                      background: 'linear-gradient(135deg, #1A73E8, #1557B0)',
+                      color: '#FFF',
+                      fontWeight: 800,
+                      fontSize: '15px',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 14px rgba(26, 115, 232, 0.2)',
+                      marginBottom: '12px'
+                    }}
+                    className="mobile-payment-btn"
+                  >
+                    <Smartphone size={18} />
+                    <span>Pay with Google Pay</span>
+                  </button>
+
+                  {/* Open Any UPI App */}
+                  <button
+                    onClick={() => handleUpiPayment('upi')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '12px',
+                      width: '100%',
+                      padding: '16px',
+                      borderRadius: '16px',
+                      border: '1.5px solid rgba(140, 79, 26, 0.3)',
+                      background: '#FAF6F2',
+                      color: '#8C4F1A',
+                      fontWeight: 800,
+                      fontSize: '15px',
+                      cursor: 'pointer',
+                      marginBottom: '16px'
+                    }}
+                    className="mobile-payment-btn"
+                  >
+                    <Smartphone size={18} />
+                    <span>Open Any UPI App</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Small Trust Section Below QR / Buttons */}
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -642,40 +801,42 @@ export default function DirectSupportPaymentPage() {
                 </div>
               </div>
 
-              {/* Scan with Apps Row */}
-              <div style={{
-                borderTop: '1px solid rgba(232, 224, 214, 0.4)',
-                paddingTop: '20px',
-                marginBottom: '28px',
-                zIndex: 1,
-                position: 'relative'
-              }}>
-                <div style={{ fontSize: '11px', color: '#7A6A5A', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
-                  Scan using any UPI App
+              {/* Scan with Apps Row (only on desktop or mobile fallback) */}
+              {(!isMobile || showQrFallback) && (
+                <div style={{
+                  borderTop: '1px solid rgba(232, 224, 214, 0.4)',
+                  paddingTop: '20px',
+                  marginBottom: '28px',
+                  zIndex: 1,
+                  position: 'relative'
+                }}>
+                  <div style={{ fontSize: '11px', color: '#7A6A5A', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
+                    Scan using any UPI App
+                  </div>
+                  <div className="payment-apps-row" style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                    {['PhonePe', 'Google Pay', 'Paytm', 'BHIM'].map((app) => (
+                      <div
+                        key={app}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          fontSize: '12px',
+                          fontWeight: 700,
+                          color: '#7A6A5A',
+                          background: '#FAF8F5',
+                          padding: '6px 12px',
+                          borderRadius: '10px',
+                          border: '1px solid rgba(232, 224, 214, 0.4)'
+                        }}
+                      >
+                        <Smartphone size={13} color="#8C4F1A" />
+                        {app}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="payment-apps-row" style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                  {['PhonePe', 'Google Pay', 'Paytm', 'BHIM'].map((app) => (
-                    <div
-                      key={app}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        fontSize: '12px',
-                        fontWeight: 700,
-                        color: '#7A6A5A',
-                        background: '#FAF8F5',
-                        padding: '6px 12px',
-                        borderRadius: '10px',
-                        border: '1px solid rgba(232, 224, 214, 0.4)'
-                      }}
-                    >
-                      <Smartphone size={13} color="#8C4F1A" />
-                      {app}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              )}
 
               {/* Button Container - handles fixed position on mobile */}
               <div className="payment-action-btn-container" style={{ zIndex: 1, position: 'relative' }}>
