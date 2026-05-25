@@ -101,12 +101,14 @@ export default function Navbar() {
               <div style={{
                 width: 30,
                 height: 30,
+                background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                 borderRadius: '10px',
-                overflow: 'hidden',
-                flexShrink: 0,
-                boxShadow: '0 4px 14px rgba(212, 168, 67, 0.25)'
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(92, 45, 14, 0.15)'
               }}>
-                <img src="/favicon.svg" alt="Heal & Play" style={{ width: '100%', height: '100%', display: 'block' }} />
+                <Heart size={15} color="#fff" fill="#fff" />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '15px', color: '#3D2B1A', letterSpacing: '-0.3px', lineHeight: 1.15 }}>Heal & Play</span>
@@ -435,12 +437,14 @@ export default function Navbar() {
             <div className="nav-logo-icon" style={{
               width: 36,
               height: 36,
+              background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
               borderRadius: '12px',
-              overflow: 'hidden',
-              flexShrink: 0,
-              boxShadow: '0 6px 20px rgba(212, 168, 67, 0.3)'
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 20px rgba(92, 45, 14, 0.15)'
             }}>
-              <img src="/favicon.svg" alt="Heal & Play" style={{ width: '100%', height: '100%', display: 'block' }} />
+              <Heart size={20} color="#fff" fill="#fff" />
             </div>
             <div>
               <div className="nav-logo-text" style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 17, color: '#3D2B1A', letterSpacing: '-0.5px', lineHeight: 1.1 }}>Heal & Play</div>
