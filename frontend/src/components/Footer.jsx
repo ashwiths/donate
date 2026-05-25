@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom'
 import { Heart, Shield, FileCheck, Lock, Users } from 'lucide-react'
 
 const trustItems = [
-  { icon: Shield,    label: '100% Transparent',  desc: 'Every penny is used for treatment funds' },
-  { icon: FileCheck, label: 'Verified Cases',     desc: 'All cases are verified with hospital proof' },
-  { icon: Lock,      label: 'Secure & Safe',      desc: 'Your data and payments are always protected' },
-  { icon: Users,     label: 'Together We Heal',   desc: 'Together, we can save more lives' },
+  { icon: Shield, label: '100% Transparent', desc: 'Every penny is used for treatment funds' },
+  { icon: FileCheck, label: 'Verified Cases', desc: 'All cases are verified with hospital proof' },
+  { icon: Lock, label: 'Secure & Safe', desc: 'Your data and payments are always protected' },
+  { icon: Users, label: 'Together We Heal', desc: 'Together, we can save more lives' },
 ]
 
 export default function Footer() {
@@ -59,7 +59,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             style={{ color: 'var(--color-primary)', fontWeight: 800, textDecoration: 'none', borderBottom: '1px dashed rgba(140,79,26,0.4)', transition: 'all 0.2s ease' }}
             onMouseOver={(e) => { e.target.style.color = '#5C2D0E'; e.target.style.borderBottomColor = '#5C2D0E'; }}
-            onMouseOut={(e)  => { e.target.style.color = 'var(--color-primary)'; e.target.style.borderBottomColor = 'rgba(140,79,26,0.4)'; }}
+            onMouseOut={(e) => { e.target.style.color = 'var(--color-primary)'; e.target.style.borderBottomColor = 'rgba(140,79,26,0.4)'; }}
           >
             Infant Ashil A
           </a>

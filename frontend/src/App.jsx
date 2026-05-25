@@ -28,11 +28,11 @@ import { seedCouponsIfEmpty } from './services/contributionService'
 
 function ScrollToTop() {
   const { pathname, search } = useLocation()
-  
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname, search])
-  
+
   return null
 }
 
