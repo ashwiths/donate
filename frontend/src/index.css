@@ -624,3 +624,26 @@ section, main, article, aside, header, footer, div {
     padding-bottom: calc(32px + env(safe-area-inset-bottom)) !important;
   }
 }
+
+/* ───────── Navbar Responsive ───────── */
+/* Desktop: show nav links, hide hamburger */
+.nav-desktop-links {
+  display: flex !important;
+}
+.nav-hamburger {
+  display: none !important;
+}
+
+/* Mobile: hide nav links, show hamburger */
+@media (max-width: 768px) {
+  .nav-desktop-links {
+    display: none !important;
+  }
+  .nav-hamburger {
+    display: flex !important;
+  }
+  .nav-container {
+    padding: 0 14px !important;
+    height: 64px !important;
+  }
+}

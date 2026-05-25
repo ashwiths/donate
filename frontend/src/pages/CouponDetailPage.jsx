@@ -455,10 +455,11 @@ export default function CouponDetailPage() {
             background: 'rgba(61, 43, 26, 0.4)',
             backdropFilter: 'blur(4px)',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'center',
+            overflowY: 'auto',
             zIndex: 1000,
-            padding: '16px'
+            padding: '24px 16px 40px'
           }}>
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}

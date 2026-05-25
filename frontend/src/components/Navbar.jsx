@@ -85,12 +85,7 @@ export default function Navbar() {
         </motion.div>
 
         {/* Middle Section: Centered Premium Capsule Nav Pills */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: 18,
-          justifyContent: 'center'
-        }} className="nav-desktop-links" style={{ display: 'flex', alignItems: 'center', gap: 18, justifyContent: 'center' }}>
+        <div className="nav-desktop-links" style={{ display: 'flex', alignItems: 'center', gap: 18, justifyContent: 'center' }}>
           {navItems.map(({ label, path, icon: Icon }) => {
             const active = isActive(path)
             return (
