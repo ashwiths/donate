@@ -34,8 +34,8 @@ export default function Navbar() {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropOpen, setDropOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(() => typeof window !== 'undefined' ? window.scrollY > 10 : false)
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,8 +70,6 @@ export default function Navbar() {
     return (
       <>
         <motion.nav
-          initial={{ y: -10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
           className={`premium-nav-mobile ${isScrolled ? 'scrolled' : ''}`}
           style={{
             position: 'fixed',

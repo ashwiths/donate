@@ -42,6 +42,16 @@ export default function BioPathTracerPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
 
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   // Game States
   const [isPlaying, setIsPlaying] = useState(false)
   const [activeNode, setActiveNode] = useState(0) // Start node index
@@ -241,11 +251,11 @@ export default function BioPathTracerPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#3D2B1A', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#3D2B1A', position: 'relative', overflowX: 'hidden' }}>
       <GlobalBackground />
       <Navbar />
 
-      <main style={{ flex: 1, position: 'relative', zIndex: 1, width: '100%', paddingBottom: 100 }}>
+      <main style={{ flex: 1, position: 'relative', zIndex: 1, width: '100%', paddingBottom: 100, overflowX: 'hidden' }}>
         
         {/* Header Back Link */}
         <div style={{ maxWidth: 1200, margin: '40px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
@@ -273,40 +283,283 @@ export default function BioPathTracerPage() {
         </div>
 
         {/* Evolved Academic-Medical UI Layout */}
-        <div style={{ maxWidth: 1100, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
-          
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.88)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(225, 215, 203, 0.9)',
-            borderRadius: '40px',
-            boxShadow: '0 25px 60px rgba(122, 78, 43, 0.09)',
-            overflow: 'hidden',
-            padding: '48px 36px'
-          }}>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '50fr 50fr', gap: 44 }} className="gameplay-split-grid">
-              
-              {/* LEFT SIDE: KINETIC SYNTHESIS Visualizer & 3D Progress */}
-              <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+        {isMobile ? (
+          <div style={{ maxWidth: '100%', margin: '20px auto 0', padding: '0 16px', boxSizing: 'border-box', overflowX: 'hidden' }}>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.88)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(225, 215, 203, 0.9)',
+              borderRadius: '24px',
+              boxShadow: '0 15px 35px rgba(122, 78, 43, 0.06)',
+              overflow: 'hidden',
+              padding: '24px 16px',
+              boxSizing: 'border-box'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 
-                {/* Academic Header Info */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8C4F1A', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                    [ SYSTEM MONITOR: RESTORATION DECK ]
-                  </span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 8.5, fontWeight: 900, color: '#47682C', background: '#F3F6F0', padding: '2px 8px', borderRadius: 99 }}>
-                    <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#47682C' }} /> ONLINE FEED
+                {/* 1. Header (Title & Brand Intro) */}
+                <div style={{ width: '100%' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 12 }}>
+                    <div style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6, alignSelf: 'flex-start',
+                      background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                      borderRadius: 99, padding: '4px 12px'
+                    }}>
+                      <Sparkles size={11} color="#8B5E34" />
+                      <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                        fine-motor tracing
+                      </span>
+                    </div>
+                    <span style={{ 
+                      fontSize: 10, fontWeight: 900, color: '#8C4F1A', 
+                      background: 'rgba(140, 79, 26, 0.08)', border: '1.5px dashed rgba(140, 79, 26, 0.3)', 
+                      padding: '4px 12px', borderRadius: '8px', fontFamily: 'Outfit', alignSelf: 'flex-start'
+                    }}>
+                      Entry Code: ₹20 ENTRY CODE
+                    </span>
+                  </div>
+
+                  <h2 style={{ margin: '0 0 8px', fontSize: '22px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+                    Bio-Path Tracer
+                  </h2>
+                  
+                  <p style={{ margin: '0 0 10px', fontSize: '13px', color: '#7A6A5A', lineHeight: 1.5, fontWeight: 500 }}>
+                    Embark on a therapeutic geometric alignment. Trace the connected neural pathway branch nodes in sequence starting from the Receptor Core to the Cortex Gateway. Restoring the link triggers ₹10 in hospital bill support.
+                  </p>
+
+                  <p style={{ margin: 0, fontSize: '11px', color: '#8C4F1A', lineHeight: 1.4, fontWeight: 600, paddingLeft: 8, borderLeft: '2px solid #8C4F1A', fontStyle: 'italic' }}>
+                    Each precise trajectory completed pools deep-tier Oncology Treatment Asset Credits directly from our clinical brand partners, automatically updating Janamithra's real-time care chart.
+                  </p>
+                </div>
+
+                {/* 2. Beneficiary Case Badge */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  background: 'rgba(140, 79, 26, 0.04)',
+                  border: '1px solid rgba(140, 79, 26, 0.08)',
+                  borderRadius: '16px',
+                  padding: '12px 16px',
+                  width: '100%',
+                  boxSizing: 'border-box'
+                }}>
+                  <div style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    background: '#8C4F1A',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 10px rgba(140, 79, 26, 0.2)',
+                    flexShrink: 0
+                  }}>
+                    <Heart size={14} color="#FFF" fill="#FFF" />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#A09080' }}>
+                      Clinical Partner Sponsor
+                    </span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#4A3427' }}>
+                      Janamithra's Treatment Facilitation
+                    </span>
                   </div>
                 </div>
 
-                {/* Elaborate Biological Pathway SVG Grid */}
+                {/* 3. Progress / Stats Card */}
+                <div style={{
+                  background: '#FFFDFB',
+                  border: '1px solid rgba(220, 208, 195, 0.6)',
+                  borderRadius: '18px',
+                  padding: '16px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  boxShadow: '0 4px 12px rgba(139, 94, 52, 0.02)'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', color: '#8C4F1A', marginBottom: 8, letterSpacing: '0.02em' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                      <Cpu size={12} /> PATHWAY PROGRESS
+                    </span>
+                    <span>{tracedPath.length} / 12 Nodes</span>
+                  </div>
+                  
+                  <div style={{ 
+                    height: 12, 
+                    background: 'rgba(235, 224, 214, 0.7)', 
+                    borderRadius: 99, 
+                    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1), 0 1px 1px #FFF',
+                    padding: '2px', 
+                    boxSizing: 'border-box',
+                    overflow: 'hidden',
+                    marginBottom: 16
+                  }}>
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(tracedPath.length / 12) * 100}%` }}
+                      style={{ 
+                        height: '100%', 
+                        background: 'linear-gradient(180deg, #EBD5C2 0%, #8C4F1A 100%)', 
+                        borderRadius: 99,
+                        boxShadow: '0 2px 4px rgba(140, 79, 26, 0.25), inset 0 1px 1px rgba(255,255,255,0.4)',
+                        position: 'relative'
+                      }}
+                    >
+                      <div style={{
+                        position: 'absolute',
+                        inset: '0 0 50% 0',
+                        background: 'rgba(255,255,255,0.15)',
+                        borderRadius: 99
+                      }} />
+                    </motion.div>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
+                        <span>Vitality Match</span>
+                        <span style={{ color: '#47682C', fontWeight: 900 }}>{Math.floor(chartProgress)}%</span>
+                      </div>
+                      <div style={{ height: 5, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
+                        <motion.div animate={{ width: `${chartProgress}%` }} style={{ height: '100%', background: '#47682C', borderRadius: 99 }} />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
+                        <span>Partner Credits</span>
+                        <span style={{ fontWeight: 800 }}>₹{creditPool.toLocaleString()}</span>
+                      </div>
+                      <div style={{ height: 5, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
+                        <motion.div animate={{ width: `${(creditPool / 20000) * 100}%` }} style={{ height: '100%', background: '#8C4F1A', borderRadius: 99 }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Controls */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 4px' }}>
+                  <button
+                    onClick={() => {
+                      const nextSound = !soundEnabled
+                      setSoundEnabled(nextSound)
+                      if (nextSound) {
+                        initAudio()
+                        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                          audioContextRef.current.resume()
+                        }
+                        playMarimbaNode(0)
+                      }
+                    }}
+                    style={{
+                      border: 'none',
+                      background: 'none',
+                      padding: 4,
+                      cursor: 'pointer',
+                      color: soundEnabled ? '#8C4F1A' : '#A09080',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6
+                    }}
+                  >
+                    {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                    <span style={{ fontSize: 11, fontWeight: 700 }}>Marimba Feed</span>
+                  </button>
+
+                  <span style={{ fontSize: 9, fontWeight: 800, color: '#A09080', letterSpacing: '0.04em' }}>
+                    SOLFEGIO: 432Hz
+                  </span>
+                </div>
+
+                {/* 5. Active Cell Pathway Status list */}
+                <div style={{ width: '100%' }}>
+                  <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A' }}>
+                    Active Cell Pathway Status
+                  </h4>
+                  
+                  <div style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    gap: 6,
+                    maxHeight: '140px',
+                    overflowY: 'auto',
+                    paddingRight: '4px',
+                    border: '1px solid rgba(220, 208, 195, 0.3)',
+                    borderRadius: '16px',
+                    padding: '8px',
+                    background: 'rgba(253, 250, 246, 0.4)'
+                  }} className="clinical-scroll-container">
+                    {PATHWAY_NODES.map((node) => {
+                      const isDone = tracedPath.includes(node.id)
+                      const isActive = activeNode === node.id && isPlaying
+                      const isAdjacent = isPlaying && PATHWAY_NODES[activeNode].connectsTo.includes(node.id)
+
+                      return (
+                        <div
+                          key={node.id}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            background: isActive ? '#FFFDFB' : isAdjacent ? 'rgba(140, 79, 26, 0.04)' : 'rgba(255,255,255,0.6)',
+                            border: isActive ? '1.5px solid #8C4F1A' : isAdjacent ? '1px dashed rgba(140, 79, 26, 0.4)' : '1px solid rgba(220, 208, 195, 0.4)',
+                            borderRadius: '10px',
+                            padding: '6px 10px',
+                            opacity: !isPlaying ? 0.6 : 1,
+                            transition: 'all 0.2s'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <Dna size={11} color={isDone ? '#47682C' : isActive ? '#8C4F1A' : '#A09080'} />
+                            <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4A3427' }}>
+                              {node.label}
+                            </span>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ fontSize: 8.5, color: '#7A6A5A', fontWeight: 600 }}>
+                              Vit: <strong>{node.vitality}%</strong>
+                            </span>
+                            <span style={{
+                              fontSize: 8,
+                              fontWeight: 900,
+                              color: isDone ? '#47682C' : isActive ? '#8C4F1A' : isAdjacent ? '#8C4F1A' : '#A09080',
+                              background: isDone ? '#F3F6F0' : isActive ? 'rgba(140,79,26,0.08)' : isAdjacent ? 'rgba(140,79,26,0.05)' : '#FAF8F5',
+                              padding: '1px 5px',
+                              borderRadius: 99
+                            }}>
+                              {isDone ? '✓' : isActive ? '●' : '○'}
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* 6. Tracing Guideline Box */}
+                <div style={{
+                  background: 'rgba(139, 94, 52, 0.02)',
+                  border: '1px dashed rgba(139, 94, 52, 0.25)',
+                  borderRadius: '16px',
+                  padding: '12px 16px',
+                  fontSize: 12,
+                  lineHeight: 1.45,
+                  color: '#7A6A5A'
+                }}>
+                  <span style={{ fontWeight: 800, color: '#8C4F1A', display: 'block', marginBottom: 2 }}>
+                    💡 Tracing Guideline
+                  </span>
+                  Guide the active light pulses. Tapping an adjacent glowing connected node draws a structural golden bridge. Guide the pulse to the Cortex Gateway and chart-level synthesis will trigger.
+                </div>
+
+                {/* 7. Gameplay container */}
                 <div style={{
                   width: '100%',
-                  height: 380,
+                  height: 320,
                   background: '#FFFFFF',
                   border: '1px solid rgba(220, 208, 195, 0.8)',
-                  borderRadius: '28px',
+                  borderRadius: '24px',
                   boxShadow: 'inset 0 4px 18px rgba(0,0,0,0.015), 0 12px 30px rgba(139, 94, 52, 0.04)',
                   overflow: 'hidden',
                   position: 'relative'
@@ -315,15 +568,15 @@ export default function BioPathTracerPage() {
                   {/* Overlay text */}
                   <div style={{
                     position: 'absolute',
-                    top: 16,
-                    left: 20,
+                    top: 12,
+                    left: 16,
                     fontSize: '9px',
                     fontWeight: 900,
                     letterSpacing: '0.08em',
                     color: '#8C4F1A',
                     background: 'rgba(253, 250, 246, 0.8)',
                     border: '1px solid rgba(139,94,52,0.15)',
-                    padding: '4px 10px',
+                    padding: '4px 8px',
                     borderRadius: '6px',
                     zIndex: 5
                   }}>
@@ -345,8 +598,8 @@ export default function BioPathTracerPage() {
                       zIndex: 10
                     }}>
                       <div style={{
-                        width: 54,
-                        height: 54,
+                        width: 50,
+                        height: 50,
                         borderRadius: '50%',
                         background: '#8C4F1A',
                         display: 'flex',
@@ -356,7 +609,7 @@ export default function BioPathTracerPage() {
                         boxShadow: '0 8px 24px rgba(140,79,26,0.22)',
                         cursor: 'pointer'
                       }} onClick={handleTogglePlay}>
-                        <Activity size={22} color="#FFF" />
+                        <Activity size={20} color="#FFF" />
                       </div>
                       <span style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8C4F1A' }}>
                         Initialize Alignment Grid
@@ -365,14 +618,13 @@ export default function BioPathTracerPage() {
                   )}
 
                   {/* Crystalline Biological Layered SVG */}
-                  <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '15px', boxSizing: 'border-box' }}>
+                  <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '10px', boxSizing: 'border-box' }}>
                     
                     {/* Intricate background crystalline matrix guides representing secondary filaments */}
                     <g opacity="0.15">
                       <polygon points="50,10 20,80 80,80" fill="none" stroke="#8C4F1A" strokeWidth="0.35" />
                       <polygon points="50,90 15,32 85,32" fill="none" stroke="#8C4F1A" strokeWidth="0.35" />
                       <circle cx="50" cy="50" r="40" fill="none" stroke="#8C4F1A" strokeWidth="0.25" strokeDasharray="1, 3" />
-                      <circle cx="50" cy="50" r="25" fill="none" stroke="#8C4F1A" strokeWidth="0.2" strokeDasharray="2, 2" />
                     </g>
 
                     {/* Complex dynamic light filaments */}
@@ -484,300 +736,40 @@ export default function BioPathTracerPage() {
                   {/* Feedback status overlay bar */}
                   <div style={{
                     position: 'absolute',
-                    bottom: 16,
+                    bottom: 12,
                     left: '50%',
                     transform: 'translateX(-50%)',
                     background: '#FFFFFF',
                     border: '1px solid rgba(139,94,52,0.18)',
-                    padding: '5px 14px',
-                    borderRadius: '12px',
-                    fontSize: '10.5px',
+                    padding: '4px 10px',
+                    borderRadius: '10px',
+                    fontSize: '9.5px',
                     fontWeight: 900,
                     color: '#8C4F1A',
                     boxShadow: '0 4px 14px rgba(139,94,52,0.06)',
                     pointerEvents: 'none',
                     letterSpacing: '0.04em',
-                    textTransform: 'uppercase'
+                    textTransform: 'uppercase',
+                    whiteSpace: 'nowrap'
                   }}>
                     {feedbackText}
                   </div>
                 </div>
 
-                {/* 3D-Stylized Progress Bar Section */}
-                <div style={{ marginTop: 24, width: '100%' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', color: '#8C4F1A', marginBottom: 8, letterSpacing: '0.02em' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                      <Cpu size={12} /> PATHWAY CONNECTION RESTORED
-                    </span>
-                    <span>{tracedPath.length} / 12 Nodes Traced</span>
-                  </div>
-                  
-                  {/* 3D Styled Progress Track */}
-                  <div style={{ 
-                    height: 14, 
-                    background: 'rgba(235, 224, 214, 0.7)', 
-                    borderRadius: 99, 
-                    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1), 0 1px 1px #FFF',
-                    padding: '2px', 
-                    boxSizing: 'border-box',
-                    overflow: 'hidden'
-                  }}>
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(tracedPath.length / 12) * 100}%` }}
-                      style={{ 
-                        height: '100%', 
-                        background: 'linear-gradient(180deg, #EBD5C2 0%, #8C4F1A 100%)', 
-                        borderRadius: 99,
-                        boxShadow: '0 2px 4px rgba(140, 79, 26, 0.25), inset 0 1px 1px rgba(255,255,255,0.4)',
-                        position: 'relative'
-                      }}
-                    >
-                      <div style={{
-                        position: 'absolute',
-                        inset: '0 0 50% 0',
-                        background: 'rgba(255,255,255,0.15)',
-                        borderRadius: 99
-                      }} />
-                    </motion.div>
-                  </div>
-                </div>
-
-                {/* Sound settings */}
-                <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <button
-                    onClick={() => {
-                      const nextSound = !soundEnabled
-                      setSoundEnabled(nextSound)
-                      if (nextSound) {
-                        initAudio()
-                        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-                          audioContextRef.current.resume()
-                        }
-                        playMarimbaNode(0)
-                      }
-                    }}
-                    style={{
-                      border: 'none',
-                      background: 'none',
-                      padding: 6,
-                      cursor: 'pointer',
-                      color: soundEnabled ? '#8C4F1A' : '#A09080',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6
-                    }}
-                  >
-                    {soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-                    <span style={{ fontSize: 11, fontWeight: 700 }}>Marimba Synth Feed</span>
-                  </button>
-
-                  <span style={{ fontSize: 9.5, fontWeight: 900, color: '#A09080', letterSpacing: '0.04em' }}>
-                    SOLFEGIO TRANSFORM CORE: 432Hz/528Hz
-                  </span>
-                </div>
-
-              </div>
-
-              {/* RIGHT SIDE: Densely Packed Academic Info & Real-Time Stats */}
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.6)', paddingLeft: 36 }} className="gameplay-settings-col">
-                <div>
-                  
-                  {/* Title & Brand Intro */}
-                  <div style={{ marginBottom: 20 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                      <div style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                        background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
-                        borderRadius: 99, padding: '4px 12px'
-                      }}>
-                        <Sparkles size={11} color="#8B5E34" />
-                        <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                          fine-motor tracing
-                        </span>
-                      </div>
-
-                      {/* Entry Code Box */}
-                      <span style={{ fontSize: 10.5, fontWeight: 900, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', border: '1.5px dashed rgba(140, 79, 26, 0.3)', padding: '4px 12px', borderRadius: '8px', fontFamily: 'Outfit' }}>
-                        Entry Code: ₹20 ENTRY CODE
-                      </span>
-                    </div>
-
-                    <h2 style={{ margin: '0 0 8px', fontSize: '28px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
-                      Bio-Path Tracer
-                    </h2>
-                    
-                    <p style={{ margin: '0 0 8px', fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.5, fontWeight: 500 }}>
-                      Embark on a therapeutic geometric alignment. Trace the connected neural pathway branch nodes in sequence starting from the Receptor Core to the Cortex Gateway. Restoring the link triggers ₹10 in hospital bill support.
-                    </p>
-
-                    {/* Deep-tier expanded sub-paragraph */}
-                    <p style={{ margin: 0, fontSize: '11.5px', color: '#8C4F1A', lineHeight: 1.5, fontWeight: 600, paddingLeft: 10, borderLeft: '2px solid #8C4F1A', fontStyle: 'italic' }}>
-                      Each precise trajectory completed pools deep-tier Oncology Treatment Asset Credits directly from our clinical brand partners, automatically updating Janamithra's real-time care chart with critical oncology fund allocations.
-                    </p>
-                  </div>
-
-                  {/* HEAVILY DETAILED ACTIVE CELL PATHWAY STATUS - Scrollable custom height container */}
-                  <div style={{ marginBottom: 24 }}>
-                    <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A' }}>
-                      Active Cell Pathway Status
-                    </h4>
-                    
-                    <div style={{ 
-                      display: 'flex', 
-                      flexDirection: 'column', 
-                      gap: 6,
-                      maxHeight: '190px',
-                      overflowY: 'auto',
-                      paddingRight: '6px',
-                      border: '1px solid rgba(220, 208, 195, 0.3)',
-                      borderRadius: '16px',
-                      padding: '8px',
-                      background: 'rgba(253, 250, 246, 0.4)'
-                    }} className="clinical-scroll-container">
-                      {PATHWAY_NODES.map((node) => {
-                        const isDone = tracedPath.includes(node.id)
-                        const isActive = activeNode === node.id && isPlaying
-                        const isAdjacent = isPlaying && PATHWAY_NODES[activeNode].connectsTo.includes(node.id)
-
-                        return (
-                          <div
-                            key={node.id}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              background: isActive ? '#FFFDFB' : isAdjacent ? 'rgba(140, 79, 26, 0.04)' : 'rgba(255,255,255,0.6)',
-                              border: isActive ? '1.5px solid #8C4F1A' : isAdjacent ? '1px dashed rgba(140, 79, 26, 0.4)' : '1px solid rgba(220, 208, 195, 0.4)',
-                              borderRadius: '10px',
-                              padding: '6px 10px',
-                              opacity: !isPlaying ? 0.6 : 1,
-                              transition: 'all 0.2s'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                              <Dna size={11} color={isDone ? '#47682C' : isActive ? '#8C4F1A' : '#A09080'} />
-                              <span style={{ fontSize: 11, fontWeight: 700, color: '#4A3427' }}>
-                                {node.label} <span style={{ fontSize: 8, color: '#A09080', fontWeight: 600 }}>({node.code})</span>
-                              </span>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                              <span style={{ fontSize: 9, color: '#7A6A5A', fontWeight: 600 }}>
-                                Vit: <strong>{node.vitality}%</strong>
-                              </span>
-                              <span style={{ fontSize: 9, color: '#7A6A5A', fontWeight: 600 }}>
-                                Lk: <strong>{node.integrity}%</strong>
-                              </span>
-                              <span style={{
-                                fontSize: 8.5,
-                                fontWeight: 900,
-                                color: isDone ? '#47682C' : isActive ? '#8C4F1A' : isAdjacent ? '#8C4F1A' : '#A09080',
-                                background: isDone ? '#F3F6F0' : isActive ? 'rgba(140,79,26,0.08)' : isAdjacent ? 'rgba(140,79,26,0.05)' : '#FAF8F5',
-                                padding: '1px 6px',
-                                borderRadius: 99
-                              }}>
-                                {isDone ? '✓ ALIGNED' : isActive ? '● ACTIVE' : isAdjacent ? '○ READY' : '○ STABLE'}
-                              </span>
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-
-                  {/* NEW MAJOR SECTION: INTEGRATED CHART & CREDIT POOL */}
-                  <div style={{
-                    background: 'rgba(139, 94, 52, 0.03)',
-                    border: '1.5px solid rgba(139, 94, 52, 0.12)',
-                    borderRadius: '24px',
-                    padding: '18px 22px',
-                    marginBottom: 24
-                  }}>
-                    <h4 style={{ margin: '0 0 12px', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A', display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <Target size={14} /> INTEGRATED CHART & CREDIT POOL
-                    </h4>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      
-                      {/* Metric 1 */}
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
-                          <span>Janamithra's Chart Status (Oncology)</span>
-                          <span style={{ color: '#47682C', fontWeight: 900 }}>{Math.floor(chartProgress)}% Vitality Match</span>
-                        </div>
-                        <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
-                          <motion.div 
-                            animate={{ width: `${chartProgress}%` }}
-                            style={{ height: '100%', background: '#47682C', borderRadius: 99 }} 
-                          />
-                        </div>
-                      </div>
-
-                      {/* Metric 2 */}
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
-                          <span>Partner Credit Pool</span>
-                          <span style={{ fontWeight: 800 }}>₹{creditPool.toLocaleString()} / ₹20,000</span>
-                        </div>
-                        <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
-                          <motion.div 
-                            animate={{ width: `${(creditPool / 20000) * 100}%` }}
-                            style={{ height: '100%', background: '#8C4F1A', borderRadius: 99 }} 
-                          />
-                        </div>
-                      </div>
-
-                      {/* Metric 3 */}
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                            <Zap size={11} color="#D4AF37" /> Next Medical Asset Unlock
-                          </span>
-                          <span style={{ fontWeight: 800 }}>25% Complete</span>
-                        </div>
-                        <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: '25%', background: '#D4AF37', borderRadius: 99 }} />
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  {/* Tracing Guideline Box */}
-                  <div style={{
-                    background: 'rgba(139, 94, 52, 0.02)',
-                    border: '1px dashed rgba(139, 94, 52, 0.25)',
-                    borderRadius: '20px',
-                    padding: '16px 20px',
-                    marginBottom: 24,
-                    fontSize: 12.5,
-                    lineHeight: 1.5,
-                    color: '#7A6A5A'
-                  }}>
-                    <span style={{ fontWeight: 800, color: '#8C4F1A', display: 'block', marginBottom: 4 }}>
-                      💡 Tracing Guideline
-                    </span>
-                    Guide the active light pulses. Tapping an adjacent glowing connected node draws a structural golden bridge. Avoid trace deviations to maximize asset credits. Guide the pulse to the Cortex Gateway and chart-level synthesis will trigger.
-                  </div>
-
-                </div>
-
-                {/* Play Controls */}
-                <div style={{ display: 'flex', gap: 14 }}>
+                {/* 8. Buttons */}
+                <div style={{ display: 'flex', gap: 12, width: '100%', boxSizing: 'border-box' }}>
                   <motion.button
                     onClick={handleTogglePlay}
-                    whileHover={{ scale: 1.02, boxShadow: '0 8px 20px rgba(140, 79, 26, 0.16)' }}
                     whileTap={{ scale: 0.98 }}
                     style={{
                       flex: 2,
-                      padding: '15px',
+                      padding: '14px',
                       borderRadius: '16px',
                       border: 'none',
                       background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                       color: '#FFF',
                       fontWeight: 800,
-                      fontSize: '14.5px',
+                      fontSize: '14px',
                       fontFamily: 'Outfit',
                       cursor: 'pointer',
                       display: 'flex',
@@ -789,22 +781,21 @@ export default function BioPathTracerPage() {
                   >
                     {isPlaying ? (
                       <>
-                        <Pause size={15} /> Pause Tracer
+                        <Pause size={15} /> Pause
                       </>
                     ) : (
                       <>
-                        <Play size={15} /> {tracedPath.length > 1 ? 'Resume Tracing' : 'Start Tracing'}
+                        <Play size={15} /> {tracedPath.length > 1 ? 'Resume' : 'Start'}
                       </>
                     )}
                   </motion.button>
 
                   <motion.button
                     onClick={handleReset}
-                    whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     style={{
                       flex: 1,
-                      padding: '15px',
+                      padding: '14px',
                       borderRadius: '16px',
                       border: '1px solid rgba(220, 208, 195, 0.8)',
                       background: '#FFF',
@@ -824,7 +815,614 @@ export default function BioPathTracerPage() {
 
               </div>
 
+              {/* VERY BOTTOM PANEL: PARTNER ACKNOWLEDGEMENT */}
+              <div style={{
+                marginTop: 30,
+                paddingTop: 20,
+                borderTop: '1px solid rgba(225, 215, 203, 0.8)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 16,
+                textAlign: 'center'
+              }}>
+                <div>
+                  <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A', display: 'block', marginBottom: 2 }}>
+                    PARTNER ACKNOWLEDGEMENT
+                  </span>
+                  <span style={{ fontSize: 11, color: '#7A6A5A', fontWeight: 500 }}>
+                    Janamithra's treatment facilitated by partner contributions.
+                  </span>
+                </div>
+
+                {/* Fictitious elegant partner logos */}
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    background: 'rgba(235, 224, 214, 0.25)',
+                    border: '1px solid rgba(220, 208, 195, 0.5)',
+                    padding: '5px 12px',
+                    borderRadius: '10px'
+                  }}>
+                    <ShieldCheck size={12} color="#8C4F1A" />
+                    <span style={{ fontSize: 10, fontWeight: 800, color: '#4A3427', fontFamily: 'Outfit' }}>MedCorp BioTech</span>
+                  </div>
+                  
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    background: 'rgba(235, 224, 214, 0.25)',
+                    border: '1px solid rgba(220, 208, 195, 0.5)',
+                    padding: '5px 12px',
+                    borderRadius: '10px'
+                  }}>
+                    <BadgeIcon size={12} color="#8C4F1A" />
+                    <span style={{ fontSize: 10, fontWeight: 800, color: '#4A3427', fontFamily: 'Outfit' }}>Global Health Alliance</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
+          </div>
+        ) : (
+          <div style={{ maxWidth: 1100, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
+            
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.88)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(225, 215, 203, 0.9)',
+              borderRadius: '40px',
+              boxShadow: '0 25px 60px rgba(122, 78, 43, 0.09)',
+              overflow: 'hidden',
+              padding: '48px 36px'
+            }}>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '50fr 50fr', gap: 44 }} className="gameplay-split-grid">
+                
+                {/* LEFT SIDE: KINETIC SYNTHESIS Visualizer & 3D Progress */}
+                <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                  
+                  {/* Academic Header Info */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8C4F1A', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                      [ SYSTEM MONITOR: RESTORATION DECK ]
+                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 8.5, fontWeight: 900, color: '#47682C', background: '#F3F6F0', padding: '2px 8px', borderRadius: 99 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#47682C' }} /> ONLINE FEED
+                    </div>
+                  </div>
+
+                  {/* Elaborate Biological Pathway SVG Grid */}
+                  <div style={{
+                    width: '100%',
+                    height: 380,
+                    background: '#FFFFFF',
+                    border: '1px solid rgba(220, 208, 195, 0.8)',
+                    borderRadius: '28px',
+                    boxShadow: 'inset 0 4px 18px rgba(0,0,0,0.015), 0 12px 30px rgba(139, 94, 52, 0.04)',
+                    overflow: 'hidden',
+                    position: 'relative'
+                  }}>
+                    
+                    {/* Overlay text */}
+                    <div style={{
+                      position: 'absolute',
+                      top: 16,
+                      left: 20,
+                      fontSize: '9px',
+                      fontWeight: 900,
+                      letterSpacing: '0.08em',
+                      color: '#8C4F1A',
+                      background: 'rgba(253, 250, 246, 0.8)',
+                      border: '1px solid rgba(139,94,52,0.15)',
+                      padding: '4px 10px',
+                      borderRadius: '6px',
+                      zIndex: 5
+                    }}>
+                      KINETIC SYNTHESIS ENGINE - LIVE FEED
+                    </div>
+
+                    {/* Play lock state */}
+                    {!isPlaying && !sessionCompleted && (
+                      <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'rgba(253, 250, 246, 0.75)',
+                        backdropFilter: 'blur(4px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 12,
+                        zIndex: 10
+                      }}>
+                        <div style={{
+                          width: 54,
+                          height: 54,
+                          borderRadius: '50%',
+                          background: '#8C4F1A',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#fff',
+                          boxShadow: '0 8px 24px rgba(140,79,26,0.22)',
+                          cursor: 'pointer'
+                        }} onClick={handleTogglePlay}>
+                          <Activity size={22} color="#FFF" />
+                        </div>
+                        <span style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8C4F1A' }}>
+                          Initialize Alignment Grid
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Crystalline Biological Layered SVG */}
+                    <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', padding: '15px', boxSizing: 'border-box' }}>
+                      
+                      {/* Intricate background crystalline matrix guides representing secondary filaments */}
+                      <g opacity="0.15">
+                        <polygon points="50,10 20,80 80,80" fill="none" stroke="#8C4F1A" strokeWidth="0.35" />
+                        <polygon points="50,90 15,32 85,32" fill="none" stroke="#8C4F1A" strokeWidth="0.35" />
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="#8C4F1A" strokeWidth="0.25" strokeDasharray="1, 3" />
+                        <circle cx="50" cy="50" r="25" fill="none" stroke="#8C4F1A" strokeWidth="0.2" strokeDasharray="2, 2" />
+                      </g>
+
+                      {/* Complex dynamic light filaments */}
+                      {PATHWAY_NODES.map(node => 
+                        node.connectsTo.map(targetId => {
+                          const targetNode = PATHWAY_NODES[targetId]
+                          if (node.id > targetId) return null
+                          
+                          const isTraced = 
+                            tracedPath.includes(node.id) && 
+                            tracedPath.includes(targetId) &&
+                            Math.abs(tracedPath.indexOf(node.id) - tracedPath.indexOf(targetId)) === 1
+
+                          return (
+                            <g key={`${node.id}-${targetId}`}>
+                              {/* Softer background trace path */}
+                              <line
+                                x1={node.x}
+                                y1={node.y}
+                                x2={targetNode.x}
+                                y2={targetNode.y}
+                                stroke={isTraced ? 'rgba(140, 79, 26, 0.15)' : 'rgba(220, 208, 195, 0.25)'}
+                                strokeWidth={3}
+                              />
+                              {/* Intricate aligned light trace filament */}
+                              <motion.line
+                                x1={node.x}
+                                y1={node.y}
+                                x2={targetNode.x}
+                                y2={targetNode.y}
+                                stroke={isTraced ? '#8C4F1A' : 'rgba(220, 208, 195, 0.45)'}
+                                strokeWidth={isTraced ? 2.2 : 0.9}
+                                animate={isTraced ? { strokeDashoffset: [0, -10] } : {}}
+                                transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+                                strokeDasharray={isTraced ? "4, 4" : "none"}
+                              />
+                            </g>
+                          )
+                        })
+                      )}
+
+                      {/* Crystalline cell structure spheres */}
+                      {PATHWAY_NODES.map(node => {
+                        const isActive = activeNode === node.id && isPlaying
+                        const isTraced = tracedPath.includes(node.id)
+                        const isClickable = isPlaying && 
+                          PATHWAY_NODES[activeNode].connectsTo.includes(node.id) &&
+                          !tracedPath.includes(node.id)
+
+                        return (
+                          <g key={node.id} style={{ cursor: isClickable ? 'pointer' : 'default' }} onClick={() => handleNodeClick(node.id)}>
+                            
+                            {/* Concentric layered glowing circles */}
+                            {isActive && (
+                              <>
+                                <motion.circle
+                                  cx={node.x}
+                                  cy={node.y}
+                                  r={8}
+                                  fill="none"
+                                  stroke="#8C4F1A"
+                                  strokeWidth={0.5}
+                                  animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.6, 0.2] }}
+                                  transition={{ duration: 2, repeat: Infinity }}
+                                />
+                                <circle cx={node.x} cy={node.y} r={5.5} fill="none" stroke="rgba(140, 79, 26, 0.2)" strokeWidth={0.5} />
+                              </>
+                            )}
+
+                            {/* Outer crystalline cell frame */}
+                            <circle
+                              cx={node.x}
+                              cy={node.y}
+                              r={isTraced ? 5.5 : 4.2}
+                              fill={isActive ? '#8C4F1A' : isTraced ? '#5C3D24' : '#FFFFFF'}
+                              stroke={isClickable ? '#8C4F1A' : isTraced ? '#5C3D24' : '#C5B4A6'}
+                              strokeWidth={isClickable ? 1.5 : 1.0}
+                            />
+
+                            {/* Center core */}
+                            <circle
+                              cx={node.x}
+                              cy={node.y}
+                              r={1.5}
+                              fill={isActive || isTraced ? '#FFFDF8' : '#8C4F1A'}
+                            />
+
+                            {/* Target Cortex Gateway specialized outer orbit */}
+                            {node.id === 11 && (
+                              <circle cx={node.x} cy={node.y} r={8} fill="none" stroke="rgba(140, 79, 26, 0.25)" strokeWidth={0.8} strokeDasharray="3, 3" />
+                            )}
+                          </g>
+                        )
+                      })}
+
+                      {/* Glowing active path pulse indicator */}
+                      {isPlaying && (
+                        <motion.circle
+                          cx={PATHWAY_NODES[activeNode].x}
+                          cy={PATHWAY_NODES[activeNode].y}
+                          r={2.2}
+                          fill="#D4AF37"
+                          animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
+                          transition={{ duration: 1.2, repeat: Infinity }}
+                        />
+                      )}
+                    </svg>
+
+                    {/* Feedback status overlay bar */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: 16,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      background: '#FFFFFF',
+                      border: '1px solid rgba(139,94,52,0.18)',
+                      padding: '5px 14px',
+                      borderRadius: '12px',
+                      fontSize: '10.5px',
+                      fontWeight: 900,
+                      color: '#8C4F1A',
+                      boxShadow: '0 4px 14px rgba(139,94,52,0.06)',
+                      pointerEvents: 'none',
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase'
+                    }}>
+                      {feedbackText}
+                    </div>
+                  </div>
+
+                  {/* 3D-Stylized Progress Bar Section */}
+                  <div style={{ marginTop: 24, width: '100%' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', color: '#8C4F1A', marginBottom: 8, letterSpacing: '0.02em' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        <Cpu size={12} /> PATHWAY CONNECTION RESTORED
+                      </span>
+                      <span>{tracedPath.length} / 12 Nodes Traced</span>
+                    </div>
+                    
+                    {/* 3D Styled Progress Track */}
+                    <div style={{ 
+                      height: 14, 
+                      background: 'rgba(235, 224, 214, 0.7)', 
+                      borderRadius: 99, 
+                      boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1), 0 1px 1px #FFF',
+                      padding: '2px', 
+                      boxSizing: 'border-box',
+                      overflow: 'hidden'
+                    }}>
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(tracedPath.length / 12) * 100}%` }}
+                        style={{ 
+                          height: '100%', 
+                          background: 'linear-gradient(180deg, #EBD5C2 0%, #8C4F1A 100%)', 
+                          borderRadius: 99,
+                          boxShadow: '0 2px 4px rgba(140, 79, 26, 0.25), inset 0 1px 1px rgba(255,255,255,0.4)',
+                          position: 'relative'
+                        }}
+                      >
+                        <div style={{
+                          position: 'absolute',
+                          inset: '0 0 50% 0',
+                          background: 'rgba(255,255,255,0.15)',
+                          borderRadius: 99
+                        }} />
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  {/* Sound settings */}
+                  <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <button
+                      onClick={() => {
+                        const nextSound = !soundEnabled
+                        setSoundEnabled(nextSound)
+                        if (nextSound) {
+                          initAudio()
+                          if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                            audioContextRef.current.resume()
+                          }
+                          playMarimbaNode(0)
+                        }
+                      }}
+                      style={{
+                        border: 'none',
+                        background: 'none',
+                        padding: 6,
+                        cursor: 'pointer',
+                        color: soundEnabled ? '#8C4F1A' : '#A09080',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                    >
+                      {soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+                      <span style={{ fontSize: 11, fontWeight: 700 }}>Marimba Synth Feed</span>
+                    </button>
+
+                    <span style={{ fontSize: 9.5, fontWeight: 900, color: '#A09080', letterSpacing: '0.04em' }}>
+                      SOLFEGIO TRANSFORM CORE: 432Hz/528Hz
+                    </span>
+                  </div>
+
+                </div>
+
+                {/* RIGHT SIDE: Densely Packed Academic Info & Real-Time Stats */}
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.6)', paddingLeft: 36 }} className="gameplay-settings-col">
+                  <div>
+                    
+                    {/* Title & Brand Intro */}
+                    <div style={{ marginBottom: 20 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                        <div style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                          background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                          borderRadius: 99, padding: '4px 12px'
+                        }}>
+                          <Sparkles size={11} color="#8B5E34" />
+                          <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                            fine-motor tracing
+                          </span>
+                        </div>
+
+                        {/* Entry Code Box */}
+                        <span style={{ fontSize: 10.5, fontWeight: 900, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', border: '1.5px dashed rgba(140, 79, 26, 0.3)', padding: '4px 12px', borderRadius: '8px', fontFamily: 'Outfit' }}>
+                          Entry Code: ₹20 ENTRY CODE
+                        </span>
+                      </div>
+
+                      <h2 style={{ margin: '0 0 8px', fontSize: '28px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
+                        Bio-Path Tracer
+                      </h2>
+                      
+                      <p style={{ margin: '0 0 8px', fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.5, fontWeight: 500 }}>
+                        Embark on a therapeutic geometric alignment. Trace the connected neural pathway branch nodes in sequence starting from the Receptor Core to the Cortex Gateway. Restoring the link triggers ₹10 in hospital bill support.
+                      </p>
+
+                      {/* Deep-tier expanded sub-paragraph */}
+                      <p style={{ margin: 0, fontSize: '11.5px', color: '#8C4F1A', lineHeight: 1.5, fontWeight: 600, paddingLeft: 10, borderLeft: '2px solid #8C4F1A', fontStyle: 'italic' }}>
+                        Each precise trajectory completed pools deep-tier Oncology Treatment Asset Credits directly from our clinical brand partners, automatically updating Janamithra's real-time care chart with critical oncology fund allocations.
+                      </p>
+                    </div>
+
+                    {/* HEAVILY DETAILED ACTIVE CELL PATHWAY STATUS - Scrollable custom height container */}
+                    <div style={{ marginBottom: 24 }}>
+                      <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A' }}>
+                        Active Cell Pathway Status
+                      </h4>
+                      
+                      <div style={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        gap: 6,
+                        maxHeight: '190px',
+                        overflowY: 'auto',
+                        paddingRight: '6px',
+                        border: '1px solid rgba(220, 208, 195, 0.3)',
+                        borderRadius: '16px',
+                        padding: '8px',
+                        background: 'rgba(253, 250, 246, 0.4)'
+                      }} className="clinical-scroll-container">
+                        {PATHWAY_NODES.map((node) => {
+                          const isDone = tracedPath.includes(node.id)
+                          const isActive = activeNode === node.id && isPlaying
+                          const isAdjacent = isPlaying && PATHWAY_NODES[activeNode].connectsTo.includes(node.id)
+
+                          return (
+                            <div
+                              key={node.id}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContainer: 'space-between',
+                                justifyContent: 'space-between',
+                                background: isActive ? '#FFFDFB' : isAdjacent ? 'rgba(140, 79, 26, 0.04)' : 'rgba(255,255,255,0.6)',
+                                border: isActive ? '1.5px solid #8C4F1A' : isAdjacent ? '1px dashed rgba(140, 79, 26, 0.4)' : '1px solid rgba(220, 208, 195, 0.4)',
+                                borderRadius: '10px',
+                                padding: '6px 10px',
+                                opacity: !isPlaying ? 0.6 : 1,
+                                transition: 'all 0.2s'
+                              }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <Dna size={11} color={isDone ? '#47682C' : isActive ? '#8C4F1A' : '#A09080'} />
+                                <span style={{ fontSize: 11, fontWeight: 700, color: '#4A3427' }}>
+                                  {node.label} <span style={{ fontSize: 8, color: '#A09080', fontWeight: 600 }}>({node.code})</span>
+                                </span>
+                              </div>
+
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <span style={{ fontSize: 9, color: '#7A6A5A', fontWeight: 600 }}>
+                                  Vit: <strong>{node.vitality}%</strong>
+                                </span>
+                                <span style={{ fontSize: 9, color: '#7A6A5A', fontWeight: 600 }}>
+                                  Lk: <strong>{node.integrity}%</strong>
+                                </span>
+                                <span style={{
+                                  fontSize: 8.5,
+                                  fontWeight: 900,
+                                  color: isDone ? '#47682C' : isActive ? '#8C4F1A' : isAdjacent ? '#8C4F1A' : '#A09080',
+                                  background: isDone ? '#F3F6F0' : isActive ? 'rgba(140,79,26,0.08)' : isAdjacent ? 'rgba(140,79,26,0.05)' : '#FAF8F5',
+                                  padding: '1px 6px',
+                                  borderRadius: 99
+                                }}>
+                                  {isDone ? '✓ ALIGNED' : isActive ? '● ACTIVE' : isAdjacent ? '○ READY' : '○ STABLE'}
+                                </span>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    {/* NEW MAJOR SECTION: INTEGRATED CHART & CREDIT POOL */}
+                    <div style={{
+                      background: 'rgba(139, 94, 52, 0.03)',
+                      border: '1.5px solid rgba(139, 94, 52, 0.12)',
+                      borderRadius: '24px',
+                      padding: '18px 22px',
+                      marginBottom: 24
+                    }}>
+                      <h4 style={{ margin: '0 0 12px', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#8C4F1A', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <Target size={14} /> INTEGRATED CHART & CREDIT POOL
+                      </h4>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        
+                        {/* Metric 1 */}
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
+                            <span>Janamithra's Chart Status (Oncology)</span>
+                            <span style={{ color: '#47682C', fontWeight: 900 }}>{Math.floor(chartProgress)}% Vitality Match</span>
+                          </div>
+                          <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
+                            <motion.div 
+                              animate={{ width: `${chartProgress}%` }}
+                              style={{ height: '100%', background: '#47682C', borderRadius: 99 }} 
+                            />
+                          </div>
+                        </div>
+
+                        {/* Metric 2 */}
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
+                            <span>Partner Credit Pool</span>
+                            <span style={{ fontWeight: 800 }}>₹{creditPool.toLocaleString()} / ₹20,000</span>
+                          </div>
+                          <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
+                            <motion.div 
+                              animate={{ width: `${(creditPool / 20000) * 100}%` }}
+                              style={{ height: '100%', background: '#8C4F1A', borderRadius: 99 }} 
+                            />
+                          </div>
+                        </div>
+
+                        {/* Metric 3 */}
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, fontWeight: 700, color: '#4A3427', marginBottom: 4 }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                              <Zap size={11} color="#D4AF37" /> Next Medical Asset Unlock
+                            </span>
+                            <span style={{ fontWeight: 800 }}>25% Complete</span>
+                          </div>
+                          <div style={{ height: 6, background: 'rgba(235,224,214,0.5)', borderRadius: 99, overflow: 'hidden' }}>
+                            <div style={{ height: '100%', width: '25%', background: '#D4AF37', borderRadius: 99 }} />
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    {/* Tracing Guideline Box */}
+                    <div style={{
+                      background: 'rgba(139, 94, 52, 0.02)',
+                      border: '1px dashed rgba(139, 94, 52, 0.25)',
+                      borderRadius: '20px',
+                      padding: '16px 20px',
+                      marginBottom: 24,
+                      fontSize: 12.5,
+                      lineHeight: 1.5,
+                      color: '#7A6A5A'
+                    }}>
+                      <span style={{ fontWeight: 800, color: '#8C4F1A', display: 'block', marginBottom: 4 }}>
+                        💡 Tracing Guideline
+                      </span>
+                      Guide the active light pulses. Tapping an adjacent glowing connected node draws a structural golden bridge. Avoid trace deviations to maximize asset credits. Guide the pulse to the Cortex Gateway and chart-level synthesis will trigger.
+                    </div>
+
+                  </div>
+
+                  {/* Play Controls */}
+                  <div style={{ display: 'flex', gap: 14 }}>
+                    <motion.button
+                      onClick={handleTogglePlay}
+                      whileHover={{ scale: 1.02, boxShadow: '0 8px 20px rgba(140, 79, 26, 0.16)' }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        flex: 2,
+                        padding: '15px',
+                        borderRadius: '16px',
+                        border: 'none',
+                        background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                        color: '#FFF',
+                        fontWeight: 800,
+                        fontSize: '14.5px',
+                        fontFamily: 'Outfit',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        boxShadow: '0 6px 16px rgba(140, 79, 26, 0.12)'
+                      }}
+                    >
+                      {isPlaying ? (
+                        <>
+                          <Pause size={15} /> Pause Tracer
+                        </>
+                      ) : (
+                        <>
+                          <Play size={15} /> {tracedPath.length > 1 ? 'Resume Tracing' : 'Start Tracing'}
+                        </>
+                      )}
+                    </motion.button>
+
+                    <motion.button
+                      onClick={handleReset}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        flex: 1,
+                        padding: '15px',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(220, 208, 195, 0.8)',
+                        background: '#FFF',
+                        color: '#7A6A5A',
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6
+                      }}
+                    >
+                      <RotateCcw size={14} /> Reset
+                    </motion.button>
+                  </div>
+
+                </div>
+
+              </div>
+
+
 
             {/* VERY BOTTOM PANEL: PARTNER ACKNOWLEDGEMENT */}
             <div style={{
@@ -879,6 +1477,7 @@ export default function BioPathTracerPage() {
           </div>
 
         </div>
+      )}
 
         {/* ────────────────── SUCCESS MODAL OVERLAY ────────────────── */}
         <AnimatePresence>

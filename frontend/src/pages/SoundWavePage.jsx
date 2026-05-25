@@ -56,6 +56,16 @@ export default function SoundWavePage() {
   const [feedbackText, setFeedbackText] = useState('')
   const [ripples, setRipples] = useState([])
 
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const currentSoundscape = SOUNDSCAPES[soundscapeKey]
 
   // Canvas Refs
@@ -291,7 +301,7 @@ export default function SoundWavePage() {
       window.removeEventListener('resize', resizeCanvas)
       cancelAnimationFrame(animRef.current)
     }
-  }, [isPlaying, ripples])
+  }, [isPlaying, ripples, isMobile])
 
   // Tap handler to capture active notes
   const handleTapWorkspace = (e) => {
@@ -423,11 +433,11 @@ export default function SoundWavePage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#3D2B1A', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#3D2B1A', position: 'relative', overflowX: 'hidden' }}>
       <GlobalBackground />
       <Navbar />
 
-      <main style={{ flex: 1, position: 'relative', zIndex: 1, width: '100%', paddingBottom: 100 }}>
+      <main style={{ flex: 1, position: 'relative', zIndex: 1, width: '100%', paddingBottom: 100, overflowX: 'hidden' }}>
         
         {/* Header Block with Back Link */}
         <div style={{ maxWidth: 1200, margin: '40px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
@@ -455,31 +465,53 @@ export default function SoundWavePage() {
         </div>
 
         {/* Outer Premium Glass Card for Game Area */}
-        <div style={{ maxWidth: 1000, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
-          
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.85)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(225, 215, 203, 0.8)',
-            borderRadius: '40px',
-            boxShadow: '0 20px 50px rgba(122, 78, 43, 0.08)',
-            overflow: 'hidden',
-            padding: '48px 32px'
-          }}>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '55fr 45fr', gap: 40 }} className="gameplay-split-grid">
-              
-              {/* Left Column: Interactive Canvas & Visuals */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+        {isMobile ? (
+          <div style={{ maxWidth: '100%', margin: '20px auto 0', padding: '0 16px', boxSizing: 'border-box', overflowX: 'hidden' }}>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.85)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(225, 215, 203, 0.8)',
+              borderRadius: '24px',
+              boxShadow: '0 15px 35px rgba(122, 78, 43, 0.06)',
+              overflow: 'hidden',
+              padding: '24px 16px',
+              boxSizing: 'border-box'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 
-                {/* Floating Heart indicator */}
+                {/* 1. Header (Title & Brand Intro) */}
+                <div style={{ width: '100%' }}>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                    borderRadius: 99, padding: '4px 12px', marginBottom: 12
+                  }}>
+                    <Sparkles size={11} color="#8B5E34" />
+                    <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                      Soundscape healing
+                    </span>
+                  </div>
+
+                  <h2 style={{ margin: '0 0 8px', fontSize: '22px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+                    Sound Wave Serenade
+                  </h2>
+                  
+                  <p style={{ margin: 0, fontSize: '13px', color: '#7A6A5A', lineHeight: 1.5, fontWeight: 500 }}>
+                    Listen to soothing sound frequencies and tap the nodes when they align with the vertical Harmony Zone. Achieve a perfect harmony of 10 hits to trigger a sponsored ₹10 treatment donation.
+                  </p>
+                </div>
+
+                {/* 2. Hero/game icon (Janamithra's Recovery Badge) */}
                 <div style={{
-                  position: 'absolute',
-                  top: -10,
                   display: 'flex',
-                  flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 4
+                  gap: 12,
+                  background: 'rgba(140, 79, 26, 0.04)',
+                  border: '1px solid rgba(140, 79, 26, 0.08)',
+                  borderRadius: '16px',
+                  padding: '12px 16px',
+                  width: '100%',
+                  boxSizing: 'border-box'
                 }}>
                   <div style={{
                     width: 32,
@@ -489,23 +521,148 @@ export default function SoundWavePage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 4px 10px rgba(140, 79, 26, 0.3)'
+                    boxShadow: '0 4px 10px rgba(140, 79, 26, 0.2)',
+                    flexShrink: 0
                   }}>
                     <Heart size={14} color="#FFF" fill="#FFF" />
                   </div>
-                  <span style={{ fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8C4F1A' }}>
-                    Janamithra's Recovery
-                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#A09080' }}>
+                      Beneficiary Case
+                    </span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#4A3427' }}>
+                      Janamithra's Recovery
+                    </span>
+                  </div>
                 </div>
 
-                {/* Main Interactive Canvas Area */}
+                {/* 3. Progress card (Chime Harmony progress) */}
+                <div style={{
+                  background: '#FFFDFB',
+                  border: '1px solid rgba(220, 208, 195, 0.6)',
+                  borderRadius: '18px',
+                  padding: '16px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  boxShadow: '0 4px 12px rgba(139, 94, 52, 0.02)'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#8C4F1A', marginBottom: 8 }}>
+                    <span>Chime Harmony progress</span>
+                    <span>{score} / 10 Hits</span>
+                  </div>
+                  <div style={{ height: 8, background: 'rgba(235, 224, 214, 0.6)', borderRadius: 99, overflow: 'hidden' }}>
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(score / 10) * 100}%` }}
+                      style={{ height: '100%', background: 'linear-gradient(90deg, #EBD5C2, #8C4F1A)', borderRadius: 99 }}
+                    />
+                  </div>
+                </div>
+
+                {/* 4. Controls (Synthesizer & Streak) */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 4px' }}>
+                  <button
+                    onClick={() => {
+                      const nextSound = !soundEnabled
+                      setSoundEnabled(nextSound)
+                      if (nextSound) {
+                        initAudio()
+                        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                          audioContextRef.current.resume()
+                        }
+                        setTimeout(() => playChime(true, 0), 50)
+                      }
+                    }}
+                    style={{
+                      border: 'none',
+                      background: 'none',
+                      padding: 4,
+                      cursor: 'pointer',
+                      color: soundEnabled ? '#8C4F1A' : '#A09080',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6
+                    }}
+                  >
+                    {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                    <span style={{ fontSize: 11, fontWeight: 700 }}>Chime Synthesizer</span>
+                  </button>
+
+                  {streak > 1 && (
+                    <span style={{ fontSize: 11, fontWeight: 800, color: '#47682C', background: '#F3F6F0', padding: '3px 10px', borderRadius: 99 }}>
+                      🔥 {streak} Streak
+                    </span>
+                  )}
+                </div>
+
+                {/* 5. Theme selection */}
+                <div style={{ width: '100%' }}>
+                  <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
+                    Choose Soundscape Theme
+                  </h4>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {Object.entries(SOUNDSCAPES).map(([key, details]) => (
+                      <div
+                        key={key}
+                        onClick={() => {
+                          setSoundscapeKey(key)
+                          initAudio()
+                          if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                            audioContextRef.current.resume()
+                          }
+                          playChime(true, score)
+                        }}
+                        style={{
+                          background: soundscapeKey === key ? '#FFFDFB' : 'rgba(255,255,255,0.4)',
+                          border: soundscapeKey === key ? '1.5px solid #8C4F1A' : '1px solid rgba(220, 208, 195, 0.6)',
+                          borderRadius: '16px',
+                          padding: '12px 16px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          boxShadow: soundscapeKey === key ? '0 4px 12px rgba(139, 94, 52, 0.05)' : 'none'
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 13.5, fontWeight: 700, color: '#4A3427' }}>
+                            {details.name}
+                          </span>
+                          <span style={{ fontSize: 10, fontWeight: 800, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', padding: '2px 8px', borderRadius: 99 }}>
+                            {details.synthType}
+                          </span>
+                        </div>
+                        <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#7A6A5A', lineHeight: 1.4 }}>
+                          {details.desc}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 6. Instructions */}
+                <div style={{
+                  background: 'rgba(139, 94, 52, 0.03)',
+                  border: '1px solid rgba(139, 94, 52, 0.08)',
+                  borderRadius: '20px',
+                  padding: '16px 20px',
+                  fontSize: 12.5,
+                  lineHeight: 1.5,
+                  color: '#7A6A5A',
+                  boxSizing: 'border-box'
+                }}>
+                  <span style={{ fontWeight: 800, color: '#8C4F1A', display: 'block', marginBottom: 4 }}>
+                    💡 Gameplay Instruction
+                  </span>
+                  Tap anywhere inside the wave container when a floating circular node crosses the dashed vertical HARMONY ZONE to play a chime. Missing a node resets your active multiplier streak.
+                </div>
+
+                {/* 7. Gameplay container (Visual Canvas) */}
                 <div 
                   onClick={handleTapWorkspace}
                   style={{
                     position: 'relative',
                     width: '100%',
-                    height: 260,
-                    marginTop: 40,
+                    height: 220,
                     background: '#FCFAF6',
                     border: '1px solid rgba(220, 208, 195, 0.6)',
                     borderRadius: '24px',
@@ -573,166 +730,20 @@ export default function SoundWavePage() {
                   )}
                 </div>
 
-                {/* Score Target status bar */}
-                <div style={{ marginTop: 24, width: '100%' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#8C4F1A', marginBottom: 6 }}>
-                    <span>Chime Harmony progress</span>
-                    <span>{score} / 10 Hits</span>
-                  </div>
-                  <div style={{ height: 6, background: 'rgba(235, 224, 214, 0.6)', borderRadius: 99, overflow: 'hidden' }}>
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(score / 10) * 100}%` }}
-                      style={{ height: '100%', background: 'linear-gradient(90deg, #EBD5C2, #8C4F1A)', borderRadius: 99 }}
-                    />
-                  </div>
-                </div>
-
-                {/* soundscape and toggle settings */}
-                <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyBetween: 'space-between', justifyContent: 'space-between', width: '100%' }}>
-                  <button
-                    onClick={() => {
-                      const nextSound = !soundEnabled
-                      setSoundEnabled(nextSound)
-                      if (nextSound) {
-                        initAudio()
-                        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-                          audioContextRef.current.resume()
-                        }
-                        // Play a pleasant chime preview to verify sound instantly
-                        setTimeout(() => playChime(true, 0), 50)
-                      }
-                    }}
-                    style={{
-                      border: 'none',
-                      background: 'none',
-                      padding: 6,
-                      cursor: 'pointer',
-                      color: soundEnabled ? '#8C4F1A' : '#A09080',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6
-                    }}
-                  >
-                    {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-                    <span style={{ fontSize: 11, fontWeight: 700 }}>Chime Synthesizer</span>
-                  </button>
-
-                  {streak > 1 && (
-                    <span style={{ fontSize: 11, fontWeight: 800, color: '#47682C', background: '#F3F6F0', padding: '3px 10px', borderRadius: 99 }}>
-                      🔥 {streak} Streak
-                    </span>
-                  )}
-                </div>
-
-              </div>
-
-              {/* Right Column: Information, settings & presets */}
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.5)', paddingLeft: 32 }} className="gameplay-settings-col">
-                <div>
-                  
-                  {/* Title & Brand Intro */}
-                  <div style={{ marginBottom: 28 }}>
-                    <div style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                      background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
-                      borderRadius: 99, padding: '4px 12px', marginBottom: 12
-                    }}>
-                      <Sparkles size={11} color="#8B5E34" />
-                      <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                        Soundscape healing
-                      </span>
-                    </div>
-
-                    <h2 style={{ margin: '0 0 8px', fontSize: '28px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
-                      Sound Wave Serenade
-                    </h2>
-                    
-                    <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.6, fontWeight: 500 }}>
-                      Listen to soothing sound frequencies and tap the nodes when they align with the vertical Harmony Zone. Achieve a perfect harmony of 10 hits to trigger a sponsored ₹10 treatment donation.
-                    </p>
-                  </div>
-
-                  {/* Soundscape presets selection */}
-                  <div style={{ marginBottom: 32 }}>
-                    <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
-                      Choose Soundscape Theme
-                    </h4>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      {Object.entries(SOUNDSCAPES).map(([key, details]) => (
-                        <div
-                          key={key}
-                          onClick={() => {
-                            setSoundscapeKey(key)
-                            // Resume audio context just in case
-                            initAudio()
-                            if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-                              audioContextRef.current.resume()
-                            }
-                            // Play a nice preview chime of the new soundscape theme!
-                            playChime(true, score)
-                          }}
-                          style={{
-                            background: soundscapeKey === key ? '#FFFDFB' : 'rgba(255,255,255,0.4)',
-                            border: soundscapeKey === key ? '1.5px solid #8C4F1A' : '1px solid rgba(220, 208, 195, 0.6)',
-                            borderRadius: '16px',
-                            padding: '12px 16px',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s',
-                            boxShadow: soundscapeKey === key ? '0 4px 12px rgba(139, 94, 52, 0.05)' : 'none'
-                          }}
-                        >
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: 13.5, fontWeight: 700, color: '#4A3427' }}>
-                              {details.name}
-                            </span>
-                            <span style={{ fontSize: 10, fontWeight: 800, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', padding: '2px 8px', borderRadius: 99 }}>
-                              {details.synthType} synth
-                            </span>
-                          </div>
-                          <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#7A6A5A', lineHeight: 1.4 }}>
-                            {details.desc}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Microcopy Instruction Info Box */}
-                  <div style={{
-                    background: 'rgba(139, 94, 52, 0.03)',
-                    border: '1px solid rgba(139, 94, 52, 0.08)',
-                    borderRadius: '20px',
-                    padding: '16px 20px',
-                    marginBottom: 32,
-                    fontSize: 12.5,
-                    lineHeight: 1.5,
-                    color: '#7A6A5A'
-                  }}>
-                    <span style={{ fontWeight: 800, color: '#8C4F1A', display: 'block', marginBottom: 4 }}>
-                      💡 Gameplay Instruction
-                    </span>
-                    Tap anywhere inside the wave container when a floating circular node crosses the dashed vertical HARMONY ZONE to play a chime. Missing a node resets your active multiplier streak.
-                  </div>
-
-                </div>
-
-                {/* Bottom: Play Controls */}
-                <div style={{ display: 'flex', gap: 14 }}>
+                {/* 8. Buttons */}
+                <div style={{ display: 'flex', gap: 12, width: '100%', boxSizing: 'border-box' }}>
                   <motion.button
                     onClick={handleTogglePlay}
-                    whileHover={{ scale: 1.02, boxShadow: '0 8px 20px rgba(140, 79, 26, 0.16)' }}
                     whileTap={{ scale: 0.98 }}
                     style={{
                       flex: 2,
-                      padding: '15px',
+                      padding: '14px',
                       borderRadius: '16px',
                       border: 'none',
                       background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                       color: '#FFF',
                       fontWeight: 800,
-                      fontSize: '14.5px',
+                      fontSize: '14px',
                       fontFamily: 'Outfit',
                       cursor: 'pointer',
                       display: 'flex',
@@ -744,22 +755,21 @@ export default function SoundWavePage() {
                   >
                     {isPlaying ? (
                       <>
-                        <Pause size={15} /> Pause Soundscape
+                        <Pause size={15} /> Pause
                       </>
                     ) : (
                       <>
-                        <Play size={15} /> {score > 0 ? 'Resume Harmony' : 'Start Soundscape'}
+                        <Play size={15} /> {score > 0 ? 'Resume' : 'Start'}
                       </>
                     )}
                   </motion.button>
 
                   <motion.button
                     onClick={handleReset}
-                    whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     style={{
                       flex: 1,
-                      padding: '15px',
+                      padding: '14px',
                       borderRadius: '16px',
                       border: '1px solid rgba(220, 208, 195, 0.8)',
                       background: '#FFF',
@@ -778,12 +788,339 @@ export default function SoundWavePage() {
                 </div>
 
               </div>
+            </div>
+          </div>
+        ) : (
+          <div style={{ maxWidth: 1000, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
+            
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.85)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(225, 215, 203, 0.8)',
+              borderRadius: '40px',
+              boxShadow: '0 20px 50px rgba(122, 78, 43, 0.08)',
+              overflow: 'hidden',
+              padding: '48px 32px'
+            }}>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '55fr 45fr', gap: 40 }} className="gameplay-split-grid">
+                
+                {/* Left Column: Interactive Canvas & Visuals */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                  
+                  {/* Floating Heart indicator */}
+                  <div style={{
+                    position: 'absolute',
+                    top: -10,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 4
+                  }}>
+                    <div style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      background: '#8C4F1A',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 10px rgba(140, 79, 26, 0.3)'
+                    }}>
+                      <Heart size={14} color="#FFF" fill="#FFF" />
+                    </div>
+                    <span style={{ fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8C4F1A' }}>
+                      Janamithra's Recovery
+                    </span>
+                  </div>
+
+                  {/* Main Interactive Canvas Area */}
+                  <div 
+                    onClick={handleTapWorkspace}
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: 260,
+                      marginTop: 40,
+                      background: '#FCFAF6',
+                      border: '1px solid rgba(220, 208, 195, 0.6)',
+                      borderRadius: '24px',
+                      boxShadow: 'inset 0 4px 16px rgba(0,0,0,0.01), 0 10px 24px rgba(139, 94, 52, 0.03)',
+                      cursor: isPlaying ? 'crosshair' : 'default',
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
+
+                    {/* Play Overlay if not playing and not completed */}
+                    {!isPlaying && !gameCompleted && (
+                      <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'rgba(253, 250, 246, 0.65)',
+                        backdropFilter: 'blur(3px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 12
+                      }}>
+                        <div style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: '50%',
+                          background: '#8C4F1A',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#fff',
+                          boxShadow: '0 8px 20px rgba(140,79,26,0.25)',
+                          cursor: 'pointer'
+                        }} onClick={handleTogglePlay}>
+                          <Music size={20} fill="#FFF" />
+                        </div>
+                        <span style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#8C4F1A' }}>
+                          Click Play to Harmonize
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Floating Hit Feedback Text */}
+                    {feedbackText && (
+                      <div style={{
+                        position: 'absolute',
+                        bottom: 16,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        background: '#FFF',
+                        border: '1px solid rgba(139,94,52,0.15)',
+                        padding: '4px 12px',
+                        borderRadius: '12px',
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        color: '#8C4F1A',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                        pointerEvents: 'none',
+                        letterSpacing: '0.02em',
+                        textTransform: 'uppercase'
+                      }}>
+                        {feedbackText}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Score Target status bar */}
+                  <div style={{ marginTop: 24, width: '100%' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#8C4F1A', marginBottom: 6 }}>
+                      <span>Chime Harmony progress</span>
+                      <span>{score} / 10 Hits</span>
+                    </div>
+                    <div style={{ height: 6, background: 'rgba(235, 224, 214, 0.6)', borderRadius: 99, overflow: 'hidden' }}>
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(score / 10) * 100}%` }}
+                        style={{ height: '100%', background: 'linear-gradient(90deg, #EBD5C2, #8C4F1A)', borderRadius: 99 }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* soundscape and toggle settings */}
+                  <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyBetween: 'space-between', justifyContent: 'space-between', width: '100%' }}>
+                    <button
+                      onClick={() => {
+                        const nextSound = !soundEnabled
+                        setSoundEnabled(nextSound)
+                        if (nextSound) {
+                          initAudio()
+                          if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                            audioContextRef.current.resume()
+                          }
+                          // Play a pleasant chime preview to verify sound instantly
+                          setTimeout(() => playChime(true, 0), 50)
+                        }
+                      }}
+                      style={{
+                        border: 'none',
+                        background: 'none',
+                        padding: 6,
+                        cursor: 'pointer',
+                        color: soundEnabled ? '#8C4F1A' : '#A09080',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                    >
+                      {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                      <span style={{ fontSize: 11, fontWeight: 700 }}>Chime Synthesizer</span>
+                    </button>
+
+                    {streak > 1 && (
+                      <span style={{ fontSize: 11, fontWeight: 800, color: '#47682C', background: '#F3F6F0', padding: '3px 10px', borderRadius: 99 }}>
+                        🔥 {streak} Streak
+                      </span>
+                    )}
+                  </div>
+
+                </div>
+
+                {/* Right Column: Information, settings & presets */}
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.5)', paddingLeft: 32 }} className="gameplay-settings-col">
+                  <div>
+                    
+                    {/* Title & Brand Intro */}
+                    <div style={{ marginBottom: 28 }}>
+                      <div style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                        borderRadius: 99, padding: '4px 12px', marginBottom: 12
+                      }}>
+                        <Sparkles size={11} color="#8B5E34" />
+                        <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                          Soundscape healing
+                        </span>
+                      </div>
+
+                      <h2 style={{ margin: '0 0 8px', fontSize: '28px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
+                        Sound Wave Serenade
+                      </h2>
+                      
+                      <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.6, fontWeight: 500 }}>
+                        Listen to soothing sound frequencies and tap the nodes when they align with the vertical Harmony Zone. Achieve a perfect harmony of 10 hits to trigger a sponsored ₹10 treatment donation.
+                      </p>
+                    </div>
+
+                    {/* Soundscape presets selection */}
+                    <div style={{ marginBottom: 32 }}>
+                      <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
+                        Choose Soundscape Theme
+                      </h4>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        {Object.entries(SOUNDSCAPES).map(([key, details]) => (
+                          <div
+                            key={key}
+                            onClick={() => {
+                              setSoundscapeKey(key)
+                              // Resume audio context just in case
+                              initAudio()
+                              if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                                audioContextRef.current.resume()
+                              }
+                              // Play a nice preview chime of the new soundscape theme!
+                              playChime(true, score)
+                            }}
+                            style={{
+                              background: soundscapeKey === key ? '#FFFDFB' : 'rgba(255,255,255,0.4)',
+                              border: soundscapeKey === key ? '1.5px solid #8C4F1A' : '1px solid rgba(220, 208, 195, 0.6)',
+                              borderRadius: '16px',
+                              padding: '12px 16px',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              boxShadow: soundscapeKey === key ? '0 4px 12px rgba(139, 94, 52, 0.05)' : 'none'
+                            }}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontSize: 13.5, fontWeight: 700, color: '#4A3427' }}>
+                                {details.name}
+                              </span>
+                              <span style={{ fontSize: 10, fontWeight: 800, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', padding: '2px 8px', borderRadius: 99 }}>
+                                {details.synthType} synth
+                              </span>
+                            </div>
+                            <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#7A6A5A', lineHeight: 1.4 }}>
+                              {details.desc}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Microcopy Instruction Info Box */}
+                    <div style={{
+                      background: 'rgba(139, 94, 52, 0.03)',
+                      border: '1px solid rgba(139, 94, 52, 0.08)',
+                      borderRadius: '20px',
+                      padding: '16px 20px',
+                      marginBottom: 32,
+                      fontSize: 12.5,
+                      lineHeight: 1.5,
+                      color: '#7A6A5A'
+                    }}>
+                      <span style={{ fontWeight: 800, color: '#8C4F1A', display: 'block', marginBottom: 4 }}>
+                        💡 Gameplay Instruction
+                      </span>
+                      Tap anywhere inside the wave container when a floating circular node crosses the dashed vertical HARMONY ZONE to play a chime. Missing a node resets your active multiplier streak.
+                    </div>
+
+                  </div>
+
+                  {/* Bottom: Play Controls */}
+                  <div style={{ display: 'flex', gap: 14 }}>
+                    <motion.button
+                      onClick={handleTogglePlay}
+                      whileHover={{ scale: 1.02, boxShadow: '0 8px 20px rgba(140, 79, 26, 0.16)' }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        flex: 2,
+                        padding: '15px',
+                        borderRadius: '16px',
+                        border: 'none',
+                        background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                        color: '#FFF',
+                        fontWeight: 800,
+                        fontSize: '14.5px',
+                        fontFamily: 'Outfit',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        boxShadow: '0 6px 16px rgba(140, 79, 26, 0.12)'
+                      }}
+                    >
+                      {isPlaying ? (
+                        <>
+                          <Pause size={15} /> Pause Soundscape
+                        </>
+                      ) : (
+                        <>
+                          <Play size={15} /> {score > 0 ? 'Resume Harmony' : 'Start Soundscape'}
+                        </>
+                      )}
+                    </motion.button>
+
+                    <motion.button
+                      onClick={handleReset}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        flex: 1,
+                        padding: '15px',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(220, 208, 195, 0.8)',
+                        background: '#FFF',
+                        color: '#7A6A5A',
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6
+                      }}
+                    >
+                      <RotateCcw size={14} /> Reset
+                    </motion.button>
+                  </div>
+
+                </div>
+
+              </div>
 
             </div>
 
           </div>
-
-        </div>
+        )}
 
         {/* ────────────────── SUCCESS MODAL OVERLAY ────────────────── */}
         <AnimatePresence>

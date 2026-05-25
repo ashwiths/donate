@@ -54,6 +54,16 @@ export default function BreatheBloomPage() {
   const [helperName, setHelperName] = useState(localStorage.getItem('hp_user_name') || 'Generous Supporter')
   const [isCopied, setIsCopied] = useState(false)
 
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   // Floating healing particles state
   const [particles, setParticles] = useState([])
   
@@ -305,11 +315,11 @@ export default function BreatheBloomPage() {
   const strokeDashoffset = circumference - (progressPercent / 100) * circumference
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#3D2B1A', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', color: '#3D2B1A', position: 'relative', overflowX: 'hidden' }}>
       <GlobalBackground />
       <Navbar />
 
-      <main style={{ flex: 1, position: 'relative', zIndex: 1, width: '100%', paddingBottom: 100 }}>
+      <main style={{ flex: 1, position: 'relative', zIndex: 1, width: '100%', paddingBottom: 100, overflowX: 'hidden' }}>
         
         {/* Header Block with Back link */}
         <div style={{ maxWidth: 1200, margin: '40px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
@@ -337,31 +347,53 @@ export default function BreatheBloomPage() {
         </div>
 
         {/* Outer Elegant Glass Card for the Game Area */}
-        <div style={{ maxWidth: 1000, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
-          
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.85)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(225, 215, 203, 0.8)',
-            borderRadius: '40px',
-            boxShadow: '0 20px 50px rgba(122, 78, 43, 0.08)',
-            overflow: 'hidden',
-            padding: '48px 32px'
-          }}>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '55fr 45fr', gap: 40 }} className="gameplay-split-grid">
-              
-              {/* Left Column: Interactive Breathing Core */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+        {isMobile ? (
+          <div style={{ maxWidth: '100%', margin: '20px auto 0', padding: '0 16px', boxSizing: 'border-box', overflowX: 'hidden' }}>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.85)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(225, 215, 203, 0.8)',
+              borderRadius: '24px',
+              boxShadow: '0 15px 35px rgba(122, 78, 43, 0.06)',
+              overflow: 'hidden',
+              padding: '24px 16px',
+              boxSizing: 'border-box'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 
-                {/* Floating Heart / Child Target Area */}
+                {/* 1. Header (Title & Brand Intro) */}
+                <div style={{ width: '100%' }}>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                    borderRadius: 99, padding: '4px 12px', marginBottom: 12
+                  }}>
+                    <Sparkles size={11} color="#8B5E34" />
+                    <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                      Wellness Portal
+                    </span>
+                  </div>
+
+                  <h2 style={{ margin: '0 0 8px', fontSize: '22px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+                    Breathe & Bloom
+                  </h2>
+                  
+                  <p style={{ margin: 0, fontSize: '13px', color: '#7A6A5A', lineHeight: 1.5, fontWeight: 500 }}>
+                    Complete 3 full cycles of peaceful breathing. Our wellness sponsors will match your focus by executing a direct ₹10 contribution to Janamithra's treatment.
+                  </p>
+                </div>
+
+                {/* 2. Hero/game icon (Janamithra's Recovery Badge) */}
                 <div style={{
-                  position: 'absolute',
-                  top: -10,
                   display: 'flex',
-                  flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 4
+                  gap: 12,
+                  background: 'rgba(140, 79, 26, 0.04)',
+                  border: '1px solid rgba(140, 79, 26, 0.08)',
+                  borderRadius: '16px',
+                  padding: '12px 16px',
+                  width: '100%',
+                  boxSizing: 'border-box'
                 }}>
                   <div style={{
                     width: 32,
@@ -371,191 +403,65 @@ export default function BreatheBloomPage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 4px 10px rgba(140, 79, 26, 0.3)'
+                    boxShadow: '0 4px 10px rgba(140, 79, 26, 0.2)',
+                    flexShrink: 0
                   }}>
                     <Heart size={14} color="#FFF" fill="#FFF" />
                   </div>
-                  <span style={{ fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8C4F1A' }}>
-                    Janamithra's Recovery
-                  </span>
-                </div>
-
-                {/* Particle Canvas */}
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 10 }}>
-                  {particles.map(p => (
-                    <motion.div
-                      key={p.id}
-                      style={{
-                        position: 'absolute',
-                        left: `${p.x}%`,
-                        top: `${p.y}%`,
-                        width: 8 * p.scale,
-                        height: 8 * p.scale,
-                        borderRadius: '50%',
-                        background: 'radial-gradient(circle, #EADFD6 20%, #8C4F1A 80%)',
-                        opacity: p.opacity,
-                        pointerEvents: 'none',
-                        boxShadow: '0 0 8px rgba(140, 79, 26, 0.3)'
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* Major Breathing Circle & Flower Visualizer */}
-                <div style={{ position: 'relative', width: 280, height: 280, marginTop: 40, display: 'flex', alignItems: 'center', justifyCenter: 'center', justifyContent: 'center' }}>
-                  
-                  {/* SVG Outer Progress Ring & Radials */}
-                  <svg width="280" height="280" style={{ transform: 'rotate(-90deg)', position: 'absolute', top: 0, left: 0 }}>
-                    {/* Background Soft dashed tracks */}
-                    <circle cx="140" cy="140" r={radius} fill="none" stroke="rgba(235, 224, 214, 0.8)" strokeWidth="4" />
-                    <circle cx="140" cy="140" r={radius + 15} fill="none" stroke="rgba(235, 224, 214, 0.3)" strokeWidth="1" strokeDasharray="4, 4" />
-                    <circle cx="140" cy="140" r={radius - 15} fill="none" stroke="rgba(235, 224, 214, 0.5)" strokeWidth="0.8" strokeDasharray="3, 3" />
-                    
-                    {/* Active Timer Ring */}
-                    {isPlaying && (
-                      <motion.circle
-                        cx="140"
-                        cy="140"
-                        r={radius}
-                        fill="none"
-                        stroke="#8C4F1A"
-                        strokeWidth="5"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={strokeDashoffset}
-                        strokeLinecap="round"
-                        transition={{ ease: 'linear' }}
-                      />
-                    )}
-                  </svg>
-
-                  {/* Central Elegant Blooming Flower & State */}
-                  <div style={{
-                    width: 220,
-                    height: 220,
-                    borderRadius: '50%',
-                    background: '#FFFFFF',
-                    border: '1px solid rgba(220, 208, 195, 0.6)',
-                    boxShadow: 'inset 0 4px 16px rgba(0,0,0,0.01), 0 10px 24px rgba(139, 94, 52, 0.05)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'relative',
-                    zIndex: 2
-                  }}>
-                    
-                    {/* Glowing Aura Ring based on phase */}
-                    <AnimatePresence>
-                      {isPlaying && (
-                        <motion.div
-                          key={phase}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ 
-                            opacity: phase === 'hold' ? 0.35 : 0.15,
-                            scale: phase === 'inhale' ? 1.15 : phase === 'hold' ? 1.25 : 1.0
-                          }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: getPhaseDuration(), ease: 'easeInOut' }}
-                          style={{
-                            position: 'absolute',
-                            inset: 0,
-                            borderRadius: '50%',
-                            background: 'radial-gradient(circle, rgba(140, 79, 26, 0.4) 0%, transparent 70%)',
-                            pointerEvents: 'none',
-                            zIndex: -1
-                          }}
-                        />
-                      )}
-                    </AnimatePresence>
-
-                    {/* Highly polished Flower Silhouette inside the ring */}
-                    <div style={{ width: 100, height: 100 }}>
-                      <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-                        <motion.g
-                          animate={{ 
-                            scale: isPlaying 
-                              ? (phase === 'inhale' ? [0.85, 1.25] : phase === 'hold' ? [1.25, 1.28, 1.25] : [1.25, 0.85])
-                              : 1.0,
-                            rotate: isPlaying ? (phase === 'hold' ? [0, 8, 0] : [0, 0]) : 0
-                          }}
-                          transition={{ 
-                            duration: isPlaying ? getPhaseDuration() : 2, 
-                            ease: 'easeInOut',
-                            repeat: phase === 'hold' ? Infinity : 0
-                          }}
-                          style={{ originX: '50px', originY: '50px' }}
-                        >
-                          {/* Flower Stem / Base */}
-                          <path d="M50 50 L50 75" stroke="#5C3D24" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
-                          
-                          {/* Flower Petals (Elegant silhouette) */}
-                          <path d="M50 50 C46 38, 54 38, 50 50 Z" fill="#5C3D24" opacity="0.9" />
-                          <path d="M50 50 C38 42, 44 32, 50 50 Z" fill="#785338" opacity="0.85" />
-                          <path d="M50 50 C62 42, 56 32, 50 50 Z" fill="#785338" opacity="0.85" />
-                          <path d="M50 50 C34 48, 38 38, 50 50 Z" fill="#946B4E" opacity="0.75" />
-                          <path d="M50 50 C66 48, 62 38, 50 50 Z" fill="#946B4E" opacity="0.75" />
-                          
-                          {/* Center core */}
-                          <circle cx="50" cy="48" r="2.5" fill="#EADFD6" />
-                          <circle cx="50" cy="48" r="1.5" fill="#5C3D24" />
-                        </motion.g>
-                      </svg>
-                    </div>
-
-                    {/* Numeric seconds indicator in center */}
-                    <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <span style={{ 
-                        fontSize: 36, 
-                        fontWeight: 900, 
-                        color: '#4A3427', 
-                        fontFamily: 'Outfit',
-                        lineHeight: 1
-                      }}>
-                        {isPlaying ? secondsLeft : '0'}
-                      </span>
-                      <span style={{ 
-                        fontSize: 10, 
-                        fontWeight: 800, 
-                        textTransform: 'uppercase', 
-                        letterSpacing: '0.12em', 
-                        color: '#8C4F1A',
-                        marginTop: 4
-                      }}>
-                        {isPlaying ? phase : 'Ready'}
-                      </span>
-                    </div>
-
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#A09080' }}>
+                      Beneficiary Case
+                    </span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#4A3427' }}>
+                      Janamithra's Recovery
+                    </span>
                   </div>
                 </div>
 
-                {/* Central Status Text Notification */}
-                <div style={{ marginTop: 24, textAlign: 'center', minHeight: 60 }}>
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={phase}
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -5 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <h3 style={{ margin: '0 0 4px', fontSize: '18px', fontWeight: 800, color: '#4A3427', fontFamily: 'Outfit' }}>
-                        {phase === 'idle' && 'Begin Mindful Breathing'}
-                        {phase === 'inhale' && 'Inhale Gently'}
-                        {phase === 'hold' && 'Hold and Rest'}
-                        {phase === 'exhale' && 'Exhale Fully'}
-                      </h3>
-                      <p style={{ margin: 0, fontSize: '13px', color: '#7A6A5A', fontStyle: 'italic', fontWeight: 500 }}>
-                        {phase === 'idle' && 'Click Play to begin a 3-cycle sponsored wellness session.'}
-                        {phase === 'inhale' && 'Breathe in slowly, filling your lungs with positivity.'}
-                        {phase === 'hold' && 'Embrace absolute stillness, holding in the peacefulness.'}
-                        {phase === 'exhale' && 'Release all weight, sending your healing energy upwards.'}
-                      </p>
-                    </motion.div>
-                  </AnimatePresence>
+                {/* 3. Progress card (Session Progress card) */}
+                <div style={{
+                  background: '#FFFDFB',
+                  border: '1px solid rgba(220, 208, 195, 0.6)',
+                  borderRadius: '18px',
+                  padding: '16px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  boxShadow: '0 4px 12px rgba(139, 94, 52, 0.02)'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
+                      Session Progress
+                    </span>
+                    <span style={{ fontSize: '13px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit' }}>
+                      {cyclesCompleted} / 3 Cycles
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {[0, 1, 2].map((idx) => {
+                      const isDone = cyclesCompleted > idx
+                      const isActive = isPlaying && cyclesCompleted === idx
+                      return (
+                        <div
+                          key={idx}
+                          style={{
+                            flex: 1,
+                            height: 8,
+                            borderRadius: 99,
+                            background: isDone 
+                              ? '#8C4F1A' 
+                              : isActive 
+                                ? 'linear-gradient(90deg, #EBD5C2, #8C4F1A)' 
+                                : 'rgba(235, 224, 214, 0.6)',
+                            transition: 'all 0.4s'
+                          }}
+                        />
+                      )
+                    })}
+                  </div>
                 </div>
 
-                {/* Ambient Visual Sound Bar Toggle */}
-                <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 16 }}>
+                {/* 4. Controls (Ambient Hum) */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 4px' }}>
                   <button
                     onClick={() => {
                       const nextSound = !soundEnabled
@@ -567,7 +473,6 @@ export default function BreatheBloomPage() {
                         if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
                           audioContextRef.current.resume()
                         }
-                        // Start hum immediately if currently in active phase
                         if (isPlaying && phase !== 'idle') {
                           setTimeout(() => startHum(phase === 'inhale' ? 220 : phase === 'hold' ? 261.63 : 196, 0.04), 50)
                         }
@@ -578,158 +483,277 @@ export default function BreatheBloomPage() {
                     style={{
                       border: 'none',
                       background: 'none',
-                      padding: 6,
+                      padding: 4,
                       cursor: 'pointer',
                       color: soundEnabled ? '#8C4F1A' : '#A09080',
                       display: 'flex',
                       alignItems: 'center',
                       gap: 6
                     }}
-                    title={soundEnabled ? "Mute Ambient Hum" : "Enable Serene Ambient Sound"}
                   >
                     {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
                     <span style={{ fontSize: 11, fontWeight: 700 }}>Ambient Hum</span>
                   </button>
                 </div>
 
-              </div>
+                {/* 5. Theme selection (Breathing Techniques) */}
+                <div style={{ width: '100%' }}>
+                  <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
+                    Select Breathing Technique
+                  </h4>
 
-              {/* Right Column: Settings, Information & Gamification Progress */}
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.5)', paddingLeft: 32 }} className="gameplay-settings-col">
-                <div>
-                  
-                  {/* Title & Brand Intro */}
-                  <div style={{ marginBottom: 28 }}>
-                    <div style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                      background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
-                      borderRadius: 99, padding: '4px 12px', marginBottom: 12
-                    }}>
-                      <Sparkles size={11} color="#8B5E34" />
-                      <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                        Wellness Portal
-                      </span>
-                    </div>
-
-                    <h2 style={{ margin: '0 0 8px', fontSize: '28px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
-                      Breathe & Bloom
-                    </h2>
-                    
-                    <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.6, fontWeight: 500 }}>
-                      Complete 3 full cycles of peaceful breathing. Our wellness sponsors will match your focus by executing a direct ₹10 contribution to Janamithra's treatment.
-                    </p>
-                  </div>
-
-                  {/* Rhythm Style Selection Presets */}
-                  <div style={{ marginBottom: 32 }}>
-                    <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
-                      Select Breathing Technique
-                    </h4>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      {Object.entries(RHYTHMS).map(([key, details]) => (
-                        <div
-                          key={key}
-                          onClick={() => {
-                            setRhythmKey(key)
-                            // Resume audio context just in case
-                            if (!audioContextRef.current) {
-                              audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)()
-                            }
-                            if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-                              audioContextRef.current.resume()
-                            }
-                            // Update active countdown timer immediately if session is playing
-                            if (isPlaying) {
-                              const activeDur = details[phase] !== undefined ? details[phase] : details.inhale
-                              setSecondsLeft(activeDur)
-                            }
-                          }}
-                          style={{
-                            background: rhythmKey === key ? '#FFFDFB' : 'rgba(255,255,255,0.4)',
-                            border: rhythmKey === key ? '1.5px solid #8C4F1A' : '1px solid rgba(220, 208, 195, 0.6)',
-                            borderRadius: '16px',
-                            padding: '12px 16px',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s',
-                            boxShadow: rhythmKey === key ? '0 4px 12px rgba(139, 94, 52, 0.05)' : 'none'
-                          }}
-                        >
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: 13.5, fontWeight: 700, color: '#4A3427' }}>
-                              {details.name}
-                            </span>
-                            <span style={{ fontSize: 10, fontWeight: 800, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', padding: '2px 8px', borderRadius: 99 }}>
-                              {details.inhale}s - {details.hold}s - {details.exhale}s
-                            </span>
-                          </div>
-                          <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#7A6A5A', lineHeight: 1.4 }}>
-                            {details.description}
-                          </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {Object.entries(RHYTHMS).map(([key, details]) => (
+                      <div
+                        key={key}
+                        onClick={() => {
+                          setRhythmKey(key)
+                          if (!audioContextRef.current) {
+                            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)()
+                          }
+                          if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                            audioContextRef.current.resume()
+                          }
+                          if (isPlaying) {
+                            const activeDur = details[phase] !== undefined ? details[phase] : details.inhale
+                            setSecondsLeft(activeDur)
+                          }
+                        }}
+                        style={{
+                          background: rhythmKey === key ? '#FFFDFB' : 'rgba(255,255,255,0.4)',
+                          border: rhythmKey === key ? '1.5px solid #8C4F1A' : '1px solid rgba(220, 208, 195, 0.6)',
+                          borderRadius: '16px',
+                          padding: '12px 16px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          boxShadow: rhythmKey === key ? '0 4px 12px rgba(139, 94, 52, 0.05)' : 'none'
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 13.5, fontWeight: 700, color: '#4A3427' }}>
+                            {details.name}
+                          </span>
+                          <span style={{ fontSize: 10, fontWeight: 800, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', padding: '2px 8px', borderRadius: 99 }}>
+                            {details.inhale}s - {details.hold}s - {details.exhale}s
+                          </span>
                         </div>
-                      ))}
-                    </div>
+                        <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#7A6A5A', lineHeight: 1.4 }}>
+                          {details.description}
+                        </p>
+                      </div>
+                    ))}
                   </div>
-
-                  {/* Core Cycle Counter Tracker */}
-                  <div style={{
-                    background: 'rgba(139, 94, 52, 0.03)',
-                    border: '1px solid rgba(139, 94, 52, 0.08)',
-                    borderRadius: '20px',
-                    padding: '16px 20px',
-                    marginBottom: 32
-                  }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                      <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
-                        Session Progress
-                      </span>
-                      <span style={{ fontSize: '13px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit' }}>
-                        {cyclesCompleted} / 3 Cycles
-                      </span>
-                    </div>
-
-                    {/* Cycle mini dots */}
-                    <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
-                      {[0, 1, 2].map((idx) => {
-                        const isDone = cyclesCompleted > idx
-                        const isActive = isPlaying && cyclesCompleted === idx
-                        return (
-                          <div
-                            key={idx}
-                            style={{
-                              flex: 1,
-                              height: 6,
-                              borderRadius: 99,
-                              background: isDone 
-                                ? '#8C4F1A' 
-                                : isActive 
-                                  ? 'linear-gradient(90deg, #EBD5C2, #8C4F1A)' 
-                                  : 'rgba(235, 224, 214, 0.6)',
-                              transition: 'all 0.4s'
-                            }}
-                          />
-                        )
-                      })}
-                    </div>
-                  </div>
-
                 </div>
 
-                {/* Bottom: Play Control Trigger Buttons */}
-                <div style={{ display: 'flex', gap: 14 }}>
+                {/* 6. Instructions (Dynamic status notification) */}
+                <div style={{
+                  background: 'rgba(139, 94, 52, 0.03)',
+                  border: '1px dashed rgba(139, 94, 52, 0.25)',
+                  borderRadius: '20px',
+                  padding: '16px 20px',
+                  minHeight: 60,
+                  boxSizing: 'border-box'
+                }}>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={phase}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <h3 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 800, color: '#4C301D', fontFamily: 'Outfit' }}>
+                        {phase === 'idle' && 'Begin Mindful Breathing'}
+                        {phase === 'inhale' && 'Inhale Gently'}
+                        {phase === 'hold' && 'Hold and Rest'}
+                        {phase === 'exhale' && 'Exhale Fully'}
+                      </h3>
+                      <p style={{ margin: 0, fontSize: '12px', color: '#7A6A5A', fontStyle: 'italic', fontWeight: 500, lineHeight: 1.4 }}>
+                        {phase === 'idle' && 'Click Play to begin a 3-cycle sponsored wellness session.'}
+                        {phase === 'inhale' && 'Breathe in slowly, filling your lungs with positivity.'}
+                        {phase === 'hold' && 'Embrace absolute stillness, holding in the peacefulness.'}
+                        {phase === 'exhale' && 'Release all weight, sending your healing energy upwards.'}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* 7. Gameplay container (Breathing Circle SVG & Flower) */}
+                <div style={{
+                  position: 'relative',
+                  width: '100%',
+                  background: '#FCFAF6',
+                  border: '1px solid rgba(220, 208, 195, 0.6)',
+                  borderRadius: '24px',
+                  padding: '24px 0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  boxShadow: 'inset 0 4px 16px rgba(0,0,0,0.01), 0 10px 24px rgba(139, 94, 52, 0.03)'
+                }}>
+                  {/* Particle Canvas */}
+                  <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 10 }}>
+                    {particles.map(p => (
+                      <motion.div
+                        key={p.id}
+                        style={{
+                          position: 'absolute',
+                          left: `${p.x}%`,
+                          top: `${p.y}%`,
+                          width: 8 * p.scale,
+                          height: 8 * p.scale,
+                          borderRadius: '50%',
+                          background: 'radial-gradient(circle, #EADFD6 20%, #8C4F1A 80%)',
+                          opacity: p.opacity,
+                          pointerEvents: 'none',
+                          boxShadow: '0 0 8px rgba(140, 79, 26, 0.3)'
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  <div style={{ position: 'relative', width: 260, height: 260, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    
+                    {/* SVG Outer Progress Ring & Radials */}
+                    <svg width="260" height="260" viewBox="0 0 280 280" style={{ transform: 'rotate(-90deg)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                      {/* Background Soft dashed tracks */}
+                      <circle cx="140" cy="140" r={radius} fill="none" stroke="rgba(235, 224, 214, 0.8)" strokeWidth="4" />
+                      <circle cx="140" cy="140" r={radius + 15} fill="none" stroke="rgba(235, 224, 214, 0.3)" strokeWidth="1" strokeDasharray="4, 4" />
+                      <circle cx="140" cy="140" r={radius - 15} fill="none" stroke="rgba(235, 224, 214, 0.5)" strokeWidth="0.8" strokeDasharray="3, 3" />
+                      
+                      {/* Active Timer Ring */}
+                      {isPlaying && (
+                        <motion.circle
+                          cx="140"
+                          cy="140"
+                          r={radius}
+                          fill="none"
+                          stroke="#8C4F1A"
+                          strokeWidth="5"
+                          strokeDasharray={circumference}
+                          strokeDashoffset={strokeDashoffset}
+                          strokeLinecap="round"
+                          transition={{ ease: 'linear' }}
+                        />
+                      )}
+                    </svg>
+
+                    {/* Central Elegant Blooming Flower & State */}
+                    <div style={{
+                      width: 200,
+                      height: 200,
+                      borderRadius: '50%',
+                      background: '#FFFFFF',
+                      border: '1px solid rgba(220, 208, 195, 0.6)',
+                      boxShadow: 'inset 0 4px 16px rgba(0,0,0,0.01), 0 10px 24px rgba(139, 94, 52, 0.05)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      zIndex: 2
+                    }}>
+                      
+                      {/* Glowing Aura Ring based on phase */}
+                      <AnimatePresence>
+                        {isPlaying && (
+                          <motion.div
+                            key={phase}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ 
+                              opacity: phase === 'hold' ? 0.35 : 0.15,
+                              scale: phase === 'inhale' ? 1.15 : phase === 'hold' ? 1.25 : 1.0
+                            }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: getPhaseDuration(), ease: 'easeInOut' }}
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              borderRadius: '50%',
+                              background: 'radial-gradient(circle, rgba(140, 79, 26, 0.4) 0%, transparent 70%)',
+                              pointerEvents: 'none',
+                              zIndex: -1
+                            }}
+                          />
+                        )}
+                      </AnimatePresence>
+
+                      {/* Highly polished Flower Silhouette inside the ring */}
+                      <div style={{ width: 90, height: 90 }}>
+                        <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+                          <motion.g
+                            animate={{ 
+                              scale: isPlaying 
+                                ? (phase === 'inhale' ? [0.85, 1.25] : phase === 'hold' ? [1.25, 1.28, 1.25] : [1.25, 0.85])
+                                : 1.0,
+                              rotate: isPlaying ? (phase === 'hold' ? [0, 8, 0] : [0, 0]) : 0
+                            }}
+                            transition={{ 
+                              duration: isPlaying ? getPhaseDuration() : 2, 
+                              ease: 'easeInOut',
+                              repeat: phase === 'hold' ? Infinity : 0
+                            }}
+                            style={{ originX: '50px', originY: '50px' }}
+                          >
+                            {/* Flower Stem / Base */}
+                            <path d="M50 50 L50 75" stroke="#5C3D24" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
+                            
+                            {/* Flower Petals (Elegant silhouette) */}
+                            <path d="M50 50 C46 38, 54 38, 50 50 Z" fill="#5C3D24" opacity="0.9" />
+                            <path d="M50 50 C38 42, 44 32, 50 50 Z" fill="#785338" opacity="0.85" />
+                            <path d="M50 50 C62 42, 56 32, 50 50 Z" fill="#785338" opacity="0.85" />
+                            <path d="M50 50 C34 48, 38 38, 50 50 Z" fill="#946B4E" opacity="0.75" />
+                            <path d="M50 50 C66 48, 62 38, 50 50 Z" fill="#946B4E" opacity="0.75" />
+                            
+                            {/* Center core */}
+                            <circle cx="50" cy="48" r="2.5" fill="#EADFD6" />
+                            <circle cx="50" cy="48" r="1.5" fill="#5C3D24" />
+                          </motion.g>
+                        </svg>
+                      </div>
+
+                      {/* Numeric seconds indicator in center */}
+                      <div style={{ marginTop: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <span style={{ 
+                          fontSize: 32, 
+                          fontWeight: 900, 
+                          color: '#4A3427', 
+                          fontFamily: 'Outfit',
+                          lineHeight: 1
+                        }}>
+                          {isPlaying ? secondsLeft : '0'}
+                        </span>
+                        <span style={{ 
+                          fontSize: 9, 
+                          fontWeight: 800, 
+                          textTransform: 'uppercase', 
+                          letterSpacing: '0.12em', 
+                          color: '#8C4F1A',
+                          marginTop: 2
+                        }}>
+                          {isPlaying ? phase : 'Ready'}
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                {/* 8. Buttons */}
+                <div style={{ display: 'flex', gap: 12, width: '100%', boxSizing: 'border-box' }}>
                   <motion.button
                     onClick={handleTogglePlay}
-                    whileHover={{ scale: 1.02, boxShadow: '0 8px 20px rgba(140, 79, 26, 0.16)' }}
                     whileTap={{ scale: 0.98 }}
                     style={{
                       flex: 2,
-                      padding: '15px',
+                      padding: '14px',
                       borderRadius: '16px',
                       border: 'none',
                       background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                       color: '#FFF',
                       fontWeight: 800,
-                      fontSize: '14.5px',
+                      fontSize: '14px',
                       fontFamily: 'Outfit',
                       cursor: 'pointer',
                       display: 'flex',
@@ -741,22 +765,21 @@ export default function BreatheBloomPage() {
                   >
                     {isPlaying ? (
                       <>
-                        <Pause size={15} /> Pause Session
+                        <Pause size={15} /> Pause
                       </>
                     ) : (
                       <>
-                        <Play size={15} /> {cyclesCompleted > 0 ? 'Resume Session' : 'Start Session'}
+                        <Play size={15} /> {cyclesCompleted > 0 ? 'Resume' : 'Start'}
                       </>
                     )}
                   </motion.button>
 
                   <motion.button
                     onClick={handleReset}
-                    whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     style={{
                       flex: 1,
-                      padding: '15px',
+                      padding: '14px',
                       borderRadius: '16px',
                       border: '1px solid rgba(220, 208, 195, 0.8)',
                       background: '#FFF',
@@ -775,12 +798,454 @@ export default function BreatheBloomPage() {
                 </div>
 
               </div>
+            </div>
+          </div>
+        ) : (
+          <div style={{ maxWidth: 1000, margin: '30px auto 0', padding: '0 24px', boxSizing: 'border-box' }}>
+            
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.85)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(225, 215, 203, 0.8)',
+              borderRadius: '40px',
+              boxShadow: '0 20px 50px rgba(122, 78, 43, 0.08)',
+              overflow: 'hidden',
+              padding: '48px 32px'
+            }}>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '55fr 45fr', gap: 40 }} className="gameplay-split-grid">
+                
+                {/* Left Column: Interactive Breathing Core */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                  
+                  {/* Floating Heart / Child Target Area */}
+                  <div style={{
+                    position: 'absolute',
+                    top: -10,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 4
+                  }}>
+                    <div style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      background: '#8C4F1A',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 10px rgba(140, 79, 26, 0.3)'
+                    }}>
+                      <Heart size={14} color="#FFF" fill="#FFF" />
+                    </div>
+                    <span style={{ fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8C4F1A' }}>
+                      Janamithra's Recovery
+                    </span>
+                  </div>
+
+                  {/* Particle Canvas */}
+                  <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 10 }}>
+                    {particles.map(p => (
+                      <motion.div
+                        key={p.id}
+                        style={{
+                          position: 'absolute',
+                          left: `${p.x}%`,
+                          top: `${p.y}%`,
+                          width: 8 * p.scale,
+                          height: 8 * p.scale,
+                          borderRadius: '50%',
+                          background: 'radial-gradient(circle, #EADFD6 20%, #8C4F1A 80%)',
+                          opacity: p.opacity,
+                          pointerEvents: 'none',
+                          boxShadow: '0 0 8px rgba(140, 79, 26, 0.3)'
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Major Breathing Circle & Flower Visualizer */}
+                  <div style={{ position: 'relative', width: 280, height: 280, marginTop: 40, display: 'flex', alignItems: 'center', justifyCenter: 'center', justifyContent: 'center' }}>
+                    
+                    {/* SVG Outer Progress Ring & Radials */}
+                    <svg width="280" height="280" style={{ transform: 'rotate(-90deg)', position: 'absolute', top: 0, left: 0 }}>
+                      {/* Background Soft dashed tracks */}
+                      <circle cx="140" cy="140" r={radius} fill="none" stroke="rgba(235, 224, 214, 0.8)" strokeWidth="4" />
+                      <circle cx="140" cy="140" r={radius + 15} fill="none" stroke="rgba(235, 224, 214, 0.3)" strokeWidth="1" strokeDasharray="4, 4" />
+                      <circle cx="140" cy="140" r={radius - 15} fill="none" stroke="rgba(235, 224, 214, 0.5)" strokeWidth="0.8" strokeDasharray="3, 3" />
+                      
+                      {/* Active Timer Ring */}
+                      {isPlaying && (
+                        <motion.circle
+                          cx="140"
+                          cy="140"
+                          r={radius}
+                          fill="none"
+                          stroke="#8C4F1A"
+                          strokeWidth="5"
+                          strokeDasharray={circumference}
+                          strokeDashoffset={strokeDashoffset}
+                          strokeLinecap="round"
+                          transition={{ ease: 'linear' }}
+                        />
+                      )}
+                    </svg>
+
+                    {/* Central Elegant Blooming Flower & State */}
+                    <div style={{
+                      width: 220,
+                      height: 220,
+                      borderRadius: '50%',
+                      background: '#FFFFFF',
+                      border: '1px solid rgba(220, 208, 195, 0.6)',
+                      boxShadow: 'inset 0 4px 16px rgba(0,0,0,0.01), 0 10px 24px rgba(139, 94, 52, 0.05)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      zIndex: 2
+                    }}>
+                      
+                      {/* Glowing Aura Ring based on phase */}
+                      <AnimatePresence>
+                        {isPlaying && (
+                          <motion.div
+                            key={phase}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ 
+                              opacity: phase === 'hold' ? 0.35 : 0.15,
+                              scale: phase === 'inhale' ? 1.15 : phase === 'hold' ? 1.25 : 1.0
+                            }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: getPhaseDuration(), ease: 'easeInOut' }}
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              borderRadius: '50%',
+                              background: 'radial-gradient(circle, rgba(140, 79, 26, 0.4) 0%, transparent 70%)',
+                              pointerEvents: 'none',
+                              zIndex: -1
+                            }}
+                          />
+                        )}
+                      </AnimatePresence>
+
+                      {/* Highly polished Flower Silhouette inside the ring */}
+                      <div style={{ width: 100, height: 100 }}>
+                        <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
+                          <motion.g
+                            animate={{ 
+                              scale: isPlaying 
+                                ? (phase === 'inhale' ? [0.85, 1.25] : phase === 'hold' ? [1.25, 1.28, 1.25] : [1.25, 0.85])
+                                : 1.0,
+                              rotate: isPlaying ? (phase === 'hold' ? [0, 8, 0] : [0, 0]) : 0
+                            }}
+                            transition={{ 
+                              duration: isPlaying ? getPhaseDuration() : 2, 
+                              ease: 'easeInOut',
+                              repeat: phase === 'hold' ? Infinity : 0
+                            }}
+                            style={{ originX: '50px', originY: '50px' }}
+                          >
+                            {/* Flower Stem / Base */}
+                            <path d="M50 50 L50 75" stroke="#5C3D24" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
+                            
+                            {/* Flower Petals (Elegant silhouette) */}
+                            <path d="M50 50 C46 38, 54 38, 50 50 Z" fill="#5C3D24" opacity="0.9" />
+                            <path d="M50 50 C38 42, 44 32, 50 50 Z" fill="#785338" opacity="0.85" />
+                            <path d="M50 50 C62 42, 56 32, 50 50 Z" fill="#785338" opacity="0.85" />
+                            <path d="M50 50 C34 48, 38 38, 50 50 Z" fill="#946B4E" opacity="0.75" />
+                            <path d="M50 50 C66 48, 62 38, 50 50 Z" fill="#946B4E" opacity="0.75" />
+                            
+                            {/* Center core */}
+                            <circle cx="50" cy="48" r="2.5" fill="#EADFD6" />
+                            <circle cx="50" cy="48" r="1.5" fill="#5C3D24" />
+                          </motion.g>
+                        </svg>
+                      </div>
+
+                      {/* Numeric seconds indicator in center */}
+                      <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <span style={{ 
+                          fontSize: 36, 
+                          fontWeight: 900, 
+                          color: '#4A3427', 
+                          fontFamily: 'Outfit',
+                          lineHeight: 1
+                        }}>
+                          {isPlaying ? secondsLeft : '0'}
+                        </span>
+                        <span style={{ 
+                          fontSize: 10, 
+                          fontWeight: 800, 
+                          textTransform: 'uppercase', 
+                          letterSpacing: '0.12em', 
+                          color: '#8C4F1A',
+                          marginTop: 4
+                        }}>
+                          {isPlaying ? phase : 'Ready'}
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Central Status Text Notification */}
+                  <div style={{ marginTop: 24, textAlign: 'center', minHeight: 60 }}>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={phase}
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <h3 style={{ margin: '0 0 4px', fontSize: '18px', fontWeight: 800, color: '#4A3427', fontFamily: 'Outfit' }}>
+                          {phase === 'idle' && 'Begin Mindful Breathing'}
+                          {phase === 'inhale' && 'Inhale Gently'}
+                          {phase === 'hold' && 'Hold and Rest'}
+                          {phase === 'exhale' && 'Exhale Fully'}
+                        </h3>
+                        <p style={{ margin: 0, fontSize: '13px', color: '#7A6A5A', fontStyle: 'italic', fontWeight: 500 }}>
+                          {phase === 'idle' && 'Click Play to begin a 3-cycle sponsored wellness session.'}
+                          {phase === 'inhale' && 'Breathe in slowly, filling your lungs with positivity.'}
+                          {phase === 'hold' && 'Embrace absolute stillness, holding in the peacefulness.'}
+                          {phase === 'exhale' && 'Release all weight, sending your healing energy upwards.'}
+                        </p>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Ambient Visual Sound Bar Toggle */}
+                  <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <button
+                      onClick={() => {
+                        const nextSound = !soundEnabled
+                        setSoundEnabled(nextSound)
+                        if (nextSound) {
+                          if (!audioContextRef.current) {
+                            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)()
+                          }
+                          if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                            audioContextRef.current.resume()
+                          }
+                          // Start hum immediately if currently in active phase
+                          if (isPlaying && phase !== 'idle') {
+                            setTimeout(() => startHum(phase === 'inhale' ? 220 : phase === 'hold' ? 261.63 : 196, 0.04), 50)
+                          }
+                        } else {
+                          stopHum()
+                        }
+                      }}
+                      style={{
+                        border: 'none',
+                        background: 'none',
+                        padding: 6,
+                        cursor: 'pointer',
+                        color: soundEnabled ? '#8C4F1A' : '#A09080',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                      title={soundEnabled ? "Mute Ambient Hum" : "Enable Serene Ambient Sound"}
+                    >
+                      {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                      <span style={{ fontSize: 11, fontWeight: 700 }}>Ambient Hum</span>
+                    </button>
+                  </div>
+
+                </div>
+
+                {/* Right Column: Settings, Information & Gamification Progress */}
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid rgba(225, 215, 203, 0.5)', paddingLeft: 32 }} className="gameplay-settings-col">
+                  <div>
+                    
+                    {/* Title & Brand Intro */}
+                    <div style={{ marginBottom: 28 }}>
+                      <div style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        background: 'rgba(139,94,52,0.06)', border: '1px solid rgba(139,94,52,0.12)',
+                        borderRadius: 99, padding: '4px 12px', marginBottom: 12
+                      }}>
+                        <Sparkles size={11} color="#8B5E34" />
+                        <span style={{ fontSize: 9.5, fontWeight: 900, color: '#8B5E34', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                          Wellness Portal
+                        </span>
+                      </div>
+
+                      <h2 style={{ margin: '0 0 8px', fontSize: '28px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit', letterSpacing: '-0.5px' }}>
+                        Breathe & Bloom
+                      </h2>
+                      
+                      <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.6, fontWeight: 500 }}>
+                        Complete 3 full cycles of peaceful breathing. Our wellness sponsors will match your focus by executing a direct ₹10 contribution to Janamithra's treatment.
+                      </p>
+                    </div>
+
+                    {/* Rhythm Style Selection Presets */}
+                    <div style={{ marginBottom: 32 }}>
+                      <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
+                        Select Breathing Technique
+                      </h4>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        {Object.entries(RHYTHMS).map(([key, details]) => (
+                          <div
+                            key={key}
+                            onClick={() => {
+                              setRhythmKey(key)
+                              // Resume audio context just in case
+                              if (!audioContextRef.current) {
+                                audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)()
+                              }
+                              if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+                                audioContextRef.current.resume()
+                              }
+                              // Update active countdown timer immediately if session is playing
+                              if (isPlaying) {
+                                const activeDur = details[phase] !== undefined ? details[phase] : details.inhale
+                                setSecondsLeft(activeDur)
+                              }
+                            }}
+                            style={{
+                              background: rhythmKey === key ? '#FFFDFB' : 'rgba(255,255,255,0.4)',
+                              border: rhythmKey === key ? '1.5px solid #8C4F1A' : '1px solid rgba(220, 208, 195, 0.6)',
+                              borderRadius: '16px',
+                              padding: '12px 16px',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              boxShadow: rhythmKey === key ? '0 4px 12px rgba(139, 94, 52, 0.05)' : 'none'
+                            }}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontSize: 13.5, fontWeight: 700, color: '#4A3427' }}>
+                                {details.name}
+                              </span>
+                              <span style={{ fontSize: 10, fontWeight: 800, color: '#8C4F1A', background: 'rgba(140, 79, 26, 0.08)', padding: '2px 8px', borderRadius: 99 }}>
+                                {details.inhale}s - {details.hold}s - {details.exhale}s
+                              </span>
+                            </div>
+                            <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#7A6A5A', lineHeight: 1.4 }}>
+                              {details.description}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Core Cycle Counter Tracker */}
+                    <div style={{
+                      background: 'rgba(139, 94, 52, 0.03)',
+                      border: '1px solid rgba(139, 94, 52, 0.08)',
+                      borderRadius: '20px',
+                      padding: '16px 20px',
+                      marginBottom: 32
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                        <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#8C4F1A' }}>
+                          Session Progress
+                        </span>
+                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#4A3427', fontFamily: 'Outfit' }}>
+                          {cyclesCompleted} / 3 Cycles
+                        </span>
+                      </div>
+
+                      {/* Cycle mini dots */}
+                      <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
+                        {[0, 1, 2].map((idx) => {
+                          const isDone = cyclesCompleted > idx
+                          const isActive = isPlaying && cyclesCompleted === idx
+                          return (
+                            <div
+                              key={idx}
+                              style={{
+                                flex: 1,
+                                height: 6,
+                                borderRadius: 99,
+                                background: isDone 
+                                  ? '#8C4F1A' 
+                                  : isActive 
+                                    ? 'linear-gradient(90deg, #EBD5C2, #8C4F1A)' 
+                                    : 'rgba(235, 224, 214, 0.6)',
+                                transition: 'all 0.4s'
+                              }}
+                            />
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Bottom: Play Control Trigger Buttons */}
+                  <div style={{ display: 'flex', gap: 14 }}>
+                    <motion.button
+                      onClick={handleTogglePlay}
+                      whileHover={{ scale: 1.02, boxShadow: '0 8px 20px rgba(140, 79, 26, 0.16)' }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        flex: 2,
+                        padding: '15px',
+                        borderRadius: '16px',
+                        border: 'none',
+                        background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                        color: '#FFF',
+                        fontWeight: 800,
+                        fontSize: '14.5px',
+                        fontFamily: 'Outfit',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        boxShadow: '0 6px 16px rgba(140, 79, 26, 0.12)'
+                      }}
+                    >
+                      {isPlaying ? (
+                        <>
+                          <Pause size={15} /> Pause Session
+                        </>
+                      ) : (
+                        <>
+                          <Play size={15} /> {cyclesCompleted > 0 ? 'Resume Session' : 'Start Session'}
+                        </>
+                      )}
+                    </motion.button>
+
+                    <motion.button
+                      onClick={handleReset}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        flex: 1,
+                        padding: '15px',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(220, 208, 195, 0.8)',
+                        background: '#FFF',
+                        color: '#7A6A5A',
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6
+                      }}
+                    >
+                      <RotateCcw size={14} /> Reset
+                    </motion.button>
+                  </div>
+
+                </div>
+
+              </div>
 
             </div>
 
           </div>
-
-        </div>
+        )}
 
         {/* ────────────────── SUCCESS VAULT OVERLAY MODAL ────────────────── */}
         <AnimatePresence>
