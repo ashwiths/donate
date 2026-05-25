@@ -1040,7 +1040,7 @@ export default function HomePage() {
         <MedicalProofSection />
 
         {/* ────────────────── 8. REDESIGNED HIGH-FIDELITY LUXURY MYSTERY REWARD SECTION ────────────────── */}
-        <section style={{
+        <section className="mystery-rewards-section" style={{
           background: 'transparent',
           borderTop: '1px solid var(--color-border)',
           borderBottom: '1px solid var(--color-border)',
@@ -1279,7 +1279,7 @@ export default function HomePage() {
           <DonationBackground />
           <div style={{ padding: '80px 40px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box', position: 'relative', zIndex: 1 }}>
 
-            <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <div style={{ textAlign: 'center', marginBottom: 56 }} className="payment-transparency-header">
               <motion.div
                 variants={fadeUp}
                 style={{
@@ -2095,6 +2095,11 @@ export default function HomePage() {
           }
           .framework-cards-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .mystery-rewards-section, .payment-transparency-header {
+            display: none !important;
           }
         }
         @media (max-width: 480px) {

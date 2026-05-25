@@ -70,6 +70,9 @@ export default function Navbar() {
     return (
       <>
         <motion.nav
+          key="mobile-nav"
+          initial={{ y: 0, opacity: 1 }}
+          animate={{ y: 0, opacity: 1 }}
           className={`premium-nav-mobile ${isScrolled ? 'scrolled' : ''}`}
           style={{
             position: 'fixed',
@@ -418,6 +421,7 @@ export default function Navbar() {
 
   return (
     <motion.nav
+      key="desktop-nav"
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
