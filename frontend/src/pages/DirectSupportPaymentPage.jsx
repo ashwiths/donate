@@ -16,7 +16,7 @@ export default function DirectSupportPaymentPage() {
   const { confirmDonation } = useDonation()
 
   const [copied, setCopied] = useState(false)
-  const [processing, setProcessing] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [showQrFallback, setShowQrFallback] = useState(false)
@@ -37,6 +37,16 @@ export default function DirectSupportPaymentPage() {
   useEffect(() => {
     if (!user) {
       navigate('/')
+    } else {
+      // Preload Google Fonts used in certificates (e.g. Great Vibes, Outfit) and cache browser resources
+      try {
+        const fontLink = document.createElement('link');
+        fontLink.rel = 'stylesheet';
+        fontLink.href = 'https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@400;500;700;800;900&display=swap';
+        document.head.appendChild(fontLink);
+      } catch (err) {
+        console.error('Failed to preload certificate fonts:', err);
+      }
     }
   }, [user, navigate])
 
@@ -95,96 +105,83 @@ export default function DirectSupportPaymentPage() {
     }, 1200)
   }
 
-  const handlePaymentComplete = async () => {
+  const handlePaymentComplete = () => {
     triggerHaptic()
-    setProcessing(true)
+    setIsProcessing(true)
     
-    // Simulate premium processing delay
-    setTimeout(async () => {
-      try {
-        confirmDonation(pendingPrice)
+    // 1. Immediately show the lightweight transition overlay
+    setPaymentSuccess(true)
 
-        if (user?.uid) {
-          // Generate certificate based on saved context
-          if (unlockType === 'game') {
-            await generateHealingCertificate({
-              userId: user.uid,
-              amount: pendingPrice,
-              childName: 'Janamitra',
-              title: 'Certificate of Game Unlock',
-              contributionType: 'game_unlock',
-              gameId: pendingGameId,
-              gameName: pendingGameTitle || 'Premium Game',
-              supporterName: supporterName
-            })
-          } else if (unlockType === 'coupon') {
-            await generateHealingCertificate({
-              userId: user.uid,
-              amount: pendingPrice,
-              childName: 'Janamitra',
-              title: `Certificate of Coupon Unlock - ${pendingGameTitle}`,
-              contributionType: 'coupon_unlock',
-              couponId: pendingGameId,
-              couponBrand: pendingGameTitle,
-              couponCode: 'SECRET_CODE_MOCK', // placeholder
-              supporterName: supporterName
-            })
-          } else if (unlockType === 'message') {
-            await generateHealingCertificate({
-              userId: user.uid,
-              amount: pendingPrice,
-              childName: 'Janamitra',
-              title: `Certificate of Healing Message - ${pendingGameTitle}`,
-              contributionType: 'healing_message_unlock',
-              gameId: pendingGameId,
-              gameName: pendingGameTitle || 'Healing Message',
-              supporterName: supporterName
-            })
-          } else {
-            await generateHealingCertificate({
-              userId: user.uid,
-              amount: pendingPrice,
-              childName: 'Janamitra',
-              title: 'Certificate of Healing Support',
-              contributionType: 'donation',
-              supporterName: supporterName
-            })
-          }
+    // 2. Perform Firestore background save asynchronously (non-blocking)
+    try {
+      confirmDonation(pendingPrice)
+
+      if (user?.uid) {
+        if (unlockType === 'game') {
+          generateHealingCertificate({
+            userId: user.uid,
+            amount: pendingPrice,
+            childName: 'Janamitra',
+            title: 'Certificate of Game Unlock',
+            contributionType: 'game_unlock',
+            gameId: pendingGameId,
+            gameName: pendingGameTitle || 'Premium Game',
+            supporterName: supporterName
+          })
+        } else if (unlockType === 'coupon') {
+          generateHealingCertificate({
+            userId: user.uid,
+            amount: pendingPrice,
+            childName: 'Janamitra',
+            title: `Certificate of Coupon Unlock - ${pendingGameTitle}`,
+            contributionType: 'coupon_unlock',
+            couponId: pendingGameId,
+            couponBrand: pendingGameTitle,
+            couponCode: 'SECRET_CODE_MOCK',
+            supporterName: supporterName
+          })
+        } else if (unlockType === 'message') {
+          generateHealingCertificate({
+            userId: user.uid,
+            amount: pendingPrice,
+            childName: 'Janamitra',
+            title: `Certificate of Healing Message - ${pendingGameTitle}`,
+            contributionType: 'healing_message_unlock',
+            gameId: pendingGameId,
+            gameName: pendingGameTitle || 'Healing Message',
+            supporterName: supporterName
+          })
+        } else {
+          generateHealingCertificate({
+            userId: user.uid,
+            amount: pendingPrice,
+            childName: 'Janamitra',
+            title: 'Certificate of Healing Support',
+            contributionType: 'donation',
+            supporterName: supporterName
+          })
         }
-
-        // Show full screen success celebration
-        setPaymentSuccess(true)
-        confetti({
-          particleCount: 180,
-          spread: 100,
-          origin: { y: 0.4 },
-          colors: ['#8C4F1A', '#C8773A', '#D4AF37', '#FAF2EA']
-        })
-
-        // Hold success presentation for 3 seconds of high-fidelity wellness delight
-        setTimeout(() => {
-          // Navigate based on type
-          if (unlockType === 'game') {
-            if (pendingGamePath) {
-              navigate(pendingGamePath)
-            } else {
-              navigate('/main')
-            }
-          } else if (unlockType === 'coupon') {
-            navigate(`/coupon-thank-you/${pendingGameId}`)
-          } else if (unlockType === 'message') {
-            navigate(`/reveal-message/${pendingGameId}`)
-          } else {
-            navigate('/thank-you')
-          }
-        }, 3000)
-
-      } catch (err) {
-        console.error('Error confirming payment:', err)
-        alert('Confirmation failed: ' + err.message)
-        setProcessing(false)
       }
-    }, 2000)
+    } catch (err) {
+      console.error('Background save registration failed:', err)
+    }
+
+    // 3. Immediately trigger navigation after a short 500ms transition delay
+    setTimeout(() => {
+      if (unlockType === 'game') {
+        if (pendingGamePath) {
+          navigate(pendingGamePath)
+        } else {
+          navigate('/main')
+        }
+      } else if (unlockType === 'coupon') {
+        navigate(`/coupon-thank-you/${pendingGameId}`)
+      } else if (unlockType === 'message') {
+        navigate(`/reveal-message/${pendingGameId}`)
+      } else {
+        navigate('/thank-you')
+      }
+    }, 500)
   }
 
   const floatingIcons = [
@@ -265,6 +262,15 @@ export default function DirectSupportPaymentPage() {
       overflowX: 'hidden'
     }}>
       <style>{`
+        @keyframes pulseGlow {
+          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(140, 79, 26, 0)); }
+          50% { transform: scale(1.08); filter: drop-shadow(0 0 12px rgba(200, 119, 58, 0.4)); }
+        }
+        @keyframes shimmerProgress {
+          0% { left: -50%; }
+          100% { left: 100%; }
+        }
+
         .payment-grid-layout {
           display: grid;
           grid-template-columns: 1.15fr 0.85fr;
@@ -955,7 +961,7 @@ export default function DirectSupportPaymentPage() {
                   <div className="payment-action-btn-container" style={{ zIndex: 1, position: 'relative' }}>
                     <button
                       onClick={handlePaymentComplete}
-                      disabled={processing}
+                      disabled={isProcessing}
                       className="payment-action-btn glowing-btn"
                       style={{
                         width: '100%',
@@ -973,7 +979,7 @@ export default function DirectSupportPaymentPage() {
                       }}
                     >
                       <Heart size={16} fill="#fff" />
-                      {processing ? 'Processing Contribution...' : 'I Have Completed Payment'}
+                      {isProcessing ? 'Processing Contribution...' : 'I Have Completed Payment'}
                     </button>
                     <p style={{ margin: '8px 0 0', fontSize: '10.5px', color: '#9A8A7A', fontStyle: 'italic', textAlign: 'center', lineHeight: 1.35 }}>
                       Payments are manually reviewed to prevent misuse and protect verified pediatric treatment campaigns.
@@ -1135,7 +1141,7 @@ export default function DirectSupportPaymentPage() {
                   <div style={{ zIndex: 1, position: 'relative' }}>
                     <button
                       onClick={handlePaymentComplete}
-                      disabled={processing}
+                      disabled={isProcessing}
                       className="payment-action-btn glowing-btn"
                       style={{
                         width: '100%',
@@ -1153,7 +1159,7 @@ export default function DirectSupportPaymentPage() {
                       }}
                     >
                       <Heart size={16} fill="#fff" />
-                      {processing ? 'Processing Contribution...' : 'I Have Completed Payment'}
+                      {isProcessing ? 'Processing Contribution...' : 'I Have Completed Payment'}
                     </button>
                   </div>
                 </>
@@ -1181,7 +1187,7 @@ export default function DirectSupportPaymentPage() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(61, 43, 26, 0.96)',
+              background: 'rgba(253, 251, 247, 0.98)',
               zIndex: 99999,
               display: 'flex',
               flexDirection: 'column',
@@ -1189,13 +1195,13 @@ export default function DirectSupportPaymentPage() {
               justifyContent: 'center',
               padding: '24px',
               textAlign: 'center',
-              backdropFilter: 'blur(16px)'
+              backdropFilter: 'blur(10px)'
             }}
           >
             <motion.div
-              initial={{ scale: 0.6, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: 'spring', damping: 15 }}
+              transition={{ duration: 0.2 }}
               style={{
                 background: 'linear-gradient(135deg, #FFF, #FAF4E8)',
                 padding: '48px 40px',
@@ -1215,54 +1221,46 @@ export default function DirectSupportPaymentPage() {
                 width: '80px',
                 height: '80px',
                 borderRadius: '50%',
-                background: '#EAF6E2',
+                background: '#FAF2EA',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: '24px',
-                border: '4px solid #85B96F',
-                boxShadow: '0 8px 24px rgba(133, 185, 111, 0.3)'
+                border: '1px solid rgba(212, 175, 55, 0.2)',
+                boxShadow: '0 8px 24px rgba(140, 79, 26, 0.08)',
+                animation: 'pulseGlow 1.2s infinite ease-in-out'
               }}>
-                <ShieldCheck size={40} color="#47682C" />
+                <Heart size={36} fill="#8C4F1A" color="#8C4F1A" />
               </div>
 
               <h2 style={{
-                margin: '0 0 12px',
-                fontSize: '26px',
+                margin: '0 0 16px',
+                fontSize: '24px',
                 fontWeight: 900,
                 color: '#3D2B1A',
                 letterSpacing: '-0.5px'
               }}>
-                Payment Completed! ✨
+                Verifying contribution...
               </h2>
               
-              <p style={{
-                margin: '0 0 24px',
-                fontSize: '14.5px',
-                color: '#7A6A5A',
-                lineHeight: 1.6,
-                fontWeight: 500
-              }}>
-                Your direct support is fully verified and routed directly to Janamitra’s pediatric care.
-              </p>
-
-              {/* Glowing Heart indicator */}
+              {/* Shimmering Progress Bar */}
               <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: '#FAF2EA',
-                padding: '10px 20px',
-                borderRadius: '14px',
-                border: '1px solid #EBD5C2',
-                fontSize: '13px',
-                fontWeight: 800,
-                color: '#8C4F1A',
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em'
+                width: '180px',
+                height: '5px',
+                background: 'rgba(140, 79, 26, 0.1)',
+                borderRadius: '3px',
+                overflow: 'hidden',
+                position: 'relative',
+                marginBottom: '8px'
               }}>
-                <Heart size={14} fill="#8C4F1A" />
-                Certificate Generated
+                <div style={{
+                  position: 'absolute',
+                  height: '100%',
+                  width: '50%',
+                  background: 'linear-gradient(90deg, #C8773A, #8C4F1A)',
+                  borderRadius: '3px',
+                  animation: 'shimmerProgress 1s infinite linear'
+                }} />
               </div>
             </motion.div>
           </motion.div>

@@ -21,22 +21,24 @@ export async function generateHealingCertificate({
 }) {
   if (!userId) return null;
 
-  const userRef = doc(db, 'users', userId);
-  const contributionsCol = collection(db, 'contributions');
-  const activitiesCol = collection(db, 'activities');
   const certificatesCol = collection(db, 'certificates');
+  const certificateDocRef = doc(certificatesCol);
+  const newCertId = certificateDocRef.id;
 
-  try {
-    let newCertId = '';
-    await runTransaction(db, async (transaction) => {
-      // 1. Fetch user data within transaction
-      const userSnap = await transaction.get(userRef);
-      if (!userSnap.exists()) {
-        throw new Error('User document does not exist.');
-      }
-      const userData = userSnap.data();
+  // Run the Firestore writes completely asynchronously in the background
+  (async () => {
+    try {
+      const userRef = doc(db, 'users', userId);
+      const contributionsCol = collection(db, 'contributions');
+      const activitiesCol = collection(db, 'activities');
 
-      // 2. Add Contribution record
+      // Fetch user data
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.exists() ? userSnap.data() : {};
+
+      const batchPromises = [];
+
+      // 1. Add Contribution record
       const newContribution = {
         userId,
         amount,
@@ -45,9 +47,9 @@ export async function generateHealingCertificate({
         createdAt: serverTimestamp()
       };
       const contributionDocRef = doc(contributionsCol);
-      transaction.set(contributionDocRef, newContribution);
+      batchPromises.push(setDoc(contributionDocRef, newContribution));
 
-      // 3. Add Activity records
+      // 2. Add Activity records
       let activityType = 'contribution';
       let activityTarget = 'Healing Support';
       
@@ -74,7 +76,7 @@ export async function generateHealingCertificate({
         createdAt: serverTimestamp()
       };
       const activityDocRef = doc(activitiesCol);
-      transaction.set(activityDocRef, newActivity);
+      batchPromises.push(setDoc(activityDocRef, newActivity));
 
       // Log certificate_generated activity
       const certActivityDocRef = doc(activitiesCol);
@@ -86,12 +88,9 @@ export async function generateHealingCertificate({
         amount,
         createdAt: serverTimestamp()
       };
-      transaction.set(certActivityDocRef, certActivity);
+      batchPromises.push(setDoc(certActivityDocRef, certActivity));
 
-      // 4. Add Certificate record
-      const certificateDocRef = doc(certificatesCol);
-      newCertId = certificateDocRef.id;
-      
+      // 3. Add Certificate record
       const newCertificate = {
         amount,
         childName,
@@ -104,7 +103,7 @@ export async function generateHealingCertificate({
         contributionType,
         supporterName: supporterName || ''
       };
-      transaction.set(certificateDocRef, newCertificate);
+      batchPromises.push(setDoc(certificateDocRef, newCertificate));
 
       // Coupon Unlock logic
       if (contributionType === 'coupon_unlock') {
@@ -121,37 +120,42 @@ export async function generateHealingCertificate({
           certificateId: newCertId,
           redeemed: false
         };
-        transaction.set(couponUnlockDocRef, newCouponUnlock);
+        batchPromises.push(setDoc(couponUnlockDocRef, newCouponUnlock));
 
         // Update Coupon Stock & Reward Inventory
         if (couponId) {
           const couponDocRef = doc(db, 'coupons', couponId);
-          const couponSnap = await transaction.get(couponDocRef);
-          if (couponSnap.exists()) {
-            const couponData = couponSnap.data();
-            const remaining = couponData.remainingStock ?? 100;
-            if (remaining <= 0) {
-              throw new Error('This coupon is out of stock.');
-            }
-            const newRemaining = remaining - 1;
-            const newUnlocked = (couponData.unlockedCount ?? 0) + 1;
-            
-            transaction.update(couponDocRef, {
-              remainingStock: newRemaining,
-              unlockedCount: newUnlocked,
-              isActive: newRemaining > 0
-            });
+          // Run Coupon update inside background scope as well
+          const runCouponUpdate = async () => {
+            try {
+              const couponSnap = await getDoc(couponDocRef);
+              if (couponSnap.exists()) {
+                const couponData = couponSnap.data();
+                const remaining = couponData.remainingStock ?? 100;
+                const newRemaining = Math.max(0, remaining - 1);
+                const newUnlocked = (couponData.unlockedCount ?? 0) + 1;
+                
+                await setDoc(couponDocRef, {
+                  remainingStock: newRemaining,
+                  unlockedCount: newUnlocked,
+                  isActive: newRemaining > 0
+                }, { merge: true });
 
-            // rewardInventory record
-            const invDocRef = doc(db, 'rewardInventory', couponId);
-            transaction.set(invDocRef, {
-              couponId,
-              brand: couponBrand || '',
-              remainingStock: newRemaining,
-              unlockedCount: newUnlocked,
-              updatedAt: serverTimestamp()
-            }, { merge: true });
-          }
+                // rewardInventory record
+                const invDocRef = doc(db, 'rewardInventory', couponId);
+                await setDoc(invDocRef, {
+                  couponId,
+                  brand: couponBrand || '',
+                  remainingStock: newRemaining,
+                  unlockedCount: newUnlocked,
+                  updatedAt: serverTimestamp()
+                }, { merge: true });
+              }
+            } catch (couponErr) {
+              console.error('Failed background coupon update:', couponErr);
+            }
+          };
+          batchPromises.push(runCouponUpdate());
         }
       }
 
@@ -167,7 +171,7 @@ export async function generateHealingCertificate({
           unlockedAt: serverTimestamp(),
           certificateId: newCertId
         };
-        transaction.set(gameUnlockDocRef, newGameUnlock);
+        batchPromises.push(setDoc(gameUnlockDocRef, newGameUnlock));
       }
 
       // Healing Message Unlock logic
@@ -183,10 +187,10 @@ export async function generateHealingCertificate({
           unlockedAt: serverTimestamp(),
           certificateId: newCertId
         };
-        transaction.set(messageUnlockDocRef, newMessageUnlock);
+        batchPromises.push(setDoc(messageUnlockDocRef, newMessageUnlock));
       }
 
-      // Update global analytics document inside transaction
+      // Update global analytics document
       const statsRef = doc(db, 'analytics', 'globalStats');
       const statsUpdate = {
         totalContributions: increment(1),
@@ -205,7 +209,7 @@ export async function generateHealingCertificate({
         statsUpdate.totalHealingSupport = increment(amount);
       }
       
-      transaction.set(statsRef, statsUpdate, { merge: true });
+      batchPromises.push(setDoc(statsRef, statsUpdate, { merge: true }));
 
       // 5. Update user stats
       const updateFields = {
@@ -253,14 +257,15 @@ export async function generateHealingCertificate({
         updateFields.healingSupports = increment(1);
       }
 
-      transaction.update(userRef, updateFields);
-    });
+      batchPromises.push(setDoc(userRef, updateFields, { merge: true }));
 
-    return newCertId;
-  } catch (err) {
-    console.error('Failed to generate healing certificate inside transaction:', err);
-    throw err;
-  }
+      await Promise.all(batchPromises);
+    } catch (err) {
+      console.error('Failed to generate healing certificate in background:', err);
+    }
+  })();
+
+  return newCertId;
 }
 
 /**
