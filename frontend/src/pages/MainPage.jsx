@@ -782,7 +782,7 @@ export default function MainPage() {
         </div>
 
         {/* ── CENTRALIZED CONTENT GRID ── */}
-        <div style={{ maxWidth: 1360, margin: '56px auto 0', padding: '0 48px', boxSizing: 'border-box' }}>
+        <div className="main-grid-container" style={{ maxWidth: 1360, margin: '56px auto 0', padding: '0 48px', boxSizing: 'border-box' }}>
           
           {/* ────────────────── 1. GAMES SECTION ────────────────── */}
           {show('games') && (
@@ -1055,6 +1055,7 @@ export default function MainPage() {
                           navigate(`/coupon/${reward.id}`);
                         }
                       }}
+                      className="coupon-card"
                       style={{
                         background: '#FFFFFF',
                         border: isOutOfStock ? '1px solid rgba(220, 208, 195, 0.4)' : '1px solid rgba(220, 208, 195, 0.7)',
@@ -1275,6 +1276,7 @@ export default function MainPage() {
                 {INSPIRATIONAL_CARDS.map((card, idx) => (
                   <motion.div
                     key={idx}
+                    className="quotes-card"
                     whileHover={{ 
                       y: -8, 
                       boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
@@ -1417,7 +1419,7 @@ export default function MainPage() {
                 <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
-              <div style={{
+              <div className="free-help-card" style={{
                 background: '#FFFFFF',
                 border: '1px solid rgba(220, 208, 195, 0.7)',
                 borderRadius: '36px',
@@ -1454,7 +1456,7 @@ export default function MainPage() {
                 </label>
 
                 {/* Preset Chips */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 32 }}>
+                <div className="preset-chips-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 32 }}>
                   {[100, 250, 500, 1000].map((preset) => {
                     const isSelected = selectedPreset === preset && !customAmount;
                     return (
@@ -1517,7 +1519,7 @@ export default function MainPage() {
                 </div>
 
                 {/* Direct Hospital Trust Info Panel */}
-                <div style={{
+                <div className="hospital-trust-panel" style={{
                   background: 'rgba(255, 255, 255, 0.45)',
                   border: '1px solid rgba(235, 224, 214, 0.5)',
                   borderRadius: '24px',
@@ -1871,6 +1873,38 @@ export default function MainPage() {
           }
         }
         @media (max-width: 768px) {
+          #tab-container { margin: 24px auto 0 !important; padding: 0 16px !important; }
+          .main-grid-container {
+            margin: 24px auto 0 !important;
+            padding: 0 16px !important;
+          }
+          .free-help-card {
+            padding: 24px 16px !important;
+            border-radius: 24px !important;
+          }
+          .preset-chips-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+            margin-bottom: 24px !important;
+          }
+          .hospital-trust-panel {
+            padding: 16px !important;
+            border-radius: 18px !important;
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+            margin-bottom: 24px !important;
+          }
+          .coupon-card {
+            border-radius: 20px !important;
+          }
+          .coupon-card > div:last-child {
+            padding: 20px 16px !important;
+          }
+          .quotes-card {
+            padding: 20px 16px !important;
+            border-radius: 20px !important;
+            min-height: 240px !important;
+          }
           .main-tabs-row { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap !important; gap: 8px !important; }
           .main-tabs-row button { flex-shrink: 0; white-space: nowrap; }
           .games-card-grid { grid-template-columns: 1fr !important; gap: 20px !important; }

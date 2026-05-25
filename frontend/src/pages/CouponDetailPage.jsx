@@ -135,7 +135,7 @@ export default function CouponDetailPage() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FAF6F0', color: '#3D2B1A', fontFamily: 'Outfit, sans-serif' }}>
       <Navbar />
 
-      <main style={{ flex: 1, padding: '40px 20px', maxWidth: '1000px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
+      <main className="coupon-detail-main" style={{ flex: 1, padding: '40px 20px', maxWidth: '1000px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
         
         {/* Back Link */}
         <Link to="/main" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#8B5E34', textDecoration: 'none', fontWeight: 700, fontSize: '14.5px', marginBottom: 28, transition: 'all 0.2s' }}>
@@ -145,7 +145,7 @@ export default function CouponDetailPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '32px' }}>
           
           {/* Main Card */}
-          <div style={{ 
+          <div className="coupon-detail-card" style={{ 
             background: '#FFFFFF', 
             borderRadius: '32px', 
             border: '1px solid rgba(220, 208, 195, 0.7)', 
@@ -179,7 +179,7 @@ export default function CouponDetailPage() {
             </div>
 
             {/* Content Area */}
-            <div style={{ padding: '64px 32px 32px' }}>
+            <div className="coupon-detail-content" style={{ padding: '64px 32px 32px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 16 }}>
                 <div>
                   <span style={{ fontSize: '11px', fontWeight: 800, color: coupon.accentColor, textTransform: 'uppercase', letterSpacing: '0.08em', background: `${coupon.accentColor}12`, padding: '6px 12px', borderRadius: '8px' }}>

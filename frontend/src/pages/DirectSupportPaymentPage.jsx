@@ -52,7 +52,7 @@ export default function DirectSupportPaymentPage() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  const upiId = 'supportjanami1459@cashfreesdlpb'
+  const upiId = 'ppqr01.bgpulp@iob'
 
   const getUpiUrl = (appScheme = 'upi') => {
     const pnEncoded = encodeURIComponent('Janamithra Support')
@@ -251,7 +251,7 @@ export default function DirectSupportPaymentPage() {
   }
 
   return (
-    <div style={{
+    <div className="payment-page-container" style={{
       minHeight: '100vh',
       background: 'linear-gradient(180deg, #FDFBF7 0%, #F5EFEB 100%)',
       color: '#3D2B1A',
@@ -404,6 +404,35 @@ export default function DirectSupportPaymentPage() {
         }
 
         @media (max-width: 768px) {
+          .payment-page-container {
+            padding: 16px 12px 100px !important;
+          }
+          .payment-main-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          .payment-right-card {
+            padding: 20px 16px !important;
+            border-radius: 20px !important;
+          }
+          .amount-indicator-card {
+            padding: 16px 18px !important;
+            border-radius: 18px !important;
+          }
+          .compassion-quote-card {
+            padding: 14px 18px !important;
+            border-radius: 0 16px 16px 0 !important;
+          }
+          .trust-badges-grid {
+            gap: 10px !important;
+            margin-bottom: 20px !important;
+          }
+          .trust-badge-item {
+            padding: 12px 10px !important;
+            border-radius: 12px !important;
+          }
           .payment-action-btn-container {
             position: fixed !important;
             bottom: 0 !important;
@@ -412,7 +441,7 @@ export default function DirectSupportPaymentPage() {
             background: rgba(253, 251, 247, 0.95) !important;
             backdrop-filter: blur(16px) !important;
             -webkit-backdrop-filter: blur(16px) !important;
-            padding: 16px 20px 20px !important;
+            padding: 16px 20px calc(16px + env(safe-area-inset-bottom)) !important;
             box-shadow: 0 -8px 32px rgba(140,79,26,0.1) !important;
             border-top: 1px solid rgba(232, 224, 214, 0.8) !important;
             z-index: 1000 !important;
@@ -528,7 +557,7 @@ export default function DirectSupportPaymentPage() {
       </AnimatePresence>
 
       {/* Main Layout Container */}
-      <div style={{
+      <div className="payment-main-container" style={{
         width: '100%',
         maxWidth: '1100px',
         margin: '0 auto',
@@ -609,7 +638,7 @@ export default function DirectSupportPaymentPage() {
             </p>
 
             {/* Selected Amount Indicator */}
-            <div style={{
+            <div className="amount-indicator-card" style={{
               background: 'linear-gradient(135deg, #FAF6F2 0%, #F5ECE5 100%)',
               border: '1px solid rgba(140, 79, 26, 0.15)',
               borderRadius: '24px',
@@ -632,7 +661,7 @@ export default function DirectSupportPaymentPage() {
             </div>
 
             {/* Compassion Quote Card */}
-            <div style={{
+            <div className="compassion-quote-card" style={{
               background: 'rgba(200, 119, 58, 0.04)',
               borderLeft: '4px solid #C8773A',
               borderRadius: '0 20px 20px 0',
@@ -646,13 +675,13 @@ export default function DirectSupportPaymentPage() {
             </div>
 
             {/* Left Trust Badges Row */}
-            <div style={{
+            <div className="trust-badges-grid" style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               gap: '12px',
               marginBottom: '28px'
             }}>
-              <div style={{
+              <div className="trust-badge-item" style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
@@ -670,7 +699,7 @@ export default function DirectSupportPaymentPage() {
                   <div style={{ fontSize: '11px', color: '#7A6A5A' }}>Direct QR Transfer</div>
                 </div>
               </div>
-              <div style={{
+              <div className="trust-badge-item" style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
@@ -720,7 +749,7 @@ export default function DirectSupportPaymentPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <div style={{
+            <div className="payment-right-card" style={{
               border: '2px solid transparent',
               background: 'linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.7) 100%) padding-box, linear-gradient(135deg, rgba(235, 213, 194, 0.9) 0%, rgba(200, 119, 58, 0.4) 100%) border-box',
               borderRadius: '32px',

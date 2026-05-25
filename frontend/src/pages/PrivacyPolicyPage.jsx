@@ -113,10 +113,10 @@ export default function PrivacyPolicyPage() {
                 </p>
               </div>
 
-              <div>
+              <div id="terms">
                 <h2 style={{ fontSize: 18, fontWeight: 900, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
                   <FileText size={18} color="var(--color-primary)" />
-                  6. Consent
+                  6. Consent & Terms
                 </h2>
                 <p style={{ color: 'var(--color-text-muted)', margin: 0 }}>
                   By using our website, you hereby consent to our Privacy Policy and agree to its terms and conditions.

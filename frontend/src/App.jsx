@@ -24,6 +24,9 @@ import CouponThankYouPage from './pages/CouponThankYouPage'
 import AdminAnalyticsPage from './pages/AdminAnalyticsPage'
 import RevealMessagePage from './pages/RevealMessagePage'
 import DirectSupportPaymentPage from './pages/DirectSupportPaymentPage'
+import AboutPage from './pages/AboutPage'
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
+import ContactPage from './pages/ContactPage'
 import { seedCouponsIfEmpty } from './services/contributionService'
 
 function ScrollToTop() {
@@ -70,6 +73,9 @@ export default function App() {
                 <Route path="/admin-analytics" element={<AdminAnalyticsPage />} />
                 <Route path="/reveal-message/:messageId" element={<RevealMessagePage />} />
                 <Route path="/direct-payment" element={<DirectSupportPaymentPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                <Route path="/contact" element={<ContactPage />} />
                 {/* Fallback */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

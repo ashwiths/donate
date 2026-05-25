@@ -449,6 +449,7 @@ export default function RevealMessagePage() {
             /* 1️⃣ NAME ENTRY PAGE */
             <motion.div
               key="name-step"
+              className="reveal-page-card"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
@@ -535,6 +536,7 @@ export default function RevealMessagePage() {
             /* 2️⃣ THANK YOU + MESSAGE REVEAL PAGE */
             <motion.div
               key="reveal-step"
+              className="reveal-page-card"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}

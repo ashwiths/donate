@@ -50,7 +50,23 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{ borderTop: '1px solid var(--color-border)', padding: '16px 24px', textAlign: 'center' }}>
+      <div style={{ borderTop: '1px solid var(--color-border)', padding: '20px 24px', textAlign: 'center' }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          gap: '16px', 
+          marginBottom: '16px',
+          flexWrap: 'wrap'
+        }}>
+          <Link to="/about" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>About Us</Link>
+          <span style={{ color: 'var(--color-border)', fontSize: 12 }}>|</span>
+          <Link to="/privacy" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Privacy Policy</Link>
+          <span style={{ color: 'var(--color-border)', fontSize: 12 }}>|</span>
+          <Link to="/privacy#terms" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Terms & Conditions</Link>
+          <span style={{ color: 'var(--color-border)', fontSize: 12 }}>|</span>
+          <Link to="/contact" style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 700, textDecoration: 'none' }}>Contact Us</Link>
+        </div>
         <p style={{ fontSize: 13, color: 'var(--color-text-muted)', margin: 0 }}>
           © 2026{' '}
           <a

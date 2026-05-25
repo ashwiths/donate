@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, ArrowRight, Share2, Download, Heart, Shield, Award, Calendar, Landmark, Copy, Check, Sparkles, Activity, Info } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Share2, Download, Heart, Shield, Award, Calendar, Landmark, Copy, Check, Sparkles, Activity, Info, ArrowDown } from 'lucide-react'
 import { useDonation } from '../context/DonationContext'
 import { useAuth } from '../context/AuthContext'
 import { useUserData } from '../hooks/useUserData'
@@ -523,6 +523,45 @@ export default function ThankYouPage() {
         >
           100% of your contribution goes directly toward verified pediatric treatment support.
         </motion.p>
+
+        {/* Mobile-Only Premium Scroll Hint */}
+        <motion.div
+          className="mobile-scroll-hint"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: [0.7, 1, 0.7], y: [0, 4, 0] }}
+          transition={{
+            opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+            y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
+          }}
+          style={{
+            display: 'none',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            background: 'rgba(255, 255, 255, 0.65)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(212, 175, 55, 0.25)',
+            padding: '8px 16px',
+            borderRadius: '99px',
+            color: '#8C4F1A',
+            fontSize: '11px',
+            fontWeight: 800,
+            letterSpacing: '0.03em',
+            margin: '0 auto 20px',
+            boxShadow: '0 4px 12px rgba(139, 94, 52, 0.04)',
+            width: 'fit-content'
+          }}
+        >
+          <motion.div
+            animate={{ y: [0, 3, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            <ArrowDown size={13} color="#8C4F1A" strokeWidth={2.5} />
+          </motion.div>
+          <span>Scroll down to access your certificate</span>
+        </motion.div>
 
         {/* Dynamic Transparent Contribution Breakdown */}
         <div style={{ maxWidth: '380px', width: '100%', margin: '0 auto 24px' }}>

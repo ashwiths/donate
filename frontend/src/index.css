@@ -634,6 +634,10 @@ section, main, article, aside, header, footer, div {
 
 /* Mobile: compact premium layout */
 @media (max-width: 768px) {
+  body {
+    padding-top: calc(54px + env(safe-area-inset-top)) !important;
+  }
+
   .premium-nav {
     margin: 0 !important;
     width: 100% !important;
@@ -696,6 +700,40 @@ section, main, article, aside, header, footer, div {
     display: flex !important;
     animation: avatarGlow 3s infinite ease-in-out !important;
     transition: all 0.3s ease !important;
+  }
+
+  /* Global mobile page overrides */
+  .page-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  .glass-warm {
+    padding: 24px 16px !important;
+    border-radius: 20px !important;
+  }
+
+  .coupon-detail-main {
+    padding: 16px 12px 64px !important;
+  }
+  .coupon-detail-card {
+    border-radius: 24px !important;
+  }
+  .coupon-detail-content {
+    padding: 40px 16px 24px !important;
+  }
+
+  .reveal-page-card {
+    padding: 24px 16px !important;
+    border-radius: 24px !important;
+  }
+
+  .mobile-scroll-hint {
+    display: flex !important;
   }
 }
 

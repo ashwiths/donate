@@ -35,6 +35,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropOpen, setDropOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,6 +43,15 @@ export default function Navbar() {
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const handleLogout = () => {
@@ -54,6 +64,358 @@ export default function Navbar() {
       return location.pathname + location.search === path;
     }
     return location.pathname === path;
+  }
+
+  if (isMobile) {
+    return (
+      <>
+        <motion.nav
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className={`premium-nav-mobile ${isScrolled ? 'scrolled' : ''}`}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 'auto',
+            background: isScrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderBottom: isScrolled ? '1px solid rgba(235, 224, 214, 0.7)' : '1px solid rgba(235, 224, 214, 0.35)',
+            boxShadow: isScrolled ? '0 4px 20px rgba(120, 80, 40, 0.04)' : 'none',
+            zIndex: 1000,
+            paddingTop: 'env(safe-area-inset-top)',
+            transition: 'all 0.3s ease',
+          }}
+        >
+          <div style={{
+            height: '54px',
+            padding: '0 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+            boxSizing: 'border-box'
+          }}>
+            {/* Logo */}
+            <Link 
+              to="/home" 
+              onClick={() => {
+                if ("vibrate" in navigator) navigator.vibrate(15);
+                setMenuOpen(false);
+              }}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
+            >
+              <div style={{
+                width: 30,
+                height: 30,
+                background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(92, 45, 14, 0.15)'
+              }}>
+                <Heart size={15} color="#fff" fill="#fff" />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '15px', color: '#3D2B1A', letterSpacing: '-0.3px', lineHeight: 1.15 }}>Heal & Play</span>
+                <span style={{ fontSize: '7.5px', color: '#7A6A58', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Play Games. Save Lives.</span>
+              </div>
+            </Link>
+
+            {/* Compact circular account trigger button */}
+            <motion.button
+              whileTap={{ scale: 0.92 }}
+              onClick={() => {
+                if ("vibrate" in navigator) navigator.vibrate(20);
+                setMenuOpen(!menuOpen);
+              }}
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: '50%',
+                border: '1.5px solid rgba(200, 119, 58, 0.25)',
+                background: 'linear-gradient(135deg, #FAF2EA, #EBD5C2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                padding: 0,
+                boxShadow: '0 2px 8px rgba(139, 94, 52, 0.08)',
+                flexShrink: 0
+              }}
+              aria-label="Toggle menu"
+            >
+              {user ? (
+                <span style={{ fontSize: '12px', fontWeight: 900, color: '#8C4F1A' }}>
+                  {user.name ? user.name[0].toUpperCase() : 'V'}
+                </span>
+              ) : (
+                <User size={15} color="#8C4F1A" strokeWidth={2.5} />
+              )}
+            </motion.button>
+          </div>
+        </motion.nav>
+
+        {/* Mobile Drawer (Bottom Sheet) */}
+        <AnimatePresence>
+          {menuOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  position: 'fixed',
+                  top: 0, left: 0, right: 0, bottom: 0,
+                  background: 'rgba(61, 43, 26, 0.45)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  zIndex: 9999
+                }}
+              />
+              <motion.div
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+                className="mobile-drawer-sheet"
+                style={{
+                  position: 'fixed',
+                  bottom: 0, left: 0, right: 0,
+                  background: '#FAF8F5',
+                  borderTopLeftRadius: '24px',
+                  borderTopRightRadius: '24px',
+                  padding: '24px 20px 32px',
+                  zIndex: 10000,
+                  boxShadow: '0 -10px 40px rgba(61, 43, 26, 0.15)',
+                  maxHeight: '85vh',
+                  overflowY: 'auto'
+                }}
+              >
+                {/* Drag handle line */}
+                <div style={{
+                  width: 36, height: 5, borderRadius: 99,
+                  background: 'rgba(140, 79, 26, 0.15)',
+                  margin: '0 auto 24px'
+                }} />
+
+                {/* Title inside drawer */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Heart size={18} color="#8C4F1A" fill="#8C4F1A" />
+                    <span style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 16, color: '#3D2B1A' }}>Menu Navigation</span>
+                  </div>
+                  <button 
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      background: 'rgba(140, 79, 26, 0.05)',
+                      border: 'none', width: 32, height: 32, borderRadius: '50%',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+                    }}
+                  >
+                    <X size={16} color="#8C4F1A" />
+                  </button>
+                </div>
+
+                {/* Drawer Links */}
+                <motion.div 
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                  style={{ display: 'flex', flexDirection: 'column', gap: 10 }}
+                >
+                  {navItems.map(({ label, path, icon: Icon }) => {
+                    const active = isActive(path)
+                    return (
+                      <motion.div key={label} variants={itemVariants}>
+                        <Link
+                          to={path}
+                          onClick={() => {
+                            if ("vibrate" in navigator) navigator.vibrate(20);
+                            setMenuOpen(false);
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 12,
+                            padding: '12px 16px',
+                            borderRadius: 14,
+                            textDecoration: 'none',
+                            color: active ? '#8C4F1A' : '#4A3422',
+                            background: active ? 'rgba(140, 79, 26, 0.06)' : 'transparent',
+                            border: active ? '1px solid rgba(140, 79, 26, 0.15)' : '1px solid transparent',
+                            fontWeight: active ? 800 : 600,
+                            fontSize: 15,
+                            transition: 'all 0.2s ease',
+                            position: 'relative'
+                          }}
+                        >
+                          <Icon size={18} color={active ? '#8C4F1A' : '#7A6A5A'} />
+                          <span>{label}</span>
+                          {active && (
+                            <div 
+                              className="active-dot-indicator"
+                              style={{
+                                position: 'absolute',
+                                right: 16,
+                                width: 6,
+                                height: 6,
+                                borderRadius: '50%',
+                                backgroundColor: '#C8773A',
+                              }}
+                            />
+                          )}
+                        </Link>
+                      </motion.div>
+                    )
+                  })}
+                </motion.div>
+
+                {user ? (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 25 }}
+                    style={{ marginTop: 24, borderTop: '1px solid rgba(235, 224, 214, 0.5)', paddingTop: 20 }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, padding: '0 8px' }}>
+                      <div style={{
+                        width: 40, height: 40, borderRadius: '50%',
+                        background: 'linear-gradient(135deg, #FAF2EA, #EBD5C2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '14px', fontWeight: 900, color: '#8C4F1A',
+                        border: '1px solid rgba(235, 224, 214, 0.6)'
+                      }}>
+                        {user.name ? user.name[0].toUpperCase() : 'V'}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '11px', color: '#8B5E34', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Signed in as</div>
+                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#3D2B1A' }}>{user.name || 'Helper'}</div>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        if ("vibrate" in navigator) navigator.vibrate(20);
+                        setMenuOpen(false);
+                        handleLogout();
+                      }}
+                      style={{ 
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        width: '100%', 
+                        height: 48, 
+                        borderRadius: 14, 
+                        fontSize: 14,
+                        fontWeight: 800,
+                        background: 'rgba(220, 38, 38, 0.08)',
+                        color: '#DC2626',
+                        border: 'none',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <LogOut size={16} /> Sign Out Securely
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 25 }}
+                    style={{ marginTop: 24 }}
+                  >
+                    <Link 
+                      to="/" 
+                      onClick={() => {
+                        if ("vibrate" in navigator) navigator.vibrate(20);
+                        setMenuOpen(false);
+                      }}
+                      style={{ 
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%', 
+                        height: 48, 
+                        borderRadius: 14, 
+                        fontSize: 14,
+                        fontWeight: 800,
+                        background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                        color: '#fff',
+                        textDecoration: 'none',
+                        boxShadow: '0 4px 12px rgba(140, 79, 26, 0.15)'
+                      }}
+                    >
+                      Login to Account
+                    </Link>
+                  </motion.div>
+                )}
+
+                {/* Extra legal and story links */}
+                <div style={{
+                  marginTop: '28px',
+                  borderTop: '1px solid rgba(235, 224, 214, 0.4)',
+                  paddingTop: '16px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                  gap: '12px 16px'
+                }}>
+                  <Link
+                    to="/about"
+                    onClick={() => {
+                      if ("vibrate" in navigator) navigator.vibrate(15);
+                      setMenuOpen(false);
+                    }}
+                    style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
+                  >
+                    About Us
+                  </Link>
+                  <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
+                  <Link
+                    to="/privacy"
+                    onClick={() => {
+                      if ("vibrate" in navigator) navigator.vibrate(15);
+                      setMenuOpen(false);
+                    }}
+                    style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
+                  >
+                    Privacy Policy
+                  </Link>
+                  <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
+                  <Link
+                    to="/privacy#terms"
+                    onClick={() => {
+                      if ("vibrate" in navigator) navigator.vibrate(15);
+                      setMenuOpen(false);
+                    }}
+                    style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
+                  >
+                    Terms of Use
+                  </Link>
+                  <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
+                  <Link
+                    to="/contact"
+                    onClick={() => {
+                      if ("vibrate" in navigator) navigator.vibrate(15);
+                      setMenuOpen(false);
+                    }}
+                    style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
+                  >
+                    Contact
+                  </Link>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </>
+    )
   }
 
   return (
@@ -528,6 +890,61 @@ export default function Navbar() {
                   </Link>
                 </motion.div>
               )}
+
+              {/* Extra legal and story links */}
+              <div style={{
+                marginTop: '28px',
+                borderTop: '1px solid rgba(235, 224, 214, 0.4)',
+                paddingTop: '16px',
+                display: 'flex',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                gap: '12px 16px'
+              }}>
+                <Link
+                  to="/about"
+                  onClick={() => {
+                    if ("vibrate" in navigator) navigator.vibrate(15);
+                    setMenuOpen(false);
+                  }}
+                  style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
+                >
+                  About Us
+                </Link>
+                <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
+                <Link
+                  to="/privacy"
+                  onClick={() => {
+                    if ("vibrate" in navigator) navigator.vibrate(15);
+                    setMenuOpen(false);
+                  }}
+                  style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
+                >
+                  Privacy Policy
+                </Link>
+                <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
+                <Link
+                  to="/privacy#terms"
+                  onClick={() => {
+                    if ("vibrate" in navigator) navigator.vibrate(15);
+                    setMenuOpen(false);
+                  }}
+                  style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
+                >
+                  Terms of Use
+                </Link>
+                <span style={{ color: '#E8E0D6', fontSize: '12.5px' }}>•</span>
+                <Link
+                  to="/contact"
+                  onClick={() => {
+                    if ("vibrate" in navigator) navigator.vibrate(15);
+                    setMenuOpen(false);
+                  }}
+                  style={{ fontSize: '12.5px', fontWeight: 700, color: '#8B5E34', textDecoration: 'none' }}
+                >
+                  Contact
+                </Link>
+              </div>
             </motion.div>
           </>
         )}
