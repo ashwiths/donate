@@ -827,11 +827,14 @@ export default function MainPage() {
                 <div style={{ height: '1px', width: '60px', background: 'rgba(139, 94, 52, 0.25)', marginTop: 16 }} />
               </div>
 
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
-                gap: 32 
-              }}>
+              <div 
+                className="games-card-grid"
+                style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
+                  gap: 32 
+                }}
+              >
                 {PREMIUM_GAMES.map((game) => {
                   const isUnlocked = game.price === 0 || unlockedGames.includes(game.id)
                   
@@ -849,6 +852,7 @@ export default function MainPage() {
                   return (
                     <motion.div
                       key={game.id}
+                      className="premium-game-card"
                       whileHover={isUnlocked ? { 
                         y: -8, 
                         boxShadow: '0 24px 48px rgba(122, 78, 43, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03)' 
@@ -903,33 +907,53 @@ export default function MainPage() {
                       )}
 
                       {/* SVG Illustration Container */}
-                      <div style={{ 
-                        height: 160, 
-                        background: 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.45) 100%)', 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        padding: 20,
-                        borderBottom: '1px solid rgba(235, 224, 214, 0.3)',
-                        opacity: isUnlocked ? 1 : 0.6
-                      }}>
+                      <div 
+                        className="game-card-illustration-container"
+                        style={{ 
+                          height: 160, 
+                          background: 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.45) 100%)', 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center',
+                          padding: 20,
+                          borderBottom: '1px solid rgba(235, 224, 214, 0.3)',
+                          opacity: isUnlocked ? 1 : 0.6
+                        }}
+                      >
                         <div style={{ width: '100%', height: '100%', maxWidth: 120, maxHeight: 120 }}>
                           {game.illustration}
                         </div>
                       </div>
 
-                      <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 20 }}>
+                      <div 
+                        className="game-card-body"
+                        style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 20 }}
+                      >
                         <div>
-                          <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}>{game.title}</h4>
-                          <p style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.75, fontWeight: 500 }}>{game.description}</p>
+                          <h4 
+                            className="game-card-title"
+                            style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#4A3427', fontFamily: 'Outfit' }}
+                          >
+                            {game.title}
+                          </h4>
+                          <p 
+                            className="game-card-description"
+                            style={{ margin: 0, fontSize: '13.5px', color: '#7A6A5A', lineHeight: 1.75, fontWeight: 500 }}
+                          >
+                            {game.description}
+                          </p>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px', position: 'relative', zIndex: 11 }}>
+                        <div 
+                          className="game-card-footer"
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(235, 224, 214, 0.4)', paddingTop: '16px', position: 'relative', zIndex: 11 }}
+                        >
                           <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5E34', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                             {game.price === 0 ? 'Free Experience' : (isUnlocked ? 'Unlocked' : `₹${game.price} Entry Code`)}
                           </span>
                           <motion.div 
                             whileHover={{ scale: 1.02 }}
+                            className="game-card-cta-button"
                             style={{ 
                               display: 'flex', 
                               alignItems: 'center', 
@@ -1849,12 +1873,71 @@ export default function MainPage() {
         @media (max-width: 768px) {
           .main-tabs-row { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap !important; gap: 8px !important; }
           .main-tabs-row button { flex-shrink: 0; white-space: nowrap; }
-          .games-card-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .games-card-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
           .coupon-card-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
           .quotes-card-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
           .donation-section-inner { padding: 24px 16px !important; }
           .direct-donation-amounts { flex-wrap: wrap !important; gap: 8px !important; }
           .direct-donation-amounts button { flex: 1 1 calc(50% - 8px) !important; min-width: 80px !important; }
+          
+          /* Premium mobile game cards styling overrides */
+          .premium-game-card {
+            min-height: 420px !important;
+            height: 420px !important;
+            display: flex !important;
+            flex-direction: column !important;
+          }
+          .game-card-illustration-container {
+            height: 140px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 16px !important;
+            flex-shrink: 0 !important;
+          }
+          .game-card-body {
+            padding: 20px !important;
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            box-sizing: border-box !important;
+          }
+          .game-card-title {
+            margin: 0 0 6px 0 !important;
+            font-size: 17px !important;
+          }
+          .game-card-description {
+            min-height: 72px !important;
+            max-height: 72px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 3 !important;
+            -webkit-box-orient: vertical !important;
+            line-height: 1.6 !important;
+            margin: 0 !important;
+            font-size: 13px !important;
+          }
+          .game-card-footer {
+            border-top: 1px solid rgba(235, 224, 214, 0.5) !important;
+            padding-top: 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            flex-shrink: 0 !important;
+          }
+          .game-card-cta-button {
+            padding: 8px 16px !important;
+            font-size: 12px !important;
+            border-radius: 12px !important;
+            white-space: nowrap !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 120px !important;
+          }
         }
         @media (max-width: 480px) {
           .main-tabs-row { gap: 6px !important; }

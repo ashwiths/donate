@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Heart, Gamepad2, Quote, Bell, ChevronDown, LogOut, Menu, X, Sparkles, User } from 'lucide-react'
@@ -12,12 +12,37 @@ const navItems = [
   { label: 'Account', path: '/account', icon: User },
 ]
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.04,
+      delayChildren: 0.05
+    }
+  }
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 25 } }
+}
+
 export default function Navbar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropOpen, setDropOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handleLogout = () => {
     logout()
@@ -36,6 +61,7 @@ export default function Navbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
+      className={`premium-nav ${isScrolled ? 'scrolled' : ''}`}
       style={{
         margin: '24px auto 0',
         maxWidth: '1200px',
@@ -65,7 +91,7 @@ export default function Navbar() {
         {/* Left Section: Premium Branding */}
         <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
           <Link to="/home" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-            <div style={{
+            <div className="nav-logo-icon" style={{
               width: 36,
               height: 36,
               background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
@@ -78,8 +104,8 @@ export default function Navbar() {
               <Heart size={20} color="#fff" fill="#fff" />
             </div>
             <div>
-              <div style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 17, color: '#3D2B1A', letterSpacing: '-0.5px', lineHeight: 1.1 }}>Heal & Play</div>
-              <div style={{ fontSize: 8.5, color: '#7A6A58', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Play Games. Save Lives.</div>
+              <div className="nav-logo-text" style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 17, color: '#3D2B1A', letterSpacing: '-0.5px', lineHeight: 1.1 }}>Heal & Play</div>
+              <div className="nav-logo-subtext" style={{ fontSize: 8.5, color: '#7A6A58', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Play Games. Save Lives.</div>
             </div>
           </Link>
         </motion.div>
@@ -150,142 +176,168 @@ export default function Navbar() {
         {/* Right Section: Aligned flex group */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           
-          {user ? (
-            <div style={{ position: 'relative' }}>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                onClick={() => setDropOpen(!dropOpen)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  background: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid rgba(235, 224, 214, 0.5)',
-                  cursor: 'pointer',
-                  padding: '4px 12px 4px 4px',
-                  borderRadius: '99px',
-                  height: 44,
-                  boxSizing: 'border-box',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 12px rgba(139, 94, 52, 0.03)'
-                }}
-              >
-                <div style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #FAF2EA, #EBD5C2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '13.5px',
-                  fontWeight: 900,
-                  color: '#8C4F1A'
-                }}>
-                  {user.name ? user.name[0].toUpperCase() : 'V'}
-                </div>
-                <ChevronDown size={18} strokeWidth={2} color="#4A3422" style={{ transform: dropOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-              </motion.button>
+          {/* Desktop Only Right Section */}
+          <div className="nav-desktop-right" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {user ? (
+              <div style={{ position: 'relative' }}>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => setDropOpen(!dropOpen)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    border: '1px solid rgba(235, 224, 214, 0.5)',
+                    cursor: 'pointer',
+                    padding: '4px 12px 4px 4px',
+                    borderRadius: '99px',
+                    height: 44,
+                    boxSizing: 'border-box',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 12px rgba(139, 94, 52, 0.03)'
+                  }}
+                >
+                  <div style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #FAF2EA, #EBD5C2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '13.5px',
+                    fontWeight: 900,
+                    color: '#8C4F1A'
+                  }}>
+                    {user.name ? user.name[0].toUpperCase() : 'V'}
+                  </div>
+                  <ChevronDown size={18} strokeWidth={2} color="#4A3422" style={{ transform: dropOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                </motion.button>
 
-              <AnimatePresence>
-                {dropOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    style={{
-                      position: 'absolute',
-                      right: 0,
-                      top: 48,
-                      width: 190,
-                      background: 'rgba(255, 255, 255, 0.95)',
-                      backdropFilter: 'blur(16px)',
-                      borderRadius: '16px',
-                      boxShadow: '0 24px 60px rgba(139, 94, 52, 0.12), inset 0 1px 0 rgba(255,255,255,0.8)',
-                      border: '1px solid rgba(235, 224, 214, 0.6)',
-                      overflow: 'hidden',
-                      zIndex: 200,
-                      padding: '8px'
-                    }}
-                  >
-                    <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(235, 224, 214, 0.4)', marginBottom: 4 }}>
-                      <div style={{ fontSize: '11px', color: '#4A3422', fontWeight: 800, textTransform: 'uppercase' }}>Signed in as</div>
-                      <div style={{ fontSize: '13px', fontWeight: 800, color: '#4A3427', marginTop: 2 }}>{user.name || 'Helper'}</div>
-                    </div>
-                    
-                    <button 
-                      onClick={handleLogout} 
+                <AnimatePresence>
+                  {dropOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
                       style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 10,
-                        padding: '10px 12px',
-                        background: 'none',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontSize: '13px',
-                        color: '#DC2626',
-                        fontWeight: 800,
-                        transition: 'background 0.2s'
+                        position: 'absolute',
+                        right: 0,
+                        top: 48,
+                        width: 190,
+                        background: 'rgba(255, 255, 255, 0.95)',
+                        backdropFilter: 'blur(16px)',
+                        borderRadius: '16px',
+                        boxShadow: '0 24px 60px rgba(139, 94, 52, 0.12), inset 0 1px 0 rgba(255,255,255,0.8)',
+                        border: '1px solid rgba(235, 224, 214, 0.6)',
+                        overflow: 'hidden',
+                        zIndex: 200,
+                        padding: '8px'
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.05)'}
-                      onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
                     >
-                      <LogOut size={15} />
-                      Sign Out
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-              <Link 
-                to="/" 
-                style={{ 
-                  padding: '0 24px', 
-                  fontSize: '14px', 
-                  fontWeight: 800,
-                  borderRadius: '99px',
-                  height: 42,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  textDecoration: 'none',
-                  background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
-                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 6px 16px rgba(92, 45, 14, 0.2)',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                Login
-              </Link>
-            </motion.div>
-          )}
+                      <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(235, 224, 214, 0.4)', marginBottom: 4 }}>
+                        <div style={{ fontSize: '11px', color: '#4A3422', fontWeight: 800, textTransform: 'uppercase' }}>Signed in as</div>
+                        <div style={{ fontSize: '13px', fontWeight: 800, color: '#4A3427', marginTop: 2 }}>{user.name || 'Helper'}</div>
+                      </div>
+                      
+                      <button 
+                        onClick={handleLogout} 
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 10,
+                          padding: '10px 12px',
+                          background: 'none',
+                          border: 'none',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          fontSize: '13px',
+                          color: '#DC2626',
+                          fontWeight: 800,
+                          transition: 'background 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.05)'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                      >
+                        <LogOut size={15} />
+                        Sign Out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+                <Link 
+                  to="/" 
+                  style={{ 
+                    padding: '0 24px', 
+                    fontSize: '14px', 
+                    fontWeight: 800,
+                    borderRadius: '99px',
+                    height: 42,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    textDecoration: 'none',
+                    background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
+                    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 6px 16px rgba(92, 45, 14, 0.2)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  Login
+                </Link>
+              </motion.div>
+            )}
+          </div>
 
-          {/* Mobile Hamburger - only shown on mobile via CSS */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="nav-hamburger"
+          {/* Mobile Account Button - only shown on mobile via CSS */}
+          <motion.button
+            whileTap={{ scale: 0.93 }}
+            onClick={() => {
+              if ("vibrate" in navigator) navigator.vibrate(20);
+              setMenuOpen(!menuOpen);
+            }}
+            className="nav-mobile-account-btn"
             style={{
               display: 'none',
               alignItems: 'center',
               justifyContent: 'center',
-              width: 40,
-              height: 40,
-              borderRadius: '12px',
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+              border: '1px solid rgba(235, 224, 214, 0.6)',
               background: 'rgba(255,251,245,0.8)',
-              border: '1px solid rgba(235,224,214,0.6)',
               cursor: 'pointer',
+              padding: 0,
               flexShrink: 0
             }}
             aria-label="Toggle menu"
           >
-            {menuOpen ? <X size={20} color="#3D2B1A" /> : <Menu size={20} color="#3D2B1A" />}
-          </button>
+            {user ? (
+              <div style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #FAF2EA, #EBD5C2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 900,
+                color: '#8C4F1A'
+              }}>
+                {user.name ? user.name[0].toUpperCase() : 'V'}
+              </div>
+            ) : (
+              <User size={16} color="#8C4F1A" />
+            )}
+          </motion.button>
+
         </div>
       </div>
 
@@ -297,13 +349,14 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.25 }}
               onClick={() => setMenuOpen(false)}
               style={{
                 position: 'fixed',
                 top: 0, left: 0, right: 0, bottom: 0,
-                background: 'rgba(61, 43, 26, 0.4)',
-                backdropFilter: 'blur(4px)',
+                background: 'rgba(61, 43, 26, 0.25)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
                 zIndex: 90
               }}
             />
@@ -311,7 +364,8 @@ export default function Navbar() {
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+              className="mobile-drawer-sheet"
               style={{
                 position: 'fixed',
                 bottom: 0, left: 0, right: 0,
@@ -320,72 +374,159 @@ export default function Navbar() {
                 borderTopRightRadius: '24px',
                 padding: '24px',
                 zIndex: 100,
-                boxShadow: '0 -10px 40px rgba(0,0,0,0.1)'
+                boxShadow: '0 -10px 40px rgba(0,0,0,0.06)'
               }}
             >
               <div style={{ width: 40, height: 4, background: '#E8E0D6', borderRadius: 2, margin: '0 auto 24px' }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              
+              <motion.div 
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                style={{ display: 'flex', flexDirection: 'column', gap: 12 }}
+              >
                 {navItems.map(({ label, path, icon: Icon }) => {
                   const active = isActive(path)
                   return (
-                    <Link 
-                      key={label} 
-                      to={path} 
-                      onClick={() => {
-                        setMenuOpen(false);
-                        window.scrollTo(0, 0);
-                      }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 16,
-                        padding: '16px',
-                        borderRadius: '16px',
-                        textDecoration: 'none',
-                        color: active ? '#8C4F1A' : '#4A3427',
-                        fontWeight: active ? 700 : 600,
-                        fontSize: '15px',
-                        background: active ? '#FAF2EA' : 'transparent',
-                        transition: 'all 0.2s ease',
-                        border: active ? '1px solid rgba(140, 79, 26, 0.2)' : '1px solid transparent',
-                      }}
-                    >
-                      <div style={{
-                        width: 36, height: 36, borderRadius: '50%',
-                        background: active ? '#fff' : 'rgba(235, 224, 214, 0.4)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        boxShadow: active ? '0 2px 8px rgba(139,94,52,0.1)' : 'none'
-                      }}>
-                        <Icon size={18} color={active ? '#8C4F1A' : '#7A6A5A'} />
-                      </div>
-                      {label}
-                    </Link>
+                    <motion.div key={label} variants={itemVariants} whileTap={{ scale: 0.97 }}>
+                      <Link 
+                        to={path} 
+                        onClick={() => {
+                          if ("vibrate" in navigator) navigator.vibrate(20);
+                          setMenuOpen(false);
+                          window.scrollTo(0, 0);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 16,
+                          padding: '16px',
+                          borderRadius: '16px',
+                          textDecoration: 'none',
+                          color: active ? '#8C4F1A' : '#4A3427',
+                          fontWeight: active ? 700 : 600,
+                          fontSize: '15px',
+                          background: active ? '#FAF2EA' : 'transparent',
+                          transition: 'all 0.2s ease',
+                          border: active ? '1px solid rgba(140, 79, 26, 0.2)' : '1px solid transparent',
+                          position: 'relative'
+                        }}
+                      >
+                        <div style={{
+                          width: 36, height: 36, borderRadius: '50%',
+                          background: active ? '#fff' : 'rgba(235, 224, 214, 0.4)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          boxShadow: active ? '0 2px 8px rgba(139,94,52,0.1)' : 'none',
+                          transition: 'all 0.3s ease'
+                        }}>
+                          <Icon size={18} color={active ? '#8C4F1A' : '#7A6A5A'} style={{ transition: 'all 0.3s ease' }} />
+                        </div>
+                        <span style={{ transition: 'color 0.3s ease' }}>{label}</span>
+                        
+                        {/* Gold glowing active dot */}
+                        {active && (
+                          <motion.div
+                            layoutId="activeDot"
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3 }}
+                            style={{
+                              position: 'absolute',
+                              right: 20,
+                              width: 6,
+                              height: 6,
+                              borderRadius: '50%',
+                              background: '#C8773A',
+                              boxShadow: '0 0 10px #C8773A, 0 0 4px #C8773A',
+                              animation: 'activeDotPulse 2s infinite ease-in-out'
+                            }}
+                          />
+                        )}
+                      </Link>
+                    </motion.div>
                   )
                 })}
-              </div>
+              </motion.div>
               
-              {!user && (
-                <div style={{ marginTop: 24 }}>
+              {user ? (
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 25 }}
+                  style={{ marginTop: 24, borderTop: '1px solid rgba(235, 224, 214, 0.5)', paddingTop: 20 }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, padding: '0 8px' }}>
+                    <div style={{
+                      width: 40, height: 40, borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #FAF2EA, #EBD5C2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '14px', fontWeight: 900, color: '#8C4F1A',
+                      border: '1px solid rgba(235, 224, 214, 0.6)'
+                    }}>
+                      {user.name ? user.name[0].toUpperCase() : 'V'}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '11px', color: '#8B5E34', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Signed in as</div>
+                      <div style={{ fontSize: '14px', fontWeight: 800, color: '#3D2B1A' }}>{user.name || 'Helper'}</div>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      if ("vibrate" in navigator) navigator.vibrate(20);
+                      setMenuOpen(false);
+                      handleLogout();
+                    }}
+                    style={{ 
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      width: '100%', 
+                      height: 48, 
+                      borderRadius: 14, 
+                      fontSize: 14,
+                      fontWeight: 800,
+                      background: 'rgba(220, 38, 38, 0.08)',
+                      color: '#DC2626',
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <LogOut size={16} /> Sign Out Securely
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 25 }}
+                  style={{ marginTop: 24 }}
+                >
                   <Link 
                     to="/" 
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      if ("vibrate" in navigator) navigator.vibrate(20);
+                      setMenuOpen(false);
+                    }}
                     style={{ 
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       width: '100%', 
-                      height: 52, 
-                      borderRadius: 16, 
-                      fontSize: 15,
-                      fontWeight: 700,
+                      height: 48, 
+                      borderRadius: 14, 
+                      fontSize: 14,
+                      fontWeight: 800,
                       background: 'linear-gradient(135deg, #8C4F1A, #5C2D0E)',
                       color: '#fff',
-                      textDecoration: 'none'
+                      textDecoration: 'none',
+                      boxShadow: '0 4px 12px rgba(140, 79, 26, 0.15)'
                     }}
                   >
                     Login to Account
                   </Link>
-                </div>
+                </motion.div>
               )}
             </motion.div>
           </>
