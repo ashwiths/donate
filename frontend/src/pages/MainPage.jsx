@@ -1664,10 +1664,11 @@ export default function MainPage() {
               backdropFilter: 'blur(8px)',
               zIndex: 9999,
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-end',
               justifyContent: 'center',
-              padding: '24px',
-              boxSizing: 'border-box'
+              padding: '0',
+              boxSizing: 'border-box',
+              overflowY: 'auto'
             }}
           >
             <motion.div
@@ -1676,20 +1677,25 @@ export default function MainPage() {
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: 'spring', duration: 0.45, bounce: 0.15 }}
               onClick={(e) => e.stopPropagation()} // Prevent close on modal body click
+              className="modal-sheet"
               style={{
-                background: 'rgba(255, 253, 250, 0.94)', // soft cream glassmorphism
+                background: 'rgba(255, 253, 250, 0.98)',
                 border: '1px solid rgba(139, 94, 52, 0.22)',
-                boxShadow: '0 24px 60px rgba(74, 52, 39, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
-                borderRadius: '28px',
+                boxShadow: '0 -8px 48px rgba(74, 52, 39, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+                borderRadius: '28px 28px 0 0',
                 width: '100%',
                 maxWidth: '520px',
-                padding: '36px',
+                padding: '28px 24px 32px',
+                paddingBottom: 'calc(28px + env(safe-area-inset-bottom))',
                 boxSizing: 'border-box',
                 position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'stretch',
-                color: '#3D2B1A'
+                color: '#3D2B1A',
+                maxHeight: '92vh',
+                overflowY: 'auto',
+                WebkitOverflowScrolling: 'touch'
               }}
             >
               {/* Close Button in corner */}
@@ -1919,6 +1925,31 @@ export default function MainPage() {
         @media (max-width: 960px) {
           .banner-fluid-padding {
             padding: 16px 20px !important;
+          }
+        }
+        /* On desktop, keep modal centered not bottom-anchored */
+        @media (min-width: 601px) {
+          .modal-sheet {
+            border-radius: 28px !important;
+            align-self: center !important;
+            margin: 24px !important;
+            max-height: 88vh !important;
+          }
+          .modal-backdrop-desktop {
+            align-items: center !important;
+            padding: 24px !important;
+          }
+        }
+        /* Mobile sheet handle */
+        @media (max-width: 600px) {
+          .modal-sheet::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 4px;
+            background: rgba(139, 94, 52, 0.25);
+            border-radius: 99px;
+            margin: 0 auto 20px;
           }
         }
         @media (max-width: 768px) {
