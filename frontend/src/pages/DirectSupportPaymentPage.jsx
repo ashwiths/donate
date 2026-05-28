@@ -54,7 +54,7 @@ const floatingIcons = [
 const upiApps = [
   { id: 'phonepe', name: 'PhonePe', scheme: 'phonepe', caption: 'Tap to Pay', logo: phonepeLogo },
   { id: 'gpay', name: 'Google Pay', scheme: 'gpay', caption: 'Tap to Pay', logo: gpayLogo },
-  { id: 'paytm', name: 'Paytm', scheme: 'paytmmp', caption: 'Tap to Pay', logo: paytmLogo },
+  { id: 'paytm', name: 'Paytm', scheme: 'paytm', caption: 'Tap to Pay', logo: paytmLogo },
   { id: 'bhim', name: 'BHIM', scheme: 'upi', caption: 'Tap to Pay', logo: bhimLogo }
 ]
 
@@ -145,8 +145,24 @@ export default function DirectSupportPaymentPage() {
   const getUpiUrl = (appScheme = 'upi') => {
     const pnEncoded = encodeURIComponent('Janamithra Support')
     const tnEncoded = encodeURIComponent('Heal & Play Pediatric Support')
-    const schemePrefix = appScheme === 'gpay' ? 'gpay://upi' : appScheme === 'phonepe' ? 'phonepe' : appScheme === 'paytmmp' ? 'paytmmp' : 'upi'
-    return `${schemePrefix}://pay?pa=${upiId}&pn=${pnEncoded}&am=${pendingPrice}&cu=INR&tn=${tnEncoded}`
+    // Use standard upi:// for all apps — proprietary schemes (paytmmp://, phonepe://) from
+    // browser contexts are flagged as fraud by those apps' security systems.
+    // GPay uses tez://upi which is safe. PhonePe and Paytm both support upi:// natively.
+    let url
+    if (appScheme === 'gpay') {
+      // Google Pay Android deep link (tez is the internal name)
+      url = `tez://upi/pay?pa=${upiId}&pn=${pnEncoded}&am=${pendingPrice}&cu=INR&tn=${tnEncoded}`
+    } else if (appScheme === 'phonepe') {
+      // PhonePe supports standard upi:// — avoid phonepe:// from browser (fraud flag risk)
+      url = `upi://pay?pa=${upiId}&pn=${pnEncoded}&am=${pendingPrice}&cu=INR&tn=${tnEncoded}&app=phonepe`
+    } else if (appScheme === 'paytm') {
+      // Paytm supports standard upi:// — paytmmp:// from browser triggers fraud detection
+      url = `upi://pay?pa=${upiId}&pn=${pnEncoded}&am=${pendingPrice}&cu=INR&tn=${tnEncoded}`
+    } else {
+      // BHIM and generic UPI
+      url = `upi://pay?pa=${upiId}&pn=${pnEncoded}&am=${pendingPrice}&cu=INR&tn=${tnEncoded}`
+    }
+    return url
   }
 
   const triggerHaptic = () => {
